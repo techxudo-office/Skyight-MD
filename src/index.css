@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  --primary-color: #3B82F7;
+  /* Custom primary color */
+  --secondary-color: #1D4ED8;
+  /* Custom secondary color */
+  --text-color: #333333;
+  /* Custom text color */
+  --background-color: #F9FAFB;
+  /* Custom background color */
+  --lightgray: #D3D3D3;
+  /* Custom light gray color */
+  --gray: #6B7280;
+  /* Custom light gray color */
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--background-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--lightgray);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-color);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"] {
+  appearance: none;
+}
+
+.custom-shadow {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.custom-table-th:first-child {
+  border-top-left-radius: 15px;
+}
+
+.custom-table-th:last-child {
+  border-top-right-radius: 15px;
+}
