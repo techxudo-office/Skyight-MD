@@ -62,11 +62,11 @@ const RefundRequests = () => {
     {
       name: "View",
       icon: <FaEye title="View" className="text-green-500" />,
-      // handler: (index) => {
-      //   if (activeIndex === index) {
-      //     setActiveIndex(null);
-      //   } else setActiveIndex(index);
-      // },
+      handler: (index) => {
+        if (activeIndex === index) {
+          setActiveIndex(null);
+        } else setActiveIndex(index);
+      },
       handler: (index, item) => {
         navigate("/dashboard/booking-details", {
           state: item.booking_reference_id,
@@ -77,6 +77,7 @@ const RefundRequests = () => {
 
   const gettingFlightBookings = async () => {
     const response = await getFlightBookings();
+    console.log("get filght bookings", response);
     if (response.status) {
       console.log(response.data);
       const data = response.data;

@@ -1,9 +1,9 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const baseUrl = import.meta.env.VITE_API_URL;
+export const baseUrl = import.meta.env.VITE_API_URL;
 
-const getToken = () => {
+export const getToken = () => {
   return localStorage.getItem('auth_token');
 };
 
@@ -12,7 +12,7 @@ export const login = async (payload) => {
   try {
     let response = await axios({
       method: "POST",
-      url: `${baseUrl}/api/adminlogin`,
+      url: `${baseUrl}/api/login`,
       data: payload,
     });
     console.log(response);
@@ -245,29 +245,39 @@ export const updateReason = async (payload) => {
 };
 
 //! Banks
+// export const getBanks = async () => {
+//   try {
+//     let response = await axios({
+//       method: "GET",
+//       url: `${baseUrl}/api/bank`,
+//       headers: {
+//         Authorization: getToken(),
+//       },
+//     });
+//     console.log("responsebnak", response);
+//     if (response.status === 200) {
+//       if (response.data.data[0].length > 0) {
+//         const extractedData = response.data.data[0].map(({ id, bank }) => ({
+//           id,
+//           bank,
+//           status: "active",
+//         }));
+//         return { status: true, data: extractedData };
+//       }
+//     }
+//   } catch (error) {
+//     console.log("Failed while getting banks: ", error);
+//   }
+// };
 export const getBanks = async () => {
-  try {
-    let response = await axios({
-      method: "GET",
-      url: `${baseUrl}/api/bank`,
-      headers: {
-        Authorization: getToken(),
-      },
-    });
-    console.log(response);
-    if (response.status === 200) {
-      if (response.data.data[0].length > 0) {
-        const extractedData = response.data.data[0].map(({ id, bank }) => ({
-          id,
-          bank,
-          status: "active",
-        }));
-        return { status: true, data: extractedData };
-      }
-    }
-  } catch (error) {
-    console.log("Failed while getting banks: ", error);
-  }
+  let response = await axios({
+    method: "GET",
+    url: `${baseUrl}/api/bank`,
+    headers: {
+      Authorization: getToken(),
+    },
+  });
+  return response.data;
 };
 
 export const createBank = async (payload) => {
@@ -592,12 +602,13 @@ export const getFlightBookings = async () => {
   try {
     let response = await axios({
       method: "GET",
-      url: `${baseUrl}/api/booking`,
+      // url: `${baseUrl}/api/booking`,
+      url: `http://localhost:3000/api/booking`,
       headers: {
         Authorization: getToken(),
       },
     });
-    console.log(response);
+    console.log("response", response);
     if (response.status === 200) {
       if (response.data.data.length > 0) {
         const extractedData = response.data.data.map(

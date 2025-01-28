@@ -17,6 +17,12 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import toast from "react-hot-toast";
 
+// Import Libraries
+import axios from "axios";
+
+// Base URL
+import { baseUrl, getToken} from "../../utils/api_handler";
+
 const Banks = () => {
   const navigate = useNavigate();
 
@@ -55,10 +61,16 @@ const Banks = () => {
   ];
 
   const gettingBanks = async () => {
-    const response = await getBanks();
-    if (response.status) {
-      setBanksData(response.data);
-    }
+    let response = await axios({
+      method: "GET",
+      url: `${baseUrl}/api/bank`,
+      headers: {
+        Authorization: getToken(),
+      },
+    });
+    console.log(response.data.data);
+    setBanksData(response.data.data);
+    return response.data;
   };
 
   const deleteBankHandler = async () => {

@@ -30,10 +30,12 @@ const LoginForm = () => {
             navigate("/dashboard");
           }, 1000);
         } else {
+          console.log(response);
           toast.error(response.message);
         }
       }
     } catch (error) {
+      console.log(error);
       toast.error(error.message);
     } finally {
       setLoading(false);
