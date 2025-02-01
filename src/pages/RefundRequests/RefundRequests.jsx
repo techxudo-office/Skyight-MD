@@ -139,7 +139,7 @@ const RefundRequests = () => {
             `http://localhost:3000/api/booking-refund`,
             {
               // ticket_number: String(item.ticket_number),
-              ticket_number: item.ticket_number,
+              ticket_number: String(item.ticket_number),
               coupon_number: String(item.coupon_number),
               zero_penalty: true
             },
