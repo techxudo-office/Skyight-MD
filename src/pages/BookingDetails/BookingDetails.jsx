@@ -10,12 +10,17 @@ import { Button, Spinner } from "../../components/components";
 import toast, { Toaster } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getBookingDetails } from "../../utils/api_handler";
+import axios from "axios";
 
 const TicketDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
     // const [ticketData, setTicketData] = useState([]);
+
+    // const getBookingDetail = async () => {
+    //   const response = await axios.get(`${}`)
+    // }
 
     // const getBookingDetailsHandler = async (id) => {
     //   const response = await getBookingDetails(id);
