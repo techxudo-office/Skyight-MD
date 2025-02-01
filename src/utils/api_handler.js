@@ -2,6 +2,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
+export const b2bBaseURL = import.meta.env.VITE_B2B_API_URL;
 
 export const getToken = () => {
   return localStorage.getItem('auth_token');
@@ -391,7 +392,8 @@ export const getTransactions = async () => {
   try {
     let response = await axios({
       method: "GET",
-      url: `${baseUrl}/api/company/all-transactions`,
+      // url: `${baseUrl}/api/company/all-transactions`,
+      url: `${b2bBaseURL}/api/company/all-transactions`, // will change to baseUrl after @hasham move it to admin
       headers: {
         Authorization: getToken(),
       },
@@ -414,7 +416,8 @@ export const approvedTransaction = async (payload) => {
   try {
     let response = await axios({
       method: "PUT",
-      url: `${baseUrl}/api/company/approved-transaction`,
+      // url: `${baseUrl}/api/company/approved-transaction`,
+      url: `${b2bBaseURL}/api/company/approved-transaction`,
       data: payload,
       headers: {
         Authorization: getToken(),
@@ -434,12 +437,13 @@ export const getTickets = async () => {
   try {
     let response = await axios({
       method: "GET",
-      url: `${baseUrl}/api/ticket/all`,
+      // url: `${baseUrl}/api/ticket/all`,
+      url: `${b2bBaseURL}/api/ticket/all`,
       headers: {
         Authorization: getToken(),
       },
     });
-    console.log(response);
+    // console.log(response);
     if (response.status === 200) {
       if (response.data.data.length > 0) {
         const extractedData = response.data.data.map(
@@ -457,7 +461,8 @@ export const deleteTicket = async (id) => {
   try {
     let response = await axios({
       method: "DELETE",
-      url: `${baseUrl}/api/ticket?ticket_id=${id}`,
+      // url: `${baseUrl}/api/ticket?ticket_id=${id}`,
+      url: `${b2bBaseURL}/api/ticket?ticket_id=${id}`, // will change to baseUrl after @hasham move it to admin
       headers: {
         Authorization: getToken(),
       },
@@ -467,7 +472,7 @@ export const deleteTicket = async (id) => {
       return { status: true, message: "Record has been deleted" };
     }
   } catch (error) {
-    console.log("Failed while deleting ticket: ", error);
+    console.log("Failed while deleting ticket: ", error.message);
     return { status: false, message: "Failed while deleting this record" };
   }
 };
@@ -602,8 +607,8 @@ export const getFlightBookings = async () => {
   try {
     let response = await axios({
       method: "GET",
-      // url: `${baseUrl}/api/booking`,
-      url: `http://localhost:3000/api/booking`,
+      url: `${baseUrl}/api/booking`,
+      // url: `http://localhost:3000/api/booking`,
       headers: {
         Authorization: getToken(),
       },

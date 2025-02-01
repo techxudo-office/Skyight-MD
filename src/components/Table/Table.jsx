@@ -102,6 +102,7 @@ const Table = ({ columns, data, viewColumns, actions, activeIndex }) => {
                     <td className="px-4 h-[64px] flex items-center justify-start">
                       {actions
                         ? actions.map((action, actionIndex) => {
+                          {/* console.log(action, actionIndex) */}
                             return (
                               <span
                                 className="cursor-pointer hover:bg-blue-50 p-2 rounded-full text-lg"

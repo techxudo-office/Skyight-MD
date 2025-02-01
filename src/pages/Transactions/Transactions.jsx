@@ -69,14 +69,14 @@ const Transactions = () => {
         } else setActiveIndex(index);
       },
     },
-    {
-      name: "Delete",
-      icon: <MdAutoDelete title="Delete" className="text-red-500" />,
-      handler: (_, item) => {
-        setModalStatus(true);
-        setDeleteId(item.id);
-      },
-    },
+    // {
+    //   name: "Delete",
+    //   icon: <MdAutoDelete title="Delete" className="text-red-500" />,
+    //   handler: (_, item) => {
+    //     setModalStatus(true);
+    //     setDeleteId(item.id);
+    //   },
+    // },
     {
       name: "Rights",
       icon: (
@@ -95,7 +95,8 @@ const Transactions = () => {
     }
   };
 
-  const deleteReasonHandler = async () => {
+  const deleteReasonHandler = async (deleteId) => {
+    // console.log(`Delete Transaction Id: ${JSON.stringify(deleteId)}` )
     if (!deleteId) {
       toast.error("Failed to delete this record");
       setModalStatus(false);
@@ -144,11 +145,11 @@ const Transactions = () => {
 
   return (
     <>
-      <ConfirmModal
-        status={modalStatus}
-        abortDelete={abortDeleteHandler}
-        deleteHandler={deleteReasonHandler}
-      />
+      {/* // <ConfirmModal
+      //   status={modalStatus}
+      //   abortDelete={abortDeleteHandler}
+      //   deleteHandler={deleteReasonHandler}
+      // /> */}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}

@@ -1,6 +1,7 @@
 export { default as Navbar } from "./Navbar/Navbar";
 export { default as Header } from "./Header/Header";
 export { default as Table } from "./Table/Table";
+export { default as MainTable } from "./MainTable/MainTable";
 export { default as Sidebar } from "./Sidebar/Sidebar";
 
 export { default as Container } from "./Container/Container";
@@ -15,3 +16,5 @@ export { default as ConfirmModal } from "./ConfirmModal/ConfirmModal";
 
 export { default as LoginForm } from "./LoginForm/LoginForm";
 export { default as DashboardCards } from "./DashboardCards/DashboardCards";
+
+export { default as DeleteModal} from "./Modal/DeleteModal"
