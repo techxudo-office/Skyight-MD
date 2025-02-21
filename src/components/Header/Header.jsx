@@ -18,13 +18,13 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   };
 
   const dropdownOptions = [
-    // {
-    //   name: "Profile",
-    //   icon: <FaUser />,
-    //   handler: () => {
-    //     navigationHandler("/profile");
-    //   },
-    // },
+    {
+      name: "Profile",
+      icon: <FaUser />,
+      handler: () => {
+        navigationHandler("/profile");
+      },
+    },
     {
       name: "Setting",
       icon: <IoIosSettings />,
@@ -62,7 +62,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   return (
     <>
       <Toaster />
-      <div className="flex justify-between items-center shadow-sm bg-white p-3">
+      <div className="flex items-center justify-between p-3 bg-white shadow-sm">
         <HiOutlineMenuAlt1
           className={`text-3xl cursor-pointer hover:text-text ${
             sidebarStatus ? "text-slate-400" : "text-primary"
@@ -72,7 +72,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
         <div className="px-3">
           <FaCircleUser
             onClick={dropdownHandler}
-            className="text-slate-300 hover:text-slate-400 transition-all text-4xl cursor-pointer"
+            className="text-4xl transition-all cursor-pointer text-slate-300 hover:text-slate-400"
           />
           <Dropdown
             status={dropdownStatus}

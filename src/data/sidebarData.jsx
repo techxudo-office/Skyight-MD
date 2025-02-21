@@ -53,11 +53,11 @@ export const sidebarLinks = [
     path: "/reasons",
     icon: <MdEditSquare />,
   },
-  // {
-  //   title: "Roles",
-  //   path: "/roles",
-  //   icon: <FaSquarePollHorizontal />,
-  // },
+  {
+    title: "Roles",
+    path: "/roles",
+    icon: <FaSquarePollHorizontal />,
+  },
   {
     title: "Admins",
     path: "/admins",
