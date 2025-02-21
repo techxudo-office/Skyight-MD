@@ -174,14 +174,14 @@ const Profile = () => {
               </div>
             ))}
           </div>
-          {editingField && (
-            <button
-              className="px-4 py-2 mt-3 font-semibold text-white rounded-md bg-primary"
-              onClick={handleSave}
-            >
-              Save Changes
-            </button>
-          )}
+          <button
+            disabled={!editingField}
+            className={`px-4 py-2 mt-3 font-semibold text-white rounded-md 
+    bg-primary ${editingField ? "cursor-pointer" : "cursor-not-allowed"}`}
+            onClick={handleSave}
+          >
+            Save Changes
+          </button>
         </CardLayoutBody>
       </CardLayoutContainer>
     </div>
