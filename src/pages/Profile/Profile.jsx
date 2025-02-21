@@ -90,7 +90,7 @@ const Profile = () => {
       </div>
     );
   };
-  
+
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <CardLayoutContainer className="w-full mb-5">
@@ -137,17 +137,19 @@ const Profile = () => {
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-            {profileFields.map(({ label, field, type }) =>
-              renderEditableField(
-                label,
-                field,
-                profileData,
-                handleEdit,
-                handleChange,
-                editingField,
-                type
-              )
-            )}
+            {profileFields.map(({ label, field, type }, index) => (
+              <div key={index}>
+                {renderEditableField(
+                  label,
+                  field,
+                  profileData,
+                  handleEdit,
+                  handleChange,
+                  editingField,
+                  type
+                )}
+              </div>
+            ))}
           </div>
         </CardLayoutBody>
         <CardLayoutHeader
@@ -158,17 +160,19 @@ const Profile = () => {
         </CardLayoutHeader>
         <CardLayoutBody>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-            {addressFields.map(({ label, field, type }) =>
-              renderEditableField(
-                label,
-                field,
-                profileData,
-                handleEdit,
-                handleChange,
-                editingField,
-                type
-              )
-            )}
+            {addressFields.map(({ label, field, type }, index) => (
+              <div key={index}>
+                {renderEditableField(
+                  label,
+                  field,
+                  profileData,
+                  handleEdit,
+                  handleChange,
+                  editingField,
+                  type
+                )}
+              </div>
+            ))}
           </div>
           {editingField && (
             <button
