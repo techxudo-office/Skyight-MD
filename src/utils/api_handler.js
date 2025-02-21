@@ -392,8 +392,8 @@ export const getTransactions = async () => {
   try {
     let response = await axios({
       method: "GET",
-      // url: `${baseUrl}/api/company/all-transactions`,
-      url: `${b2bBaseURL}/api/company/all-transactions`, // will change to baseUrl after @hasham move it to admin
+      url: `${baseUrl}/api/company/all-transactions`,
+      // url: `${b2bBaseURL}/api/company/all-transactions`, // will change to baseUrl after @hasham move it to admin
       headers: {
         Authorization: getToken(),
       },
@@ -437,13 +437,13 @@ export const getTickets = async () => {
   try {
     let response = await axios({
       method: "GET",
-      // url: `${baseUrl}/api/ticket/all`,
-      url: `${b2bBaseURL}/api/ticket/all`,
+      url: `${baseUrl}/api/ticket/all`,
+      // url: `${b2bBaseURL}/api/ticket/all`,
       headers: {
         Authorization: getToken(),
       },
     });
-    // console.log(response);
+    console.log(response);
     if (response.status === 200) {
       if (response.data.data.length > 0) {
         const extractedData = response.data.data.map(

@@ -57,7 +57,7 @@ const Tickets = () => {
 
   const gettingTickets = async () => {
     const response = await getTickets();
-    if (response.status) {
+    if (response?.status) {
       setTicketsData(response.data);
     }
   };
@@ -99,7 +99,7 @@ const Tickets = () => {
         <CardLayoutHeader
           removeBorder={true}
           heading={"Tickets"}
-          className="flex justify-between items-center"
+          className="flex items-center justify-between"
         >
           <div className="relative">
             <SecondaryButton
