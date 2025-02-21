@@ -2,7 +2,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
-export const b2bBaseURL = import.meta.env.VITE_B2B_API_URL;
 
 export const getToken = () => {
   return localStorage.getItem('auth_token');
@@ -393,7 +392,6 @@ export const getTransactions = async () => {
     let response = await axios({
       method: "GET",
       url: `${baseUrl}/api/company/all-transactions`,
-      // url: `${b2bBaseURL}/api/company/all-transactions`, // will change to baseUrl after @hasham move it to admin
       headers: {
         Authorization: getToken(),
       },
@@ -417,7 +415,6 @@ export const approvedTransaction = async (payload) => {
     let response = await axios({
       method: "PUT",
       url: `${baseUrl}/api/company/approved-transaction`,
-      // url: `${b2bBaseURL}/api/company/approved-transaction`,
       data: payload,
       headers: {
         Authorization: getToken(),
@@ -438,7 +435,6 @@ export const getTickets = async () => {
     let response = await axios({
       method: "GET",
       url: `${baseUrl}/api/ticket/all`,
-      // url: `${b2bBaseURL}/api/ticket/all`,
       headers: {
         Authorization: getToken(),
       },
@@ -462,7 +458,6 @@ export const deleteTicket = async (id) => {
     let response = await axios({
       method: "DELETE",
       url: `${baseUrl}/api/ticket?ticket_id=${id}`,
-      // url: `${b2bBaseURL}/api/ticket?ticket_id=${id}`, // will change to baseUrl after @hasham move it to admin
       headers: {
         Authorization: getToken(),
       },
