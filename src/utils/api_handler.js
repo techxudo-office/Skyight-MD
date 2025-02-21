@@ -416,8 +416,8 @@ export const approvedTransaction = async (payload) => {
   try {
     let response = await axios({
       method: "PUT",
-      // url: `${baseUrl}/api/company/approved-transaction`,
-      url: `${b2bBaseURL}/api/company/approved-transaction`,
+      url: `${baseUrl}/api/company/approved-transaction`,
+      // url: `${b2bBaseURL}/api/company/approved-transaction`,
       data: payload,
       headers: {
         Authorization: getToken(),
@@ -461,8 +461,8 @@ export const deleteTicket = async (id) => {
   try {
     let response = await axios({
       method: "DELETE",
-      // url: `${baseUrl}/api/ticket?ticket_id=${id}`,
-      url: `${b2bBaseURL}/api/ticket?ticket_id=${id}`, // will change to baseUrl after @hasham move it to admin
+      url: `${baseUrl}/api/ticket?ticket_id=${id}`,
+      // url: `${b2bBaseURL}/api/ticket?ticket_id=${id}`, // will change to baseUrl after @hasham move it to admin
       headers: {
         Authorization: getToken(),
       },
@@ -608,7 +608,6 @@ export const getFlightBookings = async () => {
     let response = await axios({
       method: "GET",
       url: `${baseUrl}/api/booking`,
-      // url: `http://localhost:3000/api/booking`,
       headers: {
         Authorization: getToken(),
       },
