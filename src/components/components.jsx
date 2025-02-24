@@ -15,8 +15,9 @@ export { default as Dropdown } from "./Dropdown/Dropdown";
 export { default as ConfirmModal } from "./ConfirmModal/ConfirmModal";
 export { default as CreditsDropdown } from "./CreditsDropdown/CreditsDropdown";
 export { default as CustomTooltip } from "./CustomTooltip/CustomTooltip";
+export { default as BellIcon } from "./BellIcon/BellIcon";
 
 export { default as LoginForm } from "./LoginForm/LoginForm";
 export { default as DashboardCards } from "./DashboardCards/DashboardCards";
 
-export { default as DeleteModal} from "./Modal/DeleteModal"
+export { default as DeleteModal } from "./Modal/DeleteModal";

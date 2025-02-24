@@ -743,3 +743,26 @@ export const createRole = async (payload) => {
     throw error;
   }
 };
+
+
+//! Notifications...
+export const getNotifications = async () => {
+  try {
+    let response = await axios({
+      method: "GET",
+      url: `${baseUrl}/api/notification/1`,
+      headers: {
+        Authorization: getToken(),
+      },
+    });
+    console.log(response);
+    if (response.status === 200) {
+      return {
+        status: true,
+        data: response.data.data,
+      };
+    }
+  } catch (error) {
+    console.log("Failed while getting notifications: ", error);
+  }
+};

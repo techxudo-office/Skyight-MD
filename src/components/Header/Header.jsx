@@ -17,7 +17,7 @@ import {
   MdSettings,
 } from "react-icons/md";
 import { motion } from "framer-motion";
-// import Notifications from "../Notifications/Notifications";
+import Notifications from "../Notifications/Notifications";
 import Announcement from "../Announcement/Announcement";
 
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
@@ -38,14 +38,14 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
       name: "Profile",
       icon: <FaUser />,
       handler: () => {
-        navigationHandler("/dashboard/profile");
+        navigationHandler("/profile");
       },
     },
     {
       name: "Setting",
       icon: <IoIosSettings />,
       handler: () => {
-        navigationHandler("/dashboard/setting");
+        navigationHandler("/setting");
       },
     },
     {
@@ -117,9 +117,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
         <div className="px-2 mx-auto">
           <div className="flex items-center justify-between p-2 sm:p-4">
             {" "}
-            {/* Adjust padding for mobile and desktop */}
             <div className="flex items-end gap-3">
-              {/* Left Section: Hamburger Menu */}
               <CustomTooltip content={"Open / close"}>
                 <button
                   className="text-gray-700 transition hover:text-gray-900"
@@ -129,7 +127,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                 </button>
               </CustomTooltip>
 
-              {/* Center Section: Logo */}
               <div className="flex items-center ">
                 {/* <img
                   src={skyightLogo}
@@ -138,9 +135,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                 /> */}
               </div>
             </div>
-            {/* Right Section: Icons & User */}
             <div className="flex items-center sm:gap-3">
-              <div
+              {/* <div
                 className="relative py-2"
                 onMouseEnter={() => setIsAnnHovered(true)}
                 onMouseLeave={() => setIsAnnHovered(false)}
@@ -162,7 +158,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     <Announcement />
                   </motion.div>
                 )}
-              </div>
+              </div> */}
               <div
                 className="relative py-2"
                 onMouseEnter={() => setIsNotiHovered(true)}
@@ -182,14 +178,13 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     transition={{ duration: 0.3 }}
                     className="absolute top-10 right-0 w-[500px] bg-white shadow-lg rounded-lg p-3 z-50"
                   >
-                    {/* <Notifications /> */}
+                    <Notifications />
                   </motion.div>
                 )}
               </div>
               <CustomTooltip content={"Settings"}>
                 <div className="max-md:hidden">
                   <MdSettings className="text-2xl cursor-pointer text-text" />{" "}
-                  {/* Consistent size for all icons */}
                 </div>
               </CustomTooltip>
               <div className="relative">
@@ -253,12 +248,12 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     options={dropdownOptions}
                     className={"max-md:hidden"}
                   />
-                  <Dropdown
+                  {/* <Dropdown
                     status={dropdownStatus}
                     changeStatus={setDropDownStatus}
                     options={mobileDropdownOptions}
                     className={"md:hidden"}
-                  />
+                  /> */}
                 </div>
               </CustomTooltip>
             </div>
