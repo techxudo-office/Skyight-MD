@@ -744,6 +744,28 @@ export const createRole = async (payload) => {
   }
 };
 
+export const getRoles = async (page = 0, limit = 10) => {
+  try {
+    let response = await axios({
+      method: "GET",
+      url: `${baseUrl}/api/role?is_deleted=false&page=${page}&limit=${limit}`,
+      headers: {
+        Authorization: getToken(),
+      },
+    });
+
+    if (response.status === 200) {
+      return {
+        status: true,
+        data: response.data.data,
+        totalPages: response.data.totalPages || 1,
+      };
+    }
+  } catch (error) {
+    console.error("Failed to get roles: ", error);
+    return { status: false };
+  }
+};
 
 //! Notifications...
 export const getNotifications = async () => {

@@ -12,15 +12,15 @@ const Table = ({ columns, data, viewColumns, actions, activeIndex }) => {
 
   return (
     <>
-      <table className="min-w-full bg-white rounded-2xl shadow-sm">
+      <table className="min-w-full bg-white shadow-sm rounded-2xl">
         <thead>
-          <tr className="text-white font-semibold border-b border-slate-200">
+          <tr className="font-semibold text-white border-b border-slate-200">
             {columns.length > 0
               ? columns.map((column, columnIndex) => {
                   return (
                     <th
                       key={columnIndex}
-                      className="custom-table-th bg-primary p-4 text-left text-md font-semibold text-gray-600"
+                      className="p-4 font-semibold text-left text-gray-600 custom-table-th bg-primary text-md"
                     >
                       {column.columnName}
                     </th>
@@ -105,7 +105,7 @@ const Table = ({ columns, data, viewColumns, actions, activeIndex }) => {
                           {/* console.log(action, actionIndex) */}
                             return (
                               <span
-                                className="cursor-pointer hover:bg-blue-50 p-2 rounded-full text-lg"
+                                className="p-2 text-lg rounded-full cursor-pointer hover:bg-blue-50"
                                 key={actionIndex}
                                 onClick={() => [
                                   action.handler(dataIndex, item),
@@ -133,7 +133,7 @@ const Table = ({ columns, data, viewColumns, actions, activeIndex }) => {
                                   key={columnIndex}
                                   className="px-4 py-3 text-sm text-slate-500"
                                 >
-                                  <p className="text-text font-semibold">
+                                  <p className="font-semibold text-text">
                                     {[column.columnName]}
                                   </p>
                                   <span>
@@ -147,7 +147,7 @@ const Table = ({ columns, data, viewColumns, actions, activeIndex }) => {
                                   key={columnIndex}
                                   className="px-4 py-3 text-sm text-slate-500"
                                 >
-                                  <p className="text-text font-semibold">
+                                  <p className="font-semibold text-text">
                                     {[column.columnName]}
                                   </p>
                                   <span>
@@ -170,7 +170,7 @@ const Table = ({ columns, data, viewColumns, actions, activeIndex }) => {
                                   key={columnIndex}
                                   className="px-4 py-3 text-sm text-slate-500"
                                 >
-                                  {/* <p className="text-text font-semibold">
+                                  {/* <p className="font-semibold text-text">
                                     {[column.columnName]}
                                   </p> */}
                                   <img

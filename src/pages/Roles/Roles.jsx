@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -13,16 +13,45 @@ import { MdAutoDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 import { Table, Dropdown, SecondaryButton } from "../../components/components";
+import { getRoles } from "../../utils/api_handler";
 
 const Roles = () => {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [rolesData, setRolesData] = useState([]);
   const [dropdownStatus, setDropdownStatus] = useState(false);
 
   const navigationHandler = () => {
     navigate("/dashboard/create-role");
   };
+
+  const handleGetRoles = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await getRoles();
+      if (response.status) {
+        let data = response.data.roles.map((item) => ({
+          id: item.id.toString(),
+          role: item.name || "Unknown",
+          roleRights: item.page_permission
+            ? Object.keys(item.page_permission)
+                .filter((key) => item.page_permission[key])
+                .map((key) => key.replace(/_/g, " "))
+                .join(", ")
+            : "No Permissions",
+          status: item.is_deleted ? "inactive" : "active",
+        }));
+        setRolesData(data);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    handleGetRoles();
+  }, [handleGetRoles]);
 
   const data = [
     {
@@ -90,7 +119,7 @@ const Roles = () => {
     {
       name: "Rights",
       icon: (
-        <FaRegCircleCheck title="Rights" className="text-orange-500 text-sm" />
+        <FaRegCircleCheck title="Rights" className="text-sm text-orange-500" />
       ),
       handler: () => {
         alert("Hello Im Rights Alert !");
@@ -132,7 +161,7 @@ const Roles = () => {
         <CardLayoutHeader
           removeBorder={true}
           heading={"Roles"}
-          className="flex justify-between items-center"
+          className="flex items-center justify-between"
         >
           <div className="relative">
             <SecondaryButton
@@ -151,7 +180,7 @@ const Roles = () => {
           <Table
             columns={columnsData}
             viewColumns={viewColumns}
-            data={data}
+            data={rolesData}
             actions={actionsData}
             activeIndex={activeIndex}
           />
