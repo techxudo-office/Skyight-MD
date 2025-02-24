@@ -8,7 +8,7 @@ import { Input } from "../../components/components";
 import { MdEdit } from "react-icons/md";
 
 const Profile = () => {
-  const [editingField, setEditingField] = useState(null);
+  const [editingField,  setEditingField] = useState(null);
   const [profileData, setProfileData] = useState({
     firstName: "First Name",
     lastName: "Last Name",

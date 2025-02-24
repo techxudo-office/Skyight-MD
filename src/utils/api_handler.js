@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 export const baseUrl = import.meta.env.VITE_API_URL;
 
 export const getToken = () => {
-  return localStorage.getItem('auth_token');
+  return localStorage.getItem("auth_token");
 };
 
 //! Login
@@ -17,10 +17,10 @@ export const login = async (payload) => {
     });
     console.log(response);
     if (response.status === 200) {
-      localStorage.setItem('auth_token', response.data.data.token);
+      localStorage.setItem("auth_token", response.data.data.token);
       //! temproary...
       if (navigator.clipboard.writeText(response.data.data.token)) {
-        toast.success('Token Coppied to Clipboard');
+        toast.success("Token Coppied to Clipboard");
       }
       return {
         status: true,
@@ -41,8 +41,7 @@ export const login = async (payload) => {
           status: false,
           message: errorMessages,
         };
-      }
-      else {
+      } else {
         if (error.response.data.message) {
           toast.error(error.response.data.message);
         }
@@ -60,19 +59,33 @@ export const login = async (payload) => {
 export const getSetting = async () => {
   try {
     let response = await axios({
-      method: 'GET',
+      method: "GET",
       url: `${baseUrl}/api/setting`,
       headers: {
-        Authorization: getToken()
-      }
+        Authorization: getToken(),
+      },
     });
     console.log(response);
     if (response.status === 200) {
-      const { AED, EUR, IQD, IRR, PKR, SAR, TRY, USD, commission, status = 'active' } = response.data.data
-      return { status: true, data: { AED, EUR, IQD, IRR, PKR, SAR, TRY, USD, commission, status } };
+      const {
+        AED,
+        EUR,
+        IQD,
+        IRR,
+        PKR,
+        SAR,
+        TRY,
+        USD,
+        commission,
+        status = "active",
+      } = response.data.data;
+      return {
+        status: true,
+        data: { AED, EUR, IQD, IRR, PKR, SAR, TRY, USD, commission, status },
+      };
     }
   } catch (error) {
-    console.log('Failed while calling setting api: ', error);
+    console.log("Failed while calling setting api: ", error);
   }
 };
 
@@ -400,7 +413,33 @@ export const getTransactions = async () => {
     if (response.status === 200) {
       if (response.data.data[0].length > 0) {
         const extractedData = response.data.data[0].map(
-          ({ id, company_id, bank_name, bank_number, account_holder_name, document_number, payment_date, amount, document_url, comment, status, reasonIds }) => ({ id, company_id, bank_name, bank_number, account_holder_name, document_number, payment_date, amount, document_url, comment, status, reasonIds })
+          ({
+            id,
+            company_id,
+            bank_name,
+            bank_number,
+            account_holder_name,
+            document_number,
+            payment_date,
+            amount,
+            document_url,
+            comment,
+            status,
+            reasonIds,
+          }) => ({
+            id,
+            company_id,
+            bank_name,
+            bank_number,
+            account_holder_name,
+            document_number,
+            payment_date,
+            amount,
+            document_url,
+            comment,
+            status,
+            reasonIds,
+          })
         );
         return { status: true, data: extractedData };
       }
@@ -422,7 +461,7 @@ export const approvedTransaction = async (payload) => {
     });
     console.log(response);
     if (response.status === 200) {
-      return { status: true, message: 'Transaction Approved' };
+      return { status: true, message: "Transaction Approved" };
     }
   } catch (error) {
     console.log("Failed while approving transaction: ", error);
@@ -443,7 +482,12 @@ export const getTickets = async () => {
     if (response.status === 200) {
       if (response.data.data.length > 0) {
         const extractedData = response.data.data.map(
-          ({ id, title, description, status }) => ({ id, title, description, status })
+          ({ id, title, description, status }) => ({
+            id,
+            title,
+            description,
+            status,
+          })
         );
         return { status: true, data: extractedData };
       }
@@ -486,7 +530,13 @@ export const getAdmins = async () => {
     if (response.status === 200) {
       if (response.data.data.admins.length > 0) {
         const extractedData = response.data.data.admins.map(
-          ({ id, full_name, email, role, is_active }) => ({ id, full_name, email, role, is_active })
+          ({ id, full_name, email, role, is_active }) => ({
+            id,
+            full_name,
+            email,
+            role,
+            is_active,
+          })
         );
         return { status: true, data: extractedData };
       }
@@ -671,5 +721,25 @@ export const getBookingDetails = async (id) => {
     }
   } catch (error) {
     console.log("Failed while getting bookings: ", error);
+  }
+};
+
+//! Roles...
+export const createRole = async (payload) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/role`, payload, {
+      headers: {
+        Authorization: getToken(),
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response, "Create Role");
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error creating user:",
+      error.response?.data || error.message
+    );
+    throw error;
   }
 };

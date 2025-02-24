@@ -7,7 +7,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { Input, Button, Switch, Spinner } from "../../components/components";
 import toast, { Toaster } from "react-hot-toast";
-// import { createRole } from "../../utils/api_handler";
+import { createRole } from "../../utils/api_handler";
 
 const initialRolesData = {
   name: "",
@@ -24,20 +24,24 @@ const initialRolesData = {
     help_and_support: false,
   },
   action_permission: {
+    read_admin: false,
+    write_admin: false,
+    read_company: false,
     write_company: false,
     read_user: false,
     write_user: false,
     read_booking: false,
     write_booking: false,
     read_transaction: false,
-    write_transaction: false,
+    write_reason: false,
     read_role: false,
     write_role: false,
-    read_notification: false, 
-    read_flight: false,       
-    read_error_log: false,    
+    write_transaction: false,
+    read_notification: false,
+    read_flight: false,
+    read_error_log: false,
     write_announcement: false,
-    read_announcement: false, 
+    read_announcement: false,
   },
 };
 
@@ -91,7 +95,7 @@ const CreateRole = () => {
     };
 
     try {
-      // await createRole(payload);
+      await createRole(payload);
       toast.success("Role created successfully");
       setRolesData(initialRolesData);
     } catch (error) {
