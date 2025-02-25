@@ -42,13 +42,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
       },
     },
     {
-      name: "Setting",
-      icon: <IoIosSettings />,
-      handler: () => {
-        navigationHandler("/setting");
-      },
-    },
-    {
       name: "Logout",
       icon: <FiLogOut />,
       handler: () => {
@@ -231,7 +224,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                   </button>
                 </CustomTooltip>
               </div>
-
               <CustomTooltip content={"profile"}>
                 <div className="px-3">
                   {/* <FaUserCircle

@@ -6,12 +6,18 @@ import { TbTransactionDollar } from "react-icons/tb";
 import { PiBankBold } from "react-icons/pi";
 import { IoTicket } from "react-icons/io5";
 import { FaUserShield } from "react-icons/fa";
+import { VscGitStashApply } from "react-icons/vsc";
 
 export const sidebarLinks = [
   {
     title: "Home",
     path: "/",
     icon: <AiFillHome />,
+  },
+  {
+    title: "Apply Commisions",
+    path: "/apply-commisions",
+    icon: <VscGitStashApply />,
   },
   {
     title: "Flight Bookings",

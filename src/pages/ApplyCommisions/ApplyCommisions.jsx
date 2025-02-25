@@ -10,7 +10,7 @@ import {
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 
-const Setting = () => {
+const ApplyCommisions = () => {
   const navigate = useNavigate();
 
   const [settingData, setSettingData] = useState([]);
@@ -54,7 +54,7 @@ const Setting = () => {
   return (
     <>
       <CardLayoutContainer removeBg={true}>
-        <CardLayoutHeader removeBorder={true} heading={"Setting"} />
+        <CardLayoutHeader removeBorder={true} heading={"Apply Commisions"} />
         <CardLayoutBody removeBorder={true}>
           <Table
             columns={columnsData}
@@ -68,4 +68,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default ApplyCommisions;
