@@ -160,7 +160,7 @@ export const deleteReason = async (id) => {
   try {
     let response = await axios({
       method: "DELETE",
-      url: `${baseUrl}/api/reason?reason_id=${id}`,
+      url: `${baseUrl}/api/reason/${id}`,
       headers: {
         Authorization: getToken(),
       },
@@ -220,7 +220,7 @@ export const updateReason = async (payload) => {
   try {
     let response = await axios({
       method: "PUT",
-      url: `${baseUrl}/api/reason`,
+      url: `${baseUrl}/api/reason/${payload.reason_id}`,
       data: payload,
       headers: {
         Authorization: getToken(),
@@ -764,6 +764,57 @@ export const getRoles = async (page = 0, limit = 10) => {
   } catch (error) {
     console.error("Failed to get roles: ", error);
     return { status: false };
+  }
+};
+
+//! User...
+export const createUser = async (payload) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/user`,
+      payload,
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error creating user:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+export const getUsers = async () => {
+  let response = await axios.get(`${baseUrl}/api/user/company-user`, {
+    headers: {
+      Authorization: getToken(),
+    },
+  });
+  return response?.data?.data;
+};
+
+export const deleteUser = async (id) => {
+  try {
+    let response = await axios({
+      method: "DELETE",
+      url: `${baseUrl}/api/user/${id}`,
+      headers: {
+        Authorization: getToken(),
+      },
+    });
+    console.log(response);
+    if (response.status === 200) {
+      return { status: true, message: "User has been deleted" };
+    }
+  } catch (error) {
+    console.log("Failed while deleting user: ", error);
+    return { status: false, message: "Failed while deleting this user" };
   }
 };
 

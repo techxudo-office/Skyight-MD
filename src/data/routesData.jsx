@@ -3,6 +3,8 @@ import {
   Dashboard,
   DashboardHome,
   Roles,
+  Users,
+  CreateUser,
   CreateRole,
   Reasons,
   CreateReason,
@@ -34,6 +36,8 @@ export const routesData = [
     children: [
       { index: true, element: <DashboardHome /> },
       { path: "roles", element: <Roles /> },
+      { path: "users", element: <Users /> },
+      { path: "create-user", element: <CreateUser /> },
       { path: "create-role", element: <CreateRole /> },
       { path: "reasons", element: <Reasons /> },
       { path: "create-reason", element: <CreateReason /> },

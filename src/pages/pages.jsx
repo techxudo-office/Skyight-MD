@@ -5,6 +5,8 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 export { default as DashboardHome } from "./DashboardHome/DashboardHome";
 export { default as Roles } from "./Roles/Roles";
 export { default as CreateRole } from "./CreateRole/CreateRole";
+export { default as Users } from "./Users/Users";
+export { default as CreateUser } from "./CreateUser/CreateUser";
 export { default as Reasons } from "./Reasons/Reasons";
 export { default as CreateReason } from "./CreateReason/CreateReason";
 export { default as UpdateReason } from "./UpdateReason/UpdateReason";

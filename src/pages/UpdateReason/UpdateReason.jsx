@@ -58,7 +58,7 @@ const UpdateReason = () => {
       const payload = {
         reason_id: updateId,
         reason: values.reason,
-        status: isActive ? "active" : "inactive",
+        // status: isActive ? "active" : "inactive",
       };
       updateReasonHandler(payload, resetForm);
     },
@@ -100,7 +100,7 @@ const UpdateReason = () => {
         <form onSubmit={handleFormSubmit} noValidate>
           <CardLayoutBody>
             <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-7">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
                 <div
                   className={`relative ${
                     formik.touched.reason && formik.errors.reason ? "mb-5" : ""
@@ -117,7 +117,7 @@ const UpdateReason = () => {
                     onBlur={formik.handleBlur}
                   />
                   {formik.touched.reason && formik.errors.reason && (
-                    <div className="text-red-500 text-sm mt-2 absolute left-0">
+                    <div className="absolute left-0 mt-2 text-sm text-red-500">
                       {formik.errors.reason}
                     </div>
                   )}

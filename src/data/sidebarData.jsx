@@ -5,7 +5,7 @@ import { FaBusinessTime } from "react-icons/fa6";
 import { TbTransactionDollar } from "react-icons/tb";
 import { PiBankBold } from "react-icons/pi";
 import { IoTicket } from "react-icons/io5";
-import { FaUserShield } from "react-icons/fa";
+import { FaUserShield, FaUser } from "react-icons/fa";
 import { VscGitStashApply } from "react-icons/vsc";
 
 export const sidebarLinks = [
@@ -63,6 +63,11 @@ export const sidebarLinks = [
     title: "Roles",
     path: "/roles",
     icon: <FaSquarePollHorizontal />,
+  },
+  {
+    title: "Users",
+    path: "/users",
+    icon: <FaUser />,
   },
   {
     title: "Admins",
