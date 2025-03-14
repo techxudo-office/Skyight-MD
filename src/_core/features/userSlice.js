@@ -65,7 +65,7 @@ export const getUsers = createAsyncThunk(
   "user/getUsers",
   async (token, thunkAPI) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/user/company-user`, {
+      const response = await axios.get(`${BASE_URL}/api/allUsers`, {
         headers: {
           Authorization: token,
         },
