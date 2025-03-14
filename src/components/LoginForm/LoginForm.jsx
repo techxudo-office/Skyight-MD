@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -10,36 +10,24 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { login } from "../../utils/api_handler";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../_core/features/authSlice";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { userData, isLoading } = useSelector((state) => state.auth);
 
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (userData) {
+      navigate("/dashboard");
+    }
+  }, [userData, navigate]);
 
   const loginHandler = async (payload, resetForm) => {
-    try {
-      setLoading(true);
-
-      const response = await login(payload);
-      if (response) {
-        if (response.status) {
-          toast.success(response.message);
-          resetForm();
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 1000);
-        } else {
-          console.log(response);
-          toast.error(response.message);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
+    dispatch(login(payload)).then(() => {
+      resetForm();
+    });
   };
 
   const validationSchema = Yup.object({
@@ -64,7 +52,7 @@ const LoginForm = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (!loading) {
+    if (!isLoading) {
       formik.handleSubmit();
     }
   };
@@ -85,8 +73,7 @@ const LoginForm = () => {
                 <div
                   className={`relative ${
                     formik.touched.email && formik.errors.email ? "mb-5" : ""
-                  }`}
-                >
+                  }`}>
                   <Input
                     placeholder={"abc.xcv@gmail.com"}
                     id={"email"}
@@ -108,8 +95,7 @@ const LoginForm = () => {
                     formik.touched.password && formik.errors.password
                       ? "mb-5"
                       : ""
-                  }`}
-                >
+                  }`}>
                   <Input
                     placeholder={"********"}
                     id={"password"}
@@ -137,8 +123,8 @@ const LoginForm = () => {
           <CardLayoutFooter className={"flex items-center justify-center"}>
             <div>
               <Button
-                text={loading ? <Spinner /> : "Login"}
-                disabled={loading}
+                text={isLoading ? <Spinner /> : "Login"}
+                disabled={isLoading}
                 onClick={formik.handleSubmit}
                 type="submit"
               />
