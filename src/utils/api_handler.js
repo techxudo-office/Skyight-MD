@@ -258,30 +258,7 @@ export const updateReason = async (payload) => {
 };
 
 //! Banks
-// export const getBanks = async () => {
-//   try {
-//     let response = await axios({
-//       method: "GET",
-//       url: `${baseUrl}/api/bank`,
-//       headers: {
-//         Authorization: getToken(),
-//       },
-//     });
-//     console.log("responsebnak", response);
-//     if (response.status === 200) {
-//       if (response.data.data[0].length > 0) {
-//         const extractedData = response.data.data[0].map(({ id, bank }) => ({
-//           id,
-//           bank,
-//           status: "active",
-//         }));
-//         return { status: true, data: extractedData };
-//       }
-//     }
-//   } catch (error) {
-//     console.log("Failed while getting banks: ", error);
-//   }
-// };
+
 export const getBanks = async () => {
   let response = await axios({
     method: "GET",

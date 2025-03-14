@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  SecondaryButton,
-  ConfirmModal,
-  Dropdown,
-} from "../../components/components";
-import { getFlightBookings } from "../../utils/api_handler";
+import { Table, ConfirmModal } from "../../components/components";
 
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,19 +8,19 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import toast from "react-hot-toast";
 
 import { FaEye } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getFlightBookings } from "../../_core/features/bookingSlice";
 
 const FlightBookings = () => {
   const navigate = useNavigate();
-
-  const [bookingsData, setBookingsData] = useState([]);
+  const dispatch = useDispatch();
   const [modalStatus, setModalStatus] = useState(false);
-
-  const navigationHandler = () => {
-    navigate("/dashboard/search-flights");
-  };
+  const { userData } = useSelector((state) => state.auth);
+  const { flightBookings, isLoadingFlightBookings } = useSelector(
+    (state) => state.booking
+  );
 
   const columnsData = [
     { columnName: "No.", fieldName: "no.", type: "no." },
@@ -75,20 +69,13 @@ const FlightBookings = () => {
     },
   ];
 
-  const gettingFlightBookings = async () => {
-    const response = await getFlightBookings();
-    if (response.status) {
-      setBookingsData(response.data);
-    }
-  };
-
   const abortDeleteHandler = () => {
     setModalStatus(false);
     setDeleteId(null);
   };
 
   useEffect(() => {
-    gettingFlightBookings();
+    dispatch(getFlightBookings(userData?.token));
   }, []);
 
   return (
@@ -102,13 +89,12 @@ const FlightBookings = () => {
         <CardLayoutHeader
           removeBorder={true}
           heading={"Flight Bookings"}
-          className="flex justify-between items-center"
-        ></CardLayoutHeader>
+          className="flex justify-between items-center"></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <Table
             columns={columnsData}
             viewColumns={viewColumns}
-            data={bookingsData}
+            data={flightBookings || []}
             actions={actionsData}
           />
         </CardLayoutBody>

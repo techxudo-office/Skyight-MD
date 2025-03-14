@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "../../components/components";
-import { getSetting } from "../../utils/api_handler";
 import { MdEditSquare } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,11 +8,11 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
+import { useDispatch, useSelector } from "react-redux";
+import { getSetting } from "../../_core/features/settingSlice";
 
 const ApplyCommisions = () => {
   const navigate = useNavigate();
-
-  const [settingData, setSettingData] = useState([]);
 
   const columnsData = [
     { columnName: "No.", fieldName: "no.", type: "no." },
@@ -40,16 +39,15 @@ const ApplyCommisions = () => {
     },
   ];
 
-  const callSettingApi = async () => {
-    const response = await getSetting();
-    if (response.status) {
-      setSettingData([response.data]);
-    }
-  };
+  const dispatch = useDispatch();
+  const { userData } = useSelector((state) => state.auth);
+  const { settingData, isSettingLoading, errorSetting } = useSelector(
+    (state) => state.setting
+  );
 
   useEffect(() => {
-    callSettingApi();
-  }, []);
+    dispatch(getSetting(userData?.token));
+  }, [dispatch]);
 
   return (
     <>
@@ -58,7 +56,7 @@ const ApplyCommisions = () => {
         <CardLayoutBody removeBorder={true}>
           <Table
             columns={columnsData}
-            data={settingData}
+            data={settingData || []}
             actions={actionsData}
           />
         </CardLayoutBody>

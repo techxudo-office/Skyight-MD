@@ -314,10 +314,10 @@ export const getCredits = createAsyncThunk(
 
 export const getFlightBookings = createAsyncThunk(
   "booking/getFlightBookings",
-  async ({ id, token }, thunkAPI) => {
+  async (token, thunkAPI) => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/booking/company/${id}`,
+        `${BASE_URL}/api/booking`,
         {
           headers: {
             Authorization: token,
