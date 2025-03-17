@@ -27,8 +27,7 @@ const Sidebar = ({ status }) => {
     <div
       className={`shadow-md transition-all ${
         status ? "w-64" : "w-0"
-      } flex flex-col justify-between bg-primary`}
-    >
+      } flex flex-col justify-between bg-primary`}>
       <div>
         <div className="p-5 flex items-center justify-start">
           <h3 className="text-2xl font-semibold flex items-center gap-3 text-white">
@@ -46,8 +45,7 @@ const Sidebar = ({ status }) => {
                   itemIndex === index
                     ? "text-white bg-secondary"
                     : " text-white"
-                } rounded-full px-3 text-md font-semibold flex justify-between items-center`}
-              >
+                } rounded-full px-3 text-md font-semibold flex justify-between items-center`}>
                 <span className="flex items-center gap-3">
                   {link.icon}
                   {link.title}

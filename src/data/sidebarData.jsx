@@ -60,6 +60,11 @@ export const sidebarLinks = [
     icon: <MdEditSquare />,
   },
   {
+    title: "Companies",
+    path: "/companies",
+    icon: <MdEditSquare />,
+  },
+  {
     title: "Roles",
     path: "/roles",
     icon: <FaSquarePollHorizontal />,
