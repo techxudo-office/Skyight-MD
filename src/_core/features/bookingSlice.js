@@ -296,9 +296,12 @@ export const getCredits = createAsyncThunk(
   "booking/getCredits",
   async (token, thunkAPI) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/booking-credits`, {
+      const response = await axios({
+        method: "POST",
+        url: `${BASE_URL}/api/booking-credit`,
         headers: {
           Authorization: token,
+          "Content-Type": "application/json",
         },
       });
       return response.data.data;

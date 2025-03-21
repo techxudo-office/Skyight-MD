@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { FaUser, FaUserCircle } from "react-icons/fa";
-import { IoIosSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { CreditsDropdown, CustomTooltip, Dropdown } from "../components";
 import { HiOutlineRefresh } from "react-icons/hi";
-// import { skyightLogo } from "../../assets/Index";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoHome } from "react-icons/io5";
 import { SlSettings } from "react-icons/sl";
@@ -18,20 +16,18 @@ import {
 } from "react-icons/md";
 import { motion } from "framer-motion";
 import Notifications from "../Notifications/Notifications";
-import Announcement from "../Announcement/Announcement";
+import { getCredits } from "../../_core/features/bookingSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [dropdownStatus, setDropDownStatus] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const [credits, setCredits] = useState("");
   const [CreditsDropdownOpen, setCreditsDropdownOpen] = useState(false);
-  const [isAnnHovered, setIsAnnHovered] = useState(false);
   const [isNotiHovered, setIsNotiHovered] = useState(false);
-
-  const dropdownHandler = () => {
-    setDropDownStatus(!dropdownStatus);
-  };
+  const { userData } = useSelector((state) => state.auth);
+  const { credits, isLoadingCredits } = useSelector((state) => state.booking);
 
   const dropdownOptions = [
     {
@@ -84,7 +80,19 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
       },
     },
   ];
-  
+
+  const refreshCredits = () => {
+    dispatch(getCredits(userData?.token));
+  };
+
+  useEffect(() => {
+    refreshCredits();
+  }, [dispatch, userData?.token]);
+
+  const dropdownHandler = () => {
+    setDropDownStatus(!dropdownStatus);
+  };
+
   const logoutHandler = () => {
     dropdownHandler();
     localStorage.removeItem("auth_token");
@@ -114,49 +122,17 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
               <CustomTooltip content={"Open / close"}>
                 <button
                   className="text-gray-700 transition hover:text-gray-900"
-                  onClick={sidebarHandler}
-                >
+                  onClick={sidebarHandler}>
                   <GiHamburgerMenu size={22} />{" "}
                 </button>
               </CustomTooltip>
-
-              <div className="flex items-center ">
-                {/* <img
-                  src={skyightLogo}
-                  className="w-16 translate-x-3 md:w-24"
-                  alt=""
-                /> */}
-              </div>
+              <div className="flex items-center "></div>
             </div>
             <div className="flex items-center sm:gap-3">
-              {/* <div
-                className="relative py-2"
-                onMouseEnter={() => setIsAnnHovered(true)}
-                onMouseLeave={() => setIsAnnHovered(false)}
-              >
-                {" "}
-                <CustomTooltip content={"Announcement"}>
-                  <div className="max-md:hidden">
-                    <HiOutlineSpeakerphone className="text-2xl cursor-pointer text-text" />
-                  </div>
-                </CustomTooltip>
-                {isAnnHovered && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute top-10 right-0 w-[300px] bg-white shadow-lg rounded-lg p-3 z-50"
-                  >
-                    <Announcement />
-                  </motion.div>
-                )}
-              </div> */}
               <div
                 className="relative py-2"
                 onMouseEnter={() => setIsNotiHovered(true)}
-                onMouseLeave={() => setIsNotiHovered(false)}
-              >
+                onMouseLeave={() => setIsNotiHovered(false)}>
                 <CustomTooltip content={"Notifications"}>
                   <div className="max-md:hidden">
                     <MdNotificationsNone className="text-2xl cursor-pointer text-text" />
@@ -169,8 +145,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
-                    className="absolute top-10 right-0 w-[500px] bg-white shadow-lg rounded-lg p-3 z-50"
-                  >
+                    className="absolute top-10 right-0 w-[500px] bg-white shadow-lg rounded-lg p-3 z-50">
                     <Notifications />
                   </motion.div>
                 )}
@@ -188,25 +163,24 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     //   setIsActive(!isActive);
                     // }}
                   >
-                    {credits ? (
+                    {isLoadingCredits ? (
+                      <span className="flex items-center gap-2">
+                        <HiOutlineRefresh className="animate-spin max-sm:hidden" />
+                        <span>Refreshing...</span>
+                      </span>
+                    ) : credits ? (
                       <span
                         onClick={refreshCredits}
-                        className="flex items-center gap-2"
-                      >
+                        className="flex items-center gap-2">
                         <HiOutlineRefresh className="max-sm:hidden" />
-                        <span>PKR {credits?.toLocaleString("en-US")}</span>
+                        <span>PKR {credits?.Balence}</span>
                       </span>
                     ) : (
                       <span className="flex items-center gap-2">
-                        <HiOutlineRefresh
-                          className={`transition-all max-sm:hidden ${
-                            !credits ? "rotate-180" : "rotate-0"
-                          }`}
-                        />
-                        <span>Refreshing...</span>
+                        <HiOutlineRefresh className="rotate-180 max-sm:hidden" />
+                        <span>No Credits</span>
                       </span>
                     )}
-
                     <MdArrowDropDown
                       className={`text-xl ${
                         CreditsDropdownOpen ? "rotate-180" : ""
