@@ -80,13 +80,11 @@ const CreateReason = () => {
       <CardLayoutContainer>
         <CardLayoutHeader
           heading="Create Reason"
-          className={"flex items-center justify-between"}
-        >
+          className={"flex items-center justify-between"}>
           <span
             onClick={() => {
               setIsActive(!isActive);
-            }}
-          >
+            }}>
             <Switch switchStatus={isActive} />
           </span>
         </CardLayoutHeader>
@@ -97,8 +95,7 @@ const CreateReason = () => {
                 <div
                   className={`relative ${
                     formik.touched.reason && formik.errors.reason ? "mb-5" : ""
-                  }`}
-                >
+                  }`}>
                   <Input
                     placeholder={"Enter Reason"}
                     id={"reason"}
@@ -122,8 +119,7 @@ const CreateReason = () => {
             <div
               onClick={() => {
                 navigate(-1);
-              }}
-            >
+              }}>
               <SecondaryButton text="Cancel" />
             </div>
             <div>

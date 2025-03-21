@@ -18,6 +18,7 @@ export { default as Spinner } from "./Spinner/Spinner";
 export { default as Switch } from "./Switch/Switch";
 export { default as Dropdown } from "./Dropdown/Dropdown";
 export { default as Modal } from "./Modal/Modal";
+export { default as ModalWrapper } from "./ModalWrapper/ModalWrapper";
 export { default as ConfirmModal } from "./ConfirmModal/ConfirmModal";
 export { default as CreditsDropdown } from "./CreditsDropdown/CreditsDropdown";
 export { default as CustomTooltip } from "./CustomTooltip/CustomTooltip";

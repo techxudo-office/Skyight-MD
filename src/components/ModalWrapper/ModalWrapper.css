@@ -1,0 +1,29 @@
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.modal-content {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content--after-open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ReactModal__Content--before-close {
+  opacity: 0;
+  transform: scale(0.8);
+}
