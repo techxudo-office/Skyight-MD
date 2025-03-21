@@ -30,9 +30,9 @@ const roleSlice = createSlice({
             role: item.name || "Unknown",
             roleRights: item.page_permission
               ? Object.keys(item.page_permission)
-                  .filter((key) => item.page_permission[key])
-                  .map((key) => key.replace(/_/g, " "))
-                  .join(", ")
+                .filter((key) => item.page_permission[key])
+                .map((key) => key.replace(/_/g, " "))
+                .join(", ")
               : "No Permissions",
             status: item.is_deleted ? "inactive" : "active",
           }));
@@ -61,7 +61,7 @@ const roleSlice = createSlice({
 
 export const getRoles = createAsyncThunk(
   "role/getRoles",
-  async ({ page = 0, limit = 10, token }, thunkAPI) => {
+  async (token, thunkAPI) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/role`, {
         headers: {

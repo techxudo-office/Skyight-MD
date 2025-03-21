@@ -10,6 +10,8 @@ export { default as Tag } from "./Tag/Tag";
 export { default as Container } from "./Container/Container";
 export { default as Form } from "./Form/Form";
 export { default as Input } from "./Input/Input";
+export { default as Select } from "./Select/Select";
+export { default as PhoneNumberInput } from "./PhoneNumberInput/PhoneNumberInput";
 export { default as Button } from "./Button/Button";
 export { default as SecondaryButton } from "./SecondaryBtn/SecondaryBtn";
 export { default as Spinner } from "./Spinner/Spinner";

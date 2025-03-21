@@ -1,59 +1,95 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
-import { Input } from "../../components/components";
+import {
+  Button,
+  Input,
+  Loader,
+  PhoneNumberInput,
+  Select,
+} from "../../components/components";
 import { MdEdit } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+// import { getUserInfo, updateAccount } from "../../_core/features/authSlice";
+import { getRoles } from "../../_core/features/roleSlice";
 
 const Settings = () => {
+  const dispatch = useDispatch();
+  const fileInputRef = useRef(null);
   const [editingField, setEditingField] = useState(null);
+  const { roles, isLoadingRoles } = useSelector((state) => state.role);
+  const { userData, isUpdatingAccount, isLoadingUserInfo } = useSelector(
+    (state) => state.auth
+  );
+  const [profileImage, setProfileImage] = useState(
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
+  );
   const [profileData, setProfileData] = useState({
-    firstName: "First Name",
-    lastName: "Last Name",
-    dateOfBirth: "28-11-2024",
-    email: "profile.user@gmail.com",
-    phoneNumber: "(+00) 001002003004",
-    role: "Admin",
-    country: "United Kingdom",
-    city: "Los Angeles, California",
-    postalCode: "PTC 0204",
+    first_name: "",
+    last_name: "",
+    email: "",
+    city: "",
+    country: "",
+    role_id: "",
+    role_name: "",
+    mobile_number: "",
+    password: "",
   });
 
-  const profileFields = [
-    { label: "First Name", field: "firstName", type: "text" },
-    { label: "Last Name", field: "lastName", type: "text" },
-    { label: "Date of Birth", field: "dateOfBirth", type: "date" },
-    { label: "Email Address", field: "email", type: "email" },
-    { label: "Phone Number", field: "phoneNumber", type: "tel" },
-    { label: "User Role", field: "role", type: "text" },
-  ];
+  useEffect(() => {
+    if (userData) {
+      console.log(userData, "UserData");
+      setProfileData({
+        first_name: userData.user.first_name || "",
+        last_name: userData.user.last_name || "",
+        email: userData.user.email || "",
+        mobile_number: userData.user.mobile_number || "",
+        city: userData.user.company.city || "",
+        country: userData.user.company.country || "",
+        role_id: userData.user.role_id || "",
+        role_name: userData?.user?.role?.name || "Select a Role",
+        // password: userData.user.password || "",
+      });
+    }
+  }, [userData, roles]);
 
-  const addressFields = [
-    { label: "Country", field: "country", type: "text" },
-    { label: "City", field: "city", type: "text" },
-    { label: "Postal Code", field: "postalCode", type: "text" },
-  ];
+  useEffect(() => {
+    dispatch(getUserInfo(userData?.token));
+    dispatch(getRoles(userData?.token));
+  }, []);
 
   const handleChange = (e, field) => {
     setProfileData({ ...profileData, [field]: e.target.value });
   };
 
-  const handleEdit = (field) => {
-    setEditingField(field);
+  const handleRoleSelect = (role) => {
+    setProfileData((prev) => ({
+      ...prev,
+      role_id: role.value,
+      role_name: role.label,
+    }));
   };
 
   const handleSave = () => {
+    const payload = {
+      first_name: profileData.first_name,
+      last_name: profileData.last_name,
+      mobile_number: profileData.mobile_number,
+      role_id: Number(profileData.role_id),
+      password: profileData.password,
+    };
+    dispatch(
+      updateAccount({
+        data: payload,
+        token: userData.token,
+        id: userData.user.id,
+      })
+    );
     setEditingField(null);
-    console.log(profileData, "Form Data");
   };
-
-  const [profileImage, setProfileImage] = useState(
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
-  );
-
-  const fileInputRef = useRef(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -63,33 +99,67 @@ const Settings = () => {
     }
   };
 
+  const profileFields = [
+    {
+      label: "First Name",
+      field: "first_name",
+      type: "text",
+      edit: true,
+      placeholder: "Enter your first name",
+    },
+    {
+      label: "Last Name",
+      field: "last_name",
+      type: "text",
+      edit: true,
+      placeholder: "Enter your last name",
+    },
+    {
+      label: "Email Address",
+      field: "email",
+      type: "email",
+      edit: false,
+      placeholder: "example@email.com",
+    },
+    {
+      label: "Password",
+      field: "password",
+      type: "password",
+      edit: true,
+      placeholder: "Enter new password",
+    },
+  ];
+
+  const addressFields = [
+    { label: "City", field: "city", type: "text", edit: false },
+    { label: "Country", field: "country", type: "text", edit: false },
+  ];
+
   const renderEditableField = (
     label,
     field,
-    profileData,
-    handleEdit,
-    handleChange,
-    editingField,
-    type = "text"
-  ) => {
-    return (
-      <div className="flex flex-col w-full">
-        <h4 className="mb-1 text-xs font-medium text-slate-500">{label}</h4>
-        <div className="flex items-center gap-x-2">
-          <Input
-            type={type}
-            profile={true}
-            value={profileData[field]}
-            disabled={editingField !== field}
-            setEditingField={setEditingField}
-            isSelected={editingField === field}
-            onEditClick={() => handleEdit(field)}
-            onChange={(e) => handleChange(e, field)}
-          />
-        </div>
+    type = "text",
+    edit,
+    placeholder
+  ) => (
+    <div className="flex flex-col w-full">
+      <h4 className="mb-1 text-xs font-medium text-slate-500">{label}</h4>
+      <div className="flex items-center gap-x-2">
+        <Input
+          edit={edit}
+          type={type}
+          profile={true}
+          placeholder={placeholder}
+          value={profileData[field]}
+          disabled={editingField !== field}
+          setEditingField={setEditingField}
+          isSelected={editingField === field}
+          onEditClick={() => setEditingField(field)}
+          onChange={(e) => handleChange(e, field)}
+        />
       </div>
-    );
-  };
+    </div>
+  );
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -97,7 +167,6 @@ const Settings = () => {
         <CardLayoutHeader
           className="flex flex-wrap items-center justify-start gap-5 py-3"
           removeBorder={true}>
-          {" "}
           <div className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group">
             <img
               src={profileImage}
@@ -118,67 +187,90 @@ const Settings = () => {
             />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-text">{`${profileData.firstName} ${profileData.lastName}`}</h3>
-            <h4 className="mb-0 text-sm text-text">{`${profileData.role}`}</h4>
+            <h3 className="text-lg font-semibold text-text">{`${profileData.first_name} ${profileData.last_name}`}</h3>
             <h4 className="mb-0 text-sm text-text">{`${profileData.city}, ${profileData.country}`}</h4>
           </div>
         </CardLayoutHeader>
       </CardLayoutContainer>
-      <CardLayoutContainer className="w-full mb-5">
-        <CardLayoutHeader
-          className="flex items-center justify-between gap-5 py-3"
-          removeBorder={true}>
-          <h2 className="text-2xl font-semibold text-text">
-            Personal Information
-          </h2>
-        </CardLayoutHeader>
-        <CardLayoutBody removeBorder={true}>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-            {profileFields.map(({ label, field, type }, index) => (
-              <div key={index}>
-                {renderEditableField(
-                  label,
-                  field,
-                  profileData,
-                  handleEdit,
-                  handleChange,
-                  editingField,
-                  type
-                )}
-              </div>
-            ))}
-          </div>
-        </CardLayoutBody>
-        <CardLayoutHeader
-          className="flex items-center justify-between gap-5 py-3"
-          removeBorder={true}>
-          <h2 className="text-2xl font-semibold text-text">Address</h2>
-        </CardLayoutHeader>
-        <CardLayoutBody>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-            {addressFields.map(({ label, field, type }, index) => (
-              <div key={index}>
-                {renderEditableField(
-                  label,
-                  field,
-                  profileData,
-                  handleEdit,
-                  handleChange,
-                  editingField,
-                  type
-                )}
-              </div>
-            ))}
-          </div>
-          <button
-            disabled={!editingField}
-            className={`px-4 py-2 mt-3 font-semibold text-white rounded-md 
-    bg-primary ${editingField ? "cursor-pointer" : "cursor-not-allowed"}`}
-            onClick={handleSave}>
-            Save Changes
-          </button>
-        </CardLayoutBody>
-      </CardLayoutContainer>
+      {isLoadingRoles || isLoadingUserInfo ? (
+        <Loader />
+      ) : (
+        <CardLayoutContainer className="w-full mb-5">
+          <CardLayoutHeader
+            className="flex items-center justify-between gap-5 py-3"
+            removeBorder={true}>
+            <h2 className="text-2xl font-semibold text-text">
+              Personal Information
+            </h2>
+          </CardLayoutHeader>
+          <CardLayoutBody removeBorder={true}>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
+              {profileFields.map(
+                ({ label, field, type, edit, placeholder }, index) => (
+                  <div key={index}>
+                    {renderEditableField(label, field, type, edit, placeholder)}
+                  </div>
+                )
+              )}
+              <PhoneNumberInput
+                id={1}
+                name={"Phone Number"}
+                label={"Phone Number"}
+                className="self-end"
+                value={profileData.mobile_number}
+                onChange={(number) =>
+                  handleChange(
+                    {
+                      target: {
+                        value:
+                          number.country_code +
+                          number.area_code +
+                          number.number,
+                      },
+                    },
+                    "mobile_number"
+                  )
+                }
+                placeholder={"Phone Number"}
+              />
+              <Select
+                id="roles"
+                label="Role"
+                value={profileData.role_name}
+                onChange={(role) => handleRoleSelect(role)}
+                options={roles.map((role) => ({
+                  value: role.id,
+                  label: role.role,
+                }))}
+                placeholder="Select a role"
+                disabled={false}
+                isLoading={isLoadingRoles}
+                className="self-end w-full"
+              />
+            </div>
+          </CardLayoutBody>
+          <CardLayoutHeader
+            className="flex items-center justify-between gap-5 py-3"
+            removeBorder={true}>
+            <h2 className="text-2xl font-semibold text-text">Address</h2>
+          </CardLayoutHeader>
+          <CardLayoutBody>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
+              {addressFields.map(({ label, field, type, edit }, index) => (
+                <div key={index}>
+                  {renderEditableField(label, field, type, edit)}
+                </div>
+              ))}
+            </div>
+            <Button
+              text="Save Changes"
+              onClick={handleSave}
+              loading={isUpdatingAccount}
+              disabled={isUpdatingAccount}
+            />
+          </CardLayoutBody>
+        </CardLayoutContainer>
+      )}
     </div>
   );
 };
