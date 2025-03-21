@@ -17,7 +17,6 @@ export { default as Transactions } from "./Transactions/Transactions";
 export { default as Profile } from "./Profile/Profile";
 export { default as ApplyCommisions } from "./ApplyCommisions/ApplyCommisions";
 export { default as UpdateSetting } from "./UpdateSetting/UpdateSetting";
-export { default as Admins } from "./Admins/Admins";
 export { default as CreateAdmin } from "./CreateAdmin/CreateAdmin";
 export { default as UpdateAdmin } from "./UpdateAdmin/UpdateAdmin";
 

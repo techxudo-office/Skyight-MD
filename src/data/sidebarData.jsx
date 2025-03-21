@@ -74,9 +74,4 @@ export const sidebarLinks = [
     path: "/users",
     icon: <FaUser />,
   },
-  {
-    title: "Admins",
-    path: "/admins",
-    icon: <FaUserShield />,
-  },
 ];
