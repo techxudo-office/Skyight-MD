@@ -102,7 +102,7 @@ export const getTickets = createAsyncThunk(
   "ticket/getTickets",
   async (token, thunkAPI) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/ticket/company`, {
+      const response = await axios.get(`${BASE_URL}/api/ticket/all`, {
         headers: {
           Authorization: token,
         },
