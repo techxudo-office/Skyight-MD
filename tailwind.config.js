@@ -13,7 +13,15 @@ module.exports = {
         text: '#333333', // Matches --text-color
         background: '#F9FAFB', // Matches --background-color
         lightgray: '#D3D3D3', // Add custom color
-        gray: '#6B7280'
+        gray: '#6B7280',
+        grayBg: '#f1f5f9 ',
+        greenColor: '#4caf50',
+        yellowColor: '#ff9800',
+        redColor: '#ef5350',
+        yellowbg: '#ff99000d',
+        greenbg: '#4caf4f0d',
+        redbg: '#ff99000d',
+        bluebg: '#03a8f40d'
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],

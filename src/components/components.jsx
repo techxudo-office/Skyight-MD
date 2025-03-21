@@ -4,6 +4,8 @@ export { default as Table } from "./Table/Table";
 export { default as TableNew } from "./TableNew/TableNew";
 export { default as MainTable } from "./MainTable/MainTable";
 export { default as Sidebar } from "./Sidebar/Sidebar";
+export { default as Loader } from "./Loader/Loader";
+export { default as Tag } from "./Tag/Tag";
 
 export { default as Container } from "./Container/Container";
 export { default as Form } from "./Form/Form";
@@ -19,7 +21,6 @@ export { default as CreditsDropdown } from "./CreditsDropdown/CreditsDropdown";
 export { default as CustomTooltip } from "./CustomTooltip/CustomTooltip";
 export { default as BellIcon } from "./BellIcon/BellIcon";
 export { default as DownloadButton } from "./DownloadButton/DownloadButton";
-
 
 export { default as LoginForm } from "./LoginForm/LoginForm";
 export { default as DashboardCards } from "./DashboardCards/DashboardCards";

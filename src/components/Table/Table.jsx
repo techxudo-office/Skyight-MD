@@ -1,213 +1,102 @@
-import React, { useEffect, useState } from "react";
-import { Spinner } from "../components";
+import React, { useState, useEffect } from "react";
+import { Loader, Spinner } from "../components";
+import DataTable from "react-data-table-component";
 
-const Table = ({ columns, data, viewColumns, actions, activeIndex }) => {
-  const [loaderStatus, setLoaderStatus] = useState(true);
+const Table = ({
+  columnsData,
+  tableData,
+  pagination,
+  paginationTotalRows,
+  paginationComponentOptions,
+  noRowsPerPage,
+  progressPending,
+}) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [paginatedData, setPaginatedData] = useState([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoaderStatus(false);
-    }, 3000);
-  }, []);
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    setPaginatedData(tableData.slice(startIndex, endIndex));
+  }, [tableData, currentPage, rowsPerPage]);
+
+  const handlePageChange = (page) => {
+    console.log("Page Changed to:", page);
+    setCurrentPage(page);
+  };
+
+  const modifiedColumns = [
+    {
+      name: "NO",
+      selector: (_, index) => (currentPage - 1) * rowsPerPage + index + 1,
+      sortable: false,
+      minWidth: "70px",
+      center: true,
+    },
+    ...columnsData.map((col) => ({
+      ...col,
+      grow: col.grow || 2,
+      wrap: col.wrap || true, // Agar grow pehle se hai to use rehne do, warna 2 assign karo
+    })),
+  ];
 
   return (
-    <>
-      <table className="min-w-full bg-white shadow-sm rounded-2xl">
-        <thead>
-          <tr className="font-semibold text-white border-b border-slate-200">
-            {columns.length > 0
-              ? columns.map((column, columnIndex) => {
-                  return (
-                    <th
-                      key={columnIndex}
-                      className="p-4 font-semibold text-left text-gray-600 custom-table-th bg-primary text-md"
-                    >
-                      {column.columnName}
-                    </th>
-                  );
-                })
-              : ""}
-          </tr>
-        </thead>
-        <tbody>
-          {data.length > 0 ? (
-            data.map((item, dataIndex) => {
-              return (
-                <React.Fragment key={dataIndex}>
-                  <tr
-                    className={`${dataIndex % 2 ? "bg-slate-50" : "bg-white"}`}
-                  >
-                    {columns.map((column, columnKey) => {
-                      return column.type === "no." ? (
-                        <td
-                          key={columnKey}
-                          className="px-4 py-3 text-sm text-slate-500"
-                        >
-                          #{dataIndex + 1}
-                        </td>
-                      ) : column.type === "id" ? (
-                        <td
-                          key={columnKey}
-                          className="px-4 py-3 text-sm text-slate-500"
-                        >
-                          {item[column.fieldName]
-                            ? item[column.fieldName]
-                            : "-"}
-                        </td>
-                      ) : column.type === "text" ? (
-                        <td
-                          key={columnKey}
-                          className="px-4 py-3 text-sm text-slate-500"
-                        >
-                          {item[column.fieldName]
-                            ? item[column.fieldName]
-                            : "-"}
-                        </td>
-                      ) : column.type === "img" ? (
-                        <td
-                          key={columnKey}
-                          className="px-4 py-3 text-sm text-slate-500"
-                        >
-                          <img
-                            loading="lazy"
-                            src={
-                              item[column.fieldName]
-                                ? item[column.fieldName]
-                                : "-"
-                            }
-                            className="h-10"
-                          />
-                        </td>
-                      ) : column.type === "status" ? (
-                        <td
-                          key={columnKey}
-                          className="px-4 py-3 text-sm font-semibold capitalize"
-                        >
-                          <span
-                            className={`text-center rounded-full px-3 py-1 ${
-                              item[column.fieldName] === "active" || item[column.fieldName] === "approved" || item[column.fieldName] === "open"
-                                ? "bg-green-100 text-green-500"
-                                : "bg-red-100 text-red-500"
-                            }`}
-                          >
-                               {item[column.fieldName]
-                              ? item[column.fieldName]
-                              : "-"}
-                          </span>
-                        </td>
-                      ) : (
-                        ""
-                      );
-                    })}
-                    <td className="px-4 h-[64px] flex items-center justify-start">
-                      {actions
-                        ? actions.map((action, actionIndex) => {
-                          {/* console.log(action, actionIndex) */}
-                            return (
-                              <span
-                                className="p-2 text-lg rounded-full cursor-pointer hover:bg-blue-50"
-                                key={actionIndex}
-                                onClick={() => [
-                                  action.handler(dataIndex, item),
-                                ]}
-                              >
-                                {action.icon}
-                              </span>
-                            );
-                          })
-                        : ""}
-                    </td>
-                  </tr>
-                  {
-                    <tr
-                      key={dataIndex}
-                      className={`bg-blue-100 transition-all ${
-                        activeIndex === dataIndex ? "visible" : "hidden"
-                      }`}
-                    >
-                      <td colSpan={columns && columns.length - 3}>
-                        {viewColumns
-                          ? viewColumns.map((column, columnIndex) => {
-                              return column.type === "id" ? (
-                                <div
-                                  key={columnIndex}
-                                  className="px-4 py-3 text-sm text-slate-500"
-                                >
-                                  <p className="font-semibold text-text">
-                                    {[column.columnName]}
-                                  </p>
-                                  <span>
-                                  {item[column.fieldName]
-                                      ? item[column.fieldName]
-                                      : "-"}
-                                  </span>
-                                </div>
-                              ) : column.type === "text" ? (
-                                <div
-                                  key={columnIndex}
-                                  className="px-4 py-3 text-sm text-slate-500"
-                                >
-                                  <p className="font-semibold text-text">
-                                    {[column.columnName]}
-                                  </p>
-                                  <span>
-                                    {item[column.fieldName]
-                                      ? item[column.fieldName]
-                                      : "-"}
-                                  </span>
-                                </div>
-                              ) : (
-                                ""
-                              );
-                            })
-                          : ""}
-                      </td>
-                      <td colSpan={3}>
-                        {viewColumns
-                          ? viewColumns.map((column, columnIndex) => {
-                              return column.type === "img" ? (
-                                <div
-                                  key={columnIndex}
-                                  className="px-4 py-3 text-sm text-slate-500"
-                                >
-                                  {/* <p className="font-semibold text-text">
-                                    {[column.columnName]}
-                                  </p> */}
-                                  <img
-                                    loading="lazy"
-                                    src={
-                                      item[column.fieldName]
-                                        ? item[column.fieldName]
-                                        : "-"
-                                    }
-                                    className="h-96 "
-                                  />
-                                </div>
-                              ) : (
-                                ""
-                              );
-                            })
-                          : ""}
-                      </td>
-                    </tr>
-                  }
-                </React.Fragment>
-              );
-            })
-          ) : (
-            <tr>
-              <td className="px-4 py-3 text-center" colSpan={columns.length}>
-                {loaderStatus ? (
-                  <Spinner className={"text-primary"} />
-                ) : (
-                  <h2 className="text-xl">Data not found</h2>
-                )}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </>
+    <div className="overflow-x-auto">
+      {progressPending ? (
+        <Loader />
+      ) : (
+        <DataTable
+          columns={modifiedColumns}
+          data={paginatedData}
+          pagination={pagination}
+          paginationTotalRows={paginationTotalRows || tableData.length}
+          paginationComponentOptions={paginationComponentOptions}
+          onChangePage={handlePageChange}
+          paginationServer={true}
+          noRowsPerPage={noRowsPerPage}
+          noDataComponent={
+            tableData.length > 0 ? (
+              <Spinner />
+            ) : (
+              <div>There are no records to display</div>
+            )
+          }
+          progressPending={progressPending}
+          progressComponent={<Spinner />}
+          customStyles={{
+            headRow: {
+              style: {
+                backgroundColor: "#008585",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+                borderBottomWidth: "0px",
+              },
+            },
+            headCells: {
+              style: {
+                fontFamily: "Poppins",
+                color: "#fff",
+                fontSize: "16px",
+                fontWeight: "bold",
+                whiteSpace: "normal", // Wrap heading text
+                wordBreak: "break-word",
+              },
+            },
+            rows: {
+              style: {
+                fontSize: "13px",
+              },
+            },
+            rowsBottom: {
+              style: {
+                borderBottomWidth: "1px",
+              },
+            },
+          }}
+        />
+      )}
+    </div>
   );
 };
 

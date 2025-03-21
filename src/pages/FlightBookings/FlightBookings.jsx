@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Table, ConfirmModal } from "../../components/components";
-
+import React, { useEffect } from "react";
+import { Table, Tag } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -8,99 +7,108 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-
 import { FaEye } from "react-icons/fa";
+import { IoIosAirplane } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { getFlightBookings } from "../../_core/features/bookingSlice";
+import dayjs from "dayjs";
 
 const FlightBookings = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [modalStatus, setModalStatus] = useState(false);
   const { userData } = useSelector((state) => state.auth);
   const { flightBookings, isLoadingFlightBookings } = useSelector(
     (state) => state.booking
   );
-
-  const columnsData = [
-    { columnName: "No.", fieldName: "no.", type: "no." },
-    { columnName: "Origin", fieldName: "origin", type: "text" },
-    { columnName: "Destination", fieldName: "destination", type: "text" },
-    { columnName: "Total Fare", fieldName: "total_fare", type: "text" },
-    { columnName: "Currency", fieldName: "currency", type: "text" },
-    { columnName: "Status", fieldName: "booking_status", type: "status" },
-    { columnName: "Created At", fieldName: "created_at", type: "text" },
-    { columnName: "Actions", fieldName: "actions", type: "actions" },
-  ];
-
-  const viewColumns = [
-    { columnName: "Ref Id", fieldName: "booking_reference_id", type: "text" },
-    { columnName: "Updated At", fieldName: "updated_at", type: "text" },
+  const columns = [
     {
-      columnName: "Transaction Identifier",
-      fieldName: "transaction_identifier",
-      type: "text",
+      name: "ROUTE",
+      selector: (row) => (
+        <span className="flex w-52 items-center lg:justify-center  gap-2 text-sm text-text">
+          {row.origin}
+          <div className="flex justify-center items-center gap-1">
+            <span className="h-0.5 w-3 bg-primary"></span>
+            <IoIosAirplane className="text-lg text-primary" />
+            <span className="h-0.5 w-3 bg-primary"></span>
+          </div>
+          {row.destination}
+        </span>
+      ),
+      sortable: false,
+      center: true,
+      wrap: true,
+      grow: 4,
     },
     {
-      columnName: "Ticketing Time Limit",
-      fieldName: "ticketing_time_limit",
-      type: "text",
+      name: "PNR",
+      selector: (row) => row.booking_reference_id,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+      grow: 2,
     },
-    { columnName: "Booking Id", fieldName: "id", type: "id" },
-    { columnName: "Rate", fieldName: "rate", type: "text" },
-    { columnName: "Percentage", fieldName: "persantage", type: "text" },
-    { columnName: "Cancel At", fieldName: "canceled_at", type: "text" },
-  ];
-
-  const actionsData = [
     {
-      name: "View",
-      icon: <FaEye title="View" className="text-green-500" />,
-      // handler: (index) => {
-      //   if (activeIndex === index) {
-      //     setActiveIndex(null);
-      //   } else setActiveIndex(index);
-      // },
-      handler: (index, item) => {
-        navigate("/dashboard/booking-details", {
-          state: item.booking_reference_id,
-        });
-      },
+      name: "TOTAL FARE",
+      selector: (row) => row.total_fare,
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "STATUS",
+      selector: (row) => <Tag value={row.booking_status} />,
+      sortable: false,
+      center: true,
+      wrap: true,
+      grow: 4,
+    },
+    {
+      name: "CREATED AT",
+      selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "",
+      selector: (row) => (
+        <span
+          className="text-lg cursor-pointer"
+          onClick={() => {
+            navigate("/dashboard/booking-details", {
+              state: row,
+            });
+          }}>
+          <FaEye title="View" className="text-green-500 " />
+        </span>
+      ),
+      sortable: false,
+      center: true,
     },
   ];
-
-  const abortDeleteHandler = () => {
-    setModalStatus(false);
-    setDeleteId(null);
-  };
 
   useEffect(() => {
     dispatch(getFlightBookings(userData?.token));
   }, []);
 
   return (
-    <>
-      <ConfirmModal
-        status={modalStatus}
-        abortDelete={abortDeleteHandler}
-        // deleteHandler={cancelFlightBookingHandler}
-      />
-      <CardLayoutContainer removeBg={true}>
-        <CardLayoutHeader
-          removeBorder={true}
-          heading={"Flight Bookings"}
-          className="flex justify-between items-center"></CardLayoutHeader>
-        <CardLayoutBody removeBorder={true}>
-          <Table
-            columns={columnsData}
-            viewColumns={viewColumns}
-            data={flightBookings || []}
-            actions={actionsData}
-          />
-        </CardLayoutBody>
-        <CardLayoutFooter></CardLayoutFooter>
-      </CardLayoutContainer>
-    </>
+    <CardLayoutContainer removeBg={true}>
+      <CardLayoutHeader
+        removeBorder={true}
+        heading={"Flight Bookings"}
+        className="flex justify-between items-center"></CardLayoutHeader>
+      <CardLayoutBody removeBorder={true}>
+        <Table
+          pagination={true}
+          columnsData={columns}
+          tableData={flightBookings || []}
+          progressPending={isLoadingFlightBookings}
+          paginationTotalRows={flightBookings.length}
+          paginationComponentOptions={{ noRowsPerPage: "10" }}
+        />
+      </CardLayoutBody>
+      <CardLayoutFooter></CardLayoutFooter>
+    </CardLayoutContainer>
   );
 };
 
