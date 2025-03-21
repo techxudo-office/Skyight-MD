@@ -23,7 +23,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [dropdownStatus, setDropDownStatus] = useState(false);
-  const [isActive, setIsActive] = useState(false);
   const [CreditsDropdownOpen, setCreditsDropdownOpen] = useState(false);
   const [isNotiHovered, setIsNotiHovered] = useState(false);
   const { userData } = useSelector((state) => state.auth);
@@ -31,10 +30,10 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   const dropdownOptions = [
     {
-      name: "Profile",
-      icon: <FaUser />,
+      name: "Setting",
+      icon: <SlSettings />,
       handler: () => {
-        navigationHandler("/profile");
+        navigationHandler("/settings");
       },
     },
     {
@@ -150,19 +149,10 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                   </motion.div>
                 )}
               </div>
-              <CustomTooltip content={"Settings"}>
-                <div className="max-md:hidden">
-                  <MdSettings className="text-2xl cursor-pointer text-text" />{" "}
-                </div>
-              </CustomTooltip>
               <div className="relative">
                 <CustomTooltip content={"credits"}>
                   <button
-                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-blue-100 hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
-                    // onClick={() => {
-                    //   setIsActive(!isActive);
-                    // }}
-                  >
+                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-blue-100 hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}>
                     {isLoadingCredits ? (
                       <span className="flex items-center gap-2">
                         <HiOutlineRefresh className="animate-spin max-sm:hidden" />
@@ -200,10 +190,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
               </div>
               <CustomTooltip content={"profile"}>
                 <div className="px-3">
-                  {/* <FaUserCircle
-                    onClick={dropdownHandler}
-                    className="text-4xl transition-all cursor-pointer text-primary hover:text-secondary"
-                  /> */}
                   <FaUserCircle
                     onClick={dropdownHandler}
                     className="text-4xl transition-all cursor-pointer text-text"

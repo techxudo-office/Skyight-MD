@@ -7,8 +7,8 @@ import {
 import { Input } from "../../components/components";
 import { MdEdit } from "react-icons/md";
 
-const Profile = () => {
-  const [editingField,  setEditingField] = useState(null);
+const Settings = () => {
+  const [editingField, setEditingField] = useState(null);
   const [profileData, setProfileData] = useState({
     firstName: "First Name",
     lastName: "Last Name",
@@ -96,8 +96,7 @@ const Profile = () => {
       <CardLayoutContainer className="w-full mb-5">
         <CardLayoutHeader
           className="flex flex-wrap items-center justify-start gap-5 py-3"
-          removeBorder={true}
-        >
+          removeBorder={true}>
           {" "}
           <div className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group">
             <img
@@ -107,8 +106,7 @@ const Profile = () => {
             />
             <div
               className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 opacity-0 group-hover:opacity-100"
-              onClick={() => fileInputRef.current.click()}
-            >
+              onClick={() => fileInputRef.current.click()}>
               <MdEdit className="text-xl text-white" />
             </div>
             <input
@@ -129,8 +127,7 @@ const Profile = () => {
       <CardLayoutContainer className="w-full mb-5">
         <CardLayoutHeader
           className="flex items-center justify-between gap-5 py-3"
-          removeBorder={true}
-        >
+          removeBorder={true}>
           <h2 className="text-2xl font-semibold text-text">
             Personal Information
           </h2>
@@ -154,8 +151,7 @@ const Profile = () => {
         </CardLayoutBody>
         <CardLayoutHeader
           className="flex items-center justify-between gap-5 py-3"
-          removeBorder={true}
-        >
+          removeBorder={true}>
           <h2 className="text-2xl font-semibold text-text">Address</h2>
         </CardLayoutHeader>
         <CardLayoutBody>
@@ -178,8 +174,7 @@ const Profile = () => {
             disabled={!editingField}
             className={`px-4 py-2 mt-3 font-semibold text-white rounded-md 
     bg-primary ${editingField ? "cursor-pointer" : "cursor-not-allowed"}`}
-            onClick={handleSave}
-          >
+            onClick={handleSave}>
             Save Changes
           </button>
         </CardLayoutBody>
@@ -188,4 +183,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Settings;

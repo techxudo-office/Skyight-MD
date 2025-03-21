@@ -14,7 +14,7 @@ export { default as UpdateReason } from "./UpdateReason/UpdateReason";
 export { default as FlightBookings } from "./FlightBookings/FlightBookings";
 export { default as BookingDetails } from "./BookingDetails/BookingDetails";
 export { default as Transactions } from "./Transactions/Transactions";
-export { default as Profile } from "./Profile/Profile";
+export { default as Settings } from "./Settings/Settings";
 export { default as ApplyCommisions } from "./ApplyCommisions/ApplyCommisions";
 export { default as UpdateSetting } from "./UpdateSetting/UpdateSetting";
 export { default as CreateAdmin } from "./CreateAdmin/CreateAdmin";
