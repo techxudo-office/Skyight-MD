@@ -1,14 +1,19 @@
-import React from 'react';
+import React from "react";
+import "./Switch.css";
 
-const Switch = ({ switchStatus }) => {
-
-    return (
-        <>
-            <div className={`cursor-pointer relative w-14 h-7 rounded-full p-1 ${switchStatus ? 'bg-secondary' : 'bg-slate-200'}`}>
-                <div className={`absolute ${switchStatus ? 'bg-white left-8' : 'bg-slate-400 left-1'} transition-all h-5 w-5 rounded-full`}></div>
-            </div>
-        </>
-    );
+const Switch = ({ setToggle, profileData }) => {
+  return (
+    <label className="switch">
+      <input
+        type="checkbox"
+        className="checkbox"
+        onChange={(e) =>
+          setToggle({ ...profileData, is_active: e.target.checked })
+        }
+      />
+      <div className="slider"></div>
+    </label>
+  );
 };
 
 export default Switch;

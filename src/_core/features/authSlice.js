@@ -7,14 +7,21 @@ const initialState = {
   userData: null,
   isLoading: false,
   loginError: null,
+
   isLoadingForgotPassword: false,
   forgotPasswordError: null,
+
   isLoadingRegister: false,
   registerError: null,
+
   isLoadingVerifyOTP: false,
   verifyOTPError: null,
+
   isLoadingResendCode: false,
   resendCodeError: null,
+
+  isUpdatingAccount: false,
+  updateAccountError: null,
 };
 
 const authSlice = createSlice({
@@ -85,6 +92,22 @@ const authSlice = createSlice({
       .addCase(resendCode.rejected, (state, action) => {
         state.isLoadingResendCode = false;
         state.resendCodeError = action.payload;
+      })
+
+      .addCase(updateAccount.pending, (state) => {
+        state.isUpdatingAccount = true;
+      })
+      .addCase(updateAccount.fulfilled, (state, action) => {
+        console.log(action.payload, "UserInfo");
+        state.isUpdatingAccount = false;
+        state.userData = {
+          ...state.userData,
+          admin: action.payload,
+        };
+      })
+      .addCase(updateAccount.rejected, (state, action) => {
+        state.isUpdatingAccount = false;
+        state.updateAccountError = action.payload;
       });
   },
 });
@@ -211,6 +234,34 @@ export const resendCode = createAsyncThunk(
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
+  }
+);
+
+export const updateAccount = createAsyncThunk(
+  "auth/updateAccount",
+  async ({ token, data, id }, thunkAPI) => {
+    try {
+      console.log(data, "data");
+      let response = await axios.put(
+        `${BASE_URL}/api/admin/${id}`,
+        data,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Account updated successfully");
+        return response.data.data;
+      }
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed while updating your Account";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    } 3
   }
 );
 

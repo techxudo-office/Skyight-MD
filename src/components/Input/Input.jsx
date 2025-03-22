@@ -4,6 +4,7 @@ import { MdEdit } from "react-icons/md";
 
 const Input = ({
   id,
+  edit,
   type,
   name,
   label,
@@ -17,10 +18,10 @@ const Input = ({
   placeholder,
   autoComplete,
   setEditingField,
-  onKeyPressHandler,
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
   const inputRef = useRef();
+  const eyeIconRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const showPasswordHandler = () => {
     setShowPassword(!showPassword);
@@ -40,12 +41,10 @@ const Input = ({
       <div
         className={`relative flex items-center rounded-lg border border-gray text-text ${
           disabled ? "bg-slate-100" : "bg-white"
-        }`}
-      >
+        }`}>
         <label
           htmlFor={id}
-          className="absolute px-1 mb-2 text-base font-medium bg-white rounded-md -top-3 left-3 text-text"
-        >
+          className="absolute px-1 mb-2 text-base font-medium bg-white rounded-md -top-3 left-3 text-text">
           {label}
         </label>
         <input
@@ -55,28 +54,33 @@ const Input = ({
           type={
             type === "password" ? (showPassword ? "text" : "password") : type
           }
-          name={name}
           disabled={disabled}
+          name={name}
           value={value}
           placeholder={placeholder}
           onChange={onChange}
-          onKeyPress={onKeyPressHandler}
           autoComplete={autoComplete}
-          onBlur={() => setEditingField(null)}
+          required
+          onBlur={(e) => {
+            if (setEditingField && e.relatedTarget !== eyeIconRef.current) {
+              setEditingField(null);
+              setShowPassword(false);
+            }
+          }}
         />
-        {disabled && profile && (
+        {disabled && profile && edit && (
           <span
             className="absolute text-xl cursor-pointer right-3 text-primary"
-            onClick={onEditClick}
-          >
+            onClick={onEditClick}>
             <MdEdit className="text-xl text-black" />
           </span>
         )}
         {type === "password" && !disabled && (
           <span
-            className="absolute cursor-pointer right-3"
-            onClick={showPasswordHandler}
-          >
+            ref={eyeIconRef}
+            className="absolute cursor-pointer right-3 eye-icon"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={showPasswordHandler}>
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </span>
         )}
