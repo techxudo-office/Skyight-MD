@@ -9,6 +9,12 @@ const initialState = {
   isLoadingCreateRole: false,
   rolesError: null,
   totalPages: 1,
+
+  isEditingRole: false,
+  editRoleError: null,
+
+  isDeletingRole: false,
+  deleteRoleError: null,
 };
 
 const roleSlice = createSlice({
@@ -25,6 +31,7 @@ const roleSlice = createSlice({
         state.isLoadingRoles = false;
 
         if (action.payload?.data?.roles) {
+          console.log(action.payload.data.roles, "action.payload.data.roles");
           state.roles = action.payload.data.roles.map((item) => ({
             id: item.id.toString(),
             role: item.name || "Unknown",
@@ -35,6 +42,9 @@ const roleSlice = createSlice({
                 .join(", ")
               : "No Permissions",
             status: item.is_deleted ? "inactive" : "active",
+            description: item.description,
+            page_permission: item.page_permission,
+            action_permission: item.action_permission,
           }));
         } else {
           state.roles = [];
@@ -55,6 +65,50 @@ const roleSlice = createSlice({
       .addCase(createRole.rejected, (state, action) => {
         state.isLoadingCreateRole = false;
         state.rolesError = action.payload;
+      })
+      .addCase(deleteRole.pending, (state) => {
+        state.isDeletingRole = true;
+        state.deleteRoleError = null;
+      })
+      .addCase(deleteRole.fulfilled, (state, action) => {
+        state.isDeletingRole = false;
+        state.roles = state.roles.filter((role) => role.id !== action.payload);
+      })
+      .addCase(deleteRole.rejected, (state, action) => {
+        state.isDeletingRole = false;
+        state.deleteRoleError = action.payload;
+      })
+      .addCase(editRole.pending, (state) => {
+        state.isEditingRole = true;
+        state.editRoleError = null;
+      })
+      .addCase(editRole.fulfilled, (state, action) => {
+        state.isEditingRole = false;
+        const updatedRole = action.payload;
+
+        console.log("Updated Role Payload:", updatedRole);
+        console.log(
+          "Existing Roles Before Update:",
+          JSON.parse(JSON.stringify(state.roles))
+        );
+
+        if (!Array.isArray(state.roles)) {
+          console.error("state.roles is not an array!", state.roles);
+          return;
+        }
+
+        state.roles = state.roles.map((role) =>
+          role.id == updatedRole.id ? { ...role, ...updatedRole } : role
+        );
+
+        console.log(
+          "Updated Roles After Update:",
+          JSON.parse(JSON.stringify(state.roles))
+        );
+      })
+      .addCase(editRole.rejected, (state, action) => {
+        state.isEditingRole = false;
+        state.editRoleError = action.payload;
       });
   },
 });
@@ -102,5 +156,50 @@ export const createRole = createAsyncThunk(
     }
   }
 );
+
+export const deleteRole = createAsyncThunk(
+  "role/deleteRole",
+  async ({ id, token }, thunkAPI) => {
+    try {
+      let response = await axios.delete(`${BASE_URL}/api/role/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success("Role deleted successfully");
+        return id;
+      }
+    } catch (error) {
+      const errorMessage = "Failed while deleting this role";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const editRole = createAsyncThunk(
+  "role/editRole",
+  async ({ id, token, data }, thunkAPI) => {
+    try {
+      let response = await axios.put(`${BASE_URL}/api/role/${id}`, data, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success("Role updated successfully");
+        return response.data.data;
+      }
+    } catch (error) {
+      const errorMessage = "Failed while updating this role";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
 
 export default roleSlice.reducer;

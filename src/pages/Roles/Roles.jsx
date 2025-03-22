@@ -1,191 +1,156 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
-  CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-
-import { FaEye } from "react-icons/fa";
 import { MdEditSquare } from "react-icons/md";
-import { FaRegCircleCheck } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { MdAutoDelete } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 
-import { Table, Dropdown, SecondaryButton } from "../../components/components";
-import { getRoles } from "../../utils/api_handler";
+import {
+  ConfirmModal,
+  SecondaryButton,
+  Table,
+  Tag,
+} from "../../components/components";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteRole, getRoles } from "../../_core/features/roleSlice";
+import EditRoleModal from "./EditRoleModal/EditRoleModal";
 
 const Roles = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [rolesData, setRolesData] = useState([]);
-  const [dropdownStatus, setDropdownStatus] = useState(false);
-
-  const navigationHandler = () => {
-    navigate("/dashboard/create-role");
-  };
-
-  const handleGetRoles = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await getRoles();
-      if (response.status) {
-        let data = response.data.roles.map((item) => ({
-          id: item.id.toString(),
-          role: item.name || "Unknown",
-          roleRights: item.page_permission
-            ? Object.keys(item.page_permission)
-                .filter((key) => item.page_permission[key])
-                .map((key) => key.replace(/_/g, " "))
-                .join(", ")
-            : "No Permissions",
-          status: item.is_deleted ? "inactive" : "active",
-        }));
-        setRolesData(data);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const dispatch = useDispatch();
+  const [deleteId, setDeleteId] = useState(null);
+  const [modalStatus, setModalStatus] = useState(false);
+  const [editRoleData, setEditRoleData] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { roles, isLoadingRoles, isDeletingRole } = useSelector(
+    (state) => state.role
+  );
+  const userData = useSelector((state) => state.auth.userData);
 
   useEffect(() => {
-    handleGetRoles();
-  }, [handleGetRoles]);
+    dispatch(getRoles(userData?.token));
+  }, [dispatch, userData?.token]);
 
-  const data = [
-    {
-      id: "64c3f3f4e4b0f1a1d2c3b3e1",
-      role: "Admin",
-      roleRights: "Full Access",
-      status: "active",
-    },
-    {
-      id: "64c3f3f4e4b0f1a1d2c3b3e2",
-      role: "Editor",
-      roleRights: "Create, Update, View",
-      status: "active",
-    },
-    {
-      id: "64c3f3f4e4b0f1a1d2c3b3e3",
-      role: "Viewer",
-      roleRights: "View Only",
-      status: "inactive",
-    },
-    {
-      id: "64c3f3f4e4b0f1a1d2c3b3e4",
-      role: "Manager",
-      roleRights: "Create, Update, View",
-      status: "active",
-    },
-    {
-      id: "64c3f3f4e4b0f1a1d2c3b3e5",
-      role: "Support",
-      roleRights: "Limited Access",
-      status: "inactive",
-    },
-  ];
+  useEffect(() => {
+    console.log(roles, "roles");
+  }, [roles]);
 
-  const columnsData = [
-    { columnName: "No.", fieldName: "no.", type: "no." },
-    // { columnName: "Role Img", fieldName: "image", type: 'img' },
-    { columnName: "Role", fieldName: "role", type: "text" },
-    // { columnName: "Role ID", fieldName: "id", type: "id" },
-    { columnName: "Status", fieldName: "status", type: "status" },
-    { columnName: "Actions", fieldName: "actions", type: "actions" },
-  ];
-
-  const viewColumns = [
-    { columnName: "Role Rights", fieldName: "roleRights", type: "text" },
-  ];
-
-  const actionsData = [
+  const roleColumns = [
     {
-      name: "View",
-      icon: <FaEye title="View" className="text-green-500" />,
-      handler: (index) => {
-        if (activeIndex === index) {
-          setActiveIndex(null);
-        } else setActiveIndex(index);
-      },
+      name: "ROLE",
+      selector: (row) => row.role,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
     },
     {
-      name: "Edit",
-      icon: <MdEditSquare title="Edit" className="text-blue-500" />,
-      handler: () => {
-        alert("Hello Im Edit Alert !");
-      },
+      name: "ROLE ID",
+      selector: (row) => row.id,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
     },
     {
-      name: "Rights",
-      icon: (
-        <FaRegCircleCheck title="Rights" className="text-sm text-orange-500" />
+      name: "STATUS",
+      selector: (row) => <Tag value={row.status} />,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+    },
+    {
+      name: "",
+      selector: (row) => (
+        <div className="flex items-center gap-x-4">
+          <span
+            className="text-xl cursor-pointer"
+            onClick={() => {
+              console.log(row, "Row");
+              setEditRoleData(row);
+              setIsEditModalOpen(true);
+            }}>
+            <MdEditSquare title="Edit" className="text-blue-500" />
+          </span>
+          {/* <span
+            className="text-xl cursor-pointer"
+            onClick={() => {
+              setModalStatus(true);
+              setDeleteId(row.id);
+            }}
+          >
+            <MdAutoDelete title="Delete" className="text-red-500" />
+          </span> */}
+        </div>
       ),
-      handler: () => {
-        alert("Hello Im Rights Alert !");
-      },
-    },
-    {
-      name: "Delete",
-      icon: <MdAutoDelete title="Delete" className="text-red-500" />,
-      handler: () => {
-        alert("Hello Im Delete Alert !");
-      },
+      sortable: false,
+      minwidth: "150px",
+      center: true,
     },
   ];
 
-  const filterOptions = [
-    {
-      name: "Filter One",
-      handler: () => {
-        setDropdownStatus(!dropdownStatus);
-      },
-    },
-    {
-      name: "Filter Two",
-      handler: () => {
-        setDropdownStatus(!dropdownStatus);
-      },
-    },
-    {
-      name: "Filter Three",
-      handler: () => {
-        setDropdownStatus(!dropdownStatus);
-      },
-    },
-  ];
+  // const deleteUserHandler = () => {
+  //   console.log(deleteId, "deleteId TABLE");
+  //   if (!deleteId) {
+  //     errorToastify("Failed to delete this user");
+  //     setModalStatus(false);
+  //     return;
+  //   }
+
+  //   dispatch(deleteRole({ id: deleteId, token: userData?.token })).then(() => {
+  //     setModalStatus(false);
+  //     setDeleteId(null);
+  //   });
+  // };
+
+  // const abortDeleteHandler = () => {
+  //   setModalStatus(false);
+  //   setDeleteId(null);
+  // };
 
   return (
     <>
+      {/* <ConfirmModal
+        status={modalStatus}
+        loading={isDeletingRole}
+        onAbort={abortDeleteHandler}
+        onConfirm={deleteUserHandler}
+      /> */}
+      {isEditModalOpen && (
+        <EditRoleModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          roleData={editRoleData}
+        />
+      )}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
           heading={"Roles"}
-          className="flex items-center justify-between"
-        >
+          className="flex items-center justify-between">
           <div className="relative">
             <SecondaryButton
               text={"Create New Role"}
-              onClick={navigationHandler}
-            />
-            <Dropdown
-              className={"top-16 right-10"}
-              status={dropdownStatus}
-              changeStatus={setDropdownStatus}
-              options={filterOptions}
+              icon={<FaPlus />}
+              onClick={() => {
+                navigate("/dashboard/create-role");
+              }}
+              className="mb-4"
             />
           </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <Table
-            columns={columnsData}
-            viewColumns={viewColumns}
-            data={rolesData}
-            actions={actionsData}
-            activeIndex={activeIndex}
+            pagination={true}
+            columnsData={roleColumns}
+            tableData={roles || []}
+            progressPending={isLoadingRoles}
+            paginationTotalRows={roles.length}
+            paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
-        <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>
     </>
   );
