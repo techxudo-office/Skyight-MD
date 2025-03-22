@@ -1,19 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import {
-  CardLayoutContainer,
-  CardLayoutHeader,
-  CardLayoutBody,
-  CardLayoutFooter,
-} from "../../components/CardLayout/CardLayout";
-import { Button, SecondaryButton } from "../components";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, ModalWrapper, SecondaryButton } from "../components";
 
-const ConfirmModal = ({ status, abortDelete, deleteHandler }) => {
+const ConfirmModal = ({ status, onAbort, onConfirm, text, loading }) => {
   const modalRef = useRef();
-
   useEffect(() => {
     const outsideClickHandler = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
-        abortDelete();
+        onAbort;
       }
     };
 
@@ -25,35 +18,36 @@ const ConfirmModal = ({ status, abortDelete, deleteHandler }) => {
 
   return (
     <>
-      <div
+      <ModalWrapper
         ref={modalRef}
-        className={`transition-all absolute z-10 ${
-          status ? "top-3" : "top-[-100%]"
-        } left-[50%] translate-x-[-50%]`}
+        isOpen={status}
+        // className={`transition-all absolute z-10 ${status ? "top-16" : "top-[-100%]"
+        //   } left-[50%] translate-x-[-50%]`}
       >
-        <CardLayoutContainer className={"shadow-xl"}>
-          <CardLayoutHeader className="flex justify-between items-center rounded-t-3xl">
-            <h2 className="text-xl font-semibold text-text">Confirmation</h2>
-          </CardLayoutHeader>
-          <CardLayoutBody>
-            <h2 className="text-xl text-text">
-              Are you sure you want to delete this record?
-            </h2>
-          </CardLayoutBody>
-          <CardLayoutFooter className={"gap-1"}>
+        <div className={" flex flex-col gap-3 "}>
+          <h2 className="px-4 text-2xl font-semibold text-primary ">
+            Confirmation
+          </h2>
+
+          <h2 className="px-4 py-3 text-xl text-text border-t border-b border-background">
+            {text}
+          </h2>
+
+          <div className={"gap-2 flex justify-end px-4 "}>
             <div>
-              <SecondaryButton text="Cancel" onClick={abortDelete} />
-            </div>
-            <div>
-              <Button
-                text="Delete"
-                className="bg-red-500 hover:bg-red-700"
-                onClick={deleteHandler}
+              <SecondaryButton
+                text="Confirm"
+                onClick={onConfirm}
+                loading={loading}
+                disabled={loading}
               />
             </div>
-          </CardLayoutFooter>
-        </CardLayoutContainer>
-      </div>
+            <div>
+              <Button text="Cancel" className="bg-redColor" onClick={onAbort} />
+            </div>
+          </div>
+        </div>
+      </ModalWrapper>
     </>
   );
 };
