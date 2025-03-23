@@ -129,7 +129,6 @@ const Users = () => {
         onAbort={abortDeleteHandler}
         onConfirm={deleteUserHandler}
       />
-      <Switch />
       {isEditModalOpen && (
         <EditUserModal
           isOpen={isEditModalOpen}

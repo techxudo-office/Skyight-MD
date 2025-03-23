@@ -82,7 +82,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
         role_id: usersData.role.id || "",
       });
 
-      const role = roles?.find((r) => r.id === usersData.role.id);
+      const role = roles?.find((r) => r.id == usersData.role_id);
       setSelectedRole(role || null);
     }
   }, [usersData, roles]);
@@ -91,14 +91,26 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
     dispatch(getRoles(userData?.token));
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log(roles, "roles");
+  }, [roles]);
+
+  useEffect(() => {
+    console.log(selectedRole, "selectedRole");
+  }, [selectedRole]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleRoleSelect = (role) => {
-    setSelectedRole(role);
-    setFormData((prev) => ({ ...prev, role_id: role.id }));
+    let data = {
+      id: role.value,
+      role: role.lable,
+    };
+    setSelectedRole(data);
+    setFormData((prev) => ({ ...prev, role_id: data.role }));
   };
 
   const validateForm = () => {

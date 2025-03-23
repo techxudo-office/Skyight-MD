@@ -29,9 +29,7 @@ const roleSlice = createSlice({
       })
       .addCase(getRoles.fulfilled, (state, action) => {
         state.isLoadingRoles = false;
-
         if (action.payload?.data?.roles) {
-          console.log(action.payload.data.roles, "action.payload.data.roles");
           state.roles = action.payload.data.roles.map((item) => ({
             id: item.id.toString(),
             role: item.name || "Unknown",

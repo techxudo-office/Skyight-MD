@@ -42,9 +42,9 @@ const Settings = () => {
     }
   }, [userData, roles]);
 
-  useEffect(() => {
-    // dispatch(getUserInfo(userData?.token));
-  }, []);
+  // useEffect(() => {
+  //   // dispatch(getUserInfo(userData?.token));
+  // }, []);
 
   const handleChange = (e, field) => {
     setProfileData({ ...profileData, [field]: e.target.value });
@@ -175,8 +175,6 @@ const Settings = () => {
             <h2 className="text-2xl font-semibold text-text">
               Personal Information
             </h2>
-
-            {/* Status & Toggle */}
             <div className="flex items-center gap-3">
               <span className="text-2xl font-semibold text-text">Status:</span>
               <Switch setToggle={setProfileData} profileData={profileData} />
@@ -196,7 +194,7 @@ const Settings = () => {
           </CardLayoutBody>
           <CardLayoutBody>
             <Button
-              text="Save Changes"
+              text="Update Account"
               onClick={handleSave}
               loading={isUpdatingAccount}
               disabled={isUpdatingAccount}
