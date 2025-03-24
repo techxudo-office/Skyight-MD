@@ -39,7 +39,7 @@ export const routesData = [
       { path: "roles", element: <Roles /> },
       { path: "users", element: <Users /> },
       { path: "companies", element: <Companies /> },
-      { path: "user/:companyId", element: <Users isCompanyUser={true} /> },
+      { path: "company/user/:companyId", element: <Users isCompanyUser={true} /> },
       { path: "create-user", element: <CreateUser /> },
       { path: "create-role", element: <CreateRole /> },
       { path: "reasons", element: <Reasons /> },

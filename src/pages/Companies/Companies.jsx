@@ -61,12 +61,17 @@ const Companies = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              navigate(`/dashboard/user/${row.id}`);
+              navigate(`/dashboard/company/user/${row.id}`);
             }}
           >
             <p>Details</p>
           </span>
-          <span className="text-xl cursor-pointer" onClick={() => {}}>
+          <span
+            className="text-xl cursor-pointer"
+            onClick={() => {
+              navigate(`/dashboard/company/user/${row.id}`);
+            }}
+          >
             <p>Users</p>
           </span>
         </div>
