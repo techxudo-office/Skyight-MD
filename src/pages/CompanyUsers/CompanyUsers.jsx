@@ -5,25 +5,32 @@ import {
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
 import { MdEditSquare } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { Table, Tag } from "../../components/components";
-import { getCompanies } from "../../_core/features/companySlice";
+import { getCompanyUsers } from "../../_core/features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 
 const Companies = () => {
-  const navigate = useNavigate();
+  const { companyId } = useParams();
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.auth);
-  const { companies, isLoadingCompanies } = useSelector(
-    (state) => state.company
+  const { companyUsers, isLoadingCompanyUsers } = useSelector(
+    (state) => state.user
   );
 
   const companiesColumns = [
     {
       name: "NAME",
-      selector: (row) => row.name,
+      selector: (row) => `${row.first_name} ${row.last_name}`,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+    },
+    {
+      name: "NAME",
+      selector: (row) => `${row.first_name} ${row.last_name}`,
       sortable: false,
       minwidth: "150px",
       center: true,
@@ -62,15 +69,6 @@ const Companies = () => {
           >
             <MdEditSquare title="Edit" className="text-blue-500" />
           </span>
-          {/* <span
-              className="text-xl cursor-pointer"
-              onClick={() => {
-                setModalStatus(true);
-                setDeleteId(row.id);
-              }}
-            >
-              <MdAutoDelete title="Delete" className="text-red-500" />
-            </span> */}
         </div>
       ),
       sortable: false,
@@ -80,8 +78,10 @@ const Companies = () => {
   ];
 
   useEffect(() => {
-    dispatch(getCompanies(userData?.token));
-  }, [dispatch, userData?.token]);
+    if (companyId) {
+      dispatch(getCompanyUsers({ token: userData?.token, id: companyId }));
+    }
+  }, [userData?.token, companyId]);
 
   return (
     <>
@@ -95,9 +95,9 @@ const Companies = () => {
           <Table
             pagination={true}
             columnsData={companiesColumns}
-            tableData={companies || []}
-            progressPending={isLoadingCompanies}
-            paginationTotalRows={companies?.length}
+            tableData={companyUsers || []}
+            progressPending={isLoadingCompanyUsers}
+            paginationTotalRows={companyUsers?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

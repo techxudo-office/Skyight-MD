@@ -6,7 +6,7 @@ import {
   Switch,
 } from "../../components/components";
 import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -15,20 +15,29 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { errorToastify } from "../../helper/toast";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, getUsers } from "../../_core/features/userSlice";
+import {
+  deleteUser,
+  getCompanyUsers,
+  getUsers,
+} from "../../_core/features/userSlice";
 import EditUserModal from "./EditUserModal/EditUserModal";
 
-const Users = () => {
+const Users = ({ isCompanyUser }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { companyId } = useParams();
   const [deleteId, setDeleteId] = useState(null);
   const [modalStatus, setModalStatus] = useState(false);
   const [editUserData, setEditUserData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { userData } = useSelector((state) => state.auth);
-  const { users, isLoadingUsers, isDeletingUser } = useSelector(
-    (state) => state.user
-  );
+  const {
+    users,
+    isLoadingUsers,
+    isDeletingUser,
+    companyUsers,
+    isLoadingCompanyUsers,
+  } = useSelector((state) => state.user);
 
   const userColumns = [
     {
@@ -75,7 +84,8 @@ const Users = () => {
             onClick={() => {
               setEditUserData(row);
               setIsEditModalOpen(true);
-            }}>
+            }}
+          >
             <MdEditSquare title="Edit" className="text-blue-500" />
           </span>
           <span
@@ -83,7 +93,8 @@ const Users = () => {
             onClick={() => {
               setModalStatus(true);
               setDeleteId(row.id);
-            }}>
+            }}
+          >
             <MdAutoDelete title="Delete" className="text-red-500" />
           </span>
         </div>
@@ -118,7 +129,11 @@ const Users = () => {
   };
 
   useEffect(() => {
-    dispatch(getUsers(userData?.token));
+    if (isCompanyUser) {
+      dispatch(getCompanyUsers({ token: userData?.token, id: companyId }));
+    } else {
+      dispatch(getUsers(userData?.token));
+    }
   }, []);
 
   return (
@@ -139,8 +154,9 @@ const Users = () => {
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
-          heading={"Users"}
-          className="flex items-center justify-between">
+          heading={isCompanyUser ? "Company Users" : "Users"}
+          className="flex items-center justify-between"
+        >
           <div className="relative">
             <SecondaryButton
               icon={<MdAdd />}
@@ -153,9 +169,13 @@ const Users = () => {
           <Table
             pagination={true}
             columnsData={userColumns}
-            tableData={users || []}
-            progressPending={isLoadingUsers}
-            paginationTotalRows={users.length}
+            tableData={isCompanyUser ? companyUsers : users}
+            progressPending={
+              isCompanyUser ? isLoadingCompanyUsers : isLoadingUsers
+            }
+            paginationTotalRows={
+              isCompanyUser ? companyUsers.length : users.length
+            }
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

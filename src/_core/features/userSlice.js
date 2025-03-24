@@ -8,6 +8,10 @@ const initialState = {
   isLoadingUsers: false,
   usersError: null,
 
+  companyUsers: [],
+  isLoadingCompanyUsers: false,
+  companyUsersError: null,
+
   isCreatingUser: false,
   createUserError: null,
 
@@ -35,6 +39,18 @@ const userSlice = createSlice({
       .addCase(getUsers.rejected, (state, action) => {
         state.isLoadingUsers = false;
         state.usersError = action.payload;
+      })
+      .addCase(getCompanyUsers.pending, (state) => {
+        state.isLoadingCompanyUsers = true;
+        state.companyUsersError = null;
+      })
+      .addCase(getCompanyUsers.fulfilled, (state, action) => {
+        state.isLoadingCompanyUsers = false;
+        state.companyUsers = action.payload[0];
+      })
+      .addCase(getCompanyUsers.rejected, (state, action) => {
+        state.isLoadingCompanyUsers = false;
+        state.companyUsersError = action.payload;
       })
       .addCase(createUser.pending, (state) => {
         state.isCreatingUser = true;
@@ -97,6 +113,24 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
+export const getCompanyUsers = createAsyncThunk(
+  "user/getCompanyUsers",
+  async ({ token, id }, thunkAPI) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/users/company/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response?.data?.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch company users.";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
 
 export const createUser = createAsyncThunk(
   "user/createUser",
@@ -119,7 +153,6 @@ export const createUser = createAsyncThunk(
     }
   }
 );
-
 
 export const deleteUser = createAsyncThunk(
   "user/deleteUser",
