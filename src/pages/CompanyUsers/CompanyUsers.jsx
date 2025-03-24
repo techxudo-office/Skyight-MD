@@ -3,17 +3,11 @@ import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
-  CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import { MdEditSquare } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
-import {
-  Table,
-  Dropdown,
-  SecondaryButton,
-  Tag,
-} from "../../components/components";
+import { Table, Tag } from "../../components/components";
 import { getCompanies } from "../../_core/features/companySlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -61,14 +55,22 @@ const Companies = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              navigate(`/dashboard/user/${row.id}`);
+              console.log(row, "Row");
+              setEditRoleData(row);
+              setIsEditModalOpen(true);
             }}
           >
-            <p>Details</p>
+            <MdEditSquare title="Edit" className="text-blue-500" />
           </span>
-          <span className="text-xl cursor-pointer" onClick={() => {}}>
-            <p>Users</p>
-          </span>
+          {/* <span
+              className="text-xl cursor-pointer"
+              onClick={() => {
+                setModalStatus(true);
+                setDeleteId(row.id);
+              }}
+            >
+              <MdAutoDelete title="Delete" className="text-red-500" />
+            </span> */}
         </div>
       ),
       sortable: false,

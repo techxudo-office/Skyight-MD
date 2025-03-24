@@ -35,10 +35,6 @@ const Roles = () => {
     dispatch(getRoles(userData?.token));
   }, [dispatch, userData?.token]);
 
-  useEffect(() => {
-    console.log(roles, "roles");
-  }, [roles]);
-
   const roleColumns = [
     {
       name: "ROLE",
