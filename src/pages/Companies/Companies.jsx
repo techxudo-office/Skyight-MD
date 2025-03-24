@@ -1,19 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
-  CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { MdEditSquare } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
-import {
-  Table,
-  Dropdown,
-  SecondaryButton,
-  Tag,
-} from "../../components/components";
+import { Table, Tag } from "../../components/components";
 import { getCompanies } from "../../_core/features/companySlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -61,7 +54,7 @@ const Companies = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              navigate(`/dashboard/company/user/${row.id}`);
+              navigate(`/dashboard/company/details/${row.id}`);
             }}
           >
             <p>Details</p>
@@ -69,7 +62,7 @@ const Companies = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              navigate(`/dashboard/company/user/${row.id}`);
+              navigate(`/dashboard/company/users/${row.id}`);
             }}
           >
             <p>Users</p>
@@ -91,7 +84,7 @@ const Companies = () => {
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
-          heading={"Roles"}
+          heading={"Companies"}
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>

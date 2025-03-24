@@ -27,6 +27,7 @@ import {
   CancelRequests,
   DateChange,
   CompanyUsers,
+  CompanyDetails,
 } from "../pages/pages";
 
 export const routesData = [
@@ -39,7 +40,8 @@ export const routesData = [
       { path: "roles", element: <Roles /> },
       { path: "users", element: <Users /> },
       { path: "companies", element: <Companies /> },
-      { path: "company/user/:companyId", element: <Users isCompanyUser={true} /> },
+      { path: "company/users/:companyId", element: <Users isCompanyUser={true} /> },
+      { path: "company/details/:companyId", element: <CompanyDetails /> },
       { path: "create-user", element: <CreateUser /> },
       { path: "create-role", element: <CreateRole /> },
       { path: "reasons", element: <Reasons /> },

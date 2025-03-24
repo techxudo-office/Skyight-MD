@@ -6,6 +6,7 @@ export { default as DashboardHome } from "./DashboardHome/DashboardHome";
 export { default as Roles } from "./Roles/Roles";
 export { default as Companies } from "./Companies/Companies";
 export { default as CompanyUsers } from "./CompanyUsers/CompanyUsers";
+export { default as CompanyDetails } from "./CompanyDetails/CompanyDetails";
 export { default as CreateRole } from "./CreateRole/CreateRole";
 export { default as Users } from "./Users/Users";
 export { default as CreateUser } from "./CreateUser/CreateUser";
