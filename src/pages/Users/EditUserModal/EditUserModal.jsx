@@ -14,9 +14,10 @@ import {
   Select,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoles } from "../../../_core/features/roleSlice";
+import { getUserRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
 import { editUser } from "../../../_core/features/userSlice";
+import { editUserValidation } from "../../../utils/validations";
 
 Modal.setAppElement("#root");
 
@@ -68,7 +69,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
   const [errors, setErrors] = useState({});
   const [selectedRole, setSelectedRole] = useState(null);
   const { userData } = useSelector((state) => state.auth);
-  const { roles, isLoadingRoles } = useSelector((state) => state.role);
+  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
   const { isEditingUser } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -82,18 +83,18 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
         role_id: usersData.role.id || "",
       });
 
-      const role = roles?.find((r) => r.id == usersData.role_id);
+      const role = userRoles?.find((r) => r.id == usersData.role_id);
       setSelectedRole(role || null);
     }
-  }, [usersData, roles]);
+  }, [usersData, userRoles]);
 
   useEffect(() => {
-    dispatch(getRoles(userData?.token));
+    dispatch(getUserRoles(userData?.token));
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(roles, "roles");
-  }, [roles]);
+    console.log(userRoles, "userRoles");
+  }, [userRoles]);
 
   useEffect(() => {
     console.log(selectedRole, "selectedRole");
@@ -113,50 +114,8 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
     setFormData((prev) => ({ ...prev, role_id: data.role }));
   };
 
-  const validateForm = () => {
-    let newErrors = {};
-
-    if (!formData.first_name.trim())
-      newErrors.first_name = "First name is required";
-
-    if (!formData.last_name.trim())
-      newErrors.last_name = "Last name is required";
-
-    if (!formData.mobile_number.trim()) {
-      newErrors.mobile_number = "Mobile number is required";
-    } else if (!/^\d{10}$/.test(formData.mobile_number)) {
-      newErrors.mobile_number = "Mobile number must be 10 digits";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    } else if (!/[A-Z]/.test(formData.password)) {
-      newErrors.password =
-        "Password must contain at least one uppercase letter";
-    } else if (!/[a-z]/.test(formData.password)) {
-      newErrors.password =
-        "Password must contain at least one lowercase letter";
-    } else if (!/\d/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one number";
-    } else if (!/[!@#$%^&*]/.test(formData.password)) {
-      newErrors.password =
-        "Password must contain at least one special character (!@#$%^&*)";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = () => {
-    if (!validateForm()) {
+    if (!editUserValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
       return;
     }
@@ -180,7 +139,8 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
     <ModalWrapper
       isOpen={isOpen}
       onRequestClose={onClose}
-      contentLabel="Edit Role">
+      contentLabel="Edit Role"
+    >
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
@@ -201,17 +161,17 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
               </div>
             ))}
             <Select
-              id="roles"
+              id="userRoles"
               label="Role"
               height="h-12"
               value={selectedRole ? selectedRole.role : ""}
               onChange={handleRoleSelect}
-              options={roles.map((role) => ({
+              options={userRoles?.map((role) => ({
                 value: role.id,
                 label: role.role,
               }))}
               placeholder="Select a Role"
-              isLoading={isLoadingRoles}
+              isLoading={isLoadingUserRoles}
             />
           </div>
         </CardLayoutBody>

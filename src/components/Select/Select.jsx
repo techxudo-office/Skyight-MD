@@ -50,8 +50,8 @@ const Select = ({
     setSelectStatus(false);
   };
 
-  const filteredOptions = options.filter((option) =>
-    option.label.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredOptions = options?.filter((option) =>
+    option?.label?.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   useEffect(() => {

@@ -8,13 +8,17 @@ const initialState = {
   isLoadingRoles: false,
   isLoadingCreateRole: false,
   rolesError: null,
-  totalPages: 1,
+
+  userRoles: [],
+  isLoadingUserRoles: false,
+  userRolesError: null,
 
   isEditingRole: false,
   editRoleError: null,
 
   isDeletingRole: false,
   deleteRoleError: null,
+  
 };
 
 const roleSlice = createSlice({
@@ -29,29 +33,23 @@ const roleSlice = createSlice({
       })
       .addCase(getRoles.fulfilled, (state, action) => {
         state.isLoadingRoles = false;
-        if (action.payload?.data?.roles) {
-          state.roles = action.payload.data.roles.map((item) => ({
-            id: item.id.toString(),
-            role: item.name || "Unknown",
-            roleRights: item.page_permission
-              ? Object.keys(item.page_permission)
-                .filter((key) => item.page_permission[key])
-                .map((key) => key.replace(/_/g, " "))
-                .join(", ")
-              : "No Permissions",
-            status: item.is_deleted ? "inactive" : "active",
-            description: item.description,
-            page_permission: item.page_permission,
-            action_permission: item.action_permission,
-          }));
-        } else {
-          state.roles = [];
-        }
-        state.totalPages = action.payload?.totalPages || 0;
+        state.roles = action.payload.data.roles;
       })
       .addCase(getRoles.rejected, (state, action) => {
         state.isLoadingRoles = false;
         state.rolesError = action.payload;
+      })
+      .addCase(getUserRoles.pending, (state) => {
+        state.isLoadingUserRoles = true;
+        state.userRolesError = null;
+      })
+      .addCase(getUserRoles.fulfilled, (state, action) => {
+        state.isLoadingUserRoles = false;
+        state.userRoles = action.payload.data.roles;
+      })
+      .addCase(getUserRoles.rejected, (state, action) => {
+        state.isLoadingUserRoles = false;
+        state.userRolesError = action.payload;
       })
       .addCase(createRole.pending, (state) => {
         state.isLoadingCreateRole = true;
@@ -134,6 +132,29 @@ export const getRoles = createAsyncThunk(
   }
 );
 
+export const getUserRoles = createAsyncThunk(
+  "role/getUserRoles",
+  async (token, thunkAPI) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/userRole`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      return {
+        data: response.data.data,
+        totalPages: response.data.totalPages || 1,
+      };
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch user roles.";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const createRole = createAsyncThunk(
   "role/createRole",
   async ({ data, token }, thunkAPI) => {
@@ -198,6 +219,5 @@ export const editRole = createAsyncThunk(
     }
   }
 );
-
 
 export default roleSlice.reducer;

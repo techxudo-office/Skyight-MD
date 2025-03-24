@@ -56,7 +56,7 @@ const Roles = () => {
     },
     {
       name: "STATUS",
-      selector: (row) => <Tag value={row.status} />,
+      selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
       minwidth: "150px",
       center: true,
