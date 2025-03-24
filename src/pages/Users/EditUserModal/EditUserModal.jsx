@@ -12,6 +12,7 @@ import {
   Spinner,
   ModalWrapper,
   Select,
+  Switch,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserRoles } from "../../../_core/features/roleSlice";
@@ -144,6 +145,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
+          <Switch />
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {inputFields.map(({ name, label, type }) => (
               <div key={name} className="relative">

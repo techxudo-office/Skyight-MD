@@ -6,26 +6,14 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { MdEditSquare } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
-import { MdAutoDelete } from "react-icons/md";
 
-import {
-  ConfirmModal,
-  SecondaryButton,
-  Table,
-  Tag,
-} from "../../components/components";
+import { SecondaryButton, Table, Tag } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteRole, getRoles } from "../../_core/features/roleSlice";
-// import EditRoleModal from "./EditRoleModal/EditRoleModal";
-
+import { getRoles } from "../../_core/features/roleSlice";
 const CompanyDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deleteId, setDeleteId] = useState(null);
-  const [modalStatus, setModalStatus] = useState(false);
-  const [editRoleData, setEditRoleData] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { roles, isLoadingRoles, isDeletingRole } = useSelector(
     (state) => state.role
   );
@@ -67,18 +55,10 @@ const CompanyDetails = () => {
               console.log(row, "Row");
               setEditRoleData(row);
               setIsEditModalOpen(true);
-            }}>
-            <MdEditSquare title="Edit" className="text-blue-500" />
-          </span>
-          {/* <span
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              setModalStatus(true);
-              setDeleteId(row.id);
             }}
           >
-            <MdAutoDelete title="Delete" className="text-red-500" />
-          </span> */}
+            <MdEditSquare title="Edit" className="text-blue-500" />
+          </span>
         </div>
       ),
       sortable: false,
@@ -87,45 +67,14 @@ const CompanyDetails = () => {
     },
   ];
 
-  // const deleteUserHandler = () => {
-  //   console.log(deleteId, "deleteId TABLE");
-  //   if (!deleteId) {
-  //     errorToastify("Failed to delete this user");
-  //     setModalStatus(false);
-  //     return;
-  //   }
-
-  //   dispatch(deleteRole({ id: deleteId, token: userData?.token })).then(() => {
-  //     setModalStatus(false);
-  //     setDeleteId(null);
-  //   });
-  // };
-
-  // const abortDeleteHandler = () => {
-  //   setModalStatus(false);
-  //   setDeleteId(null);
-  // };
-
   return (
     <>
-      {/* <ConfirmModal
-        status={modalStatus}
-        loading={isDeletingRole}
-        onAbort={abortDeleteHandler}
-        onConfirm={deleteUserHandler}
-      /> */}
-      {/* {isEditModalOpen && (
-        <EditRoleModal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          roleData={editRoleData}
-        />
-      )} */}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
           heading={"Company Details"}
-          className="flex items-center justify-between">
+          className="flex items-center justify-between"
+        >
           <div className="relative">
             <SecondaryButton
               text={"Create New Role"}

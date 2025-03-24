@@ -44,7 +44,7 @@ export const getCompanies = createAsyncThunk(
   "company/getCompanies",
   async (token, thunkAPI) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/allCompanies`, {
+      const response = await axios.get(`${BASE_URL}/api/allCompanies?page=0&limit=1000000000`, {
         headers: {
           Authorization: token,
         },

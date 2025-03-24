@@ -28,6 +28,13 @@ const Companies = () => {
       center: true,
     },
     {
+      name: "ID",
+      selector: (row) => row.id,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+    },
+    {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
