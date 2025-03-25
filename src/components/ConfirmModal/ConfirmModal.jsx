@@ -21,8 +21,8 @@ const ConfirmModal = ({ status, onAbort, onConfirm, text, loading }) => {
       <ModalWrapper
         ref={modalRef}
         isOpen={status}
-        // className={`transition-all absolute z-10 ${status ? "top-16" : "top-[-100%]"
-        //   } left-[50%] translate-x-[-50%]`}
+      // className={`transition-all absolute z-10 ${status ? "top-16" : "top-[-100%]"
+      //   } left-[50%] translate-x-[-50%]`}
       >
         <div className={" flex flex-col gap-3 "}>
           <h2 className="px-4 text-2xl font-semibold text-primary ">

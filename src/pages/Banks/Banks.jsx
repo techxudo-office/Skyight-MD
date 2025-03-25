@@ -104,7 +104,6 @@ const Banks = () => {
   useEffect(() => {
     dispatch(getBanks(userData?.token));
   }, []);
-  console.log("banks", banks)
 
   const columns = [
     {
@@ -158,7 +157,10 @@ const Banks = () => {
           <Table
             columnsData={columns}
             tableData={banks || []}
-
+            pagination={true}
+            progressPending={isLoadingBanks}
+            paginationTotalRows={banks?.length}
+            paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>

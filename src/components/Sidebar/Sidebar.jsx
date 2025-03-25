@@ -25,9 +25,8 @@ const Sidebar = ({ status }) => {
 
   return (
     <div
-      className={`shadow-md transition-all ${
-        status ? "w-64" : "w-0"
-      } flex flex-col justify-between bg-primary h-screen sticky top-0 overflow-y-auto `}>
+      className={`shadow-md transition-all ${status ? "w-64" : "w-0"
+        } flex flex-col justify-between z-[999] bg-primary h-screen fixed xl:sticky top-0 overflow-y-auto `}>
       <div>
         <div className="p-5 flex items-center justify-start">
           <h3 className="text-2xl font-semibold flex items-center gap-3 text-white">
@@ -41,20 +40,18 @@ const Sidebar = ({ status }) => {
               <li
                 key={index}
                 onClick={() => navigationHandler(link.path)}
-                className={`mb-3 w-full flex items-center justify-start gap-2 p-2 cursor-pointer transition-all hover:bg-secondary ${
-                  itemIndex === index
-                    ? "text-white bg-secondary"
-                    : " text-white"
-                } rounded-full px-3 text-md font-semibold flex justify-between items-center`}>
+                className={`mb-3 w-full flex items-center justify-start gap-2 p-2 cursor-pointer transition-all hover:bg-secondary ${itemIndex === index
+                  ? "text-white bg-secondary"
+                  : " text-white"
+                  } rounded-full px-3 text-md font-semibold flex justify-between items-center`}>
                 <span className="flex items-center gap-3">
                   {link.icon}
                   {link.title}
                 </span>
                 <span>
                   <FaDotCircle
-                    className={`text-xs transition-all ${
-                      itemIndex === index ? "text-slate-300" : "text-white"
-                    }`}
+                    className={`text-xs transition-all ${itemIndex === index ? "text-slate-300" : "text-white"
+                      }`}
                   />
                 </span>
               </li>

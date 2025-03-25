@@ -67,7 +67,7 @@ const Table = ({
           customStyles={{
             headRow: {
               style: {
-                backgroundColor: "#008585",
+                backgroundColor: "#4FA9A8",
                 borderTopLeftRadius: "10px",
                 borderTopRightRadius: "10px",
                 borderBottomWidth: "0px",

@@ -141,62 +141,7 @@ const RefundRequests = () => {
     },
   ];
 
-  // const actionsData = [
-  //   {
-  //     name: "View",
-  //     icon: <FaEye title="View" className="text-green-500" />,
-  //     handler: (index, item) => {
-  //       console.log("dsaasd")
-  //       console.log({index})
-  //       console.log({item: item.booking_reference_id})
-  //       if([, index]){
-  //         console.log(`Console ${index}`)
-  //       }
-  //       if([, !activeIndex]){
-  //         console.log(`activeIndex ${activeIndex}`)
-  //       }
-  //       console.log("index", index)
-  //       console.log(`Active Index: ${activeIndex}`)
-  //       console.log(`Item: ${item}`)
 
-  //       if({item}){
-  //         // navigate(`/dashboard/booking-details/${item.booking_reference_id}`)
-  //         navigate("/dashboard/booking-details", {
-  //           state: item.booking_reference_id,
-  //         });
-  //       }
-  //      else{
-  //       console.log("Conditiion False")
-  //      }
-  //       // if (activeIndex === index) {
-  //       //   setActiveIndex(null);
-  //       // } else {
-  //       //   setActiveIndex(index);
-  //         // navigate("/dashboard/booking-details", {
-  //         //   state: item.booking_reference_id,
-  //         // });
-  //       // }
-
-  //     },
-  //   },
-  // ];
-
-  // const actionsData = [
-  //   {
-  //     name: "View",
-  //     icon: <FaEye title="View" className="text-green-500" />,
-  //     // handler: (index) => {
-  //     //   if (activeIndex === index) {
-  //     //     setActiveIndex(null);
-  //     //   } else setActiveIndex(index);
-  //     // },
-  //     handler: (index, item) => {
-  //       navigate("/dashboard/booking-details", {
-  //         state: item.booking_reference_id,
-  //       });
-  //     },
-  //   },
-  // ];
 
   const actionsData = [
     {
@@ -243,32 +188,6 @@ const RefundRequests = () => {
   ];
   console.log(typeof String(null))
 
-  // const getRefundFlight = async () => {
-  //   const response = await axios.get(`${baseUrl}/api/refund-booking`, {
-  //     headers: {
-  //       Authorization: getToken(),
-  //     },
-  //   });
-  //   console.log(response.data.data);
-  //   console.log("coupon", typeof response.data.data[3].coupen_number)
-  //   console.log("coupon", response.data.data[3].coupen_number)
-  //   setData(response?.data?.data);
-  // };
-  console.log(data)
-  // console.log(`Data: ${JSON.stringify(data)}`);
-  // const gettingFlightBookings = async () => {
-  //   const response = await getFlightBookings();
-  //   console.log("get filght bookings", response);
-  //   if (response.status) {
-  //     console.log(response.data);
-  //     const data = response.data;
-  //     setBookingsData(
-  //       data.filter(
-  //         ({ booking_status }) => booking_status === "requested-refund"
-  //       )
-  //     );
-  //   }
-  // };
 
   const abortDeleteHandler = () => {
     setModalStatus(false);
@@ -293,7 +212,6 @@ const RefundRequests = () => {
         <CardLayoutBody removeBorder={true}>
 
           <Table
-
             tableData={getRefundBooking || []}
             columnsData={columns}
             pagination={true}
