@@ -13,6 +13,7 @@ import transactionReducer from "../features/transactionSlice";
 import notificationReducer from "../features/notificationSlice";
 import settingReducer from "../features/settingSlice"
 import companyReducer from "../features/companySlice"
+import reasonsReducer from "../features/reasonsSlice"
 const appReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
@@ -22,7 +23,8 @@ const appReducer = combineReducers({
   transaction: transactionReducer,
   notification: notificationReducer,
   setting: settingReducer,
-  company: companyReducer
+  company: companyReducer,
+  reasons: reasonsReducer
 });
 
 const rootReducer = (state, action) => {

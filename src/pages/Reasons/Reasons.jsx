@@ -3,6 +3,7 @@ import {
   Table,
   SecondaryButton,
   ConfirmModal,
+  Tag,
 } from "../../components/components";
 import { getReasons, deleteReason } from "../../utils/api_handler";
 import { MdEditSquare } from "react-icons/md";
@@ -34,6 +35,24 @@ const Reasons = () => {
     { columnName: "Reason", fieldName: "reason", type: "text" },
     { columnName: "Status", fieldName: "status", type: "status" },
     { columnName: "Actions", fieldName: "actions", type: "actions" },
+  ];
+
+  const columns = [
+    {
+      name: "Reason",
+      selector: (row) => row.reason,
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "Status",
+      selector: (row) => <Tag value={row.status} />,
+      sortable: false,
+      center: true,
+      wrap: true,
+      grow: 4,
+    },
   ];
 
   const actionsData = [
