@@ -4,7 +4,8 @@ import {
   SecondaryButton,
   ConfirmModal,
 } from "../../components/components";
-import { getBanks,deleteBank  } from "../../utils/api_handler";
+import { deleteBank } from "../../utils/api_handler";
+import { getBanks } from "../../_core/features/bookingSlice";
 import { MdEditSquare } from "react-icons/md";
 import { MdAutoDelete } from "react-icons/md";
 
@@ -21,14 +22,19 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 // Base URL
-import { baseUrl, getToken} from "../../utils/api_handler";
+import { baseUrl, getToken } from "../../utils/api_handler";
+import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 const Banks = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
   const navigationHandler = () => {
     navigate("/dashboard/create-bank");
   };
+
+  const { userData } = useSelector((state) => state.auth);
+  const { banks, isLoadingBanks, banksError } = useSelector((state) => state.booking)
 
   const [banksData, setBanksData] = useState([]);
   const [modalStatus, setModalStatus] = useState(false);
@@ -60,18 +66,18 @@ const Banks = () => {
     },
   ];
 
-  const gettingBanks = async () => {
-    let response = await axios({
-      method: "GET",
-      url: `${baseUrl}/api/bank`,
-      headers: {
-        Authorization: getToken(),
-      },
-    });
-    console.log(response.data.data);
-    setBanksData(response.data.data);
-    return response.data;
-  };
+  // const gettingBanks = async () => {
+  //   let response = await axios({
+  //     method: "GET",
+  //     url: `${baseUrl}/api/bank`,
+  //     headers: {
+  //       Authorization: getToken(),
+  //     },
+  //   });
+  //   console.log(response.data.data);
+  //   setBanksData(response.data.data);
+  //   return response.data;
+  // };
 
   const deleteBankHandler = async () => {
     if (!deleteId) {
@@ -96,9 +102,38 @@ const Banks = () => {
   };
 
   useEffect(() => {
-    gettingBanks();
+    dispatch(getBanks(userData?.token));
   }, []);
+  console.log("banks", banks)
 
+  const columns = [
+    {
+      name: "Id",
+      selector: (row) => row.id,
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "Bank",
+      selector: (row) => (row.bank
+      ),
+      sortable: false,
+      center: true,
+      wrap: true,
+      grow: 4,
+    },
+    {
+      name: "Date",
+      selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+      grow: 2,
+    },
+
+
+  ];
   return (
     <>
       <ConfirmModal
@@ -121,9 +156,9 @@ const Banks = () => {
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <Table
-            columns={columnsData}
-            data={banksData}
-            actions={actionsData}
+            columnsData={columns}
+            tableData={banks || []}
+
           />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>

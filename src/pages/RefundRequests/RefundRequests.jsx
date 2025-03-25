@@ -4,6 +4,7 @@ import {
   SecondaryButton,
   ConfirmModal,
   Dropdown,
+  Tag,
 } from "../../components/components";
 import { getFlightBookings } from "../../utils/api_handler";
 
@@ -22,6 +23,8 @@ import axios from "axios";
 import { baseUrl, getToken } from "../../utils/api_handler";
 import { useDispatch, useSelector } from "react-redux";
 import { getRefundFlight } from "../../_core/features/bookingSlice";
+import { IoIosAirplane } from "react-icons/io";
+import dayjs from "dayjs";
 
 const RefundRequests = () => {
   const navigate = useNavigate();
@@ -90,52 +93,52 @@ const RefundRequests = () => {
       wrap: true,
       grow: 4,
     },
-    // {
-    //   name: "PNR",
-    //   selector: (row) => row.booking_reference_id,
-    //   sortable: false,
-    //   minwidth: "150px",
-    //   center: true,
-    //   grow: 2,
-    // },
-    // {
-    //   name: "TOTAL FARE",
-    //   selector: (row) => row.total_fare,
-    //   sortable: false,
-    //   center: true,
-    //   grow: 2,
-    // },
-    // {
-    //   name: "STATUS",
-    //   selector: (row) => <Tag value={row.booking_status} />,
-    //   sortable: false,
-    //   center: true,
-    //   wrap: true,
-    //   grow: 4,
-    // },
-    // {
-    //   name: "CREATED AT",
-    //   selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
-    //   sortable: false,
-    //   center: true,
-    //   grow: 2,
-    // },
-    // {
-    //   name: "",
-    //   selector: (row) => (
-    //     <span
-    //       className="text-lg cursor-pointer"
-    //       onClick={() => {
-    //         navigate("/dashboard/booking-details", {
-    //           state: row,
-    //         });
-    //       }}>
-    //       <FaEye title="View" className="text-green-500 " />
-    //     </span>
-    //   ),
-    //   sortable: false,
-    //   center: true,
-    // },
+    {
+      name: "PNR",
+      selector: (row) => row.booking_reference_id,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "TOTAL FARE",
+      selector: (row) => row.total_fare,
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "STATUS",
+      selector: (row) => <Tag value={row.booking_status} />,
+      sortable: false,
+      center: true,
+      wrap: true,
+      grow: 4,
+    },
+    {
+      name: "CREATED AT",
+      selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "",
+      selector: (row) => (
+        <span
+          className="text-lg cursor-pointer"
+          onClick={() => {
+            navigate("/dashboard/booking-details", {
+              state: row,
+            });
+          }}>
+          <FaEye title="View" className="text-green-500 " />
+        </span>
+      ),
+      sortable: false,
+      center: true,
+    },
   ];
 
   // const actionsData = [
@@ -288,9 +291,11 @@ const RefundRequests = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          {getRefundBooking && <Table
+
+          <Table
+
             tableData={getRefundBooking || []}
-            columns={columns}
+            columnsData={columns}
             pagination={true}
             progressPending={isGetRefundsLoading}
             paginationTotalRows={getRefundBooking?.length}
@@ -299,7 +304,7 @@ const RefundRequests = () => {
           // viewColumns={viewColumns}
           // data={data||[]}
           // actions={actionsData}
-          />}
+          />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>

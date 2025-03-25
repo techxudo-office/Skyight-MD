@@ -293,12 +293,12 @@ export const getBanks = createAsyncThunk(
           Authorization: token,
         },
       });
-      if (response.data.data[0]?.length > 0) {
-        const extractedData = response.data.data[0].map(({ id, bank }) => ({
-          value: id,
-          label: bank,
-        }));
-        return extractedData;
+      if (response.data.data?.length > 0) {
+        // const extractedData = response.data.data[0].map(({ id, bank }) => ({
+        //   value: id,
+        //   label: bank,
+        // }));
+        return response.data.data;
       } else {
         throw new Error("No Banks Found");
       }
