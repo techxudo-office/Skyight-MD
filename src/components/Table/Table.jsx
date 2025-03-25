@@ -34,7 +34,7 @@ const Table = ({
       minWidth: "70px",
       center: true,
     },
-    ...columnsData.map((col) => ({
+    ...columnsData?.map((col) => ({
       ...col,
       grow: col.grow || 2,
       wrap: col.wrap || true, // Agar grow pehle se hai to use rehne do, warna 2 assign karo

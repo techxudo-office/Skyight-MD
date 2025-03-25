@@ -44,7 +44,7 @@ const Input = ({
         }`}>
         <label
           htmlFor={id}
-          className="absolute px-1 mb-2 text-base font-medium bg-white rounded-md -top-3 left-3 text-text">
+          className="absolute px-1 mb-2 text-sm bg-white rounded-md -top-3 left-3 text-text">
           {label}
         </label>
         <input

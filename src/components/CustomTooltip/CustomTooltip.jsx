@@ -1,6 +1,9 @@
 import * as Tooltip from "@radix-ui/react-tooltip";
 
 const CustomTooltip = ({ children, content }) => {
+  if(!content){
+    return children
+  }
   return (
     <Tooltip.Provider>
       <Tooltip.Root>

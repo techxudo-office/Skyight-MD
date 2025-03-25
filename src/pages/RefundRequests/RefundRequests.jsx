@@ -33,16 +33,16 @@ const RefundRequests = () => {
     navigate("/dashboard/search-flights");
   };
 
-  const columns = [
-    { columnName: "No.", fieldName: "no.", type: "no." },
-    { columnName: "Origin", fieldName: "origin", type: "text" },
-    { columnName: "Destination", fieldName: "destination", type: "text" },
-    { columnName: "Total Fare", fieldName: "total_fare", type: "text" },
-    { columnName: "Currency", fieldName: "currency", type: "text" },
-    { columnName: "Status", fieldName: "booking_status", type: "status" },
-    { columnName: "Created At", fieldName: "created_at", type: "text" },
-    { columnName: "Actions", fieldName: "actions", type: "actions" },
-  ];
+  // const columns = [
+  //   { columnName: "No.", fieldName: "no.", type: "no." },
+  //   { columnName: "Origin", fieldName: "origin", type: "text" },
+  //   { columnName: "Destination", fieldName: "destination", type: "text" },
+  //   { columnName: "Total Fare", fieldName: "total_fare", type: "text" },
+  //   { columnName: "Currency", fieldName: "currency", type: "text" },
+  //   { columnName: "Status", fieldName: "booking_status", type: "status" },
+  //   { columnName: "Created At", fieldName: "created_at", type: "text" },
+  //   { columnName: "Actions", fieldName: "actions", type: "actions" },
+  // ];
 
   const viewColumns = [
     { columnName: "Ref Id", fieldName: "booking_reference_id", type: "text" },
@@ -61,6 +61,73 @@ const RefundRequests = () => {
     { columnName: "Rate", fieldName: "rate", type: "text" },
     { columnName: "Percentage", fieldName: "persantage", type: "text" },
     { columnName: "Cancel At", fieldName: "canceled_at", type: "text" },
+  ];
+
+  const columns = [
+    {
+      name: "ROUTE",
+      selector: (row) => (
+        <span className="flex w-52 items-center lg:justify-center  gap-2 text-sm text-text">
+          {row.origin}
+          <div className="flex justify-center items-center gap-1">
+            <span className="h-0.5 w-3 bg-primary"></span>
+            <IoIosAirplane className="text-lg text-primary" />
+            <span className="h-0.5 w-3 bg-primary"></span>
+          </div>
+          {row.destination}
+        </span>
+      ),
+      sortable: false,
+      center: true,
+      wrap: true,
+      grow: 4,
+    },
+    {
+      name: "PNR",
+      selector: (row) => row.booking_reference_id,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "TOTAL FARE",
+      selector: (row) => row.total_fare,
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "STATUS",
+      selector: (row) => <Tag value={row.booking_status} />,
+      sortable: false,
+      center: true,
+      wrap: true,
+      grow: 4,
+    },
+    {
+      name: "CREATED AT",
+      selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
+      sortable: false,
+      center: true,
+      grow: 2,
+    },
+    {
+      name: "",
+      selector: (row) => (
+        <span
+          className="text-lg cursor-pointer"
+          onClick={() => {
+            navigate("/dashboard/booking-details", {
+              state: row,
+            });
+          }}>
+          <FaEye title="View" className="text-green-500 " />
+        </span>
+      ),
+      sortable: false,
+      center: true,
+    },
   ];
 
   // const actionsData = [
@@ -171,10 +238,11 @@ const RefundRequests = () => {
       },
     });
     console.log(response.data.data);
-    console.log("coupon",typeof response.data.data[3].coupen_number)
+    console.log("coupon", typeof response.data.data[3].coupen_number)
     console.log("coupon", response.data.data[3].coupen_number)
     setData(response?.data?.data);
   };
+  console.log(data)
   // console.log(`Data: ${JSON.stringify(data)}`);
   // const gettingFlightBookings = async () => {
   //   const response = await getFlightBookings();
@@ -205,7 +273,7 @@ const RefundRequests = () => {
       <ConfirmModal
         status={modalStatus}
         abortDelete={abortDeleteHandler}
-        // deleteHandler={cancelFlightBookingHandler}
+      // deleteHandler={cancelFlightBookingHandler}
       />
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
@@ -215,10 +283,15 @@ const RefundRequests = () => {
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <Table
+            tableData={data || []}
             columns={columns}
-            viewColumns={viewColumns}
-            data={data}
-            actions={actionsData}
+            pagination={true}
+            paginationTotalRows={data.length}
+            paginationComponentOptions={{ noRowsPerPage: "10" }}
+
+          // viewColumns={viewColumns}
+          // data={data||[]}
+          // actions={actionsData}
           />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>

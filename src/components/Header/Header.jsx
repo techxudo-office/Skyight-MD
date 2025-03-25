@@ -150,7 +150,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                 )}
               </div>
               <div className="relative">
-                <CustomTooltip content={"credits"}>
+                <CustomTooltip content={CreditsDropdownOpen?null:"credits"}>
                   <button
                     className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-blue-100 hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}>
                     {isLoadingCredits ? (
@@ -188,7 +188,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                   </button>
                 </CustomTooltip>
               </div>
-              <CustomTooltip content={"profile"}>
+              <CustomTooltip content={dropdownStatus?null:"profile"}>
                 <div className="px-3">
                   <FaUserCircle
                     onClick={dropdownHandler}

@@ -78,7 +78,7 @@ const Select = ({
         }`}>
         <label
           htmlFor={id}
-          className={` text-md bg-white font-medium  mb-2 absolute -top-3 left-3  px-1 roounded-md text-text`}>
+          className={` text-sm bg-white  mb-2 absolute -top-3 left-3  px-1 roounded-md text-text`}>
           {label}
         </label>
         <div

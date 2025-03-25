@@ -176,19 +176,20 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
             />
           </div>
           <div className="mt-4">
-          <Switch label={"Status:"} />
+            <Switch label={"Status:"} />
+          </div>
+          <div className="flex gap-2 w-full mt-3">
+            <Button
+              text={isEditingUser ? <Spinner /> : "Update User"}
+              onClick={handleSubmit}
+              disabled={isEditingUser}
+            />
+            <Button text="Cancel" onClick={onClose} />
           </div>
 
         </CardLayoutBody>
 
-        <div className="flex gap-2 w-full">
-          <Button
-            text={isEditingUser ? <Spinner /> : "Update User"}
-            onClick={handleSubmit}
-            disabled={isEditingUser}
-          />
-          <Button text="Cancel" onClick={onClose} />
-        </div>
+
 
       </CardLayoutContainer>
     </ModalWrapper>
