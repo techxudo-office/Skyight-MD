@@ -27,7 +27,7 @@ const Sidebar = ({ status }) => {
     <div
       className={`shadow-md transition-all ${
         status ? "w-64" : "w-0"
-      } flex flex-col justify-between bg-primary`}>
+      } flex flex-col justify-between bg-primary h-screen sticky top-0 overflow-y-auto `}>
       <div>
         <div className="p-5 flex items-center justify-start">
           <h3 className="text-2xl font-semibold flex items-center gap-3 text-white">

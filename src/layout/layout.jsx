@@ -11,19 +11,18 @@ const Layout = () => {
     };
 
     return (
-        <div className="flex h-screen ">
+        <div className="flex ">
             <Sidebar status={sidebarStatus} />
-                <Header sidebarStatus={sidebarStatus} setSidebarStatusHandler={setSidebarStatusHandler} />
-            <div className="flex-1 mt-16">
-                <div className="flex flex-col justify-between items-center h-[88%] bg-slate-100 overflow-scroll"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                    <div className="flex items-center justify-center w-full p-5">
+            <Header sidebarStatus={sidebarStatus} setSidebarStatusHandler={setSidebarStatusHandler} />
+            <div className="flex-1 flex flex-col  mt-16 ">
+              
+                    <div className="flex items-center min-h-screen  justify-center w-full p-5">
                         <Outlet />
                     </div>
-                    <div className="flex items-center justify-center w-full p-3 pb-0 bg-white">
-                        <h2 className="mt-2 font-semibold text-center text-text text-md">© 2024 All rights reserved by SKYIGHT AIR & BOOKING SYSTEM</h2>
-                    </div>
+
+            
+                <div className="flex self-end justify-self-end  justify-center w-full  p-3 pb-0 bg-white">
+                    <h2 className="mt-2 font-semibold text-center text-text text-sm">© 2024 All rights reserved by SKYIGHT AIR & BOOKING SYSTEM</h2>
                 </div>
             </div>
         </div>

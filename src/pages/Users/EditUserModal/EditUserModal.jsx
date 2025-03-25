@@ -145,7 +145,6 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
-          <Switch />
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {inputFields.map(({ name, label, type }) => (
               <div key={name} className="relative">
@@ -176,17 +175,21 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
               isLoading={isLoadingUserRoles}
             />
           </div>
-        </CardLayoutBody>
-        <CardLayoutFooter>
-          <div className="space-x-2">
-            <Button
-              text={isEditingUser ? <Spinner /> : "Update User"}
-              onClick={handleSubmit}
-              disabled={isEditingUser}
-            />
-            <Button text="Cancel" onClick={onClose} />
+          <div className="mt-4">
+          <Switch label={"Status:"} />
           </div>
-        </CardLayoutFooter>
+
+        </CardLayoutBody>
+
+        <div className="flex gap-2 w-full">
+          <Button
+            text={isEditingUser ? <Spinner /> : "Update User"}
+            onClick={handleSubmit}
+            disabled={isEditingUser}
+          />
+          <Button text="Cancel" onClick={onClose} />
+        </div>
+
       </CardLayoutContainer>
     </ModalWrapper>
   );
