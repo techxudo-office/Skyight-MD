@@ -6,10 +6,11 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useNavigate } from "react-router-dom";
 
-import { Table, Tag } from "../../components/components";
+import { Button, CustomTooltip, Table, Tag } from "../../components/components";
 import { getCompanies } from "../../_core/features/companySlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
+import { FaEye, FaUser } from "react-icons/fa";
 
 const Companies = () => {
   const navigate = useNavigate();
@@ -58,22 +59,27 @@ const Companies = () => {
       name: "",
       selector: (row) => (
         <div className="flex items-center gap-x-4">
-          <span
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              navigate(`/dashboard/company/details/${row.id}`);
-            }}
-          >
-            <p>Details</p>
-          </span>
-          <span
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              navigate(`/dashboard/company/users/${row.id}`);
-            }}
-          >
-            <p>Users</p>
-          </span>
+          <CustomTooltip content={"Details"}>
+            <div>
+              <FaEye
+                className="text-lg text-greenColor cursor-pointer"
+                onClick={() => {
+                  navigate(`/dashboard/company/details/${row.id}`);
+                }}
+              />
+            </div>
+          </CustomTooltip>
+          <CustomTooltip content={"Users"}>
+            <div>
+              <FaUser
+                className="text-base text-primary cursor-pointer"
+                onClick={() => {
+                  navigate(`/dashboard/company/users/${row.id}`);
+                }}
+              />
+            </div>
+          </CustomTooltip>
+
         </div>
       ),
       sortable: false,
