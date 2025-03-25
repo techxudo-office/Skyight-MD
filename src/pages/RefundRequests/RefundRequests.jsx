@@ -20,14 +20,22 @@ import MainTable from "../../components/MainTable/MainTable";
 import { FaEye, FaMoneyBillWave } from "react-icons/fa";
 import axios from "axios";
 import { baseUrl, getToken } from "../../utils/api_handler";
+import { useDispatch, useSelector } from "react-redux";
+import { getRefundFlight } from "../../_core/features/bookingSlice";
 
 const RefundRequests = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
   const [bookingsData, setBookingsData] = useState([]);
   const [modalStatus, setModalStatus] = useState(false);
 
   const [data, setData] = useState([]);
+  const { userData } = useSelector((state) => state.auth);
+  const { getRefundBooking, isGetRefundsLoading } = useSelector((state) => state.booking)
+
+  useEffect(() => {
+    dispatch(getRefundFlight(userData?.token))
+  }, [])
 
   const navigationHandler = () => {
     navigate("/dashboard/search-flights");
@@ -82,52 +90,52 @@ const RefundRequests = () => {
       wrap: true,
       grow: 4,
     },
-    {
-      name: "PNR",
-      selector: (row) => row.booking_reference_id,
-      sortable: false,
-      minwidth: "150px",
-      center: true,
-      grow: 2,
-    },
-    {
-      name: "TOTAL FARE",
-      selector: (row) => row.total_fare,
-      sortable: false,
-      center: true,
-      grow: 2,
-    },
-    {
-      name: "STATUS",
-      selector: (row) => <Tag value={row.booking_status} />,
-      sortable: false,
-      center: true,
-      wrap: true,
-      grow: 4,
-    },
-    {
-      name: "CREATED AT",
-      selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
-      sortable: false,
-      center: true,
-      grow: 2,
-    },
-    {
-      name: "",
-      selector: (row) => (
-        <span
-          className="text-lg cursor-pointer"
-          onClick={() => {
-            navigate("/dashboard/booking-details", {
-              state: row,
-            });
-          }}>
-          <FaEye title="View" className="text-green-500 " />
-        </span>
-      ),
-      sortable: false,
-      center: true,
-    },
+    // {
+    //   name: "PNR",
+    //   selector: (row) => row.booking_reference_id,
+    //   sortable: false,
+    //   minwidth: "150px",
+    //   center: true,
+    //   grow: 2,
+    // },
+    // {
+    //   name: "TOTAL FARE",
+    //   selector: (row) => row.total_fare,
+    //   sortable: false,
+    //   center: true,
+    //   grow: 2,
+    // },
+    // {
+    //   name: "STATUS",
+    //   selector: (row) => <Tag value={row.booking_status} />,
+    //   sortable: false,
+    //   center: true,
+    //   wrap: true,
+    //   grow: 4,
+    // },
+    // {
+    //   name: "CREATED AT",
+    //   selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
+    //   sortable: false,
+    //   center: true,
+    //   grow: 2,
+    // },
+    // {
+    //   name: "",
+    //   selector: (row) => (
+    //     <span
+    //       className="text-lg cursor-pointer"
+    //       onClick={() => {
+    //         navigate("/dashboard/booking-details", {
+    //           state: row,
+    //         });
+    //       }}>
+    //       <FaEye title="View" className="text-green-500 " />
+    //     </span>
+    //   ),
+    //   sortable: false,
+    //   center: true,
+    // },
   ];
 
   // const actionsData = [
@@ -231,17 +239,18 @@ const RefundRequests = () => {
     },
   ];
   console.log(typeof String(null))
-  const getRefundFlight = async () => {
-    const response = await axios.get(`${baseUrl}/api/refund-booking`, {
-      headers: {
-        Authorization: getToken(),
-      },
-    });
-    console.log(response.data.data);
-    console.log("coupon", typeof response.data.data[3].coupen_number)
-    console.log("coupon", response.data.data[3].coupen_number)
-    setData(response?.data?.data);
-  };
+
+  // const getRefundFlight = async () => {
+  //   const response = await axios.get(`${baseUrl}/api/refund-booking`, {
+  //     headers: {
+  //       Authorization: getToken(),
+  //     },
+  //   });
+  //   console.log(response.data.data);
+  //   console.log("coupon", typeof response.data.data[3].coupen_number)
+  //   console.log("coupon", response.data.data[3].coupen_number)
+  //   setData(response?.data?.data);
+  // };
   console.log(data)
   // console.log(`Data: ${JSON.stringify(data)}`);
   // const gettingFlightBookings = async () => {
@@ -263,11 +272,8 @@ const RefundRequests = () => {
     setDeleteId(null);
   };
 
-  useEffect(() => {
-    // gettingFlightBookings();
-    getRefundFlight();
-  }, []);
 
+  console.log("get refund booking", getRefundBooking)
   return (
     <>
       <ConfirmModal
@@ -282,17 +288,18 @@ const RefundRequests = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          <Table
-            tableData={data || []}
+          {getRefundBooking && <Table
+            tableData={getRefundBooking || []}
             columns={columns}
             pagination={true}
-            paginationTotalRows={data.length}
+            progressPending={isGetRefundsLoading}
+            paginationTotalRows={getRefundBooking?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
 
           // viewColumns={viewColumns}
           // data={data||[]}
           // actions={actionsData}
-          />
+          />}
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>

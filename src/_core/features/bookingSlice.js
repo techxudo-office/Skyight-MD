@@ -50,6 +50,10 @@ const initialState = {
   isCancelling: false,
   cancelSuccess: null,
   cancelError: null,
+
+  isGetRefundsLoading: false,
+  getRefundBooking: null,
+  getRefundBookingError: null,
 };
 
 const bookingSlice = createSlice({
@@ -201,6 +205,21 @@ const bookingSlice = createSlice({
         state.isCancelling = false;
         state.cancelSuccess = null;
         state.cancelError = action.payload;
+      })
+      .addCase(getRefundFlight.pending, (state) => {
+        state.isGetRefundsLoading = true;
+        state.getRefundBooking = null;
+        state.getRefundBookingError = null;
+      })
+      .addCase(getRefundFlight.fulfilled, (state, action) => {
+        state.isGetRefundsLoading = false;
+        state.getRefundBooking = action.payload;
+        state.getRefundBookingError = null;
+      })
+      .addCase(getRefundFlight.rejected, (state, action) => {
+        state.isGetRefundsLoading = false;
+        state.getRefundBooking = null;
+        state.getRefundBookingError = action.payload;
       });
   },
 });
@@ -592,6 +611,25 @@ export const cancelFlightBooking = createAsyncThunk(
       const errorMessage =
         error.response?.data?.message || "An error occurred";
       toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+export const getRefundFlight = createAsyncThunk(
+  "booking/getRefundFlight",
+  async (token, thunkAPI) => {
+    console.log("refund api called-----")
+    try {
+      const response = await axios.get(`${BASE_URL}/api/refund-booking`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      return response.data.data;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch refund bookings";
       return thunkAPI.rejectWithValue(errorMessage);
     }
   }
