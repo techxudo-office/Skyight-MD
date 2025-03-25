@@ -14,14 +14,11 @@ const Layout = () => {
         <div className="flex ">
             <Sidebar status={sidebarStatus} />
             <Header sidebarStatus={sidebarStatus} setSidebarStatusHandler={setSidebarStatusHandler} />
-            <div className="flex-1 flex flex-col  mt-16 ">
-              
-                    <div className="flex items-center min-h-screen  justify-center w-full p-5">
+            <div className="flex-1 relative flex flex-col min-h-screen  pt-16 pb-10">
+                    <div className="flex   justify-center w-full p-5">
                         <Outlet />
                     </div>
-
-            
-                <div className="flex self-end justify-self-end  justify-center w-full  p-3 pb-0 bg-white">
+                <div className="absolute bottom-0  flex justify-center w-full  py-2 bg-white">
                     <h2 className="mt-2 font-semibold text-center text-text text-sm">© 2024 All rights reserved by SKYIGHT AIR & BOOKING SYSTEM</h2>
                 </div>
             </div>
