@@ -1,23 +1,20 @@
 import React from "react";
 import "./Switch.css";
 
-const Switch = ({ setToggle, profileData,label,disabled=false }) => {
+const Switch = ({ setToggle, label, disabled = false }) => {
   return (
-    <div className="flex gap-3 items-center ">
-      <p className="text-lg capitalize">{label}</p>
+    <div className="flex items-center gap-3 ">
+      <p className="text-xl font-semibold capitalize">{label}</p>
       <label className="switch">
         <input
           type="checkbox"
           className="checkbox"
           disabled={disabled}
-          onChange={(e) =>
-            setToggle({ ...profileData, is_active: e.target.checked })
-          }
+          onChange={(e) => setToggle(e.target.checked)}
         />
         <div className="slider"></div>
       </label>
     </div>
-
   );
 };
 

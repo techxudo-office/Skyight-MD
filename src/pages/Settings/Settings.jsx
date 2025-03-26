@@ -14,6 +14,7 @@ import { updateAccountValidation } from "../../utils/validations";
 const Settings = () => {
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
+  const [toggle, setToggle] = useState(false);
   const [editingField, setEditingField] = useState(null);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
   const { userData, isUpdatingAccount, isLoadingUserInfo } = useSelector(
@@ -63,7 +64,7 @@ const Settings = () => {
     const payload = {
       full_name: profileData.full_name,
       password: profileData.password,
-      is_active: profileData.is_active,
+      is_active: toggle,
     };
 
     dispatch(
@@ -140,7 +141,8 @@ const Settings = () => {
       <CardLayoutContainer className="w-full mb-5">
         <CardLayoutHeader
           className="flex flex-wrap items-center justify-start gap-5 py-3"
-          removeBorder={true}>
+          removeBorder={true}
+        >
           <div className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group">
             <img
               src={profileImage}
@@ -149,7 +151,8 @@ const Settings = () => {
             />
             <div
               className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 opacity-0 group-hover:opacity-100"
-              onClick={() => fileInputRef.current.click()}>
+              onClick={() => fileInputRef.current.click()}
+            >
               <MdEdit className="text-xl text-white" />
             </div>
             <input
@@ -171,14 +174,12 @@ const Settings = () => {
         <CardLayoutContainer className="w-full mb-5">
           <CardLayoutHeader
             className="flex items-center justify-between gap-5 py-3"
-            removeBorder={true}>
+            removeBorder={true}
+          >
             <h2 className="text-2xl font-semibold text-text">
               Personal Information
             </h2>
-            <div className="flex items-center gap-3">
-              <span className="text-2xl font-semibold text-text">Status:</span>
-              <Switch setToggle={setProfileData} profileData={profileData} />
-            </div>
+            <Switch setToggle={setToggle} label={"Status:"} />
           </CardLayoutHeader>
 
           <CardLayoutBody removeBorder={true}>

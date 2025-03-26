@@ -10,6 +10,9 @@ const initialState = {
 
   isCreatingTransaction: false,
   createTransactionError: null,
+
+  isEditingTransaction: false,
+  editTransactionError: null,
 };
 
 const transactionSlice = createSlice({
@@ -41,6 +44,22 @@ const transactionSlice = createSlice({
       .addCase(getTransactions.rejected, (state, action) => {
         state.isLoadingTransactions = false;
         state.transactionsError = action.payload;
+      })
+      .addCase(editTransaction.pending, (state) => {
+        state.isEditingTransaction = true;
+        state.editTransactionError = null;
+      })
+      .addCase(editTransaction.fulfilled, (state, action) => {
+        state.isEditingTransaction = false;
+        const transaction = action.payload;
+        console.log(transaction);
+        state.transactions = state.transactions.map((tran) =>
+          tran.id === transaction.id ? { ...tran, ...transaction } : tran
+        );
+      })
+      .addCase(editTransaction.rejected, (state, action) => {
+        state.isEditingTransaction = false;
+        state.editTransactionError = action.payload;
       });
   },
 });
@@ -90,6 +109,35 @@ export const getTransactions = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch transactions";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const editTransaction = createAsyncThunk(
+  "transaction/editTransaction",
+  async ({ token, data }, thunkAPI) => {
+    try {
+      console.log(data, "data");
+      const response = await axios.put(
+        `${BASE_URL}/api/company/update-transaction`,
+        data,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Transaction updated successfully");
+        return response.data.data;
+      }
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Failed while updating this Transaction";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }

@@ -140,7 +140,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
     <ModalWrapper
       isOpen={isOpen}
       onRequestClose={onClose}
-      contentLabel="Edit Role"
+      contentLabel="Edit User"
     >
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit User" />
@@ -188,7 +188,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
             onClick={handleSubmit}
             disabled={isEditingUser}
           />
-          <Button text="Cancel" className="bg-redColor hover:bg-red-600 ml-3" onClick={onClose} />
+          <Button text="Cancel" className="ml-3 bg-redColor hover:bg-red-600" onClick={onClose} />
 
         </CardLayoutFooter>
 
