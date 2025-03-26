@@ -40,7 +40,9 @@ const Table = ({
       wrap: col.wrap || true, // Agar grow pehle se hai to use rehne do, warna 2 assign karo
     })),
   ];
-
+  if (!tableData.length && !progressPending) {
+    return <p className="text-text p-5 text-center">No Data Found</p>
+  }
   return (
     <div className="overflow-x-auto">
       {progressPending ? (
