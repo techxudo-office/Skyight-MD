@@ -5,10 +5,9 @@ import {
   ConfirmModal,
   Tag,
 } from "../../components/components";
-import { getReasons, deleteReason } from "../../utils/api_handler";
-import { MdEditSquare } from "react-icons/md";
+import { MdDelete, MdEditSquare } from "react-icons/md";
 import { MdAutoDelete } from "react-icons/md";
-
+import { getReasons, deleteReason } from "../../_core/features/reasonsSlice";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -17,102 +16,84 @@ import {
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 const Reasons = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
+  const { userData } = useSelector((state) => state.auth)
+  const { reasons, isLoadingReasons, isLoadingDeleteReason, reasonsError } = useSelector((state) => state.reasons)
+  console.log("reasons", reasons)
   const navigationHandler = () => {
     navigate("/dashboard/create-reason");
   };
 
   const [reasonsData, setReasonsData] = useState([]);
-  const [modalStatus, setModalStatus] = useState(false);
+  const [modalObject, setModalObject] = useState({
+    status: false,
+    text: "",
+    loading: false,
+    onAbort: () => { },
+    onConfirm: () => { }
+  });
   const [deleteId, setDeleteId] = useState(null);
 
-  const columnsData = [
-    { columnName: "No.", fieldName: "no.", type: "no." },
-    // { columnName: "ID", fieldName: "id", type: "id" },
-    { columnName: "Reason", fieldName: "reason", type: "text" },
-    { columnName: "Status", fieldName: "status", type: "status" },
-    { columnName: "Actions", fieldName: "actions", type: "actions" },
-  ];
-
   const columns = [
+    {
+      name: "Created At",
+      selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
+      sortable: false,
+      center: true,
+    },
     {
       name: "Reason",
       selector: (row) => row.reason,
       sortable: false,
       center: true,
-      grow: 2,
     },
     {
-      name: "Status",
-      selector: (row) => <Tag value={row.status} />,
+      name: "ID",
+      selector: (row) => row.id,
       sortable: false,
       center: true,
       wrap: true,
-      grow: 4,
-    },
-  ];
-
-  const actionsData = [
-    {
-      name: "Edit",
-      icon: <MdEditSquare title="Edit" className="text-blue-500" />,
-      handler: (index, item) => {
-        navigate("/dashboard/update-reason", { state: item });
-      },
     },
     {
-      name: "Delete",
-      icon: <MdAutoDelete title="Delete" className="text-red-500" />,
-      handler: (_, item) => {
-        setModalStatus(true);
-        setDeleteId(item.id);
-      },
+      name: "",
+      selector: (row) =>
+        <button onClick={() => setModalObject({
+          status: true,
+          text: `Are you really Want to delete this reason of id ${row.id}`,
+          loading: isLoadingDeleteReason,
+          onAbort: () => setModalObject((prev) => ({ ...prev, status: false })),
+          onConfirm: () => {
+            dispatch(deleteReason({ token: userData.token, id: row.id }))
+            setModalObject((prev) => ({ ...prev, status: false }))
+          }
+
+        })}>
+          <MdDelete className="text-lg text-redColor" />
+        </button>,
+      sortable: false,
+      center: true,
+      wrap: true,
     },
   ];
-
-  const gettingReasons = async () => {
-    const response = await getReasons();
-    if (response.status) {
-      setReasonsData(response.data);
-    }
-  };
-
-  const deleteReasonHandler = async () => {
-    if (!deleteId) {
-      toast.error("Failed to delete this record");
-      setModalStatus(false);
-    } else {
-      const response = await deleteReason(deleteId);
-      if (response.status) {
-        setReasonsData(reasonsData.filter(({ id }) => id !== deleteId));
-        setModalStatus(false);
-        setDeleteId(null);
-        toast.success(response.message);
-      } else {
-        toast.error(response.message);
-      }
-    }
-  };
 
   const abortDeleteHandler = () => {
-    setModalStatus(false);
+    setModalObject(false);
     setDeleteId(null);
   };
 
   useEffect(() => {
-    gettingReasons();
+    // gettingReasons();
+    dispatch(getReasons(userData?.token))
   }, []);
 
   return (
     <>
-      <ConfirmModal
-        status={modalStatus}
-        abortDelete={abortDeleteHandler}
-        deleteHandler={deleteReasonHandler}
-      />
+      <ConfirmModal {...modalObject} />
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
@@ -128,9 +109,12 @@ const Reasons = () => {
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <Table
-            columns={columnsData}
-            data={reasonsData}
-            actions={actionsData}
+            pagination={true}
+            columnsData={columns}
+            tableData={reasons || []}
+            progressPending={isLoadingReasons}
+            paginationTotalRows={reasons?.length || 0}
+            paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>

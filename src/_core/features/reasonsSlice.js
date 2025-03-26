@@ -7,6 +7,12 @@ const initialState = {
     reasons: [],
     isLoadingReasons: false,
     reasonsError: null,
+
+    isLoadingDeleteReason: false,
+    deleteReasonError: null,
+
+    isCreatingReason: false,
+    createReasonError: null
 };
 
 const reasonsSlice = createSlice({
@@ -26,11 +32,38 @@ const reasonsSlice = createSlice({
                 state.isLoadingReasons = false;
                 state.reasonsError = action.payload;
             })
+
+            .addCase(deleteReason.pending, (state) => {
+                state.isLoadingDeleteReason = true;
+                state.deleteReasonError = null;
+            })
+            .addCase(deleteReason.fulfilled, (state, action) => {
+                state.isLoadingDeleteReason = false;
+                state.deleteReasonError = null;
+                state.reasons = state.reasons.filter((reason) => reason.id !== action.payload);
+            })
+            .addCase(deleteReason.rejected, (state, action) => {
+                state.isLoadingDeleteReason = false;
+                state.deleteReasonError = action.payload;
+            })
+
+            .addCase(createReason.pending, (state) => {
+                state.isCreatingReason = true;
+                state.createReasonError = null;
+            })
+            .addCase(createReason.fulfilled, (state, action) => {
+                state.isCreatingReason = false;
+                state.reasons.push(action.payload);
+            })
+            .addCase(createReason.rejected, (state, action) => {
+                state.isCreatingReason = false;
+                state.createReasonError = action.payload;
+            })
     },
 });
 
 export const getReasons = createAsyncThunk(
-    "company/getReasons",
+    "reason/getReasons",
     async (token, thunkAPI) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/reason`, {
@@ -41,15 +74,56 @@ export const getReasons = createAsyncThunk(
 
             if (response.status === 200) {
                 if (response.data.data.length > 0) {
-                    const extractedData = response.data.data.map(
-                        ({ id, reason, status }) => ({ id, reason, status })
-                    );
-                    return { status: true, data: extractedData };
+                    return response.data.data
                 }
             }
         } catch (error) {
             const errorMessage =
-                error?.response?.data?.message || "Failed to fetch companies.";
+                error?.response?.data?.message || "Failed to fetch Reasons.";
+            toast.error(errorMessage);
+            return thunkAPI.rejectWithValue(errorMessage);
+        }
+    }
+);
+export const deleteReason = createAsyncThunk(
+    "reason/deleteReason",
+    async ({ token, id }, thunkAPI) => {
+        try {
+            const response = await axios.delete(`${BASE_URL}/api/reason/${id}`, {
+                headers: {
+                    Authorization: token,
+                },
+            });
+
+            if (response.status === 200) {
+                toast.success("Reason deleted successfully");
+                return id
+            }
+        } catch (error) {
+            const errorMessage =
+                error?.response?.data?.message || "Failed to delete Reason.";
+            toast.error(errorMessage);
+            return thunkAPI.rejectWithValue(errorMessage);
+        }
+    }
+);
+
+export const createReason = createAsyncThunk(
+    "reason/createReason",
+    async ({ data, token }, thunkAPI) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/api/reason`, data, {
+                headers: {
+                    Authorization: token,
+                    "Content-Type": "application/json",
+                },
+            });
+            toast.success("Reason created successfully");
+            return response.data.data;
+        } catch (error) {
+            console.log(error);
+            const errorMessage =
+                error.response?.data?.message || "Failed to create reason.";
             toast.error(errorMessage);
             return thunkAPI.rejectWithValue(errorMessage);
         }

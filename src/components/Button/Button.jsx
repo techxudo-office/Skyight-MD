@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader } from '../components';
+import { Spinner } from '../components';
 
 const Button = ({ text, onClick, type = 'button', className = '', styles, disabled, id, textColorHover, icon, loading }) => {
 
@@ -13,7 +13,7 @@ const Button = ({ text, onClick, type = 'button', className = '', styles, disabl
                 style={styles}
                 id={id}
             >
-                {loading ? <Loader /> :
+                {loading ? <Spinner /> :
                     <div className='flex items-center justify-center gap-1 '>
                         <span className={`${disabled ? "text-text" : "text-white"} text-xl pb-[2px] `}>{icon}</span>
                         <span className={` hover:${textColorHover} max-md:text-sm`}>{text}</span>

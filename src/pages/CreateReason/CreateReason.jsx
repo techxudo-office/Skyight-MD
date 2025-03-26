@@ -5,132 +5,60 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Switch,
-  Spinner,
-  SecondaryButton,
-} from "../../components/components";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Button, Spinner, SecondaryButton, Input, Textarea } from "../../components/components";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { createReason } from "../../utils/api_handler";
+import { useDispatch, useSelector } from "react-redux";
+import { createReason } from "../../_core/features/reasonsSlice";
 
 const CreateReason = () => {
   const navigate = useNavigate();
-
-  const [isActive, setIsActive] = useState(true);
+  const dispatch = useDispatch()
+  const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const createReasonHandler = async (payload, resetForm) => {
-    try {
-      setLoading(true);
-
-      const response = await createReason(payload);
-      if (response) {
-        if (response.status) {
-          toast.success(response.message);
-          resetForm();
-          setTimeout(() => {
-            navigate("/dashboard/reasons");
-          }, 1000);
-        } else {
-          toast.error(response.message);
-        }
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const validationSchema = Yup.object({
-    reason: Yup.string().required("Please enter reason"),
-    status: Yup.string().required("Status Required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      reason: "",
-      status: isActive ? "active" : "inactive",
-    },
-    validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      const payload = {
-        reason: values.reason,
-        status: isActive ? "active" : "inactive",
-      };
-      createReasonHandler(payload, resetForm);
-    },
-  });
-
-  const handleFormSubmit = (e) => {
+  const { userData } = useSelector((state) => state.auth);
+  const { isCreatingReason, createReasonError } = useSelector((state) => state.reasons)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!loading) {
-      formik.handleSubmit();
+
+    if (reason.trim().length < 4) {
+      toast.error("Reason must be at least 4 characters.");
+      return;
+    } else {
+      dispatch(createReason({ token: userData?.token, data: { reason: reason } })).then(() => {
+        if (!createReasonError) {
+          navigate("/dashboard/reasons")
+        }
+      })
     }
-  };
+
+  }
+
 
   return (
     <>
       <Toaster />
       <CardLayoutContainer>
-        <CardLayoutHeader
-          heading="Create Reason"
-          className={"flex items-center justify-between"}>
-          <span
-            onClick={() => {
-              setIsActive(!isActive);
-            }}>
-            <Switch switchStatus={isActive} />
-          </span>
-        </CardLayoutHeader>
-        <form onSubmit={handleFormSubmit} noValidate>
-          <CardLayoutBody>
-            <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-7">
-                <div
-                  className={`relative ${
-                    formik.touched.reason && formik.errors.reason ? "mb-5" : ""
-                  }`}>
-                  <Input
-                    placeholder={"Enter Reason"}
-                    id={"reason"}
-                    name={"reason"}
-                    label={"Reason*"}
-                    type={"text"}
-                    value={formik.values.reason}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.reason && formik.errors.reason && (
-                    <div className="text-red-500 text-sm mt-2 absolute left-0">
-                      {formik.errors.reason}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </CardLayoutBody>
-          <CardLayoutFooter className={"flex gap-1"}>
-            <div
-              onClick={() => {
-                navigate(-1);
-              }}>
-              <SecondaryButton text="Cancel" />
-            </div>
-            <div>
-              <Button
-                text={loading ? <Spinner /> : "Create Reason"}
-                disabled={loading}
-                onClick={formik.handleSubmit}
-              />
-            </div>
-          </CardLayoutFooter>
-        </form>
+        <CardLayoutHeader heading="Create Reason" />
+
+        <CardLayoutBody>
+          <div className="relative">
+            <Textarea
+              placeholder="Enter Reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </div>
+        </CardLayoutBody>
+        <CardLayoutFooter className="flex gap-1">
+          <div onClick={() => navigate(-1)}>
+            <SecondaryButton text="Cancel" />
+          </div>
+          <div>
+            <Button loading={isCreatingReason} onClick={handleSubmit} text={loading ? <Spinner /> : "Create Reason"} disabled={loading} />
+          </div>
+        </CardLayoutFooter>
+
       </CardLayoutContainer>
     </>
   );

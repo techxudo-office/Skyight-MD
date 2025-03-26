@@ -133,29 +133,6 @@ export const updateSetting = async (payload) => {
   }
 };
 
-//! Reasons
-export const getReasons = async () => {
-  try {
-    let response = await axios({
-      method: "GET",
-      url: `${baseUrl}/api/reason`,
-      headers: {
-        Authorization: getToken(),
-      },
-    });
-    console.log(response);
-    if (response.status === 200) {
-      if (response.data.data.length > 0) {
-        const extractedData = response.data.data.map(
-          ({ id, reason, status }) => ({ id, reason, status })
-        );
-        return { status: true, data: extractedData };
-      }
-    }
-  } catch (error) {
-    console.log("Failed while getting reasons: ", error);
-  }
-};
 
 export const deleteReason = async (id) => {
   try {
