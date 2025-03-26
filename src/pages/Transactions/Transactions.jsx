@@ -99,12 +99,14 @@ const Transactions = () => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          <CustomTooltip content={"Edit"}>
-            <MdEditSquare
-              className="text-base cursor-pointer text-primary"
-              onClick={() => handleEdit(row)}
-            />
-          </CustomTooltip>
+          {row.status === "pending" && (
+            <CustomTooltip content={"Edit"}>
+              <MdEditSquare
+                className="text-base cursor-pointer text-primary"
+                onClick={() => handleEdit(row)}
+              />
+            </CustomTooltip>
+          )}
         </div>
       ),
       sortable: false,

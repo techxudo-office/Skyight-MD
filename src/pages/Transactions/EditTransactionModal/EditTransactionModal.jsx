@@ -15,89 +15,49 @@ import {
   Switch,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserRoles } from "../../../_core/features/roleSlice";
-import { editUser } from "../../../_core/features/userSlice";
+import { getReasons } from "../../../_core/features/reasonsSlice";
+import { editTransaction } from "../../../_core/features/transactionSlice";
+import toast from "react-hot-toast";
 
 Modal.setAppElement("#root");
-
-const inputFields = [
-  {
-    name: "first_name",
-    label: "First Name*",
-    type: "text",
-    placeholder: "Enter First Name",
-  },
-  {
-    name: "last_name",
-    label: "Last Name*",
-    type: "text",
-    placeholder: "Enter Last Name",
-  },
-  {
-    name: "email",
-    label: "Email*",
-    type: "text",
-    placeholder: "Enter Email",
-  },
-  {
-    name: "password",
-    label: "Password*",
-    type: "password",
-    placeholder: "Enter New Password",
-  },
-  {
-    name: "mobile_number",
-    label: "Mobile Number*",
-    type: "text",
-    placeholder: "Enter Mobile Number",
-  },
-];
-
-const initialState = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  password: "",
-  mobile_number: "",
-  role_id: "",
-};
 
 const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [reason, setReason] = useState(null);
   const { userData } = useSelector((state) => state.auth);
-  const { isEditingUser } = useSelector((state) => state.user);
-  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.reasons);
+  const { isEditingTransaction } = useSelector((state) => state.transaction);
+  const { reasons, isLoadingReasons } = useSelector((state) => state.reasons);
 
   useEffect(() => {
-    dispatch(getUserRoles(userData?.token));
-  }, [dispatch]);
+    dispatch(getReasons(userData?.token));
+  }, [userData?.token]);
 
-  // const handleRoleSelect = (role) => {
-  //   let data = {
-  //     id: role.value,
-  //     role: role.lable,
-  //   };
-  //   setSelectedRole(data);
-  //   setFormData((prev) => ({ ...prev, role_id: data.role }));
-  // };
+  const handleRoleSelect = (reason) => {
+    let data = {
+      id: reason.value,
+      reason: reason.label,
+    };
+    setReason(data);
+  };
 
   const handleSubmit = () => {
-    // if (!editUserValidation(formData, setErrors)) {
-    //   toast.error("Please fix the errors before submitting.");
-    //   return;
-    // }
+    if (!toggle && !reason?.reason) {
+      toast.error("Please give a reason.");
+      return;
+    }
 
     const payload = {
       status: toggle ? "approved" : "rejected",
       transaction_id: transactionId,
-      reasonIds: [1],
+      reasonIds: !toggle ? [reason?.id] : null,
     };
 
-    dispatch(editUser({ data: payload, token: userData?.token })).then(() => {
-      onClose();
-    });
+    dispatch(editTransaction({ data: payload, token: userData?.token })).then(
+      () => {
+        onClose();
+      }
+    );
   };
 
   return (
@@ -109,30 +69,30 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit Transaction" />
         <CardLayoutBody>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {/* <Select
+          <div className="mb-4">
+            <Switch label={"Status:"} setToggle={setToggle} />
+          </div>
+          {!toggle && (
+            <Select
               id="userRoles"
               label="Role"
               height="h-12"
-              value={selectedRole ? selectedRole.role : ""}
+              value={reason ? reason.reason : ""}
               onChange={handleRoleSelect}
-              options={userRoles?.map((role) => ({
-                value: role.id,
-                label: role.role,
+              options={reasons?.map((reason) => ({
+                value: reason.id,
+                label: reason.reason,
               }))}
-              placeholder="Select a Role"
-              isLoading={isLoadingUserRoles}
-            /> */}
-          </div>
-          <div className="mt-4">
-            <Switch label={"Status:"} setToggle={setToggle} />
-          </div>
+              placeholder="Select a Reason"
+              isLoading={isLoadingReasons}
+            />
+          )}
         </CardLayoutBody>
         <CardLayoutFooter>
           <Button
-            text={isEditingUser ? <Spinner /> : "Update User"}
+            text={isEditingTransaction ? <Spinner /> : "Update User"}
             onClick={handleSubmit}
-            disabled={isEditingUser}
+            disabled={isEditingTransaction}
           />
           <Button
             text="Cancel"
