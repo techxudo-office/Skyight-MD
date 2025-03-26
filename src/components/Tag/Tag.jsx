@@ -6,6 +6,8 @@ const statusClasses = {
   "requested-cancellation": "text-redColor border-redColor bg-redbg",
   expired: "text-redColor border-redColor bg-redbg",
   "requested-refund": "text-blueColor border-blueColor bg-bluebg",
+  rejected: "text-redColor border-redColor bg-redbg",
+  "requested-refund": "text-blueColor border-blueColor bg-bluebg",
 };
 
 export default function Tag({ value }) {
@@ -14,7 +16,8 @@ export default function Tag({ value }) {
   return (
     <p
       className={` text-center text-sm w-full  mx-auto border-[1px] tracking-tight px-2 py-1 rounded-lg 
-        ${statusClasses[value] || defaultClass} font-semibold capitalize`}>
+        ${statusClasses[value] || defaultClass} font-semibold capitalize`}
+    >
       {value}
     </p>
   );

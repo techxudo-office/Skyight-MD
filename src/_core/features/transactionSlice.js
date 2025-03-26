@@ -79,7 +79,7 @@ export const getTransactions = createAsyncThunk(
   async (token, thunkAPI) => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/company/all-transactions`,
+        `${BASE_URL}/api/company/all-transactions?page=0&limit=10000`,
         {
           headers: {
             Authorization: token,
