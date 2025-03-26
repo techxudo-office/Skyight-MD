@@ -18,7 +18,7 @@ const AppRoutes = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userData.token) {
+    if (!userData?.token) {
       toast.error("Logout Successfully");
       navigate("/", { replace: true });
     }
