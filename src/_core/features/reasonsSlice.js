@@ -12,7 +12,10 @@ const initialState = {
     deleteReasonError: null,
 
     isCreatingReason: false,
-    createReasonError: null
+    createReasonError: null,
+
+    isEditingReason: false,
+    editReasonError: null,
 };
 
 const reasonsSlice = createSlice({
@@ -59,6 +62,22 @@ const reasonsSlice = createSlice({
                 state.isCreatingReason = false;
                 state.createReasonError = action.payload;
             })
+
+            .addCase(editReason.pending, (state) => {
+                state.isEditingReason = true;
+                state.editReasonError = null;
+            })
+            .addCase(editReason.fulfilled, (state, action) => {
+                state.isEditingReason = false;
+                const updatedreason = action.payload;
+                state.reasons = state.reasons.map((reason) =>
+                    reason.id === updatedreason.id ? { ...reason, ...updatedreason } : reason
+                );
+            })
+            .addCase(editReason.rejected, (state, action) => {
+                state.isEditingReason = false;
+                state.editReasonError = action.payload;
+            });
     },
 });
 
@@ -124,6 +143,34 @@ export const createReason = createAsyncThunk(
             console.log(error);
             const errorMessage =
                 error.response?.data?.message || "Failed to create reason.";
+            toast.error(errorMessage);
+            return thunkAPI.rejectWithValue(errorMessage);
+        }
+    }
+);
+
+export const editReason = createAsyncThunk(
+    "reason/editReason",
+    async ({ id, token, data }, thunkAPI) => {
+        const payload = {
+            reason_id: id,
+            reason: data
+        }
+        try {
+            console.log(data, "data");
+            const response = await axios.put(`${BASE_URL}/api/reason/${id}`, payload, {
+                headers: {
+                    Authorization: token,
+                },
+            });
+
+            if (response.status === 200) {
+                toast.success("reason updated successfully");
+                return response.data.data;
+            }
+        } catch (error) {
+            const errorMessage =
+                error?.response?.data?.message || "Failed while updating this reason";
             toast.error(errorMessage);
             return thunkAPI.rejectWithValue(errorMessage);
         }

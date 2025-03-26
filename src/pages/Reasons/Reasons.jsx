@@ -4,10 +4,13 @@ import {
   SecondaryButton,
   ConfirmModal,
   Tag,
+  ModalWrapper,
+  Button,
+  Textarea,
 } from "../../components/components";
-import { MdDelete, MdEditSquare } from "react-icons/md";
+import { MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
 import { MdAutoDelete } from "react-icons/md";
-import { getReasons, deleteReason } from "../../_core/features/reasonsSlice";
+import { getReasons, deleteReason, editReason } from "../../_core/features/reasonsSlice";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -20,10 +23,14 @@ import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 
 const Reasons = () => {
+
+  const { userData } = useSelector((state) => state.auth)
+  const { reasons, isLoadingReasons, isLoadingDeleteReason, isEditingReason } = useSelector((state) => state.reasons)
   const navigate = useNavigate();
   const dispatch = useDispatch()
-  const { userData } = useSelector((state) => state.auth)
-  const { reasons, isLoadingReasons, isLoadingDeleteReason, reasonsError } = useSelector((state) => state.reasons)
+  const [updateReason, setUpdateReason] = useState(null)
+  const [editId, setEditId] = useState(null)
+
   console.log("reasons", reasons)
   const navigationHandler = () => {
     navigate("/dashboard/create-reason");
@@ -36,6 +43,12 @@ const Reasons = () => {
     loading: false,
     onAbort: () => { },
     onConfirm: () => { }
+  });
+  const [modalWrapper, setModalWrapper] = useState({
+    header: null,
+    isOpen: false,
+    contentLabel: "",
+    onRequestClose: () => { },
   });
   const [deleteId, setDeleteId] = useState(null);
 
@@ -62,19 +75,36 @@ const Reasons = () => {
     {
       name: "",
       selector: (row) =>
-        <button onClick={() => setModalObject({
-          status: true,
-          text: `Are you really Want to delete this reason of id ${row.id}`,
-          loading: isLoadingDeleteReason,
-          onAbort: () => setModalObject((prev) => ({ ...prev, status: false })),
-          onConfirm: () => {
-            dispatch(deleteReason({ token: userData.token, id: row.id }))
-            setModalObject((prev) => ({ ...prev, status: false }))
-          }
+        <div className="flex gap-3 items-center justify-center">
+          <button onClick={() => setModalObject({
+            status: true,
+            text: `Are you really Want to delete this reason of id ${row.id}`,
+            loading: isLoadingDeleteReason,
+            onAbort: () => setModalObject((prev) => ({ ...prev, status: false })),
+            onConfirm: () => {
+              dispatch(deleteReason({ token: userData.token, id: row.id }))
+              setModalObject((prev) => ({ ...prev, status: false }))
+            }
 
-        })}>
-          <MdDelete className="text-lg text-redColor" />
-        </button>,
+          })}>
+            <MdDelete className="text-lg text-redColor" />
+          </button>
+          <button onClick={() => {
+            setEditId(row.id)
+            setUpdateReason(row.reason)
+            setModalWrapper({
+              header: `Edit reason of id ${row.id}`,
+              isOpen: true,
+              contentLabel: `${row.id}`,
+              onRequestClose: () => { setModalWrapper((prev) => ({ ...prev, isOpen: false })) },
+            })
+          }}
+
+          >
+            <MdEdit className="text-lg text-blueColor" />
+          </button>
+        </div>
+      ,
       sortable: false,
       center: true,
       wrap: true,
@@ -91,9 +121,29 @@ const Reasons = () => {
     dispatch(getReasons(userData?.token))
   }, []);
 
+  const handleEdit = () => {
+    dispatch(editReason({ token: userData.token, data: updateReason, id: editId })).then(() => {
+      setModalWrapper((prev) => ({ ...prev, isOpen: false }))
+    })
+  }
+
   return (
     <>
       <ConfirmModal {...modalObject} />
+      <ModalWrapper {...modalWrapper}>
+        <CardLayoutBody>
+
+          <Textarea name="" id=""
+            value={updateReason}
+            onChange={(e) => setUpdateReason(e.target.value)}
+          >
+
+          </Textarea>
+          <CardLayoutFooter>
+            <Button text={"Update"} onClick={handleEdit} loading={isEditingReason} />
+          </CardLayoutFooter>
+        </CardLayoutBody>
+      </ModalWrapper>
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}

@@ -87,6 +87,7 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Edit Role"
+
     >
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit Role" />

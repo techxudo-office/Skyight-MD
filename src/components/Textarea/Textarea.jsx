@@ -37,7 +37,7 @@ const Teaxtarea = ({
                     </label>
                     <textarea
                         ref={inputRef}
-                        className={`flex flex-1 w-full bg-transparent p-3 outline-none border-gray border rounded-md py-5 px-3 cursor-default text-gray h-fit `}
+                        className={`flex flex-1 bg-transparent p-3 outline-none border-gray border rounded-md  cursor-default text-text h-fit `}
                         id={id}
                         name={name}
                         value={value}
