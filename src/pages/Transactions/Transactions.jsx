@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
+  CustomTooltip,
   ModalWrapper,
   SecondaryButton,
   Table,
   Tag,
 } from "../../components/components";
 import { FaEye } from "react-icons/fa";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdEditSquare } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -15,21 +16,24 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { getTransactions } from "../../_core/features/transactionSlice";
-import { useDispatch, useSelector } from "react-redux";
 import "./Transaction.css";
 import dayjs from "dayjs";
+import { useDispatch, useSelector } from "react-redux";
+import { getTransactions } from "../../_core/features/transactionSlice";
+import EditTransactionModal from "./EditTransactionModal/EditTransactionModal";
 
 const Transactions = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const { userData } = useSelector((state) => state.auth);
   const { transactions, isLoadingTransactions } = useSelector(
     (state) => state.transaction
   );
+  const [transactionId, setTransactionId] = useState(null);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getTransactions(userData?.token));
@@ -37,12 +41,18 @@ const Transactions = () => {
 
   const handleView = (row) => {
     setSelectedTransaction(row);
-    setIsModalOpen(true);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEdit = (row) => {
+    setTransactionId(row.id);
+    setIsEditModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsViewModalOpen(false);
     setSelectedTransaction(null);
+    setTransactionId(null);
   };
 
   const columns = [
@@ -82,11 +92,20 @@ const Transactions = () => {
     {
       name: "",
       selector: (row) => (
-        <span
-          className="text-xl cursor-pointer"
-          onClick={() => handleView(row)}>
-          <FaEye title="View" className="text-green-500" />
-        </span>
+        <div className="flex items-center gap-x-4">
+          <CustomTooltip content={"Details"}>
+            <FaEye
+              className="text-lg cursor-pointer text-greenColor"
+              onClick={() => handleView(row)}
+            />
+          </CustomTooltip>
+          <CustomTooltip content={"Edit"}>
+            <MdEditSquare
+              className="text-base cursor-pointer text-primary"
+              onClick={() => handleEdit(row)}
+            />
+          </CustomTooltip>
+        </div>
       ),
       sortable: false,
       center: true,
@@ -95,11 +114,19 @@ const Transactions = () => {
 
   return (
     <>
+      {isEditModalOpen && (
+        <EditTransactionModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          transactionId={transactionId}
+        />
+      )}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
           heading={"Transactions"}
-          className="flex items-center justify-between">
+          className="flex items-center justify-between"
+        >
           <div className="relative">
             <SecondaryButton
               text={"Create New Transaction"}
@@ -108,7 +135,6 @@ const Transactions = () => {
             />
           </div>
         </CardLayoutHeader>
-
         <CardLayoutBody removeBorder={true}>
           <Table
             pagination={true}
@@ -123,15 +149,16 @@ const Transactions = () => {
         <CardLayoutFooter />
       </CardLayoutContainer>
       <ModalWrapper
-        isOpen={isModalOpen}
+        isOpen={isViewModalOpen}
         onRequestClose={closeModal}
-        contentLabel="Transaction Details">
+        contentLabel="Transaction Details"
+      >
         {selectedTransaction && (
-          <div className="p-6 bg-white shadow-lg rounded-lg border border-gray-300 max-w-md mx-auto">
-            <h2 className="mb-4 text-2xl font-bold text-center border-b pb-2">
+          <div className="max-w-md p-6 mx-auto bg-white border border-gray-300 rounded-lg shadow-lg">
+            <h2 className="pb-2 mb-4 text-2xl font-bold text-center border-b">
               Transaction Invoice
             </h2>
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center justify-between mb-4">
               <span className="text-sm text-gray-600">Transaction ID:</span>
               <span className="font-semibold">
                 {selectedTransaction?.id || "N/A"}
@@ -140,7 +167,7 @@ const Transactions = () => {
             <img
               src={selectedTransaction?.document_url}
               alt="Document"
-              className="object-cover w-full h-40 mb-4 rounded-md border"
+              className="object-cover w-full h-40 mb-4 border rounded-md"
             />
             <div className="space-y-2 text-sm">
               <p>
@@ -181,24 +208,16 @@ const Transactions = () => {
                   ${selectedTransaction?.amount}
                 </span>
               </p>
-              <p></p>
-              <p>
+              <p className="flex items-center w-40 gap-x-2">
                 <strong className="text-text">Status:</strong>{" "}
-                <span
-                  className={`font-medium px-2 py-1 rounded ${
-                    selectedTransaction?.status === "Approved"
-                      ? "bg-green-100 text-greenColor"
-                      : "bg-red-100 text-redColor"
-                  }`}>
-                  {selectedTransaction?.status}
-                </span>
+                <Tag value={selectedTransaction?.status} />
               </p>
             </div>
-            <div className="mt-6 flex justify-end">
+            <div className="flex justify-end mt-6">
               <Button
                 onClick={closeModal}
                 text="Close"
-                className="hover:bg-primary bg-redColor text-white px-4 py-2 rounded-md"
+                className="px-4 py-2 text-white rounded-md hover:bg-primary bg-redColor"
               />
             </div>
           </div>

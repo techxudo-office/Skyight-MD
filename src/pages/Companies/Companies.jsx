@@ -60,26 +60,21 @@ const Companies = () => {
       selector: (row) => (
         <div className="flex items-center gap-x-4">
           <CustomTooltip content={"Details"}>
-            <div>
-              <FaEye
-                className="text-lg text-greenColor cursor-pointer"
-                onClick={() => {
-                  navigate(`/dashboard/company/details/${row.id}`);
-                }}
-              />
-            </div>
+            <FaEye
+              className="text-lg cursor-pointer text-greenColor"
+              onClick={() => {
+                navigate(`/dashboard/company/details/${row.id}`);
+              }}
+            />
           </CustomTooltip>
           <CustomTooltip content={"Users"}>
-            <div>
-              <FaUser
-                className="text-base text-primary cursor-pointer"
-                onClick={() => {
-                  navigate(`/dashboard/company/users/${row.id}`);
-                }}
-              />
-            </div>
+            <FaUser
+              className="text-base cursor-pointer text-primary"
+              onClick={() => {
+                navigate(`/dashboard/company/users/${row.id}`);
+              }}
+            />
           </CustomTooltip>
-
         </div>
       ),
       sortable: false,

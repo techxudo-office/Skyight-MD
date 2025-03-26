@@ -16,9 +16,7 @@ import {
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserRoles } from "../../../_core/features/roleSlice";
-import toast from "react-hot-toast";
 import { editUser } from "../../../_core/features/userSlice";
-import { editUserValidation } from "../../../utils/validations";
 
 Modal.setAppElement("#root");
 
@@ -64,74 +62,40 @@ const initialState = {
   role_id: "",
 };
 
-const EditUserModal = ({ isOpen, onClose, usersData }) => {
+const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState(initialState);
-  const [errors, setErrors] = useState({});
+  const [toggle, setToggle] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
   const { userData } = useSelector((state) => state.auth);
-  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
   const { isEditingUser } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    if (usersData) {
-      console.log(usersData, "usersData");
-      setFormData({
-        first_name: usersData.first_name || "",
-        last_name: usersData.last_name || "",
-        email: usersData.email || "",
-        mobile_number: usersData.mobile_number || "",
-        role_id: usersData.role.id || "",
-      });
-
-      const role = userRoles?.find((r) => r.id == usersData.role_id);
-      setSelectedRole(role || null);
-    }
-  }, [usersData, userRoles]);
+  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.reasons);
 
   useEffect(() => {
     dispatch(getUserRoles(userData?.token));
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(userRoles, "userRoles");
-  }, [userRoles]);
-
-  useEffect(() => {
-    console.log(selectedRole, "selectedRole");
-  }, [selectedRole]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleRoleSelect = (role) => {
-    let data = {
-      id: role.value,
-      role: role.lable,
-    };
-    setSelectedRole(data);
-    setFormData((prev) => ({ ...prev, role_id: data.role }));
-  };
+  // const handleRoleSelect = (role) => {
+  //   let data = {
+  //     id: role.value,
+  //     role: role.lable,
+  //   };
+  //   setSelectedRole(data);
+  //   setFormData((prev) => ({ ...prev, role_id: data.role }));
+  // };
 
   const handleSubmit = () => {
-    if (!editUserValidation(formData, setErrors)) {
-      toast.error("Please fix the errors before submitting.");
-      return;
-    }
+    // if (!editUserValidation(formData, setErrors)) {
+    //   toast.error("Please fix the errors before submitting.");
+    //   return;
+    // }
 
     const payload = {
-      first_name: formData.first_name,
-      last_name: formData.last_name,
-      mobile_number: formData.mobile_number,
-      password: formData.password,
-      role_id: Number(formData.role_id),
+      status: toggle ? "approved" : "rejected",
+      transaction_id: transactionId,
+      reasonIds: [1],
     };
 
-    dispatch(
-      editUser({ data: payload, token: userData?.token, id: usersData?.id })
-    ).then(() => {
+    dispatch(editUser({ data: payload, token: userData?.token })).then(() => {
       onClose();
     });
   };
@@ -140,28 +104,13 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
     <ModalWrapper
       isOpen={isOpen}
       onRequestClose={onClose}
-      contentLabel="Edit User"
+      contentLabel="Edit Transaction"
     >
       <CardLayoutContainer>
-        <CardLayoutHeader heading="Edit User" />
+        <CardLayoutHeader heading="Edit Transaction" />
         <CardLayoutBody>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {inputFields.map(({ name, label, type }) => (
-              <div key={name} className="relative">
-                <Input
-                  name={name}
-                  label={label}
-                  type={type}
-                  value={formData[name]}
-                  onChange={handleChange}
-                  placeholder={`Enter ${label}`}
-                />
-                {errors[name] && (
-                  <p className="mt-1 text-sm text-red-500">{errors[name]}</p>
-                )}
-              </div>
-            ))}
-            <Select
+            {/* <Select
               id="userRoles"
               label="Role"
               height="h-12"
@@ -173,14 +122,11 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
               }))}
               placeholder="Select a Role"
               isLoading={isLoadingUserRoles}
-            />
+            /> */}
           </div>
           <div className="mt-4">
-            <Switch label={"Status:"} />
+            <Switch label={"Status:"} setToggle={setToggle} />
           </div>
-
-
-
         </CardLayoutBody>
         <CardLayoutFooter>
           <Button
@@ -188,15 +134,15 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
             onClick={handleSubmit}
             disabled={isEditingUser}
           />
-          <Button text="Cancel" className="ml-3 bg-redColor hover:bg-red-600" onClick={onClose} />
-
+          <Button
+            text="Cancel"
+            className="ml-3 bg-redColor hover:bg-red-600"
+            onClick={onClose}
+          />
         </CardLayoutFooter>
-
-
-
       </CardLayoutContainer>
     </ModalWrapper>
   );
 };
 
-export default EditUserModal;
+export default EditTransactionModal;
