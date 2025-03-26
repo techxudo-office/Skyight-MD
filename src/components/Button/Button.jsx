@@ -9,7 +9,7 @@ const Button = ({ text, onClick, type = 'button', className = '', styles, disabl
                 type={type}
                 onClick={onClick}
                 disabled={disabled || loading}
-                className={`group ${disabled || loading ? 'cursor-not-allowed text-text bg-lightgray border-gray border-2' : 'bg-primary text-white hover:bg-secondary'}  w-fit py-2 px-4    font-semibold rounded-md transition duration-300 ease-in-out transform focus:outline-none ${className} `}
+                className={`group ${disabled || loading ? 'cursor-not-allowed text-text bg-lightgray border-gray' : 'bg-primary text-white hover:bg-secondary border-transparent'}  w-fit py-2 px-4 border-[1px]     font-semibold rounded-md transition duration-300 ease-in-out transform focus:outline-none ${className} `}
                 style={styles}
                 id={id}
             >
@@ -20,7 +20,7 @@ const Button = ({ text, onClick, type = 'button', className = '', styles, disabl
 
                     </div>
                 }
-            </button>
+            </button >
         </>
     );
 };
