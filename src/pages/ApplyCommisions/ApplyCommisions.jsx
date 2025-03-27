@@ -73,6 +73,7 @@ import {
   Table,
   SecondaryButton,
   ConfirmModal,
+  CustomTooltip,
 } from "../../components/components";
 import { getBanks } from "../../_core/features/bookingSlice";
 import { MdEditSquare } from "react-icons/md";
@@ -86,6 +87,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
+import { getCommision } from "../../_core/features/commisionSlice";
 
 const ApplyCommisions = () => {
   const navigate = useNavigate();
@@ -95,11 +97,17 @@ const ApplyCommisions = () => {
   };
 
   const { userData } = useSelector((state) => state.auth);
-  const { banks, isLoadingBanks } = useSelector((state) => state.booking);
+  const { commisions, isLoadingCommission } = useSelector(
+    (state) => state.commision
+  );
 
   useEffect(() => {
-    dispatch(getBanks(userData?.token));
+    dispatch(getCommision(userData?.token));
   }, []);
+
+  useEffect(() => {
+    console.log(commisions);
+  }, [commisions]);
 
   const columns = [
     {
@@ -173,13 +181,14 @@ const ApplyCommisions = () => {
       center: true,
       grow: 2,
       cell: (row) => (
-        <span
-          className={`px-2 py-1 rounded-full text-white ${
-            row.status === "Active" ? "bg-green-500" : "bg-red-500"
-          }`}
-        >
-          {row.status}
-        </span>
+        <CustomTooltip content={"Details"}>
+          <MdEditSquare
+            className="text-lg cursor-pointer text-greenColor"
+            onClick={() => {
+              // navigate(`/dashboard/company/details/${row.id}`);
+            }}
+          />
+        </CustomTooltip>
       ),
     },
   ];
@@ -202,10 +211,9 @@ const ApplyCommisions = () => {
         <CardLayoutBody removeBorder={true}>
           <Table
             columnsData={columns}
-            tableData={banks || []}
-            pagination={true}
-            progressPending={isLoadingBanks}
-            paginationTotalRows={banks?.length}
+            tableData={[commisions] || []}
+            progressPending={isLoadingCommission}
+            paginationTotalRows={commisions?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

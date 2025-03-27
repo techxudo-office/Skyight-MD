@@ -14,6 +14,7 @@ import notificationReducer from "../features/notificationSlice";
 import settingReducer from "../features/settingSlice"
 import companyReducer from "../features/companySlice"
 import reasonsReducer from "../features/reasonsSlice"
+import commisionReducer from "../features/commisionSlice"
 const appReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
@@ -24,7 +25,8 @@ const appReducer = combineReducers({
   notification: notificationReducer,
   setting: settingReducer,
   company: companyReducer,
-  reasons: reasonsReducer
+  reasons: reasonsReducer,
+  commision: commisionReducer,
 });
 
 const rootReducer = (state, action) => {
