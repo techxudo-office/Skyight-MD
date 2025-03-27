@@ -7,7 +7,10 @@ import {
   Tag,
   CustomTooltip,
 } from "../../components/components";
-import { cancelRequestFlight, getFlightBookings } from "../../_core/features/bookingSlice";
+import {
+  cancelRequestFlight,
+  getFlightBookings,
+} from "../../_core/features/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -26,9 +29,8 @@ const CancelRequests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.auth);
-  const { flightBookings, isLoadingFlightBookings } = useSelector(
-    (state) => state.booking
-  );
+  const { flightBookings, isLoadingFlightBookings, isCancelRequestLoading } =
+    useSelector((state) => state.booking);
   const columns = [
     {
       name: "ROUTE",

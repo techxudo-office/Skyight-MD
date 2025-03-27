@@ -51,9 +51,15 @@ const initialState = {
   cancelSuccess: null,
   cancelError: null,
 
+  refundBookings: [],
   isGetRefundsLoading: false,
-  getRefundBooking: null,
   getRefundBookingError: null,
+
+  isRefundRequestLoading: false,
+  refundBookingError: null,
+
+  isCancelRequestLoading: false,
+  cancelRequestError: null,
 };
 
 const bookingSlice = createSlice({
@@ -191,35 +197,48 @@ const bookingSlice = createSlice({
         state.isRefundLoading = false;
         state.refundError = action.payload;
       })
-      .addCase(cancelFlightBooking.pending, (state) => {
-        state.isCancelling = true;
-        state.cancelSuccess = null;
-        state.cancelError = null;
-      })
-      .addCase(cancelFlightBooking.fulfilled, (state, action) => {
-        state.isCancelling = false;
-        state.cancelSuccess = action.payload.message;
-        state.cancelError = null;
-      })
-      .addCase(cancelFlightBooking.rejected, (state, action) => {
-        state.isCancelling = false;
-        state.cancelSuccess = null;
-        state.cancelError = action.payload;
-      })
       .addCase(getRefundFlight.pending, (state) => {
         state.isGetRefundsLoading = true;
-        state.getRefundBooking = null;
+        state.refundBookings = null;
         state.getRefundBookingError = null;
       })
       .addCase(getRefundFlight.fulfilled, (state, action) => {
         state.isGetRefundsLoading = false;
-        state.getRefundBooking = action.payload;
+        state.refundBookings = action.payload;
         state.getRefundBookingError = null;
       })
       .addCase(getRefundFlight.rejected, (state, action) => {
         state.isGetRefundsLoading = false;
-        state.getRefundBooking = null;
+        state.refundBookings = null;
         state.getRefundBookingError = action.payload;
+      })
+      .addCase(refundRequestFlight.pending, (state) => {
+        state.isRefundRequestLoading = true;
+        state.refundRequestError = null;
+      })
+      .addCase(refundRequestFlight.fulfilled, (state, action) => {
+        state.isRefundRequestLoading = false;
+        state.refundBookings = state.refundBookings.filter(
+          (row) => row.id !== action.payload
+        );
+      })
+      .addCase(refundRequestFlight.rejected, (state, action) => {
+        state.isRefundRequestLoading = false;
+        state.refundRequestError = action.payload;
+      })
+      .addCase(cancelRequestFlight.pending, (state) => {
+        state.isCancelRequestLoading = true;
+        state.cancelRequestError = null;
+      })
+      .addCase(cancelRequestFlight.fulfilled, (state, action) => {
+        state.isCancelRequestLoading = false;
+        state.flightBookings = state.flightBookings.filter(
+          (row) => row.id !== action.payload
+        );
+      })
+      .addCase(cancelRequestFlight.rejected, (state, action) => {
+        state.isCancelRequestLoading = false;
+        state.cancelRequestError = action.payload;
       });
   },
 });
@@ -587,32 +606,6 @@ export const requestRefund = createAsyncThunk(
   }
 );
 
-export const cancelFlightBooking = createAsyncThunk(
-  "booking/cancelFlightBooking",
-  async ({ data, token }, thunkAPI) => {
-    try {
-      let response = await axios({
-        method: "POST",
-        url: `${BASE_URL}/api/request-cancel-booking`,
-        data: data,
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Booking cancelled successfully");
-        return { status: true, message: "Cancelled Requested" };
-      } else {
-        return thunkAPI.rejectWithValue("Unexpected response from server");
-      }
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || "An error occurred";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
 export const getRefundFlight = createAsyncThunk(
   "booking/getRefundFlight",
   async (token, thunkAPI) => {

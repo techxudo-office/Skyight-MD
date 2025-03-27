@@ -38,9 +38,8 @@ const RefundRequests = () => {
 
   const [data, setData] = useState([]);
   const { userData } = useSelector((state) => state.auth);
-  const { getRefundBooking, isGetRefundsLoading } = useSelector(
-    (state) => state.booking
-  );
+  const { refundBookings, isGetRefundsLoading, isRefundRequestLoading } =
+    useSelector((state) => state.booking);
 
   useEffect(() => {
     dispatch(getRefundFlight(userData?.token));
@@ -123,7 +122,7 @@ const RefundRequests = () => {
     dispatch(refundRequestFlight({ id, token: userData?.token }));
   };
 
-  console.log("get refund booking", getRefundBooking);
+  console.log("get refund booking", refundBookings);
   return (
     <>
       <CardLayoutContainer removeBg={true}>
@@ -134,11 +133,11 @@ const RefundRequests = () => {
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <Table
-            tableData={getRefundBooking || []}
+            tableData={refundBookings || []}
             columnsData={columns}
             pagination={true}
             progressPending={isGetRefundsLoading}
-            paginationTotalRows={getRefundBooking?.length}
+            paginationTotalRows={refundBookings?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
 
             // viewColumns={viewColumns}
