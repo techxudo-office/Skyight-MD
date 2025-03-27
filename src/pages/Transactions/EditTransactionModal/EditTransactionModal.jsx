@@ -13,6 +13,7 @@ import {
   ModalWrapper,
   Select,
   Switch,
+  MultiSelect,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
 import { getReasons } from "../../../_core/features/reasonsSlice";
@@ -24,7 +25,9 @@ Modal.setAppElement("#root");
 const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
-  const [reason, setReason] = useState(null);
+  const [selectedValues, setSelectedValues] = useState([]);
+
+
   const { userData } = useSelector((state) => state.auth);
   const { isEditingTransaction } = useSelector((state) => state.transaction);
   const { reasons, isLoadingReasons } = useSelector((state) => state.reasons);
@@ -33,16 +36,9 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
     dispatch(getReasons(userData?.token));
   }, [userData?.token]);
 
-  const handleRoleSelect = (reason) => {
-    let data = {
-      id: reason.value,
-      reason: reason.label,
-    };
-    setReason(data);
-  };
 
   const handleSubmit = () => {
-    if (!toggle && !reason?.reason) {
+    if (!toggle && !selectedValues.length) {
       toast.error("Please give a reason.");
       return;
     }
@@ -50,7 +46,7 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
     const payload = {
       status: toggle ? "approved" : "rejected",
       transaction_id: transactionId,
-      reasonIds: !toggle ? [reason?.id] : null,
+      reasonIds: !toggle ? selectedValues.map((item) => item.value) : null,
     };
 
     dispatch(editTransaction({ data: payload, token: userData?.token })).then(
@@ -59,7 +55,7 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
       }
     );
   };
-
+  console.log("selected reasons", selectedValues)
   return (
     <ModalWrapper
       isOpen={isOpen}
@@ -73,12 +69,17 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
             <Switch label={"Status:"} setToggle={setToggle} />
           </div>
           {!toggle && (
-            <Select
+            <MultiSelect
               id="userRoles"
               label="Role"
-              height="h-12"
-              value={reason ? reason.reason : ""}
-              onChange={handleRoleSelect}
+              // height="h-12"
+            maxHeight="h-16"
+              value={
+                selectedValues
+              }
+              onChange={
+                (value) => setSelectedValues(value)
+              }
               options={reasons?.map((reason) => ({
                 value: reason.id,
                 label: reason.reason,

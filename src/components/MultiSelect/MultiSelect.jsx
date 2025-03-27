@@ -17,7 +17,7 @@ const MultiSelect = ({
     onClick,
     onMouseEnter,
     isLoading = false,
-    height = "h-14",
+    maxHeight = "h-16",
 }) => {
     const selectRef = useRef(null);
     const [selectStatus, setSelectStatus] = useState(false);
@@ -79,30 +79,34 @@ const MultiSelect = ({
             ref={selectRef}>
             <div
                 onMouseEnter={onMouseEnter}
-                className={`relative ${height} rounded-md border border-gray flex items-center justify-between px-2 ${disabled && "bg-slate-100"
+                className={`relative max-${maxHeight} min-h-14  rounded-md border border-gray flex items-center justify-between ${disabled && "bg-slate-100 "
                     }`}>
                 <label
                     htmlFor={id}
-                    className={`text-sm bg-white mb-2 absolute -top-3 left-3 px-1 roounded-md text-text`}>
+                    className={`text-sm z-10 bg-white mb-2 absolute -top-3 left-3 px-1 roounded-md text-text`}>
                     {label}
                 </label>
                 <div
-                    className="flex items-center justify-between w-full px-3 py-5 bg-transparent text-text cursor-pointer"
+                    className="flex items-center justify-between w-full bg-transparent text-text cursor-pointer h-[90%] overflow-hidden  "
                     onClick={selectHandler}>
-                    <div className="flex items-center gap-3 text-text overflow-hidden">
+                    <div className={`flex items-center gap-3 text-text overflow-y-auto my-2 px-2 max-${maxHeight}`}>
                         <span className="text-primary">{selectIcon}</span>
                         {value.length > 0 ? (
                             <div className="flex flex-wrap gap-1 overflow-hidden">
                                 {value.map((item) => (
                                     <span
                                         key={item.value}
-                                        className="flex items-center gap-1 bg-slate-100 rounded-full px-2 py-1 text-xs"
+                                        className="flex  gap-2 bg-slate-100 rounded-md px-2 py-1 text-xs"
                                     >
-                                        {item.label}
                                         <FaTimes
-                                            className="text-slate-500 hover:text-slate-700 cursor-pointer"
+                                            className="text-slate-500 mt-[2px] hover:text-slate-700 cursor-pointer"
                                             onClick={(e) => removeOption(item.value, e)}
                                         />
+                                        <span className="w-[90%]"> 
+                                        {item.label}
+
+                                        </span>
+                                        
                                     </span>
                                 ))}
                             </div>
