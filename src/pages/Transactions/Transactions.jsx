@@ -3,6 +3,7 @@ import {
   Button,
   CustomTooltip,
   ModalWrapper,
+  MultiSelect,
   SecondaryButton,
   Table,
   Tag,
@@ -27,6 +28,7 @@ const Transactions = () => {
   const dispatch = useDispatch();
 
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedValues, setSelectedValues] = useState([]);
   const { userData } = useSelector((state) => state.auth);
   const { transactions, isLoadingTransactions } = useSelector(
     (state) => state.transaction
@@ -225,6 +227,17 @@ const Transactions = () => {
           </div>
         )}
       </ModalWrapper>
+      {/* <MultiSelect
+        label="Select Multiple Options"
+        options={[
+          { value: "1", label: "Option 1" },
+          { value: "2", label: "Option 2" },
+          { value: "3", label: "Option 3" },
+        ]}
+        value={selectedValues}
+        onChange={(newValues) => setSelectedValues(newValues)}
+        placeholder="Select options..."
+      /> */}
     </>
   );
 };
