@@ -6,6 +6,7 @@ import {
   Dropdown,
   Tag,
   CustomTooltip,
+  Button,
 } from "../../components/components";
 import { cancelRequestFlight, getFlightBookings } from "../../_core/features/bookingSlice";
 import { useNavigate } from "react-router-dom";
@@ -21,10 +22,13 @@ import { FaEye } from "react-icons/fa";
 import { IoIosAirplane } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
+import { MdCancelScheduleSend } from "react-icons/md";
 
 const CancelRequests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [modalStatus, setModalStatus] = useState(false)
+  const [cancelId, setCancelId] = useState()
   const { userData } = useSelector((state) => state.auth);
   const { flightBookings, isLoadingFlightBookings } = useSelector(
     (state) => state.booking
@@ -81,10 +85,10 @@ const CancelRequests = () => {
     {
       name: "",
       selector: (row) => (
-        <div className="flex items-center gap-x-4">
+        <div className="flex items-center gap-x-6 text-xl">
           <CustomTooltip content={"Details"}>
             <FaEye
-              className="text-lg cursor-pointer text-greenColor"
+              className="t cursor-pointer text-greenColor"
               onClick={() =>
                 navigate("/dashboard/booking-details", {
                   state: row,
@@ -93,7 +97,10 @@ const CancelRequests = () => {
             />
           </CustomTooltip>
           <CustomTooltip content={"Accept"}>
-            <span onClick={() => handleCancelRequest(row.id)}>Accept</span>
+            <MdCancelScheduleSend className="text-redColor cursor-pointer" onClick={() => {
+              setModalStatus(true)
+              setCancelId(row.id)
+            }} />
           </CustomTooltip>
         </div>
       ),
@@ -113,24 +120,36 @@ const CancelRequests = () => {
     (item) => item.booking_status === "requested-cancellation"
   );
   return (
-    <CardLayoutContainer removeBg={true}>
-      <CardLayoutHeader
-        removeBorder={true}
-        heading={"Cancel Requests"}
-        className="flex items-center justify-between"
-      ></CardLayoutHeader>
-      <CardLayoutBody removeBorder={true}>
-        <Table
-          pagination={true}
-          columnsData={columns}
-          tableData={canceledBooking || []}
-          progressPending={isLoadingFlightBookings}
-          paginationTotalRows={canceledBooking.length}
-          paginationComponentOptions={{ noRowsPerPage: "10" }}
-        />
-      </CardLayoutBody>
-      <CardLayoutFooter></CardLayoutFooter>
-    </CardLayoutContainer>
+    <>
+      <ConfirmModal
+        text={"Are you want to accept this cancellation request?"}
+        status={modalStatus}
+        onConfirm={() => {
+          handleCancelRequest(cancelId)
+          setModalStatus(false)
+        }}
+        onAbort={()=>setModalStatus(false)}
+
+      />
+      <CardLayoutContainer removeBg={true}>
+        <CardLayoutHeader
+          removeBorder={true}
+          heading={"Cancel Requests"}
+          className="flex items-center justify-between"
+        ></CardLayoutHeader>
+        <CardLayoutBody removeBorder={true}>
+          <Table
+            pagination={true}
+            columnsData={columns}
+            tableData={canceledBooking || []}
+            progressPending={isLoadingFlightBookings}
+            paginationTotalRows={canceledBooking.length}
+            paginationComponentOptions={{ noRowsPerPage: "10" }}
+          />
+        </CardLayoutBody>
+        <CardLayoutFooter></CardLayoutFooter>
+      </CardLayoutContainer>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import {
   Dropdown,
   Tag,
   CustomTooltip,
+  Button,
 } from "../../components/components";
 import { getFlightBookings } from "../../utils/api_handler";
 
@@ -29,6 +30,7 @@ import {
 } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
+import { RiRefund2Fill } from "react-icons/ri";
 
 const RefundRequests = () => {
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ const RefundRequests = () => {
   const [bookingsData, setBookingsData] = useState([]);
   const [modalStatus, setModalStatus] = useState(false);
 
-  const [data, setData] = useState([]);
+  const [refundId, setRefundId] = useState();
   const { userData } = useSelector((state) => state.auth);
   const { getRefundBooking, isGetRefundsLoading } = useSelector(
     (state) => state.booking
@@ -98,10 +100,10 @@ const RefundRequests = () => {
     {
       name: "",
       selector: (row) => (
-        <div className="flex items-center gap-x-4">
+        <div className="flex items-center gap-x-6 text-xl">
           <CustomTooltip content={"Details"}>
             <FaEye
-              className="text-lg cursor-pointer text-greenColor"
+              className=" cursor-pointer text-greenColor"
               onClick={() =>
                 navigate("/dashboard/booking-details", {
                   state: row,
@@ -110,12 +112,17 @@ const RefundRequests = () => {
             />
           </CustomTooltip>
           <CustomTooltip content={"Accept"}>
-            <span onClick={() => handleAcceptRefund(row.id)}>ACCEPT</span>
+          <RiRefund2Fill className="text-blueColor cursor-pointer"  onClick={() => {
+              setModalStatus(true)
+              setRefundId(row.id)
+            }}/>
           </CustomTooltip>
         </div>
       ),
       sortable: false,
       center: true,
+      wrap:false
+
     },
   ];
 
@@ -126,6 +133,14 @@ const RefundRequests = () => {
   console.log("get refund booking", getRefundBooking);
   return (
     <>
+      <ConfirmModal
+      text={"Are you really want to accepet the refund request?"}
+        onConfirm={() =>{ handleAcceptRefund(refundId)
+          setModalStatus(false)
+        }}
+        onAbort={() => setModalStatus(false)}
+        status={modalStatus}
+      />
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
@@ -141,9 +156,9 @@ const RefundRequests = () => {
             paginationTotalRows={getRefundBooking?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
 
-            // viewColumns={viewColumns}
-            // data={data||[]}
-            // actions={actionsData}
+          // viewColumns={viewColumns}
+          // data={data||[]}
+          // actions={actionsData}
           />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>
