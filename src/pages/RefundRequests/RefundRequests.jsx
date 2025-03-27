@@ -120,7 +120,7 @@ const RefundRequests = () => {
   ];
 
   const handleAcceptRefund = (id) => {
-    dispatch(refundRequestFlight({ id: id, token: userData?.token }));
+    dispatch(refundRequestFlight({ id, token: userData?.token }));
   };
 
   console.log("get refund booking", getRefundBooking);

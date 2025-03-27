@@ -5,8 +5,9 @@ import {
   ConfirmModal,
   Dropdown,
   Tag,
+  CustomTooltip,
 } from "../../components/components";
-import { getFlightBookings } from "../../_core/features/bookingSlice";
+import { cancelRequestFlight, getFlightBookings } from "../../_core/features/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -23,13 +24,7 @@ import dayjs from "dayjs";
 
 const CancelRequests = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const [bookingsData, setBookingsData] = useState([]);
-  const [modalStatus, setModalStatus] = useState(false);
-
-  const navigationHandler = () => {
-    navigate("/dashboard/search-flights");
-  };
+  const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.auth);
   const { flightBookings, isLoadingFlightBookings } = useSelector(
     (state) => state.booking
@@ -38,9 +33,9 @@ const CancelRequests = () => {
     {
       name: "ROUTE",
       selector: (row) => (
-        <span className="flex w-52 items-center lg:justify-center  gap-2 text-sm text-text">
+        <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
           {row.origin}
-          <div className="flex justify-center items-center gap-1">
+          <div className="flex items-center justify-center gap-1">
             <span className="h-0.5 w-3 bg-primary"></span>
             <IoIosAirplane className="text-lg text-primary" />
             <span className="h-0.5 w-3 bg-primary"></span>
@@ -86,105 +81,56 @@ const CancelRequests = () => {
     {
       name: "",
       selector: (row) => (
-        <span
-          className="text-lg cursor-pointer"
-          onClick={() => {
-            navigate("/dashboard/booking-details", {
-              state: row,
-            });
-          }}>
-          <FaEye title="View" className="text-green-500 " />
-        </span>
+        <div className="flex items-center gap-x-4">
+          <CustomTooltip content={"Details"}>
+            <FaEye
+              className="text-lg cursor-pointer text-greenColor"
+              onClick={() =>
+                navigate("/dashboard/booking-details", {
+                  state: row,
+                })
+              }
+            />
+          </CustomTooltip>
+          <CustomTooltip content={"Accept"}>
+            <span onClick={() => handleCancelRequest(row.id)}>Accept</span>
+          </CustomTooltip>
+        </div>
       ),
       sortable: false,
       center: true,
     },
   ];
 
-  const viewColumns = [
-    { columnName: "Ref Id", fieldName: "booking_reference_id", type: "text" },
-    { columnName: "Updated At", fieldName: "updated_at", type: "text" },
-    {
-      columnName: "Transaction Identifier",
-      fieldName: "transaction_identifier",
-      type: "text",
-    },
-    {
-      columnName: "Ticketing Time Limit",
-      fieldName: "ticketing_time_limit",
-      type: "text",
-    },
-    { columnName: "Booking Id", fieldName: "id", type: "id" },
-    { columnName: "Rate", fieldName: "rate", type: "text" },
-    { columnName: "Percentage", fieldName: "persantage", type: "text" },
-    { columnName: "Cancel At", fieldName: "canceled_at", type: "text" },
-  ];
-
-  const actionsData = [
-    {
-      name: "View",
-      icon: <FaEye title="View" className="text-green-500" />,
-      // handler: (index) => {
-      //   if (activeIndex === index) {
-      //     setActiveIndex(null);
-      //   } else setActiveIndex(index);
-      // },
-      handler: (index, item) => {
-        navigate("/dashboard/booking-details", {
-          state: item.booking_reference_id,
-        });
-      },
-    },
-  ];
-
-  // const gettingFlightBookings = async () => {
-  //   const response = await getFlightBookings();
-  //   if (response.status) {
-  //     console.log(response.data);
-  //     const data = response.data;
-  //     setBookingsData(
-  //       data.filter(
-  //         ({ booking_status }) => booking_status === "requested-cancellation"
-  //       )
-  //     );
-  //   }
-  // };
-
-  const abortDeleteHandler = () => {
-    setModalStatus(false);
-    setDeleteId(null);
+  const handleCancelRequest = (id) => {
+    dispatch(cancelRequestFlight({ id, token: userData?.token }));
   };
 
   useEffect(() => {
     dispatch(getFlightBookings(userData?.token));
   }, []);
-  const canceledBooking = flightBookings.filter((item) => item.booking_status === "requested-cancellation")
+  const canceledBooking = flightBookings.filter(
+    (item) => item.booking_status === "requested-cancellation"
+  );
   return (
-    <>
-      <ConfirmModal
-        status={modalStatus}
-        abortDelete={abortDeleteHandler}
-      // deleteHandler={cancelFlightBookingHandler}
-      />
-      <CardLayoutContainer removeBg={true}>
-        <CardLayoutHeader
-          removeBorder={true}
-          heading={"Cancel Requests"}
-          className="flex justify-between items-center"
-        ></CardLayoutHeader>
-        <CardLayoutBody removeBorder={true}>
-          <Table
-            pagination={true}
-            columnsData={columns}
-            tableData={canceledBooking || []}
-            progressPending={isLoadingFlightBookings}
-            paginationTotalRows={canceledBooking.length}
-            paginationComponentOptions={{ noRowsPerPage: "10" }}
-          />
-        </CardLayoutBody>
-        <CardLayoutFooter></CardLayoutFooter>
-      </CardLayoutContainer>
-    </>
+    <CardLayoutContainer removeBg={true}>
+      <CardLayoutHeader
+        removeBorder={true}
+        heading={"Cancel Requests"}
+        className="flex items-center justify-between"
+      ></CardLayoutHeader>
+      <CardLayoutBody removeBorder={true}>
+        <Table
+          pagination={true}
+          columnsData={columns}
+          tableData={canceledBooking || []}
+          progressPending={isLoadingFlightBookings}
+          paginationTotalRows={canceledBooking.length}
+          paginationComponentOptions={{ noRowsPerPage: "10" }}
+        />
+      </CardLayoutBody>
+      <CardLayoutFooter></CardLayoutFooter>
+    </CardLayoutContainer>
   );
 };
 

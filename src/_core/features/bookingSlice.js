@@ -632,16 +632,17 @@ export const getRefundFlight = createAsyncThunk(
     }
   }
 );
-
 export const refundRequestFlight = createAsyncThunk(
   "booking/refundRequestFlight",
   async ({ id, token }, thunkAPI) => {
     try {
       const response = await axios.post(
         `${BASE_URL}/api/accept-request-refund/${id}`,
+        {},
         {
           headers: {
             Authorization: token,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -652,6 +653,33 @@ export const refundRequestFlight = createAsyncThunk(
       }
     } catch (error) {
       const errorMessage = "Failed while refunding the flight request";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const cancelRequestFlight = createAsyncThunk(
+  "booking/cancelRequestFlight",
+  async ({ id, token }, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/accept-request-cancellation/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Cancel request successfully");
+        return id;
+      }
+    } catch (error) {
+      const errorMessage = "Failed while cancelling the flight request";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
