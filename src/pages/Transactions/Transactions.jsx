@@ -130,15 +130,7 @@ const Transactions = () => {
           removeBorder={true}
           heading={"Transactions"}
           className="flex items-center justify-between"
-        >
-          <div className="relative">
-            <SecondaryButton
-              text={"Create New Transaction"}
-              icon={<MdAdd />}
-              onClick={() => navigate("/dashboard/create-transaction")}
-            />
-          </div>
-        </CardLayoutHeader>
+        />
         <CardLayoutBody removeBorder={true}>
           <Table
             pagination={true}

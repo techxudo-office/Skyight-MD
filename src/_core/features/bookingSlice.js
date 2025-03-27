@@ -338,14 +338,11 @@ export const getFlightBookings = createAsyncThunk(
   "booking/getFlightBookings",
   async (token, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/booking`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/api/booking`, {
+        headers: {
+          Authorization: token,
+        },
+      });
 
       if (response.data.status === "success") {
         let responseData = response.data.data;
@@ -439,7 +436,7 @@ export const issueBooking = createAsyncThunk(
       );
 
       if (response.status === 200) {
-        toast.success("Booking issued successfully")
+        toast.success("Booking issued successfully");
         return response.data.data;
       } else {
         throw new Error(response.data.message || "Failed to issue booking");
@@ -549,11 +546,12 @@ export const confirmBooking = createAsyncThunk(
         toast.success("Booking created successfully");
         return { status: true, message: "Booking Created" };
       } else {
-        return thunkAPI.rejectWithValue(response.data?.message || "Unexpected response");
+        return thunkAPI.rejectWithValue(
+          response.data?.message || "Unexpected response"
+        );
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An error occurred";
+      const errorMessage = error.response?.data?.message || "An error occurred";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
@@ -577,11 +575,12 @@ export const requestRefund = createAsyncThunk(
         toast.success("Requested refund successfully");
         return { status: true, message: "Refund Requested" };
       } else {
-        return thunkAPI.rejectWithValue(response.data?.message || "Unexpected response");
+        return thunkAPI.rejectWithValue(
+          response.data?.message || "Unexpected response"
+        );
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An error occurred";
+      const errorMessage = error.response?.data?.message || "An error occurred";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
@@ -608,8 +607,7 @@ export const cancelFlightBooking = createAsyncThunk(
         return thunkAPI.rejectWithValue("Unexpected response from server");
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An error occurred";
+      const errorMessage = error.response?.data?.message || "An error occurred";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
@@ -618,7 +616,7 @@ export const cancelFlightBooking = createAsyncThunk(
 export const getRefundFlight = createAsyncThunk(
   "booking/getRefundFlight",
   async (token, thunkAPI) => {
-    console.log("refund api called-----")
+    console.log("refund api called-----");
     try {
       const response = await axios.get(`${BASE_URL}/api/refund-booking`, {
         headers: {
@@ -630,6 +628,31 @@ export const getRefundFlight = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch refund bookings";
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const refundRequestFlight = createAsyncThunk(
+  "booking/refundRequestFlight",
+  async ({ id, token }, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/accept-request-refund/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Request refunded successfully");
+        return id;
+      }
+    } catch (error) {
+      const errorMessage = "Failed while refunding the flight request";
+      toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
   }

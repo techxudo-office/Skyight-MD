@@ -14,10 +14,7 @@ import {
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import {
-  editcommision,
-  getCommision,
-} from "../../../_core/features/commisionSlice";
+import { editcommision } from "../../../_core/features/commisionSlice";
 
 Modal.setAppElement("#root");
 
@@ -39,10 +36,6 @@ const EditCommisionModal = ({ isOpen, onClose }) => {
     IQD: 0,
     commission: 0,
   });
-
-  // useEffect(() => {
-  //   dispatch(getCommision(userData?.token));
-  // }, [userData?.token]);
 
   useEffect(() => {
     if (commisions) {
