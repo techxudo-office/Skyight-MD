@@ -130,6 +130,7 @@ const CancelRequests = () => {
           handleCancelRequest(cancelId)
           setModalStatus(false)
         }}
+        loading={isCancelRequestLoading}
         onAbort={()=>setModalStatus(false)}
 
       />

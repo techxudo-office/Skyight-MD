@@ -137,6 +137,7 @@ const RefundRequests = () => {
         onConfirm={() =>{ handleAcceptRefund(refundId)
           setModalStatus(false)
         }}
+        loading={isRefundRequestLoading}
         onAbort={() => setModalStatus(false)}
         status={modalStatus}
       />
