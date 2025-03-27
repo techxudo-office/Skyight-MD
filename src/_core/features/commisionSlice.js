@@ -21,18 +21,6 @@ const commisionSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createcommision.pending, (state) => {
-        state.isCreatingcommision = true;
-        state.createcommisionError = null;
-      })
-      .addCase(createcommision.fulfilled, (state, action) => {
-        state.isCreatingcommision = false;
-        state.commisions = [action.payload, ...state.commisions];
-      })
-      .addCase(createcommision.rejected, (state, action) => {
-        state.isCreatingcommision = false;
-        state.createcommisionError = action.payload;
-      })
       .addCase(getCommision.pending, (state) => {
         state.isLoadingCommision = true;
         state.commisionError = null;
@@ -51,11 +39,7 @@ const commisionSlice = createSlice({
       })
       .addCase(editcommision.fulfilled, (state, action) => {
         state.isEditingcommision = false;
-        const commision = action.payload;
-        console.log(commision);
-        state.commisions = state.commisions.map((tran) =>
-          tran.id === commision.id ? { ...tran, ...commision } : tran
-        );
+        state.commisions = action.payload;
       })
       .addCase(editcommision.rejected, (state, action) => {
         state.isEditingcommision = false;
@@ -63,48 +47,15 @@ const commisionSlice = createSlice({
       });
   },
 });
-
-export const createcommision = createAsyncThunk(
-  "commision/createcommision",
-  async ({ data, token }, thunkAPI) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/company/create-commision`,
-        data,
-        {
-          headers: {
-            Accept: "multipart/form-data",
-            "Content-Type": "multipart/form-data",
-            Authorization: token,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success("commision created successfully!");
-        return response.data;
-      }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to create commision";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
 export const getCommision = createAsyncThunk(
   "commision/getCommision",
   async (token, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/fetch-commission`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/api/fetch-commission`, {
+        headers: {
+          Authorization: token,
+        },
+      });
       return response.data.data;
     } catch (error) {
       const errorMessage =
@@ -120,8 +71,8 @@ export const editcommision = createAsyncThunk(
   async ({ token, data }, thunkAPI) => {
     try {
       console.log(data, "data");
-      const response = await axios.put(
-        `${BASE_URL}/api/company/update-commision`,
+      const response = await axios.post(
+        `${BASE_URL}/api/update-Commission`,
         data,
         {
           headers: {

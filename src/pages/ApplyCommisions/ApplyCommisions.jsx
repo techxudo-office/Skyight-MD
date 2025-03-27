@@ -86,28 +86,21 @@ import {
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import { useDispatch, useSelector } from "react-redux";
-import dayjs from "dayjs";
 import { getCommision } from "../../_core/features/commisionSlice";
+import EditCommisionModal from "./EditCommisionModal/EditCommisionModal";
 
 const ApplyCommisions = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const navigationHandler = () => {
-    navigate("/dashboard/create-bank");
-  };
-
   const { userData } = useSelector((state) => state.auth);
-  const { commisions, isLoadingCommission } = useSelector(
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { commisions, isLoadingCommision } = useSelector(
     (state) => state.commision
   );
 
   useEffect(() => {
     dispatch(getCommision(userData?.token));
-  }, []);
-
-  useEffect(() => {
-    console.log(commisions);
-  }, [commisions]);
+  }, [userData?.token]);
 
   const columns = [
     {
@@ -181,12 +174,10 @@ const ApplyCommisions = () => {
       center: true,
       grow: 2,
       cell: (row) => (
-        <CustomTooltip content={"Details"}>
+        <CustomTooltip content={"Edit"}>
           <MdEditSquare
-            className="text-lg cursor-pointer text-greenColor"
-            onClick={() => {
-              // navigate(`/dashboard/company/details/${row.id}`);
-            }}
+            className="text-base cursor-pointer text-primary"
+            onClick={() => setIsEditModalOpen(true)}
           />
         </CustomTooltip>
       ),
@@ -195,24 +186,23 @@ const ApplyCommisions = () => {
 
   return (
     <>
+      {isEditModalOpen && (
+        <EditCommisionModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+        />
+      )}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
-          heading={"Banks"}
+          heading={"Apply Commisions"}
           className="flex items-center justify-between"
-        >
-          <div className="relative">
-            <SecondaryButton
-              text={"Create New Bank"}
-              onClick={navigationHandler}
-            />
-          </div>
-        </CardLayoutHeader>
+        />
         <CardLayoutBody removeBorder={true}>
           <Table
             columnsData={columns}
             tableData={[commisions] || []}
-            progressPending={isLoadingCommission}
+            progressPending={isLoadingCommision}
             paginationTotalRows={commisions?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />

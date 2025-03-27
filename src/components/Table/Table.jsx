@@ -37,7 +37,7 @@ const Table = ({
     ...columnsData?.map((col) => ({
       ...col,
       grow: col.grow || 2,
-      wrap: col.wrap || true, // Agar grow pehle se hai to use rehne do, warna 2 assign karo
+      wrap: col.wrap || true,
     })),
   ];
   if (!tableData.length && !progressPending) {
@@ -45,9 +45,6 @@ const Table = ({
   }
   return (
     <div className="overflow-x-auto">
-      {progressPending ? (
-        <Loader />
-      ) : (
         <DataTable
           columns={modifiedColumns}
           data={paginatedData}
@@ -59,13 +56,13 @@ const Table = ({
           noRowsPerPage={noRowsPerPage}
           noDataComponent={
             tableData.length > 0 ? (
-              <Spinner />
+              <Loader />
             ) : (
               <div>There are no records to display</div>
             )
           }
           progressPending={progressPending}
-          progressComponent={<Spinner />}
+          progressComponent={<Loader />}
           customStyles={{
             headRow: {
               style: {
@@ -81,7 +78,7 @@ const Table = ({
                 color: "#fff",
                 fontSize: "16px",
                 fontWeight: "bold",
-                whiteSpace: "normal", // Wrap heading text
+                whiteSpace: "normal",
                 wordBreak: "break-word",
               },
             },
@@ -97,7 +94,6 @@ const Table = ({
             },
           }}
         />
-      )}
     </div>
   );
 };

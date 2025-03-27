@@ -7,11 +7,9 @@ import {
   CardLayoutFooter,
 } from "../../../components/CardLayout/CardLayout";
 import {
-  Input,
   Button,
   Spinner,
   ModalWrapper,
-  Select,
   Switch,
   MultiSelect,
 } from "../../../components/components";
@@ -26,8 +24,6 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
-
-
   const { userData } = useSelector((state) => state.auth);
   const { isEditingTransaction } = useSelector((state) => state.transaction);
   const { reasons, isLoadingReasons } = useSelector((state) => state.reasons);
@@ -35,7 +31,6 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
   useEffect(() => {
     dispatch(getReasons(userData?.token));
   }, [userData?.token]);
-
 
   const handleSubmit = () => {
     if (!toggle && !selectedValues.length) {
@@ -55,7 +50,6 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
       }
     );
   };
-  console.log("selected reasons", selectedValues)
   return (
     <ModalWrapper
       isOpen={isOpen}
@@ -72,14 +66,9 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
             <MultiSelect
               id="userRoles"
               label="Role"
-              // height="h-12"
-            maxHeight="h-16"
-              value={
-                selectedValues
-              }
-              onChange={
-                (value) => setSelectedValues(value)
-              }
+              maxHeight="h-16"
+              value={selectedValues}
+              onChange={(value) => setSelectedValues(value)}
               options={reasons?.map((reason) => ({
                 value: reason.id,
                 label: reason.reason,
