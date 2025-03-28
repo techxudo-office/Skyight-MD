@@ -60,7 +60,7 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
         <CardLayoutHeader heading="Edit Transaction" />
         <CardLayoutBody>
           <div className="mb-4">
-            <Switch label={"Status:"} setToggle={setToggle} />
+            <Switch label={"Status:"} onChange={setToggle} value={toggle} />
           </div>
           {!toggle && (
             <MultiSelect

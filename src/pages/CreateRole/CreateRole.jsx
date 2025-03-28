@@ -5,7 +5,7 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { Input, Button, Switch, Spinner } from "../../components/components";
+import { Input, Button, Spinner } from "../../components/components";
 import toast, { Toaster } from "react-hot-toast";
 import { createRole } from "../../utils/api_handler";
 
@@ -61,7 +61,6 @@ const Checkbox = ({ label, checked, onChange }) => {
 
 const CreateRole = () => {
   const [rolesData, setRolesData] = useState(initialRolesData);
-  const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -91,7 +90,6 @@ const CreateRole = () => {
       description: rolesData.description,
       page_permission: rolesData.page_permission,
       action_permission: rolesData.action_permission,
-      // status: isActive ? "active" : "inactive",
     };
 
     try {
@@ -112,11 +110,7 @@ const CreateRole = () => {
         <CardLayoutHeader
           heading="Create Role"
           className="flex items-center justify-between"
-        >
-          {/* <span onClick={() => setIsActive(!isActive)}>
-            <Switch switchStatus={isActive} />
-          </span> */}
-        </CardLayoutHeader>
+        />
         <CardLayoutBody>
           <div className="flex mb-5 space-x-5">
             <Input

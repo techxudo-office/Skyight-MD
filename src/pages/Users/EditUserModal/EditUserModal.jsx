@@ -66,22 +66,23 @@ const initialState = {
 
 const EditUserModal = ({ isOpen, onClose, usersData }) => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
+  const [active, setActive] = useState(usersData?.isActive);
+  const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
   const { userData } = useSelector((state) => state.auth);
-  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
   const { isEditingUser } = useSelector((state) => state.user);
+  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
 
   useEffect(() => {
     if (usersData) {
       console.log(usersData, "usersData");
       setFormData({
-        first_name: usersData.first_name || "",
-        last_name: usersData.last_name || "",
-        email: usersData.email || "",
-        mobile_number: usersData.mobile_number || "",
-        role_id: usersData.role.id || "",
+        first_name: usersData?.first_name || "",
+        last_name: usersData?.last_name || "",
+        email: usersData?.email || "",
+        mobile_number: usersData?.mobile_number || "",
+        role_id: usersData?.role?.id || "",
       });
 
       const role = userRoles?.find((r) => r.id == usersData.role_id);
@@ -92,14 +93,6 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
   useEffect(() => {
     dispatch(getUserRoles(userData?.token));
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log(userRoles, "userRoles");
-  }, [userRoles]);
-
-  useEffect(() => {
-    console.log(selectedRole, "selectedRole");
-  }, [selectedRole]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -127,6 +120,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
       mobile_number: formData.mobile_number,
       password: formData.password,
       role_id: Number(formData.role_id),
+      isActive: active,
     };
 
     dispatch(
@@ -176,11 +170,8 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
             />
           </div>
           <div className="mt-4">
-            <Switch label={"Status:"} />
+            <Switch label={"Status:"} onChange={setActive} value={active} />
           </div>
-
-
-
         </CardLayoutBody>
         <CardLayoutFooter>
           <Button
@@ -188,12 +179,12 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
             onClick={handleSubmit}
             disabled={isEditingUser}
           />
-          <Button text="Cancel" className="ml-3 bg-redColor hover:bg-red-600" onClick={onClose} />
-
+          <Button
+            text="Cancel"
+            className="ml-3 bg-redColor hover:bg-red-600"
+            onClick={onClose}
+          />
         </CardLayoutFooter>
-
-
-
       </CardLayoutContainer>
     </ModalWrapper>
   );

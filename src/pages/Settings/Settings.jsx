@@ -179,7 +179,7 @@ const Settings = () => {
             <h2 className="text-2xl font-semibold text-text">
               Personal Information
             </h2>
-            <Switch setToggle={setToggle} label={"Status:"} />
+            <Switch onChange={setToggle} value={toggle} label={"Status:"} />
           </CardLayoutHeader>
 
           <CardLayoutBody removeBorder={true}>

@@ -5,7 +5,14 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { Input, Button, Switch, Spinner, SecondaryButton, ConfirmModal } from "../../components/components";
+import {
+  Input,
+  Button,
+  Switch,
+  Spinner,
+  SecondaryButton,
+  ConfirmModal,
+} from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,9 +22,9 @@ const CreateBank = () => {
   const navigate = useNavigate();
   const [modalstatus, setModalstatus] = useState(false);
   const [bankName, setBankName] = useState("");
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.auth);
-  const { isCreatingbank } = useSelector((state) => state.bank)
+  const { isCreatingbank } = useSelector((state) => state.bank);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,19 +32,18 @@ const CreateBank = () => {
       toast.error("Please enter bank name");
       return;
     } else {
-      setModalstatus(true)
+      setModalstatus(true);
     }
   };
   const handleAddBank = () => {
-
     const payload = {
-      bank: bankName
-    }
-    setModalstatus(false)
+      bank: bankName,
+    };
+    setModalstatus(false);
     dispatch(createBank({ token: userData?.token, data: payload })).then(() => {
-      navigate("/dashboard/banks")
-    })
-  }
+      navigate("/dashboard/banks");
+    });
+  };
 
   return (
     <CardLayoutContainer>
@@ -51,14 +57,9 @@ const CreateBank = () => {
       <CardLayoutHeader
         heading="Create Bank"
         className="flex items-center justify-between"
-      >
-        {/* <span onClick={() => setIsActive(!isActive)}>
-          <Switch switchStatus={isActive} />
-        </span> */}
-      </CardLayoutHeader>
-
+      />
       <CardLayoutBody>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-7">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
           <div>
             <Input
               inputClass={"capitalize"}
@@ -72,10 +73,7 @@ const CreateBank = () => {
       </CardLayoutBody>
 
       <CardLayoutFooter className="flex gap-1">
-        <SecondaryButton
-          text="Cancel"
-          onClick={() => navigate(-1)}
-        />
+        <SecondaryButton text="Cancel" onClick={() => navigate(-1)} />
         <Button
           text={isCreatingbank ? <Spinner /> : "Create Bank"}
           disabled={isCreatingbank}

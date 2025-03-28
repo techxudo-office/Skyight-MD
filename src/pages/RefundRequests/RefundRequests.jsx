@@ -35,7 +35,6 @@ import { RiRefund2Fill } from "react-icons/ri";
 const RefundRequests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [bookingsData, setBookingsData] = useState([]);
   const [modalStatus, setModalStatus] = useState(false);
 
   const [refundId, setRefundId] = useState();
@@ -99,10 +98,10 @@ const RefundRequests = () => {
     {
       name: "",
       selector: (row) => (
-        <div className="flex items-center gap-x-6 text-xl">
+        <div className="flex items-center text-xl gap-x-6">
           <CustomTooltip content={"Details"}>
             <FaEye
-              className=" cursor-pointer text-greenColor"
+              className="cursor-pointer  text-greenColor"
               onClick={() =>
                 navigate("/dashboard/booking-details", {
                   state: row,
@@ -111,7 +110,7 @@ const RefundRequests = () => {
             />
           </CustomTooltip>
           <CustomTooltip content={"Accept"}>
-          <RiRefund2Fill className="text-blueColor cursor-pointer"  onClick={() => {
+          <RiRefund2Fill className="cursor-pointer text-blueColor"  onClick={() => {
               setModalStatus(true)
               setRefundId(row.id)
             }}/>
