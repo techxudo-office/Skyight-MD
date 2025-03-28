@@ -13,9 +13,9 @@ const DashboardCards = () => {
       <div className="w-full p-5">
         <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-blue-500 shadow-sm rounded-xl hover:shadow-md">
+          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
             <div className="flex items-center space-x-4">
-              <FaChartLine className="text-3xl text-blue-500" />
+              <FaChartLine className="text-3xl text-primary" />
               <div>
                 <h3 className="font-semibold text-gray-700 text-md">
                   Total Sales
@@ -28,9 +28,9 @@ const DashboardCards = () => {
             </div>
           </div>
 
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-blue-500 shadow-sm rounded-xl hover:shadow-md">
+          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
             <div className="flex items-center space-x-4">
-              <FaUserAlt className="text-3xl text-blue-500" />
+              <FaUserAlt className="text-3xl text-primary" />
               <div>
                 <h3 className="font-semibold text-gray-700 textmdlg">
                   Total Users
@@ -43,9 +43,9 @@ const DashboardCards = () => {
             </div>
           </div>
 
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-blue-500 shadow-sm rounded-xl hover:shadow-md">
+          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
             <div className="flex items-center space-x-4">
-              <FaTachometerAlt className="text-3xl text-blue-500" />
+              <FaTachometerAlt className="text-3xl text-primary" />
               <div>
                 <h3 className="text-lg text-gray-700 mdt-semibold">
                   Performance
@@ -58,9 +58,9 @@ const DashboardCards = () => {
             </div>
           </div>
 
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-blue-500 shadow-sm rounded-xl hover:shadow-md">
+          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
             <div className="flex items-center space-x-4">
-              <FaClipboardList className="text-3xl text-blue-500" />
+              <FaClipboardList className="text-3xl text-primary" />
               <div>
                 <h3 className="text-lg text-gray-700 mdt-semibold">Tasks</h3>
                 <p className="mt-2 text-2xl font-bold text-gray-900">15</p>

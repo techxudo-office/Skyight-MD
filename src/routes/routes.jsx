@@ -13,13 +13,12 @@ import toast from "react-hot-toast";
 import { CompanyUsers } from "../pages/pages";
 
 const AppRoutes = () => {
+  const { userData } = useSelector((state) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
-  const { userData } = useSelector((state) => state.auth);
-  const auth = localStorage.getItem("auth_token");
 
   useEffect(() => {
-    if (!auth) {
+    if (!userData?.token) {
       toast.error("Logout Successfully");
       navigate("/", { replace: true });
     }

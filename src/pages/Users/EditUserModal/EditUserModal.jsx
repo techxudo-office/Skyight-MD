@@ -100,13 +100,12 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
   };
 
   const handleRoleSelect = (role) => {
-    console.log(role)
     let data = {
       id: role.value,
-      role: role.label,
+      role: role.lable,
     };
     setSelectedRole(data);
-    setFormData((prev) => ({ ...prev, role_id: data.id }));
+    setFormData((prev) => ({ ...prev, role_id: data.role }));
   };
 
   const handleSubmit = () => {
