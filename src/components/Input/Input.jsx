@@ -18,6 +18,7 @@ const Input = ({
   placeholder,
   autoComplete,
   setEditingField,
+  inputClass
 }) => {
   const inputRef = useRef();
   const eyeIconRef = useRef(null);
@@ -49,7 +50,7 @@ const Input = ({
         </label>
         <input
           ref={inputRef}
-          className="w-full px-3 py-3 bg-transparent outline-none"
+          className={`w-full px-3 py-3 bg-transparent outline-none ${inputClass}`}
           id={id}
           type={
             type === "password" ? (showPassword ? "text" : "password") : type

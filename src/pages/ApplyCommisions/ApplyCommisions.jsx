@@ -75,7 +75,7 @@ import {
   ConfirmModal,
   CustomTooltip,
 } from "../../components/components";
-import { getBanks } from "../../_core/features/bookingSlice";
+import { getBanks } from "../../_core/features/bankSlice";
 import { MdEditSquare } from "react-icons/md";
 import { MdAutoDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";

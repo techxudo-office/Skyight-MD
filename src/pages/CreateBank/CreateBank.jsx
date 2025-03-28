@@ -5,139 +5,84 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Switch,
-  Spinner,
-  SecondaryButton,
-} from "../../components/components";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { Input, Button, Switch, Spinner, SecondaryButton, ConfirmModal } from "../../components/components";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
-import { createBank } from "../../utils/api_handler";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { createBank } from "../../_core/features/bankSlice";
 
 const CreateBank = () => {
   const navigate = useNavigate();
-
-  const [isActive, setIsActive] = useState(true);
-  const [loading, setLoading] = useState(false);
-
-  const createBankHandler = async (payload, resetForm) => {
-    try {
-      setLoading(true);
-
-      const response = await createBank(payload);
-      if (response) {
-        if (response.status) {
-          toast.success(response.message);
-          resetForm();
-          setTimeout(() => {
-            navigate("/dashboard/banks");
-          }, 1000);
-        } else {
-          toast.error(response.message);
-        }
-      }
-    } catch (error) {
-      toast.error(error.message);
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const validationSchema = Yup.object({
-    bank: Yup.string().required("Please enter bank"),
-    // status: Yup.string().required("Status Required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      bank: "",
-      //   status: isActive ? "active" : "inactive",
-    },
-    validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      const payload = {
-        bank: values.bank,
-        // status: isActive ? "active" : "inactive",
-      };
-      createBankHandler(payload, resetForm);
-    },
-  });
-
-  const handleFormSubmit = (e) => {
+  const [modalstatus, setModalstatus] = useState(false);
+  const [bankName, setBankName] = useState("");
+  const dispatch = useDispatch()
+  const { userData } = useSelector((state) => state.auth);
+  const { isCreatingbank } = useSelector((state) => state.bank)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!loading) {
-      formik.handleSubmit();
+
+    if (!bankName.trim()) {
+      toast.error("Please enter bank name");
+      return;
+    } else {
+      setModalstatus(true)
     }
   };
+  const handleAddBank = () => {
+
+    const payload = {
+      bank: bankName
+    }
+    setModalstatus(false)
+    dispatch(createBank({ token: userData?.token, data: payload })).then(() => {
+      navigate("/dashboard/banks")
+    })
+  }
 
   return (
-    <>
-      <Toaster />
-      <CardLayoutContainer>
-        <CardLayoutHeader
-          heading="Create Bank"
-          className={"flex items-center justify-between"}
-        >
-          <span
-            onClick={() => {
-              setIsActive(!isActive);
-            }}
-          >
-            <Switch switchStatus={isActive} />
-          </span>
-        </CardLayoutHeader>
-        <form onSubmit={handleFormSubmit} noValidate>
-          <CardLayoutBody>
-            <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-7">
-                <div
-                  className={`relative ${
-                    formik.touched.bank && formik.errors.bank ? "mb-5" : ""
-                  }`}
-                >
-                  <Input
-                    placeholder={"Enter Bank"}
-                    id={"bank"}
-                    name={"bank"}
-                    label={"Bank*"}
-                    type={"text"}
-                    value={formik.values.bank}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.bank && formik.errors.bank && (
-                    <div className="text-red-500 text-sm mt-2 absolute left-0">
-                      {formik.errors.bank}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </CardLayoutBody>
-          <CardLayoutFooter className={"flex gap-1"}>
-            <div
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
-              <SecondaryButton text="Cancel" />
-            </div>
-            <div>
-              <Button
-                text={loading ? <Spinner /> : "Create Bank"}
-                disabled={loading}
-                onClick={formik.handleSubmit}
-              />
-            </div>
-          </CardLayoutFooter>
-        </form>
-      </CardLayoutContainer>
-    </>
+    <CardLayoutContainer>
+      <ConfirmModal
+        text={"Is the information you provide correct?"}
+        loading={isCreatingbank}
+        onConfirm={handleAddBank}
+        onAbort={() => setModalstatus(false)}
+        status={modalstatus}
+      />
+      <CardLayoutHeader
+        heading="Create Bank"
+        className="flex items-center justify-between"
+      >
+        {/* <span onClick={() => setIsActive(!isActive)}>
+          <Switch switchStatus={isActive} />
+        </span> */}
+      </CardLayoutHeader>
+
+      <CardLayoutBody>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-7">
+          <div>
+            <Input
+              inputClass={"capitalize"}
+              placeholder="Enter Bank"
+              label="Bank*"
+              value={bankName}
+              onChange={(e) => setBankName(e.target.value)}
+            />
+          </div>
+        </div>
+      </CardLayoutBody>
+
+      <CardLayoutFooter className="flex gap-1">
+        <SecondaryButton
+          text="Cancel"
+          onClick={() => navigate(-1)}
+        />
+        <Button
+          text={isCreatingbank ? <Spinner /> : "Create Bank"}
+          disabled={isCreatingbank}
+          onClick={handleSubmit}
+        />
+      </CardLayoutFooter>
+    </CardLayoutContainer>
   );
 };
 

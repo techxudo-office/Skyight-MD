@@ -15,6 +15,7 @@ import settingReducer from "../features/settingSlice"
 import companyReducer from "../features/companySlice"
 import reasonsReducer from "../features/reasonsSlice"
 import commisionReducer from "../features/commisionSlice"
+import bankReducer from "../features/bankSlice"
 const appReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
@@ -27,6 +28,7 @@ const appReducer = combineReducers({
   company: companyReducer,
   reasons: reasonsReducer,
   commision: commisionReducer,
+  bank: bankReducer,
 });
 
 const rootReducer = (state, action) => {

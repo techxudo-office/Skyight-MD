@@ -40,9 +40,9 @@ const Table = ({
       wrap: col.wrap || true,
     })),
   ];
-  if (!tableData.length && !progressPending) {
-    return <p className="p-5 text-center text-text">No Data Found</p>
-  }
+  // if (!tableData.length && !progressPending) {
+  //   return <p className="p-5 text-center text-text">No Data Found</p>
+  // }
   return (
     <div className="overflow-x-auto">
         <DataTable

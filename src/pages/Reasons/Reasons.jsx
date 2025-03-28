@@ -7,6 +7,7 @@ import {
   ModalWrapper,
   Button,
   Textarea,
+  CustomTooltip,
 } from "../../components/components";
 import { MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
 import { MdAutoDelete } from "react-icons/md";
@@ -87,7 +88,9 @@ const Reasons = () => {
             }
 
           })}>
-            <MdDelete className="text-lg text-redColor" />
+            <CustomTooltip content={"Delete Reason"}>
+              <MdDelete className="text-lg text-redColor" />
+            </CustomTooltip>
           </button>
           <button onClick={() => {
             setEditId(row.id)
@@ -101,7 +104,10 @@ const Reasons = () => {
           }}
 
           >
-            <MdEdit className="text-lg text-blueColor" />
+            <CustomTooltip content={"Edit Reason"}>
+              <MdEditSquare className="text-lg text-blueColor" />
+
+            </CustomTooltip>
           </button>
         </div>
       ,
@@ -122,6 +128,10 @@ const Reasons = () => {
   }, []);
 
   const handleEdit = () => {
+    if (updateReason.trim().length < 4) {
+      toast.error("Reason must be at least 4 characters.");
+      return;
+    }
     dispatch(editReason({ token: userData.token, data: updateReason, id: editId })).then(() => {
       setModalWrapper((prev) => ({ ...prev, isOpen: false }))
     })
