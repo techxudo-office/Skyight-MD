@@ -93,12 +93,9 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   };
 
   const logoutHandler = () => {
-    dropdownHandler();
+    dispatch({ type: "user/logout" });
     localStorage.removeItem("auth_token");
-    toast.success("Logout Successfully");
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+    dropdownHandler();
   };
 
   const navigationHandler = (path) => {
