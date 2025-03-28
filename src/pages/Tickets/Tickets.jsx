@@ -70,7 +70,8 @@ const Tickets = () => {
         <div className="flex items-center gap-x-4">
           <span
             className="text-xl cursor-pointer"
-            onClick={() => handleView(row)}>
+            onClick={() => handleView(row)}
+          >
             <FaEye title="View" className="text-green-500" />
           </span>
         </div>
@@ -91,15 +92,8 @@ const Tickets = () => {
         <CardLayoutHeader
           removeBorder={true}
           heading={"Tickets"}
-          className="flex items-center justify-between">
-          <div className="relative">
-            <SecondaryButton
-              icon={<MdAdd />}
-              text={"Create New Ticket"}
-              onClick={navigationHandler}
-            />
-          </div>
-        </CardLayoutHeader>
+          className="flex items-center justify-between"
+        />
         <CardLayoutBody removeBorder={true}>
           <Table
             pagination={true}
@@ -115,21 +109,22 @@ const Tickets = () => {
       <ModalWrapper
         isOpen={modal}
         onRequestClose={closeModal}
-        contentLabel="Ticket Details">
+        contentLabel="Ticket Details"
+      >
         {ticket && (
-          <div className="p-6 bg-white shadow-lg rounded-lg border border-gray-300 max-w-md mx-auto">
-            <h2 className="mb-4 text-2xl font-bold text-center border-b pb-2">
+          <div className="max-w-md p-6 mx-auto bg-white border border-gray-300 rounded-lg shadow-lg">
+            <h2 className="pb-2 mb-4 text-2xl font-bold text-center border-b">
               Ticket Details
             </h2>
 
-            <div className="text-sm space-y-2">
+            <div className="space-y-2 text-sm">
               <p>
                 <strong className="text-text">Title:</strong>
-                <span className="font-medium ml-2">{ticket.title}</span>
+                <span className="ml-2 font-medium">{ticket.title}</span>
               </p>
               <p>
                 <strong className="text-text">Description:</strong>
-                <span className="font-medium ml-2">{ticket.description}</span>
+                <span className="ml-2 font-medium">{ticket.description}</span>
               </p>
               <p className="flex items-center gap-x-4">
                 <strong className="text-text">Status:</strong>
@@ -139,17 +134,17 @@ const Tickets = () => {
               </p>
               <p>
                 <strong className="text-text">Created At:</strong>
-                <span className="font-medium ml-2">
+                <span className="ml-2 font-medium">
                   {dayjs(ticket.created_at).format("DD-MMM-YYYY h:mm a")}
                 </span>
               </p>
             </div>
 
-            <div className="mt-6 flex justify-end">
+            <div className="flex justify-end mt-6">
               <Button
                 onClick={closeModal}
                 text="Close"
-                className="hover:bg-primary bg-redColor text-white px-4 py-2 rounded-md"
+                className="px-4 py-2 text-white rounded-md hover:bg-primary bg-redColor"
               />
             </div>
           </div>
