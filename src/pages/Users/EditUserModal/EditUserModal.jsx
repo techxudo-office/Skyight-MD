@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
 import { editUser } from "../../../_core/features/userSlice";
-import { editUserValidation } from "../../../utils/validations";
+import { userValidation } from "../../../utils/validations";
 
 Modal.setAppElement("#root");
 
@@ -102,14 +102,14 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
   const handleRoleSelect = (role) => {
     let data = {
       id: role.value,
-      role: role.lable,
+      role: role.label,
     };
     setSelectedRole(data);
     setFormData((prev) => ({ ...prev, role_id: data.role }));
   };
 
   const handleSubmit = () => {
-    if (!editUserValidation(formData, setErrors)) {
+    if (!userValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
       return;
     }

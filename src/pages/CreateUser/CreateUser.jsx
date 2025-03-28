@@ -5,15 +5,15 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Spinner,
-} from "../../components/components";
+import { Input, Button, Spinner, Select } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { createUser, getRoles } from "../../utils/api_handler";
 import { FaCaretDown } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { userValidation } from "../../utils/validations";
+import { createUser, editUser } from "../../_core/features/userSlice";
+import { getUserRoles } from "../../_core/features/roleSlice";
+import { getCompanies } from "../../_core/features/companySlice";
 
 let inputFields = [
   {
@@ -44,6 +44,7 @@ let inputFields = [
 ];
 const CreateUser = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -54,60 +55,20 @@ const CreateUser = () => {
     mobile_number: "",
     password: "",
     role_id: "",
+    company_id: "",
   });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
-
-  const validateForm = () => {
-    let newErrors = {};
-
-    if (!formData.first_name.trim())
-      newErrors.first_name = "First name is required";
-    if (!formData.last_name.trim())
-      newErrors.last_name = "Last name is required";
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.mobile_number.trim()) {
-      newErrors.mobile_number = "Mobile number is required";
-    } else if (!/^\d{10}$/.test(formData.mobile_number)) {
-      newErrors.mobile_number = "Mobile number must be 10 digits";
-    }
-
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (!formData.role_id) newErrors.role_id = "Role is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const [selectedCompany, setSelectedCompany] = useState(null);
+  const { userData } = useSelector((state) => state.auth);
+  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
+  const { companies, isLoadingCompanies } = useSelector(
+    (state) => state.company
+  );
 
   useEffect(() => {
-    const fetchRoles = async () => {
-      setLoading(true);
-      try {
-        const response = await getRoles();
-        if (response.status) {
-          setRoles(response.data.roles);
-        }
-      } catch (error) {
-        console.error("Error fetching roles:", error);
-        toast.error("Failed to fetch roles.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRoles();
-  }, []);
+    dispatch(getUserRoles(userData?.token));
+    dispatch(getCompanies(userData?.token));
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -118,50 +79,43 @@ const CreateUser = () => {
   };
 
   const handleRoleSelect = (role) => {
-    setSelectedRole(role);
-    setFormData((prev) => ({
-      ...prev,
-      role_id: role.id,
-    }));
-    setDropdownOpen(false);
+    let data = {
+      id: role.value,
+      role: role.label,
+    };
+    setSelectedRole(data);
+    setFormData((prev) => ({ ...prev, role_id: data.id }));
+  };
+
+  const handleCompanySelect = (role) => {
+    let data = {
+      id: role.value,
+      name: role.label,
+    };
+    setSelectedCompany(data);
+    setFormData((prev) => ({ ...prev, company_id: data.id }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
+    if (!userValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
       return;
     }
 
-    try {
-      setLoading(true);
-      console.log("Submitting Payload:", formData);
-      const response = await createUser(JSON.stringify(formData));
+    const payload = {
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      email: formData.email,
+      mobile_number: formData.mobile_number,
+      password: formData.password,
+      role_id: Number(formData.role_id),
+      company_id: Number(formData.company_id),
+    };
 
-      if (response?.status) {
-        toast.success(response.message);
-        setFormData({
-          first_name: "",
-          last_name: "",
-          email: "",
-          mobile_number: "",
-          password: "",
-          role_id: "",
-        });
-        setSelectedRole(null);
-        setErrors({});
-        setTimeout(() => navigate("/dashboard/users"), 1000);
-      } else {
-        Array.isArray(response.message)
-          ? response.message.forEach((error) => toast.error(error))
-          : toast.error(response.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
+    dispatch(createUser({ data: payload, token: userData?.token })).then(() => {
+      onClose();
+    });
   };
 
   return (
@@ -188,38 +142,32 @@ const CreateUser = () => {
                   )}
                 </div>
               ))}
-              <div className="relative">
-                {/* <label className="block mb-2 font-medium text-md">Role</label> */}
-                <div
-                  className="relative flex items-center justify-between w-full p-3 bg-white border border-gray-300 rounded-md cursor-pointer"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                >
-                  <span>
-                    {selectedRole ? selectedRole.name : "Select a Role"}
-                  </span>
-                  <FaCaretDown className="text-gray-500" />
-                </div>
-                {dropdownOpen && (
-                  <ul className="absolute z-10 w-full mt-1 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-md max-h-40">
-                    {roles.length > 0 ? (
-                      roles.map((role) => (
-                        <li
-                          key={role.id}
-                          className="p-3 cursor-pointer hover:bg-gray-100"
-                          onClick={() => handleRoleSelect(role)}
-                        >
-                          {role.name}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="p-3 text-gray-500">No roles found</li>
-                    )}
-                  </ul>
-                )}
-                {errors.role_id && (
-                  <p className="mt-1 text-sm text-red-500">{errors.role_id}</p>
-                )}
-              </div>
+              <Select
+                id="userRoles"
+                label="Role"
+                height="h-12"
+                value={selectedRole ? selectedRole.role : ""}
+                onChange={handleRoleSelect}
+                options={userRoles?.map((role) => ({
+                  value: role.id,
+                  label: role.role,
+                }))}
+                placeholder="Select a Role"
+                isLoading={isLoadingUserRoles}
+              />
+              <Select
+                id="companies"
+                label="Company"
+                height="h-12"
+                value={selectedCompany ? selectedCompany.name : ""}
+                onChange={handleCompanySelect}
+                options={companies?.map((comp) => ({
+                  value: comp.id,
+                  label: comp.name,
+                }))}
+                placeholder="Select a Company"
+                isLoading={isLoadingCompanies}
+              />
             </div>
           </CardLayoutBody>
 

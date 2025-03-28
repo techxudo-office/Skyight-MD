@@ -23,7 +23,7 @@ export const updateAccountValidation = (password, fullName) => {
   return errors.length ? errors.join("\n") : null;
 };
 
-export const editUserValidation = (form, setErrors) => {
+export const userValidation = (form, setErrors) => {
   let newErrors = {};
 
   if (!form.first_name.trim()) newErrors.first_name = "First name is required";
