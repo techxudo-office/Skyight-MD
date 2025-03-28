@@ -7,7 +7,6 @@ const statusClasses = {
   expired: "text-redColor border-redColor bg-redbg",
   "requested-refund": "text-blueColor border-blueColor bg-bluebg",
   rejected: "text-redColor border-redColor bg-redbg",
-  "requested-refund": "text-blueColor border-blueColor bg-bluebg",
 };
 
 export default function Tag({ value }) {

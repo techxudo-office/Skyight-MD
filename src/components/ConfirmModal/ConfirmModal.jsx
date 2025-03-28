@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, ModalWrapper, SecondaryButton } from "../components";
 
 const ConfirmModal = ({ status, onAbort, onConfirm, text, loading }) => {
@@ -29,7 +29,7 @@ const ConfirmModal = ({ status, onAbort, onConfirm, text, loading }) => {
             Confirmation
           </h2>
 
-          <h2 className="px-4 py-3 text-xl text-text border-t border-b border-background">
+          <h2 className="px-4 py-3 text-xl border-t border-b text-text border-background">
             {text}
           </h2>
 

@@ -25,31 +25,31 @@ const Banks = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [updateBank, setUpdateBank] = useState(null)
-  const [editId, setEditId] = useState(null)
+  const [updateBank, setUpdateBank] = useState(null);
+  const [editId, setEditId] = useState(null);
 
   const navigationHandler = () => {
     navigate("/dashboard/create-bank");
   };
 
   const { userData } = useSelector((state) => state.auth);
-  const { banks, isLoadingBanks, isLoadingDeleteBank, isEditingBank } = useSelector((state) => state.bank);
+  const { banks, isLoadingBanks, isLoadingDeleteBank, isEditingBank } =
+    useSelector((state) => state.bank);
 
   const [modalObject, setModalObject] = useState({
     status: false,
     text: "",
     loading: false,
-    onAbort: () => { },
-    onConfirm: () => { }
+    onAbort: () => {},
+    onConfirm: () => {},
   });
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
     isOpen: false,
     contentLabel: "",
-    onRequestClose: () => { },
+    onRequestClose: () => {},
   });
 
-  console.log("banks", banks)
   useEffect(() => {
     dispatch(getBanks(userData?.token));
   }, []);
@@ -80,42 +80,50 @@ const Banks = () => {
     },
     {
       name: "",
-      selector: (row) =>
-        <div className="flex gap-3 items-center justify-center">
-          <button onClick={() => setModalObject({
-            status: true,
-            text: `Are you really Want to delete this bank of id ${row.id}`,
-            loading: isLoadingDeleteBank,
-            onAbort: () => setModalObject((prev) => ({ ...prev, status: false })),
-            onConfirm: () => {
-              dispatch(deleteBank({ token: userData.token, id: Number(row.id) }))
-              setModalObject((prev) => ({ ...prev, status: false }))
+      selector: (row) => (
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={() =>
+              setModalObject({
+                status: true,
+                text: `Are you really Want to delete this bank of id ${row.id}`,
+                loading: isLoadingDeleteBank,
+                onAbort: () =>
+                  setModalObject((prev) => ({ ...prev, status: false })),
+                onConfirm: () => {
+                  dispatch(
+                    deleteBank({ token: userData.token, id: Number(row.id) })
+                  ).then(() =>
+                    setModalObject((prev) => ({ ...prev, status: false }))
+                  );
+                },
+              })
             }
-
-          })}>
+          >
             <CustomTooltip content={"Delete Bank"}>
               <MdDelete className="text-lg text-redColor" />
             </CustomTooltip>
           </button>
-          <button onClick={() => {
-            setEditId(row.id)
-            setUpdateBank(row.bank)
-            setModalWrapper({
-              header: `Edit bank of id ${row.id}`,
-              isOpen: true,
-              contentLabel: `${row.id}`,
-              onRequestClose: () => { setModalWrapper((prev) => ({ ...prev, isOpen: false })) },
-            })
-          }}
-
+          <button
+            onClick={() => {
+              setEditId(row.id);
+              setUpdateBank(row.bank);
+              setModalWrapper({
+                header: `Edit bank of id ${row.id}`,
+                isOpen: true,
+                contentLabel: `${row.id}`,
+                onRequestClose: () => {
+                  setModalWrapper((prev) => ({ ...prev, isOpen: false }));
+                },
+              });
+            }}
           >
             <CustomTooltip content={"Edit Bank"}>
               <MdEditSquare className="text-lg text-blueColor" />
-
             </CustomTooltip>
           </button>
         </div>
-      ,
+      ),
       sortable: false,
       center: true,
       wrap: true,
@@ -127,26 +135,30 @@ const Banks = () => {
       toast.error("Bank name must be at least 4 characters.");
       return;
     } else {
-      dispatch(editBank({ token: userData.token, data: updateBank, id: editId })).then(() => {
-        setModalWrapper((prev) => ({ ...prev, isOpen: false }))
-      })
+      dispatch(
+        editBank({ token: userData.token, data: updateBank, id: editId })
+      ).then(() => {
+        setModalWrapper((prev) => ({ ...prev, isOpen: false }));
+      });
     }
-
-  }
+  };
   return (
     <>
       <ConfirmModal {...modalObject} />
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
-
-          <Textarea name="" id=""
+          <Textarea
+            name=""
+            id=""
             value={updateBank}
             onChange={(e) => setUpdateBank(e.target.value)}
-          >
-
-          </Textarea>
+          ></Textarea>
           <CardLayoutFooter>
-            <Button text={"Update"} onClick={handleEdit} loading={isEditingBank} />
+            <Button
+              text={"Update"}
+              onClick={handleEdit}
+              loading={isEditingBank}
+            />
           </CardLayoutFooter>
         </CardLayoutBody>
       </ModalWrapper>
