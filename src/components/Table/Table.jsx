@@ -18,7 +18,7 @@ const Table = ({
   useEffect(() => {
     const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
-    setPaginatedData(tableData.slice(startIndex, endIndex));
+    setPaginatedData(tableData?.slice(startIndex, endIndex));
   }, [tableData, currentPage, rowsPerPage]);
 
   const handlePageChange = (page) => {
@@ -49,13 +49,13 @@ const Table = ({
           columns={modifiedColumns}
           data={paginatedData}
           pagination={pagination}
-          paginationTotalRows={paginationTotalRows || tableData.length}
+          paginationTotalRows={paginationTotalRows || tableData?.length}
           paginationComponentOptions={paginationComponentOptions}
           onChangePage={handlePageChange}
           paginationServer={true}
           noRowsPerPage={noRowsPerPage}
           noDataComponent={
-            tableData.length > 0 ? (
+            tableData?.length > 0 ? (
               <Loader />
             ) : (
               <div>There are no records to display</div>

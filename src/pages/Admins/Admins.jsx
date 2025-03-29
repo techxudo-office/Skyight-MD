@@ -3,60 +3,40 @@ import {
   SecondaryButton,
   ConfirmModal,
   Table,
-  Switch,
 } from "../../components/components";
 import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { errorToastify } from "../../helper/toast";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteUser,
-  getCompanyUsers,
-  getUsers,
-} from "../../_core/features/userSlice";
 import EditUserModal from "./EditUserModal/EditUserModal";
+import { getAdmins } from "../../_core/features/adminSlice";
 
-const Admin = ({ isCompanyUser }) => {
+const Admin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { companyId } = useParams();
   const [deleteId, setDeleteId] = useState(null);
   const [modalStatus, setModalStatus] = useState(false);
   const [editUserData, setEditUserData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { userData } = useSelector((state) => state.auth);
-  const {
-    users,
-    isLoadingUsers,
-    isDeletingUser,
-    companyUsers,
-    isLoadingCompanyUsers,
-  } = useSelector((state) => state.user);
+  const { admins, isLoadingAdmins } = useSelector((state) => state.admin);
 
-  const userColumns = [
+  const adminColumns = [
     {
-      name: "USER ID",
+      name: "ADMIN ID",
       selector: (row) => row?.id,
       sortable: false,
       minwidth: "150px",
       center: true,
     },
     {
-      name: "FIRST NAME",
-      selector: (row) => row?.first_name,
-      sortable: false,
-      minwidth: "150px",
-      center: true,
-    },
-    {
-      name: "LAST NAME",
-      selector: (row) => row?.last_name,
+      name: "FULL NAME",
+      selector: (row) => row?.full_name,
       sortable: false,
       minwidth: "150px",
       center: true,
@@ -88,7 +68,7 @@ const Admin = ({ isCompanyUser }) => {
           >
             <MdEditSquare title="Edit" className="text-blue-500" />
           </span>
-          <span
+          {/* <span
             className="text-xl cursor-pointer"
             onClick={() => {
               setModalStatus(true);
@@ -96,7 +76,7 @@ const Admin = ({ isCompanyUser }) => {
             }}
           >
             <MdAutoDelete title="Delete" className="text-red-500" />
-          </span>
+          </span> */}
         </div>
       ),
       sortable: false,
@@ -109,41 +89,41 @@ const Admin = ({ isCompanyUser }) => {
     navigate("/dashboard/create-user");
   };
 
-  const deleteUserHandler = () => {
-    console.log(deleteId, "deleteId TABLE");
-    if (!deleteId) {
-      errorToastify("Failed to delete this user");
-      setModalStatus(false);
-      return;
-    }
+  // const deleteUserHandler = () => {
+  //   console.log(deleteId, "deleteId TABLE");
+  //   if (!deleteId) {
+  //     errorToastify("Failed to delete this user");
+  //     setModalStatus(false);
+  //     return;
+  //   }
 
-    dispatch(deleteUser({ id: deleteId, token: userData?.token })).then(() => {
-      setModalStatus(false);
-      setDeleteId(null);
-    });
-  };
+  //   dispatch(deleteUser({ id: deleteId, token: userData?.token })).then(() => {
+  //     setModalStatus(false);
+  //     setDeleteId(null);
+  //   });
+  // };
 
-  const abortDeleteHandler = () => {
-    setModalStatus(false);
-    setDeleteId(null);
-  };
+  // const abortDeleteHandler = () => {
+  //   setModalStatus(false);
+  //   setDeleteId(null);
+  // };
 
   useEffect(() => {
-    if (isCompanyUser) {
-      dispatch(getCompanyUsers({ token: userData?.token, id: companyId }));
-    } else {
-      dispatch(getUsers(userData?.token));
-    }
+    dispatch(getAdmins(userData?.token));
   }, []);
+
+  useEffect(() => {
+    console.log(admins)
+  }, [admins]);
 
   return (
     <>
-      <ConfirmModal
+      {/* <ConfirmModal
         status={modalStatus}
         loading={isDeletingUser}
         onAbort={abortDeleteHandler}
         onConfirm={deleteUserHandler}
-      />
+      /> */}
       {isEditModalOpen && (
         <EditUserModal
           isOpen={isEditModalOpen}
@@ -154,13 +134,13 @@ const Admin = ({ isCompanyUser }) => {
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
-          heading={isCompanyUser ? "Company Users" : "Users"}
+          heading={"Admins"}
           className="flex items-center justify-between"
         >
           <div className="relative">
             <SecondaryButton
               icon={<MdAdd />}
-              text={"Create New User"}
+              text={"Create New Admin"}
               onClick={navigationHandler}
             />
           </div>
@@ -168,14 +148,10 @@ const Admin = ({ isCompanyUser }) => {
         <CardLayoutBody removeBorder={true}>
           <Table
             pagination={true}
-            columnsData={userColumns}
-            tableData={isCompanyUser ? companyUsers : users}
-            progressPending={
-              isCompanyUser ? isLoadingCompanyUsers : isLoadingUsers
-            }
-            paginationTotalRows={
-              isCompanyUser ? companyUsers.length : users.length
-            }
+            columnsData={adminColumns}
+            tableData={admins}
+            progressPending={isLoadingAdmins}
+            paginationTotalRows={admins?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
