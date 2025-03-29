@@ -36,18 +36,6 @@ const adminSlice = createSlice({
         state.isLoadingAdmins = false;
         state.adminsError = action.payload;
       })
-      .addCase(getCompanyUsers.pending, (state) => {
-        state.isLoadingCompanyUsers = true;
-        state.companyUsersError = null;
-      })
-      .addCase(getCompanyUsers.fulfilled, (state, action) => {
-        state.isLoadingCompanyUsers = false;
-        state.companyUsers = action.payload[0];
-      })
-      .addCase(getCompanyUsers.rejected, (state, action) => {
-        state.isLoadingCompanyUsers = false;
-        state.companyUsersError = action.payload;
-      })
       .addCase(createUser.pending, (state) => {
         state.isCreatingUser = true;
         state.createUserError = null;
@@ -60,17 +48,17 @@ const adminSlice = createSlice({
         state.isCreatingUser = false;
         state.createUserError = action.payload;
       })
-      .addCase(deleteUser.pending, (state) => {
-        state.isDeletingUser = true;
-        state.deleteUserError = null;
+      .addCase(deleteAdmin.pending, (state) => {
+        state.isDeletingAdmin = true;
+        state.deleteAdminError = null;
       })
-      .addCase(deleteUser.fulfilled, (state, action) => {
-        state.isDeletingUser = false;
-        state.users = state.users.filter((user) => user.id !== action.payload);
+      .addCase(deleteAdmin.fulfilled, (state, action) => {
+        state.isDeletingAdmin = false;
+        state.admins = state.admins.filter((admin) => admin.id !== action.payload);
       })
-      .addCase(deleteUser.rejected, (state, action) => {
-        state.isDeletingUser = false;
-        state.deleteUserError = action.payload;
+      .addCase(deleteAdmin.rejected, (state, action) => {
+        state.isDeletingAdmin = false;
+        state.deleteAdminError = action.payload;
       })
       .addCase(editUser.pending, (state) => {
         state.isEditingUser = true;
@@ -109,24 +97,6 @@ export const getAdmins = createAsyncThunk(
     }
   }
 );
-export const getCompanyUsers = createAsyncThunk(
-  "user/getCompanyUsers",
-  async ({ token, id }, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/users/company/${id}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response?.data?.data;
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch company users.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
 
 export const createUser = createAsyncThunk(
   "user/createUser",
@@ -150,22 +120,22 @@ export const createUser = createAsyncThunk(
   }
 );
 
-export const deleteUser = createAsyncThunk(
-  "user/deleteUser",
+export const deleteAdmin = createAsyncThunk(
+  "admin/deleteAdmin",
   async ({ id, token }, thunkAPI) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/api/user/${id}`, {
+      const response = await axios.delete(`${BASE_URL}/api/admin/${id}`, {
         headers: {
           Authorization: token,
         },
       });
 
       if (response.status === 200) {
-        toast.success("User deleted successfully");
+        toast.success("Admin deleted successfully");
         return id;
       }
     } catch (error) {
-      const errorMessage = "Failed while deleting this user";
+      const errorMessage = "Failed while deleting this admin";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }

@@ -14,7 +14,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useDispatch, useSelector } from "react-redux";
 import EditUserModal from "./EditUserModal/EditUserModal";
-import { getAdmins } from "../../_core/features/adminSlice";
+import { deleteAdmin, getAdmins } from "../../_core/features/adminSlice";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -24,7 +24,9 @@ const Admin = () => {
   const [editUserData, setEditUserData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { userData } = useSelector((state) => state.auth);
-  const { admins, isLoadingAdmins } = useSelector((state) => state.admin);
+  const { admins, isLoadingAdmins, isDeletingAdmin } = useSelector(
+    (state) => state.admin
+  );
 
   const adminColumns = [
     {
@@ -68,7 +70,7 @@ const Admin = () => {
           >
             <MdEditSquare title="Edit" className="text-blue-500" />
           </span>
-          {/* <span
+          <span
             className="text-xl cursor-pointer"
             onClick={() => {
               setModalStatus(true);
@@ -76,7 +78,7 @@ const Admin = () => {
             }}
           >
             <MdAutoDelete title="Delete" className="text-red-500" />
-          </span> */}
+          </span>
         </div>
       ),
       sortable: false,
@@ -89,41 +91,41 @@ const Admin = () => {
     navigate("/dashboard/create-user");
   };
 
-  // const deleteUserHandler = () => {
-  //   console.log(deleteId, "deleteId TABLE");
-  //   if (!deleteId) {
-  //     errorToastify("Failed to delete this user");
-  //     setModalStatus(false);
-  //     return;
-  //   }
+  const deleteUserHandler = () => {
+    console.log(deleteId, "deleteId TABLE");
+    if (!deleteId) {
+      errorToastify("Failed to delete this user");
+      setModalStatus(false);
+      return;
+    }
 
-  //   dispatch(deleteUser({ id: deleteId, token: userData?.token })).then(() => {
-  //     setModalStatus(false);
-  //     setDeleteId(null);
-  //   });
-  // };
+    dispatch(deleteAdmin({ id: deleteId, token: userData?.token })).then(() => {
+      setModalStatus(false);
+      setDeleteId(null);
+    });
+  };
 
-  // const abortDeleteHandler = () => {
-  //   setModalStatus(false);
-  //   setDeleteId(null);
-  // };
+  const abortDeleteHandler = () => {
+    setModalStatus(false);
+    setDeleteId(null);
+  };
 
   useEffect(() => {
     dispatch(getAdmins(userData?.token));
   }, []);
 
   useEffect(() => {
-    console.log(admins)
+    console.log(admins);
   }, [admins]);
 
   return (
     <>
-      {/* <ConfirmModal
+      <ConfirmModal
         status={modalStatus}
-        loading={isDeletingUser}
+        loading={isDeletingAdmin}
         onAbort={abortDeleteHandler}
         onConfirm={deleteUserHandler}
-      /> */}
+      />
       {isEditModalOpen && (
         <EditUserModal
           isOpen={isEditModalOpen}
