@@ -9,6 +9,7 @@ export { default as CompanyUsers } from "./CompanyUsers/CompanyUsers";
 export { default as CompanyDetails } from "./CompanyDetails/CompanyDetails";
 export { default as CreateRole } from "./CreateRole/CreateRole";
 export { default as Users } from "./Users/Users";
+export { default as Admins } from "./Admins/Admins";
 export { default as CreateUser } from "./CreateUser/CreateUser";
 export { default as Reasons } from "./Reasons/Reasons";
 export { default as CreateReason } from "./CreateReason/CreateReason";

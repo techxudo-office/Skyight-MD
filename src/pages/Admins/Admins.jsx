@@ -22,7 +22,7 @@ import {
 } from "../../_core/features/userSlice";
 import EditUserModal from "./EditUserModal/EditUserModal";
 
-const Users = ({ isCompanyUser }) => {
+const Admin = ({ isCompanyUser }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { companyId } = useParams();
@@ -185,4 +185,4 @@ const Users = ({ isCompanyUser }) => {
   );
 };
 
-export default Users;
+export default Admin;
