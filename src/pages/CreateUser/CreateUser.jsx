@@ -11,7 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaCaretDown } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { userValidation } from "../../utils/validations";
-import { createUser, editUser } from "../../_core/features/userSlice";
+import { createUser } from "../../_core/features/userSlice";
 import { getUserRoles } from "../../_core/features/roleSlice";
 import { getCompanies } from "../../_core/features/companySlice";
 
@@ -43,11 +43,8 @@ let inputFields = [
   },
 ];
 const CreateUser = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
-  const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -61,6 +58,7 @@ const CreateUser = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const { userData } = useSelector((state) => state.auth);
   const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
+  const { isCreatingUser } = useSelector((state) => state.user);
   const { companies, isLoadingCompanies } = useSelector(
     (state) => state.company
   );
@@ -173,8 +171,8 @@ const CreateUser = () => {
 
           <CardLayoutFooter>
             <Button
-              text={loading ? <Spinner /> : "Create User"}
-              disabled={loading}
+              text={isCreatingUser ? <Spinner /> : "Create User"}
+              disabled={isCreatingUser}
               type="submit"
             />
           </CardLayoutFooter>

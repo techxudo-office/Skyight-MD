@@ -88,7 +88,7 @@ const Admin = () => {
   ];
 
   const navigationHandler = () => {
-    navigate("/dashboard/create-user");
+    navigate("/dashboard/create-admin");
   };
 
   const deleteUserHandler = () => {

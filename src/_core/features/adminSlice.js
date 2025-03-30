@@ -36,17 +36,17 @@ const adminSlice = createSlice({
         state.isLoadingAdmins = false;
         state.adminsError = action.payload;
       })
-      .addCase(createUser.pending, (state) => {
+      .addCase(createAdmin.pending, (state) => {
         state.isCreatingUser = true;
-        state.createUserError = null;
+        state.createAdminError = null;
       })
-      .addCase(createUser.fulfilled, (state, action) => {
+      .addCase(createAdmin.fulfilled, (state, action) => {
         state.isCreatingUser = false;
-        state.users.push(action.payload);
+        state.admins.push(action.payload);
       })
-      .addCase(createUser.rejected, (state, action) => {
+      .addCase(createAdmin.rejected, (state, action) => {
         state.isCreatingUser = false;
-        state.createUserError = action.payload;
+        state.createAdminError = action.payload;
       })
       .addCase(deleteAdmin.pending, (state) => {
         state.isDeletingAdmin = true;
@@ -98,22 +98,22 @@ export const getAdmins = createAsyncThunk(
   }
 );
 
-export const createUser = createAsyncThunk(
-  "user/createUser",
+export const createAdmin = createAsyncThunk(
+  "admin/createAdmin",
   async ({ data, token }, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/user`, data, {
+      const response = await axios.post(`${BASE_URL}/api/admin`, data, {
         headers: {
           Authorization: token,
           "Content-Type": "application/json",
         },
       });
-      toast.success("User created successfully");
+      toast.success("Admin created successfully");
       return response.data;
     } catch (error) {
       console.log(error);
       const errorMessage =
-        error.response?.data?.message || "Failed to create user.";
+        error.response?.data?.message || "Failed to create admin.";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
