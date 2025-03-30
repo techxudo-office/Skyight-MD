@@ -37,15 +37,15 @@ const adminSlice = createSlice({
         state.adminsError = action.payload;
       })
       .addCase(createAdmin.pending, (state) => {
-        state.isCreatingUser = true;
+        state.isCreatingAdmin = true;
         state.createAdminError = null;
       })
       .addCase(createAdmin.fulfilled, (state, action) => {
-        state.isCreatingUser = false;
+        state.isCreatingAdmin = false;
         state.admins.push(action.payload);
       })
       .addCase(createAdmin.rejected, (state, action) => {
-        state.isCreatingUser = false;
+        state.isCreatingAdmin = false;
         state.createAdminError = action.payload;
       })
       .addCase(deleteAdmin.pending, (state) => {
@@ -60,21 +60,21 @@ const adminSlice = createSlice({
         state.isDeletingAdmin = false;
         state.deleteAdminError = action.payload;
       })
-      .addCase(editUser.pending, (state) => {
-        state.isEditingUser = true;
-        state.editUserError = null;
+      .addCase(editAdmin.pending, (state) => {
+        state.isEditingAdmin = true;
+        state.editAdminError = null;
       })
-      .addCase(editUser.fulfilled, (state, action) => {
-        state.isEditingUser = false;
-        const updatedUser = action.payload;
-        console.log(updatedUser);
-        state.users = state.users.map((user) =>
-          user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+      .addCase(editAdmin.fulfilled, (state, action) => {
+        state.isEditingAdmin = false;
+        const updatedAdmin = action.payload;
+        console.log(updatedAdmin);
+        state.admins = state.admins.map((user) =>
+          user.id === updatedAdmin.id ? { ...user, ...updatedAdmin } : user
         );
       })
-      .addCase(editUser.rejected, (state, action) => {
-        state.isEditingUser = false;
-        state.editUserError = action.payload;
+      .addCase(editAdmin.rejected, (state, action) => {
+        state.isEditingAdmin = false;
+        state.editAdminError = action.payload;
       });
   },
 });
@@ -142,24 +142,24 @@ export const deleteAdmin = createAsyncThunk(
   }
 );
 
-export const editUser = createAsyncThunk(
-  "user/editUser",
+export const editAdmin = createAsyncThunk(
+  "admin/editAdmin",
   async ({ id, token, data }, thunkAPI) => {
     try {
       console.log(data, "data");
-      const response = await axios.put(`${BASE_URL}/api/user/${id}`, data, {
+      const response = await axios.put(`${BASE_URL}/api/admin/${id}`, data, {
         headers: {
           Authorization: token,
         },
       });
 
       if (response.status === 200) {
-        toast.success("User updated successfully");
+        toast.success("Admin updated successfully");
         return response.data.data;
       }
     } catch (error) {
       const errorMessage =
-        error?.response?.data?.message || "Failed while updating this User";
+        error?.response?.data?.message || "Failed while updating this admin";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }

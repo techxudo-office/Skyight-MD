@@ -18,77 +18,65 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
 import { editUser } from "../../../_core/features/userSlice";
-import { userValidation } from "../../../utils/validations";
+import { adminValidation, userValidation } from "../../../utils/validations";
+import { editAdmin } from "../../../_core/features/adminSlice";
 
 Modal.setAppElement("#root");
 
 const inputFields = [
   {
-    name: "first_name",
-    label: "First Name*",
+    name: "full_name",
+    label: "Full Name*",
     type: "text",
+    disabled: false,
     placeholder: "Enter First Name",
-  },
-  {
-    name: "last_name",
-    label: "Last Name*",
-    type: "text",
-    placeholder: "Enter Last Name",
   },
   {
     name: "email",
     label: "Email*",
     type: "text",
+    disabled: true,
     placeholder: "Enter Email",
   },
   {
     name: "password",
     label: "Password*",
     type: "password",
+    disabled: false,
     placeholder: "Enter New Password",
-  },
-  {
-    name: "mobile_number",
-    label: "Mobile Number*",
-    type: "text",
-    placeholder: "Enter Mobile Number",
   },
 ];
 
 const initialState = {
-  first_name: "",
-  last_name: "",
+  full_name: "",
   email: "",
   password: "",
-  mobile_number: "",
   role_id: "",
 };
 
-const EditUserModal = ({ isOpen, onClose, usersData }) => {
+const EditAdminModal = ({ isOpen, onClose, data }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
-  const [active, setActive] = useState(usersData?.isActive);
+  const [active, setActive] = useState(data?.is_active);
   const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
   const { userData } = useSelector((state) => state.auth);
-  const { isEditingUser } = useSelector((state) => state.user);
-  const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
+  const { isEditingAdmin } = useSelector((state) => state.admin);
+  const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
   useEffect(() => {
-    if (usersData) {
-      console.log(usersData, "usersData");
+    if (data) {
+      console.log(data, "data");
       setFormData({
-        first_name: usersData?.first_name || "",
-        last_name: usersData?.last_name || "",
-        email: usersData?.email || "",
-        mobile_number: usersData?.mobile_number || "",
-        role_id: usersData?.role?.id || "",
+        full_name: data?.full_name || "",
+        email: data?.email || "",
+        role_id: data?.role?.id || "",
       });
 
-      const role = userRoles?.find((r) => r.id == usersData.role_id);
+      const role = roles?.find((r) => r.id == data.role_id);
       setSelectedRole(role || null);
     }
-  }, [usersData, userRoles]);
+  }, [data, roles]);
 
   useEffect(() => {
     dispatch(getUserRoles(userData?.token));
@@ -109,22 +97,20 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
   };
 
   const handleSubmit = () => {
-    if (!userValidation(formData, setErrors)) {
+    if (!adminValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
       return;
     }
 
     const payload = {
-      first_name: formData.first_name,
-      last_name: formData.last_name,
-      mobile_number: formData.mobile_number,
+      full_name: formData.full_name,
       password: formData.password,
-      role_id: Number(formData.role_id),
-      isActive: active,
+      // role_id: Number(formData.role_id),
+      is_active: active,
     };
 
     dispatch(
-      editUser({ data: payload, token: userData?.token, id: usersData?.id })
+      editAdmin({ data: payload, token: userData?.token, id: data?.id })
     ).then(() => {
       onClose();
     });
@@ -140,12 +126,13 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {inputFields.map(({ name, label, type }) => (
+            {inputFields.map(({ name, label, type, disabled }) => (
               <div key={name} className="relative">
                 <Input
                   name={name}
                   label={label}
                   type={type}
+                  disabled={disabled}
                   value={formData[name]}
                   onChange={handleChange}
                   placeholder={`Enter ${label}`}
@@ -161,12 +148,12 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
               height="h-12"
               value={selectedRole ? selectedRole.role : ""}
               onChange={handleRoleSelect}
-              options={userRoles?.map((role) => ({
+              options={roles?.map((role) => ({
                 value: role.id,
                 label: role.role,
               }))}
               placeholder="Select a Role"
-              isLoading={isLoadingUserRoles}
+              isLoading={isLoadingRoles}
             />
           </div>
           <div className="mt-4">
@@ -175,9 +162,9 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
         </CardLayoutBody>
         <CardLayoutFooter>
           <Button
-            text={isEditingUser ? <Spinner /> : "Update User"}
+            text={isEditingAdmin ? <Spinner /> : "Update User"}
             onClick={handleSubmit}
-            disabled={isEditingUser}
+            disabled={isEditingAdmin}
           />
           <Button
             text="Cancel"
@@ -190,4 +177,4 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
   );
 };
 
-export default EditUserModal;
+export default EditAdminModal;

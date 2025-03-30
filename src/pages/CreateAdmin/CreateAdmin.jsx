@@ -14,7 +14,6 @@ import {
 } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { FaCaretDown } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { adminValidation } from "../../utils/validations";
 import { getRoles } from "../../_core/features/roleSlice";
@@ -35,17 +34,20 @@ let inputFields = [
     placeholder: "Enter Password",
   },
 ];
+
+const initialState = {
+  full_name: "",
+  email: "",
+  password: "",
+  role_id: "",
+};
+
 const CreateAdmin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [active, setActive] = useState(true);
-  const [formData, setFormData] = useState({
-    full_name: "",
-    email: "",
-    password: "",
-    role_id: "",
-  });
+  const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
   const { userData } = useSelector((state) => state.auth);
   const { isCreatingAdmin } = useSelector((state) => state.admin);
@@ -86,13 +88,14 @@ const CreateAdmin = () => {
       role_id: Number(formData.role_id),
       is_active: active,
     };
-    console.log(payload)
+    console.log(payload);
 
-    dispatch(createAdmin({ data: payload, token: userData?.token })).then(
-      () => {
-        onClose();
-      }
-    );
+    dispatch(createAdmin({ data: payload, token: userData?.token }))
+      .unwrap()
+      .then(() => {
+        setFormData(initialState);
+        setSelectedRole(null);
+      });
   };
 
   return (
@@ -101,7 +104,7 @@ const CreateAdmin = () => {
       <CardLayoutContainer>
         <CardLayoutHeader
           className="flex items-center justify-between"
-          heading="Create User"
+          heading="Create Admin"
         >
           <Switch label={"Status:"} onChange={setActive} value={active} />
         </CardLayoutHeader>

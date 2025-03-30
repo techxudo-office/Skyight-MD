@@ -13,7 +13,7 @@ import {
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import { useDispatch, useSelector } from "react-redux";
-import EditUserModal from "./EditUserModal/EditUserModal";
+import EditAdminModal from "./EditAdminModal/EditAdminModal";
 import { deleteAdmin, getAdmins } from "../../_core/features/adminSlice";
 
 const Admin = () => {
@@ -21,7 +21,7 @@ const Admin = () => {
   const dispatch = useDispatch();
   const [deleteId, setDeleteId] = useState(null);
   const [modalStatus, setModalStatus] = useState(false);
-  const [editUserData, setEditUserData] = useState(null);
+  const [editAdminData, setEditAdminData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { userData } = useSelector((state) => state.auth);
   const { admins, isLoadingAdmins, isDeletingAdmin } = useSelector(
@@ -64,7 +64,7 @@ const Admin = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              setEditUserData(row);
+              setEditAdminData(row);
               setIsEditModalOpen(true);
             }}
           >
@@ -114,10 +114,6 @@ const Admin = () => {
     dispatch(getAdmins(userData?.token));
   }, []);
 
-  useEffect(() => {
-    console.log(admins);
-  }, [admins]);
-
   return (
     <>
       <ConfirmModal
@@ -127,10 +123,10 @@ const Admin = () => {
         onConfirm={deleteUserHandler}
       />
       {isEditModalOpen && (
-        <EditUserModal
+        <EditAdminModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          usersData={editUserData}
+          data={editAdminData}
         />
       )}
       <CardLayoutContainer removeBg={true}>
