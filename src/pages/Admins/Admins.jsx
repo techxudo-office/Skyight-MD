@@ -3,6 +3,7 @@ import {
   SecondaryButton,
   ConfirmModal,
   Table,
+  Tag,
 } from "../../components/components";
 import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -53,6 +54,13 @@ const Admin = () => {
     {
       name: "ROLE",
       selector: (row) => row?.role?.role,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+    },
+    {
+      name: "STATUS",
+      selector: (row) => <Tag value={row.is_active ? "active" : "inactive"} />,
       sortable: false,
       minwidth: "150px",
       center: true,
