@@ -9,8 +9,7 @@ import {
   Tag,
 } from "../../components/components";
 import { FaEye } from "react-icons/fa";
-import { MdAdd, MdEditSquare } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { MdEditSquare } from "react-icons/md";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -24,18 +23,16 @@ import { getTransactions } from "../../_core/features/transactionSlice";
 import EditTransactionModal from "./EditTransactionModal/EditTransactionModal";
 
 const Transactions = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [selectedValues, setSelectedValues] = useState([]);
   const { userData } = useSelector((state) => state.auth);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const { transactions, isLoadingTransactions } = useSelector(
     (state) => state.transaction
   );
   const [transactionId, setTransactionId] = useState(null);
-  const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   useEffect(() => {
     dispatch(getTransactions(userData?.token));
@@ -63,12 +60,6 @@ const Transactions = () => {
       selector: (row) => row.bank_name,
       sortable: false,
       minwidth: "150px",
-      center: true,
-    },
-    {
-      name: "BANK NO.",
-      selector: (row) => row.bank_number,
-      sortable: false,
       center: true,
     },
     {
@@ -219,17 +210,6 @@ const Transactions = () => {
           </div>
         )}
       </ModalWrapper>
-      {/* <MultiSelect
-        label="Select Multiple Options"
-        options={[
-          { value: "1", label: "Option 1" },
-          { value: "2", label: "Option 2" },
-          { value: "3", label: "Option 3" },
-        ]}
-        value={selectedValues}
-        onChange={(newValues) => setSelectedValues(newValues)}
-        placeholder="Select options..."
-      /> */}
     </>
   );
 };

@@ -85,7 +85,7 @@ const LoginForm = () => {
                     onBlur={formik.handleBlur}
                   />
                   {formik.touched.email && formik.errors.email && (
-                    <div className="text-red-500 text-sm mt-2 absolute left-0">
+                    <div className="absolute left-0 mt-2 text-sm text-red-500">
                       {formik.errors.email}
                     </div>
                   )}
@@ -107,13 +107,13 @@ const LoginForm = () => {
                     onBlur={formik.handleBlur}
                   />
                   {formik.touched.password && formik.errors.password && (
-                    <div className="text-red-500 text-sm mt-2 absolute left-0">
+                    <div className="absolute left-0 mt-2 text-sm text-red-500">
                       {formik.errors.password}
                     </div>
                   )}
                 </div>
-                <div className="w-full flex items-center justify-end">
-                  <Link className="hover:text-primary transition-all">
+                <div className="flex items-center justify-end w-full">
+                  <Link className="transition-all hover:text-primary">
                     Forget Password?
                   </Link>
                 </div>
