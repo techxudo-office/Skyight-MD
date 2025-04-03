@@ -8,6 +8,7 @@ const statusClasses = {
   "requested-refund": "text-blueColor border-blueColor bg-bluebg",
   rejected: "text-redColor border-redColor bg-redbg",
   inactive: "text-redColor border-redColor bg-redbg",
+  closed: "text-redColor border-redColor bg-redbg",
 };
 
 export default function Tag({ value }) {

@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  SecondaryButton,
-  Table,
-  ModalWrapper,
-  Button,
-  Tag,
-} from "../../components/components";
-
-import { MdAdd } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Table, ModalWrapper, Button, Tag } from "../../components/components";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -21,16 +12,11 @@ import { getTickets } from "../../_core/features/ticketSlice";
 import dayjs from "dayjs";
 
 const Tickets = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
   const { userData } = useSelector((state) => state.auth);
   const { tickets, isLoadingTickets } = useSelector((state) => state.ticket);
-
-  const navigationHandler = () => {
-    navigate("/dashboard/create-ticket");
-  };
 
   const handleView = (row) => {
     setTicket(row);
