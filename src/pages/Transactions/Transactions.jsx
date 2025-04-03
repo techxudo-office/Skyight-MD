@@ -56,6 +56,13 @@ const Transactions = () => {
 
   const columns = [
     {
+      name: "COMPANY",
+      selector: (row) => row?.company?.name,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+    },
+    {
       name: "BANK",
       selector: (row) => row.bank_name,
       sortable: false,
