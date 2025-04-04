@@ -20,9 +20,13 @@ const initialState = {
   isLoadingFlightBookings: false,
   flightBookingsError: null,
 
-  bookingDetails: null,
+  bookingDetails: [],
   isLoadingBookingDetails: false,
   bookingDetailsError: null,
+
+  companyBookings: [],
+  isLoadingCompanyBookings: false,
+  companyBookingsError: null,
 
   isIssuingBooking: false,
   issueBookingError: null,
@@ -123,6 +127,18 @@ const bookingSlice = createSlice({
       .addCase(getBookingDetails.rejected, (state, action) => {
         state.isLoadingBookingDetails = false;
         state.bookingDetailsError = action.payload;
+      })
+      .addCase(getCompanyBookings.pending, (state) => {
+        state.isLoadingCompanyBookings = true;
+        state.companyBookingsError = null;
+      })
+      .addCase(getCompanyBookings.fulfilled, (state, action) => {
+        state.isLoadingCompanyBookings = false;
+        state.companyBookings = action.payload[0];
+      })
+      .addCase(getCompanyBookings.rejected, (state, action) => {
+        state.isLoadingCompanyBookings = false;
+        state.companyBookingsError = action.payload;
       })
       .addCase(issueBooking.pending, (state) => {
         state.isIssuingBooking = true;
@@ -269,7 +285,6 @@ export const getPNR = createAsyncThunk(
       );
 
       if (response.status === 200) {
-        toast.success("PNR fetched successfully!");
         return response.data.data;
       } else {
         const errorMessages = Object.values(response.data.data.errors).join(
@@ -286,8 +301,6 @@ export const getPNR = createAsyncThunk(
     }
   }
 );
-
-
 
 export const getCredits = createAsyncThunk(
   "booking/getCredits",
@@ -388,9 +401,33 @@ export const getBookingDetails = createAsyncThunk(
           Authorization: token,
         },
       });
+      if (response.status === 200) {
+        return response.data.data;
+      }
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch booking details";
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
 
-      console.log(response.data.data, "bookingDetails------->");
-      return response.data.data;
+export const getCompanyBookings = createAsyncThunk(
+  "booking/getCompanyBookings",
+  async ({ id, token }, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/booking/company/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+      if (response.status === 200) {
+        return response.data.data;
+      }
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch booking details";
@@ -584,6 +621,7 @@ export const getRefundFlight = createAsyncThunk(
     }
   }
 );
+
 export const refundRequestFlight = createAsyncThunk(
   "booking/refundRequestFlight",
   async ({ id, token }, thunkAPI) => {

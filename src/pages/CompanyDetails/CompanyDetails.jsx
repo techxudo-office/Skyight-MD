@@ -29,7 +29,7 @@ const CompanyDetails = () => {
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
-          heading={"Company Tickets"}
+          heading={"Company Details"}
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>

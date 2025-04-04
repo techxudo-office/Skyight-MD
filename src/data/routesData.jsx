@@ -31,6 +31,7 @@ import {
   NotificationPage,
   CompanyDetails,
   CompanyTickets,
+  CompanyRefundedRequests
 } from "../pages/pages";
 
 export const routesData = [
@@ -73,6 +74,10 @@ export const routesData = [
       {
         path: "company/details/tickets/:companyId",
         element: <CompanyTickets />,
+      },
+      {
+        path: "company/details/refunded-requests/:companyId",
+        element: <CompanyRefundedRequests />,
       },
     ],
   },
