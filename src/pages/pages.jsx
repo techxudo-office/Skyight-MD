@@ -25,6 +25,7 @@ export { default as CompanyUsers } from "./CompanyUsers/CompanyUsers";
 export { default as CompanyDetails } from "./CompanyDetails/CompanyDetails";
 export { default as CompanyTickets } from "./CompanyDetails/CompanyTickets/CompanyTickets";
 export { default as CompanyRefundedRequests } from "./CompanyDetails/CompanyRefundedRequests/CompanyRefundedRequests";
+export { default as CompanyCancelledRequests } from "./CompanyDetails/CompanyCancelledRequests/CompanyCancelledRequests";
 
 export { default as Banks } from "./Banks/Banks";
 export { default as CreateBank } from "./CreateBank/CreateBank";

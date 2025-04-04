@@ -17,12 +17,12 @@ import {
 import { IoIosAirplane } from "react-icons/io";
 import { getCompanyBookings } from "../../../_core/features/bookingSlice";
 
-const CompanyRefundedRequests = () => {
+const CompanyCancelledRequests = () => {
   const dispatch = useDispatch();
   const { companyId } = useParams();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
-  const [refundedRequests, setRefundedRequests] = useState([]);
+  const [cancelledRequests, setCancelledRequests] = useState([]);
   const { userData } = useSelector((state) => state.auth);
   const { companyBookings, isLoadingCompanyBookings } = useSelector(
     (state) => state.booking
@@ -110,9 +110,9 @@ const CompanyRefundedRequests = () => {
       getCompanyBookings({ token: userData?.token, id: companyId })
     ).then(() => {
       const refunded = companyBookings.filter(
-        (booking) => booking.booking_status === "Refunded"
+        (booking) => booking.booking_status === "cancelled"
       );
-      setRefundedRequests(refunded);
+      setCancelledRequests(refunded);
     });
   }, []);
 
@@ -121,16 +121,16 @@ const CompanyRefundedRequests = () => {
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
-          heading={"Company Refunded Requests"}
+          heading={"Company Cancelled Requests"}
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
           <Table
             pagination={true}
             columnsData={columns}
-            tableData={refundedRequests || []}
+            tableData={cancelledRequests || []}
             progressPending={isLoadingCompanyBookings}
-            paginationTotalRows={refundedRequests?.length}
+            paginationTotalRows={cancelledRequests?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
@@ -183,4 +183,4 @@ const CompanyRefundedRequests = () => {
   );
 };
 
-export default CompanyRefundedRequests;
+export default CompanyCancelledRequests;
