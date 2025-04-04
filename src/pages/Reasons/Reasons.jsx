@@ -80,7 +80,6 @@ const Reasons = () => {
           <button onClick={() => setModalObject({
             status: true,
             text: `Are you really Want to delete this reason of id ${row.id}`,
-            loading: isLoadingDeleteReason,
             onAbort: () => setModalObject((prev) => ({ ...prev, status: false })),
             onConfirm: () => {
               dispatch(deleteReason({ token: userData.token, id: row.id }))
@@ -117,11 +116,6 @@ const Reasons = () => {
     },
   ];
 
-  const abortDeleteHandler = () => {
-    setModalObject(false);
-    setDeleteId(null);
-  };
-
   useEffect(() => {
     // gettingReasons();
     dispatch(getReasons(userData?.token))
@@ -139,7 +133,7 @@ const Reasons = () => {
 
   return (
     <>
-      <ConfirmModal {...modalObject} />
+      <ConfirmModal loading={isLoadingDeleteReason} {...modalObject} />
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
 

@@ -40,14 +40,14 @@ const Banks = () => {
     status: false,
     text: "",
     loading: false,
-    onAbort: () => {},
-    onConfirm: () => {},
+    onAbort: () => { },
+    onConfirm: () => { },
   });
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
     isOpen: false,
     contentLabel: "",
-    onRequestClose: () => {},
+    onRequestClose: () => { },
   });
 
   useEffect(() => {
@@ -87,7 +87,6 @@ const Banks = () => {
               setModalObject({
                 status: true,
                 text: `Are you really Want to delete this bank of id ${row.id}`,
-                loading: isLoadingDeleteBank,
                 onAbort: () =>
                   setModalObject((prev) => ({ ...prev, status: false })),
                 onConfirm: () => {
@@ -144,7 +143,7 @@ const Banks = () => {
   };
   return (
     <>
-      <ConfirmModal {...modalObject} />
+      <ConfirmModal loading={isLoadingDeleteBank} {...modalObject} />
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
           <Textarea

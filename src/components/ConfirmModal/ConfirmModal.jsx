@@ -35,11 +35,11 @@ const ConfirmModal = ({ status, onAbort, onConfirm, text, loading }) => {
 
           <div className={"gap-2 flex justify-end px-4 "}>
             <div>
-              <SecondaryButton
+              <Button
                 text="Confirm"
                 onClick={onConfirm}
                 loading={loading}
-                disabled={loading}
+              // disabled={loading}
               />
             </div>
             <div>

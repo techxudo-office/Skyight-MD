@@ -198,7 +198,7 @@ const ApplyCommisions = () => {
           heading={"Apply Commisions"}
           className="flex items-center justify-between"
         />
-        <CardLayoutBody removeBorder={false}>
+        <CardLayoutBody removeBorder={true}>
           <Table
             columnsData={columns}
             tableData={[commisions] || []}

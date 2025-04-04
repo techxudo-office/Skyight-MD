@@ -44,57 +44,57 @@ const Table = ({
   //   return <p className="p-5 text-center text-text">No Data Found</p>
   // }
   return (
-    <div className="overflow-x-auto  ">
-        <DataTable
-        
-          columns={modifiedColumns}
-          data={paginatedData}
-          pagination={pagination}
-          paginationTotalRows={paginationTotalRows || tableData?.length}
-          paginationComponentOptions={paginationComponentOptions}
-          onChangePage={handlePageChange}
-          paginationServer={true}
-          noRowsPerPage={noRowsPerPage}
-          noDataComponent={
-            tableData?.length > 0 ? (
-              <Loader />
-            ) : (
-              <div>There are no records to display</div>
-            )
-          }
-          progressPending={progressPending}
-          progressComponent={<Loader />}
-          customStyles={{
-            headRow: {
-              style: {
-                backgroundColor: "#4FA9A8",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                borderBottomWidth: "0px",
-              },
+    <div className="overflow-x-auto container mx-auto ">
+      <DataTable
+
+        columns={modifiedColumns}
+        data={paginatedData}
+        pagination={pagination}
+        paginationTotalRows={paginationTotalRows || tableData?.length}
+        paginationComponentOptions={paginationComponentOptions}
+        onChangePage={handlePageChange}
+        paginationServer={true}
+        noRowsPerPage={noRowsPerPage}
+        noDataComponent={
+          tableData?.length > 0 ? (
+            <Loader />
+          ) : (
+            <div>There are no records to display</div>
+          )
+        }
+        progressPending={progressPending}
+        progressComponent={<Loader />}
+        customStyles={{
+          headRow: {
+            style: {
+              backgroundColor: "#4FA9A8",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+              borderBottomWidth: "0px",
             },
-            headCells: {
-              style: {
-                fontFamily: "Poppins",
-                color: "#fff",
-                fontSize: "16px",
-                fontWeight: "bold",
-                whiteSpace: "normal",
-                wordBreak: "break-word",
-              },
+          },
+          headCells: {
+            style: {
+              fontFamily: "Poppins",
+              color: "#fff",
+              fontSize: "16px",
+              fontWeight: "bold",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
             },
-            rows: {
-              style: {
-                fontSize: "13px",
-              },
+          },
+          rows: {
+            style: {
+              fontSize: "13px",
             },
-            rowsBottom: {
-              style: {
-                borderBottomWidth: "1px",
-              },
+          },
+          rowsBottom: {
+            style: {
+              borderBottomWidth: "1px",
             },
-          }}
-        />
+          },
+        }}
+      />
     </div>
   );
 };

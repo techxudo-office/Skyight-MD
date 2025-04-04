@@ -12,9 +12,9 @@ const Layout = () => {
 
     return (
         <div className="flex ">
-            <Sidebar status={sidebarStatus} updateStatus={setSidebarStatus}/>
+            <Sidebar status={sidebarStatus} updateStatus={setSidebarStatus} />
             <Header sidebarStatus={sidebarStatus} setSidebarStatusHandler={setSidebarStatusHandler} />
-            <div className="relative flex flex-col flex-1 min-h-screen pt-16 pb-10">
+            <div className="relative flex flex-col flex-1 min-h-screen pt-16 lg:pb-10">
                 <div className="flex justify-center w-full p-5">
                     <Outlet />
                 </div>
@@ -24,6 +24,5 @@ const Layout = () => {
             </div>
         </div>
     );
-};
-
+}
 export default Layout;
