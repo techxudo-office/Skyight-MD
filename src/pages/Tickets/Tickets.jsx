@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Table, ModalWrapper, Button, Tag } from "../../components/components";
+import {
+  Table,
+  ModalWrapper,
+  Button,
+  Tag,
+  CustomTooltip,
+  ConfirmModal,
+} from "../../components/components";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -9,13 +16,17 @@ import {
 import { FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getTickets } from "../../_core/features/ticketSlice";
+import { MdEditSquare } from "react-icons/md";
 import dayjs from "dayjs";
+import EditTicketModal from "./EditTicketModal/EditTicketModal";
 
 const Tickets = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
+  const [ticketData, setTicketData] = useState(null);
   const { userData } = useSelector((state) => state.auth);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { tickets, isLoadingTickets } = useSelector((state) => state.ticket);
 
   const handleView = (row) => {
@@ -27,6 +38,10 @@ const Tickets = () => {
     setTicket(false);
     setModal(false);
   };
+
+  useEffect(() => {
+    dispatch(getTickets(userData?.token));
+  }, []);
 
   const columns = [
     {
@@ -54,12 +69,22 @@ const Tickets = () => {
       name: "",
       selector: (row) => (
         <div className="flex items-center gap-x-4">
-          <span
-            className="text-xl cursor-pointer"
-            onClick={() => handleView(row)}
-          >
-            <FaEye title="View" className="text-green-500" />
-          </span>
+          <CustomTooltip content={"Details"}>
+            <FaEye
+              className="text-lg cursor-pointer text-greenColor"
+              onClick={() => handleView(row)}
+            />
+          </CustomTooltip>
+          <CustomTooltip content={"Edit"}>
+            <MdEditSquare
+              onClick={() => {
+                setTicketData(row);
+                setIsEditModalOpen(true);
+              }}
+              title="Edit"
+              className="text-lg text-blue-500 cursor-pointer"
+            />
+          </CustomTooltip>
         </div>
       ),
       sortable: false,
@@ -68,12 +93,15 @@ const Tickets = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getTickets(userData?.token));
-  }, []);
-
   return (
     <>
+      {isEditModalOpen && (
+        <EditTicketModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          data={ticketData}
+        />
+      )}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}

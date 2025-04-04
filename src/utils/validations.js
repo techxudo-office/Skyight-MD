@@ -60,6 +60,7 @@ export const userValidation = (form, setErrors) => {
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
 };
+
 export const adminValidation = (form, setErrors) => {
   let newErrors = {};
 
@@ -85,6 +86,16 @@ export const adminValidation = (form, setErrors) => {
     newErrors.password =
       "Password must contain at least one special character (!@#$%^&*)";
   }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
+export const ticketValidation = (form, setErrors) => {
+  let newErrors = {};
+
+  if (!form.title.trim()) newErrors.title = "Title is required";
+  if (!form.description.trim()) newErrors.description = "Description name is required";
 
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;

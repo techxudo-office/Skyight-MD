@@ -12,6 +12,9 @@ const initialState = {
   isLoadingTickets: false,
   loadTicketsError: null,
 
+  isUpdatingTicket: false,
+  updateTicketError: null,
+
   isDeletingTicket: false,
   deleteTicketError: null,
 };
@@ -45,6 +48,21 @@ const ticketSlice = createSlice({
       .addCase(getTickets.rejected, (state, action) => {
         state.isLoadingTickets = false;
         state.loadTicketsError = action.payload;
+      })
+      .addCase(editTicket.pending, (state) => {
+        console.log("It should be true")
+        state.isUpdatingTicket = true;
+        state.updateTicketError = null;
+      })
+      .addCase(editTicket.fulfilled, (state, action) => {
+        state.isUpdatingTicket = false;
+        state.tickets = state.tickets.map((ticket) =>
+          ticket.id === action.payload.id ? action.payload : ticket
+        );
+      })
+      .addCase(editTicket.rejected, (state, action) => {
+        state.isUpdatingTicket = false;
+        state.updateTicketError = action.payload;
       })
       .addCase(deleteTicket.pending, (state) => {
         state.isDeletingTicket = true;
@@ -94,6 +112,28 @@ export const createTicket = createAsyncThunk(
         toast.error(errorMessages);
         return thunkAPI.rejectWithValue(errorMessages);
       }
+    }
+  }
+);
+
+export const editTicket = createAsyncThunk(
+  "ticket/editTicket",
+  async ({ data, token }, thunkAPI) => {
+    try {
+      let response = await axios.put(`${BASE_URL}/api/ticket`, data, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success("Ticket updated successfully");
+        return response.data.data;
+      }
+    } catch (error) {
+      const errorMessage = "Failed while updating this ticket";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
     }
   }
 );

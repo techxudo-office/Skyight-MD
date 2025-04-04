@@ -10,7 +10,6 @@ import {
 import { useSelector } from "react-redux";
 import { routesData } from "../data/routesData";
 import toast from "react-hot-toast";
-import { CompanyUsers } from "../pages/pages";
 
 const AppRoutes = () => {
   const location = useLocation();

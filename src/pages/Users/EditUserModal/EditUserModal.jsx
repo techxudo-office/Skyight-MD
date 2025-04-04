@@ -64,7 +64,7 @@ const initialState = {
   role_id: "",
 };
 
-const EditAdminModal = ({ isOpen, onClose, usersData }) => {
+const EditUserModal = ({ isOpen, onClose, usersData }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [active, setActive] = useState(usersData?.isActive);
@@ -190,4 +190,4 @@ const EditAdminModal = ({ isOpen, onClose, usersData }) => {
   );
 };
 
-export default EditAdminModal;
+export default EditUserModal;

@@ -100,7 +100,6 @@ const CompanyDetails = () => {
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
-        <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>
       <ModalWrapper
         isOpen={modal}

@@ -36,7 +36,6 @@ const RefundRequests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [modalStatus, setModalStatus] = useState(false);
-
   const [refundId, setRefundId] = useState();
   const { userData } = useSelector((state) => state.auth);
   const { refundBookings, isGetRefundsLoading, isRefundRequestLoading } =
@@ -101,7 +100,7 @@ const RefundRequests = () => {
         <div className="flex items-center text-xl gap-x-6">
           <CustomTooltip content={"Details"}>
             <FaEye
-              className="cursor-pointer  text-greenColor"
+              className="cursor-pointer text-greenColor"
               onClick={() =>
                 navigate("/dashboard/booking-details", {
                   state: row,
@@ -110,17 +109,19 @@ const RefundRequests = () => {
             />
           </CustomTooltip>
           <CustomTooltip content={"Accept"}>
-          <RiRefund2Fill className="cursor-pointer text-blueColor"  onClick={() => {
-              setModalStatus(true)
-              setRefundId(row.id)
-            }}/>
+            <RiRefund2Fill
+              className="cursor-pointer text-blueColor"
+              onClick={() => {
+                setModalStatus(true);
+                setRefundId(row.id);
+              }}
+            />
           </CustomTooltip>
         </div>
       ),
       sortable: false,
       center: true,
-      wrap:false
-
+      wrap: false,
     },
   ];
 
@@ -132,9 +133,10 @@ const RefundRequests = () => {
   return (
     <>
       <ConfirmModal
-      text={"Are you really want to accepet the refund request?"}
-        onConfirm={() =>{ handleAcceptRefund(refundId)
-          setModalStatus(false)
+        text={"Are you really want to accepet the refund request?"}
+        onConfirm={() => {
+          handleAcceptRefund(refundId);
+          setModalStatus(false);
         }}
         loading={isRefundRequestLoading}
         onAbort={() => setModalStatus(false)}
@@ -155,9 +157,9 @@ const RefundRequests = () => {
             paginationTotalRows={refundBookings?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
 
-          // viewColumns={viewColumns}
-          // data={data||[]}
-          // actions={actionsData}
+            // viewColumns={viewColumns}
+            // data={data||[]}
+            // actions={actionsData}
           />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>
