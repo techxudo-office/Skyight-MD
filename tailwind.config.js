@@ -13,7 +13,7 @@ module.exports = {
         // primary: '#EF4444', // Matches --primary-color
         // secondary: '#B91C1C', // Matches --secondary-color
         text: '#333333', // Matches --text-color
-        background: '#F9FAFB', // Matches --background-color
+        background: '#DFF0D9', // Matches --background-color
         lightgray: '#D3D3D3', // Add custom color
         gray: '#6B7280',
         grayBg: '#f1f5f9 ',

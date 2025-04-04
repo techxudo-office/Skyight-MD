@@ -185,7 +185,7 @@ const ApplyCommisions = () => {
   ];
 
   return (
-    <>
+    <div className="  ">
       {isEditModalOpen && (
         <EditCommisionModal
           isOpen={isEditModalOpen}
@@ -198,7 +198,7 @@ const ApplyCommisions = () => {
           heading={"Apply Commisions"}
           className="flex items-center justify-between"
         />
-        <CardLayoutBody removeBorder={true}>
+        <CardLayoutBody removeBorder={false}>
           <Table
             columnsData={columns}
             tableData={[commisions] || []}
@@ -209,7 +209,7 @@ const ApplyCommisions = () => {
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>
-    </>
+    </div>
   );
 };
 

@@ -44,8 +44,9 @@ const Table = ({
   //   return <p className="p-5 text-center text-text">No Data Found</p>
   // }
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto  ">
         <DataTable
+        
           columns={modifiedColumns}
           data={paginatedData}
           pagination={pagination}
