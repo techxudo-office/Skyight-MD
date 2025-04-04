@@ -29,6 +29,7 @@ import {
   DateChange,
   CompanyUsers,
   CompanyDetails,
+  NotificationPage,
 } from "../pages/pages";
 
 export const routesData = [
@@ -67,6 +68,7 @@ export const routesData = [
       { path: "refund-requests", element: <RefundRequests /> },
       { path: "cancel-requests", element: <CancelRequests /> },
       { path: "date-change", element: <DateChange /> },
+      { path: "notifications", element: <NotificationPage /> }
     ],
   },
   { path: "*", element: <NotFound /> },

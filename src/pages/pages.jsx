@@ -34,3 +34,4 @@ export { default as CancelRequests } from "./CancelRequests/CancelRequests";
 export { default as DateChange } from "./DateChange/DateChange";
 
 export { default as Login } from "./Login/Login";
+export { default as NotificationPage } from "./NotificationPage/NotificationPage";

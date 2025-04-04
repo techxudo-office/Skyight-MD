@@ -75,7 +75,7 @@ export const sidebarLinks = [
   {
     title: "Users",
     icon: <MdEditSquare />,
-    sublinks:[
+    sublinks: [
       {
         title: "Roles",
         path: "roles",
@@ -93,8 +93,12 @@ export const sidebarLinks = [
       },
     ]
   },
+  {
+    title: "Notifications",
+    path: "notifications",
+    icon: <MdEditSquare />,
+  },
 
- 
 ];
 
 // import {

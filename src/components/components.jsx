@@ -33,3 +33,4 @@ export { default as FlightInfoCard } from "./FlightInfoCard/FlightInfoCard";
 export { default as DeleteModal } from "./DeleteModal/DeleteModal";
 export { default as Textarea } from "./Textarea/Textarea";
 export { default as MultiSelect } from "./MultiSelect/MultiSelect";
+export { default as Notifications } from "./Notifications/Notifications";
