@@ -6,7 +6,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useNavigate } from "react-router-dom";
 
-import { Button, CustomTooltip, Table, Tag } from "../../components/components";
+import { CustomTooltip, Table, Tag } from "../../components/components";
 import { getCompanies } from "../../_core/features/companySlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";

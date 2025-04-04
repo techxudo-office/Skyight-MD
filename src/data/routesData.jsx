@@ -28,8 +28,9 @@ import {
   CancelRequests,
   DateChange,
   CompanyUsers,
-  CompanyDetails,
   NotificationPage,
+  CompanyDetails,
+  CompanyTickets,
 } from "../pages/pages";
 
 export const routesData = [
@@ -46,7 +47,6 @@ export const routesData = [
         path: "company/users/:companyId",
         element: <Users isCompanyUser={true} />,
       },
-      { path: "company/details/:companyId", element: <CompanyDetails /> },
       { path: "create-user", element: <CreateUser /> },
       { path: "create-role", element: <CreateRole /> },
       { path: "reasons", element: <Reasons /> },
@@ -68,7 +68,12 @@ export const routesData = [
       { path: "refund-requests", element: <RefundRequests /> },
       { path: "cancel-requests", element: <CancelRequests /> },
       { path: "date-change", element: <DateChange /> },
-      { path: "notifications", element: <NotificationPage /> }
+      { path: "notifications", element: <NotificationPage /> },
+      { path: "company/details/:companyId", element: <CompanyDetails /> },
+      {
+        path: "company/details/tickets/:companyId",
+        element: <CompanyTickets />,
+      },
     ],
   },
   { path: "*", element: <NotFound /> },

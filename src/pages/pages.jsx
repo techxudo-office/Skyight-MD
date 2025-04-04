@@ -4,9 +4,6 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 //! Dashboard Pages
 export { default as DashboardHome } from "./DashboardHome/DashboardHome";
 export { default as Roles } from "./Roles/Roles";
-export { default as Companies } from "./Companies/Companies";
-export { default as CompanyUsers } from "./CompanyUsers/CompanyUsers";
-export { default as CompanyDetails } from "./CompanyDetails/CompanyDetails";
 export { default as CreateRole } from "./CreateRole/CreateRole";
 export { default as Users } from "./Users/Users";
 export { default as Admins } from "./Admins/Admins";
@@ -22,6 +19,11 @@ export { default as ApplyCommisions } from "./ApplyCommisions/ApplyCommisions";
 export { default as UpdateSetting } from "./UpdateSetting/UpdateSetting";
 export { default as CreateAdmin } from "./CreateAdmin/CreateAdmin";
 export { default as UpdateAdmin } from "./UpdateAdmin/UpdateAdmin";
+export { default as Companies } from "./Companies/Companies";
+export { default as CompanyUsers } from "./CompanyUsers/CompanyUsers";
+
+export { default as CompanyDetails } from "./CompanyDetails/CompanyDetails";
+export { default as CompanyTickets } from "./CompanyDetails/CompanyTickets/CompanyTickets";
 
 export { default as Banks } from "./Banks/Banks";
 export { default as CreateBank } from "./CreateBank/CreateBank";
