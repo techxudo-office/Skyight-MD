@@ -198,7 +198,7 @@ const TicketDetails = () => {
               ]}
               tableData={bookingDetails?.passengers || []}
               progressPending={isLoadingBookingDetails}
-              paginationTotalRows={bookingDetails?.passengers.length}
+              paginationTotalRows={bookingDetails?.passengers?.length}
               paginationComponentOptions={{ noRowsPerPage: "10" }}
             />
           )}

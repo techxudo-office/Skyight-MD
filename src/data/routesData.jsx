@@ -81,8 +81,16 @@ export const routesData = [
         element: <CompanyRefundedRequests />,
       },
       {
+        path: "company/details/refunded-requests/booking-details/:companyId",
+        element: <BookingDetails />,
+      },
+      {
         path: "company/details/cancelled-requests/:companyId",
         element: <CompanyCancelledRequests />,
+      },
+      {
+        path: "company/details/cancelled-requests/booking-details/:companyId",
+        element: <BookingDetails />,
       },
     ],
   },
