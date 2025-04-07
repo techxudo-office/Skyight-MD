@@ -29,10 +29,11 @@ import {
   DateChange,
   CompanyUsers,
   NotificationPage,
+  CreateNotification,
   CompanyDetails,
   CompanyTickets,
   CompanyRefundedRequests,
-  CompanyCancelledRequests
+  CompanyCancelledRequests,
 } from "../pages/pages";
 
 export const routesData = [
@@ -71,6 +72,7 @@ export const routesData = [
       { path: "cancel-requests", element: <CancelRequests /> },
       { path: "date-change", element: <DateChange /> },
       { path: "notifications", element: <NotificationPage /> },
+      { path: "create-notification", element: <CreateNotification /> },
       { path: "company/details/:companyId", element: <CompanyDetails /> },
       {
         path: "company/details/tickets/:companyId",

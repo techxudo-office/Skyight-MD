@@ -5,11 +5,11 @@ import toast from "react-hot-toast";
 
 const initialState = {
   notifications: [],
-  announcements: [],
   isLoadingNotifications: false,
-  isLoadingAnnouncements: false,
   errorNotifications: null,
-  errorAnnouncements: null,
+
+  isCreatingNotification: false,
+  createNotificationError: null,
 };
 
 const notificationSlice = createSlice({
@@ -30,18 +30,18 @@ const notificationSlice = createSlice({
         state.isLoadingNotifications = false;
         state.errorNotifications = action.payload;
       })
-      .addCase(getAnnouncements.pending, (state) => {
-        state.isLoadingAnnouncements = true;
-        state.errorAnnouncements = null;
+      .addCase(createNotification.pending, (state) => {
+        state.isCreatingbank = true;
+        state.createNotificationError = null;
       })
-      .addCase(getAnnouncements.fulfilled, (state, action) => {
-        state.isLoadingAnnouncements = false;
-        state.announcements = action.payload;
+      .addCase(createNotification.fulfilled, (state, action) => {
+        state.isCreatingbank = false;
+        state.banks.push(action.payload);
       })
-      .addCase(getAnnouncements.rejected, (state, action) => {
-        state.isLoadingAnnouncements = false;
-        state.errorAnnouncements = action.payload;
-      });
+      .addCase(createNotification.rejected, (state, action) => {
+        state.isCreatingbank = false;
+        state.createNotificationError = action.payload;
+      })
   },
 });
 
@@ -73,25 +73,22 @@ export const getNotifications = createAsyncThunk(
   }
 );
 
-export const getAnnouncements = createAsyncThunk(
-  "notification/getAnnouncements",
-  async (token, thunkAPI) => {
+export const createNotification = createAsyncThunk(
+  "notification/createNotification",
+  async ({ data, token }, thunkAPI) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/getAnnouncements`, {
+      const response = await axios.post(`${BASE_URL}/api/SendNotificationToCompany`, data, {
         headers: {
           Authorization: token,
+          "Content-Type": "application/json",
         },
       });
-
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error("Failed to fetch announcements");
-      }
+      toast.success("Notification sent successfully");
+      return response.data.data;
     } catch (error) {
+      console.log(error);
       const errorMessage =
-        error?.response?.data?.message ||
-        "Failed to fetch announcements. Please try again.";
+        error.response?.data?.message || "Failed to sent notification.";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }
