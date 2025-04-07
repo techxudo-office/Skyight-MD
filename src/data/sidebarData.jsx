@@ -1,13 +1,16 @@
 import { AiFillHome } from "react-icons/ai";
 import { FaSquarePollHorizontal } from "react-icons/fa6";
-import { MdEditSquare } from "react-icons/md";
+import { MdAccountBalanceWallet, MdCancelScheduleSend, MdDoorbell, MdEditSquare, MdOutlineGroups, MdOutlineNoteAlt } from "react-icons/md";
 import { FaBusinessTime } from "react-icons/fa6";
 import { TbTransactionDollar } from "react-icons/tb";
 import { PiBankBold } from "react-icons/pi";
 import { IoTicket } from "react-icons/io5";
 import { FaUserShield, FaUser } from "react-icons/fa";
 import { VscGitStashApply } from "react-icons/vsc";
-
+import { BiSolidDollarCircle } from "react-icons/bi";
+import { HiRectangleGroup } from "react-icons/hi2";
+import { IoMdBookmark } from "react-icons/io";
+import { RiRefund2Fill } from "react-icons/ri";
 export const sidebarLinks = [
   // {
   //   title: "Home",
@@ -17,16 +20,16 @@ export const sidebarLinks = [
   {
     title: "Companies",
     path: "companies",
-    icon: <MdEditSquare />,
+    icon: <HiRectangleGroup />
   },
   {
     title: "Bookings",
-    icon: <MdEditSquare />,
+    icon: <IoMdBookmark />,
     sublinks: [
       {
         title: "Apply Commisions",
         path: "apply-commisions",
-        icon: <VscGitStashApply />,
+        icon: <BiSolidDollarCircle />,
       },
       {
         title: "Transactions",
@@ -41,23 +44,23 @@ export const sidebarLinks = [
       {
         title: "Flight Bookings",
         path: "flight-bookings",
-        icon: <FaBusinessTime />,
+        icon: <IoMdBookmark />,
       },
       {
         title: "Refund Requests",
         path: "refund-requests",
-        icon: <FaBusinessTime />,
+        icon: <RiRefund2Fill />,
       },
       {
         title: "Cancel Requests",
         path: "cancel-requests",
-        icon: <FaBusinessTime />,
+        icon: <MdCancelScheduleSend />,
       },
     ],
   },
   {
     title: "Accounts",
-    icon: <FaBusinessTime />,
+    icon: <MdAccountBalanceWallet />,
     sublinks: [
       {
         title: "Banks",
@@ -70,11 +73,11 @@ export const sidebarLinks = [
   {
     title: "Reasons",
     path: "reasons",
-    icon: <MdEditSquare />,
+    icon: <MdOutlineNoteAlt />,
   },
   {
     title: "Users",
-    icon: <MdEditSquare />,
+    icon: <MdOutlineGroups />,
     sublinks: [
       {
         title: "Roles",
@@ -96,7 +99,7 @@ export const sidebarLinks = [
   {
     title: "Notifications",
     path: "notifications",
-    icon: <MdEditSquare />,
+    icon: <MdDoorbell />,
   },
 
 ];

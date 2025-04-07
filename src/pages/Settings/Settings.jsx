@@ -14,6 +14,8 @@ import { updateAccountValidation } from "../../utils/validations";
 const Settings = () => {
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
+
+  const [base64IMG, setBase64IMG] = useState()
   const [toggle, setToggle] = useState(false);
   const [editingField, setEditingField] = useState(null);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
@@ -81,11 +83,17 @@ const Settings = () => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
+      const reader = new FileReader()
+
+      reader.readAsDataURL(file)
+
+      reader.onload = () => {
+        console.log('called: ', reader)
+        setBase64IMG(reader.result)
+      }
     }
   };
-
+  console.log("base64IMG", base64IMG)
   const profileFields = [
     {
       label: "Full Name",
@@ -145,7 +153,7 @@ const Settings = () => {
         >
           <div className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group">
             <img
-              src={profileImage}
+              src={base64IMG || profileImage}
               alt="profile-img"
               className="object-cover w-full h-full rounded-full"
             />
@@ -155,6 +163,7 @@ const Settings = () => {
             >
               <MdEdit className="text-xl text-white" />
             </div>
+
             <input
               type="file"
               accept="image/png, image/jpeg, image/jpg"
