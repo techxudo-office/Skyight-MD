@@ -69,15 +69,15 @@ const Transactions = ({ isCompanyDetail }) => {
 
   const columns = [
     {
-      name: "TRANSACTION ID",
-      selector: (row) => row?.id,
+      name: "COMPANY",
+      selector: (row) => row?.company?.name,
       sortable: false,
       minwidth: "150px",
       center: true,
     },
     {
-      name: "COMPANY",
-      selector: (row) => row?.company?.name,
+      name: "TRANSACTION ID",
+      selector: (row) => row?.id,
       sortable: false,
       minwidth: "150px",
       center: true,
@@ -170,93 +170,91 @@ const Transactions = ({ isCompanyDetail }) => {
 
         <CardLayoutFooter />
       </CardLayoutContainer>
-      {!isCompanyDetail && (
-        <ModalWrapper
-          isOpen={isViewModalOpen}
-          onRequestClose={closeModal}
-          contentLabel="Transaction Details"
-        >
-          {selectedTransaction && (
-            <div className="max-w-md p-6 mx-auto bg-white border border-gray-300 rounded-lg shadow-lg">
-              <h2 className="pb-2 mb-4 text-2xl font-bold text-center border-b">
-                Transaction Invoice
-              </h2>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-gray-600">Transaction ID:</span>
-                <span className="font-semibold">
-                  {selectedTransaction?.id || "N/A"}
-                </span>
-              </div>
-              <img
-                src={selectedTransaction?.document_url}
-                alt="Document"
-                className="object-cover w-full h-40 mb-4 border rounded-md"
-              />
-              <div className="space-y-2 text-sm">
-                <p>
-                  <strong className="text-text">Bank Holder Name:</strong>{" "}
-                  <span className="font-medium">
-                    {selectedTransaction?.account_holder_name}
-                  </span>
-                </p>
-                <p>
-                  <strong className="text-text">Bank number:</strong>{" "}
-                  <span className="font-medium">
-                    {selectedTransaction?.bank_number}
-                  </span>
-                </p>
-                <p>
-                  <strong className="text-text">Bank:</strong>{" "}
-                  <span className="font-medium">
-                    {selectedTransaction?.bank_name}
-                  </span>
-                </p>
-                <p>
-                  <strong className="text-text">Comment:</strong>{" "}
-                  <span className="font-medium">
-                    {selectedTransaction?.comment}
-                  </span>
-                </p>
-                <p>
-                  <strong className="text-text">Payment Date:</strong>{" "}
-                  <span className="font-medium">
-                    {dayjs(selectedTransaction?.payment_date).format(
-                      "DD-MMM-YYYY h:mm a"
-                    )}
-                  </span>
-                </p>
-                <p>
-                  <strong className="text-text">Amount:</strong>{" "}
-                  <span className="font-medium text-greenColor">
-                    ${selectedTransaction?.amount}
-                  </span>
-                </p>
-                <p className="flex items-center w-40 gap-x-2">
-                  <strong className="text-text">Status:</strong>{" "}
-                  <Tag value={selectedTransaction?.status} />
-                </p>
-                {selectedTransaction?.status === "rejected" && (
-                  <p className="flex items-center gap-x-2">
-                    <strong className="text-text">Reasons:</strong>{" "}
-                    <span className="font-medium text-black">
-                      {selectedTransaction?.reasons
-                        ?.map((item) => item.reason)
-                        .join(", ")}
-                    </span>
-                  </p>
-                )}
-              </div>
-              <div className="flex justify-end mt-6">
-                <Button
-                  onClick={closeModal}
-                  text="Close"
-                  className="px-4 py-2 text-white rounded-md hover:bg-primary bg-redColor"
-                />
-              </div>
+      <ModalWrapper
+        isOpen={isViewModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Transaction Details"
+      >
+        {selectedTransaction && (
+          <div className="max-w-md p-6 mx-auto bg-white border border-gray-300 rounded-lg shadow-lg">
+            <h2 className="pb-2 mb-4 text-2xl font-bold text-center border-b">
+              Transaction Invoice
+            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm text-gray-600">Transaction ID:</span>
+              <span className="font-semibold">
+                {selectedTransaction?.id || "N/A"}
+              </span>
             </div>
-          )}
-        </ModalWrapper>
-      )}
+            <img
+              src={selectedTransaction?.document_url}
+              alt="Document"
+              className="object-cover w-full h-40 mb-4 border rounded-md"
+            />
+            <div className="space-y-2 text-sm">
+              <p>
+                <strong className="text-text">Bank Holder Name:</strong>{" "}
+                <span className="font-medium">
+                  {selectedTransaction?.account_holder_name}
+                </span>
+              </p>
+              <p>
+                <strong className="text-text">Bank number:</strong>{" "}
+                <span className="font-medium">
+                  {selectedTransaction?.bank_number}
+                </span>
+              </p>
+              <p>
+                <strong className="text-text">Bank:</strong>{" "}
+                <span className="font-medium">
+                  {selectedTransaction?.bank_name}
+                </span>
+              </p>
+              <p>
+                <strong className="text-text">Comment:</strong>{" "}
+                <span className="font-medium">
+                  {selectedTransaction?.comment}
+                </span>
+              </p>
+              <p>
+                <strong className="text-text">Payment Date:</strong>{" "}
+                <span className="font-medium">
+                  {dayjs(selectedTransaction?.payment_date).format(
+                    "DD-MMM-YYYY h:mm a"
+                  )}
+                </span>
+              </p>
+              <p>
+                <strong className="text-text">Amount:</strong>{" "}
+                <span className="font-medium text-greenColor">
+                  ${selectedTransaction?.amount}
+                </span>
+              </p>
+              <p className="flex items-center w-40 gap-x-2">
+                <strong className="text-text">Status:</strong>{" "}
+                <Tag value={selectedTransaction?.status} />
+              </p>
+              {selectedTransaction?.status === "rejected" && (
+                <p className="flex items-center gap-x-2">
+                  <strong className="text-text">Reasons:</strong>{" "}
+                  <span className="font-medium text-black">
+                    {selectedTransaction?.reasons
+                      ?.map((item) => item.reason)
+                      .join(", ")}
+                  </span>
+                </p>
+              )}
+            </div>
+            <div className="flex justify-end mt-6">
+              <Button
+                onClick={closeModal}
+                text="Close"
+                className="px-4 py-2 text-white rounded-md hover:bg-primary bg-redColor"
+              />
+            </div>
+          </div>
+        )}
+      </ModalWrapper>
     </>
   );
 };
