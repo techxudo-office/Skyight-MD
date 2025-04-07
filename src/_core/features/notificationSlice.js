@@ -31,15 +31,14 @@ const notificationSlice = createSlice({
         state.errorNotifications = action.payload;
       })
       .addCase(createNotification.pending, (state) => {
-        state.isCreatingbank = true;
+        state.isCreatingNotification = true;
         state.createNotificationError = null;
       })
       .addCase(createNotification.fulfilled, (state, action) => {
-        state.isCreatingbank = false;
-        state.banks.push(action.payload);
+        state.isCreatingNotification = false;
       })
       .addCase(createNotification.rejected, (state, action) => {
-        state.isCreatingbank = false;
+        state.isCreatingNotification = false;
         state.createNotificationError = action.payload;
       })
   },

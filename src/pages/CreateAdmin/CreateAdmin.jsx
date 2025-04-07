@@ -88,7 +88,7 @@ const CreateAdmin = () => {
       role_id: Number(formData.role_id),
       is_active: active,
     };
-    console.log(payload);
+    
 
     dispatch(createAdmin({ data: payload, token: userData?.token }))
       .unwrap()
