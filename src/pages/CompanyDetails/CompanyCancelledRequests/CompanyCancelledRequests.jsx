@@ -8,36 +8,30 @@ import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Table,
-  ModalWrapper,
-  Button,
-  Tag,
-} from "../../../components/components";
+import { Table, Tag } from "../../../components/components";
 import { IoIosAirplane } from "react-icons/io";
 import { getCompanyBookings } from "../../../_core/features/bookingSlice";
 
 const CompanyCancelledRequests = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { companyId } = useParams();
-  const [modal, setModal] = useState(false);
-  const [ticket, setTicket] = useState(null);
   const [cancelledRequests, setCancelledRequests] = useState([]);
   const { userData } = useSelector((state) => state.auth);
   const { companyBookings, isLoadingCompanyBookings } = useSelector(
     (state) => state.booking
   );
 
-  const handleView = (row) => {
-    setTicket(row);
-    setModal(true);
-  };
-
-  const closeModal = () => {
-    setTicket(false);
-    setModal(false);
-  };
+  useEffect(() => {
+    dispatch(
+      getCompanyBookings({ token: userData?.token, id: companyId })
+    ).then(() => {
+      const refunded = companyBookings.filter(
+        (booking) => booking.booking_status === "cancelled"
+      );
+      setCancelledRequests(refunded);
+    });
+  }, []);
 
   const columns = [
     {
@@ -95,9 +89,12 @@ const CompanyCancelledRequests = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() =>
-              navigate(`/dashboard/company/details/cancelled-requests/booking-details/${companyId}`, {
-                state: row,
-              })
+              navigate(
+                `/dashboard/company/details/cancelled-requests/booking-details/${companyId}`,
+                {
+                  state: row,
+                }
+              )
             }
           >
             <FaEye title="View" className="text-green-500" />
@@ -109,17 +106,6 @@ const CompanyCancelledRequests = () => {
       center: true,
     },
   ];
-
-  useEffect(() => {
-    dispatch(
-      getCompanyBookings({ token: userData?.token, id: companyId })
-    ).then(() => {
-      const refunded = companyBookings.filter(
-        (booking) => booking.booking_status === "cancelled"
-      );
-      setCancelledRequests(refunded);
-    });
-  }, []);
 
   return (
     <>
@@ -140,50 +126,6 @@ const CompanyCancelledRequests = () => {
           />
         </CardLayoutBody>
       </CardLayoutContainer>
-      <ModalWrapper
-        isOpen={modal}
-        onRequestClose={closeModal}
-        contentLabel="Ticket Details"
-      >
-        {ticket && (
-          <div className="max-w-md p-6 mx-auto bg-white border border-gray-300 rounded-lg shadow-lg">
-            <h2 className="pb-2 mb-4 text-2xl font-bold text-center border-b">
-              Ticket Details
-            </h2>
-
-            <div className="space-y-2 text-sm">
-              <p>
-                <strong className="text-text">Title:</strong>
-                <span className="ml-2 font-medium">{ticket.title}</span>
-              </p>
-              <p>
-                <strong className="text-text">Description:</strong>
-                <span className="ml-2 font-medium">{ticket.description}</span>
-              </p>
-              <p className="flex items-center gap-x-4">
-                <strong className="text-text">Status:</strong>
-                <span className="w-24">
-                  <Tag value={ticket.status} />
-                </span>
-              </p>
-              <p>
-                <strong className="text-text">Created At:</strong>
-                <span className="ml-2 font-medium">
-                  {dayjs(ticket.created_at).format("DD-MMM-YYYY h:mm a")}
-                </span>
-              </p>
-            </div>
-
-            <div className="flex justify-end mt-6">
-              <Button
-                onClick={closeModal}
-                text="Close"
-                className="px-4 py-2 text-white rounded-md hover:bg-primary bg-redColor"
-              />
-            </div>
-          </div>
-        )}
-      </ModalWrapper>
     </>
   );
 };

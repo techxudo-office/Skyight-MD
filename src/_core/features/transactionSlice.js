@@ -8,6 +8,10 @@ const initialState = {
   isLoadingTransactions: false,
   transactionsError: null,
 
+  companyTransactions: [],
+  isLoadingCompanyTransactions: false,
+  companyTransactionsError: null,
+
   isCreatingTransaction: false,
   createTransactionError: null,
 
@@ -21,18 +25,6 @@ const transactionSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createTransaction.pending, (state) => {
-        state.isCreatingTransaction = true;
-        state.createTransactionError = null;
-      })
-      .addCase(createTransaction.fulfilled, (state, action) => {
-        state.isCreatingTransaction = false;
-        state.transactions = [action.payload, ...state.transactions];
-      })
-      .addCase(createTransaction.rejected, (state, action) => {
-        state.isCreatingTransaction = false;
-        state.createTransactionError = action.payload;
-      })
       .addCase(getTransactions.pending, (state) => {
         state.isLoadingTransactions = true;
         state.transactionsError = null;
@@ -44,6 +36,31 @@ const transactionSlice = createSlice({
       .addCase(getTransactions.rejected, (state, action) => {
         state.isLoadingTransactions = false;
         state.transactionsError = action.payload;
+      })
+      .addCase(getCompanyTransactions.pending, (state) => {
+        state.isLoadingCompanyTransactions = true;
+        state.companyTransactionsError = null;
+      })
+      .addCase(getCompanyTransactions.fulfilled, (state, action) => {
+        state.isLoadingCompanyTransactions = false;
+        console.log(action?.payload,"Transaction")
+        state.companyTransactions = action?.payload?.credit_request;
+      })
+      .addCase(getCompanyTransactions.rejected, (state, action) => {
+        state.isLoadingCompanyTransactions = false;
+        state.companyTransactionsError = action.payload;
+      })
+      .addCase(createTransaction.pending, (state) => {
+        state.isCreatingTransaction = true;
+        state.createTransactionError = null;
+      })
+      .addCase(createTransaction.fulfilled, (state, action) => {
+        state.isCreatingTransaction = false;
+        state.transactions = [action.payload, ...state.transactions];
+      })
+      .addCase(createTransaction.rejected, (state, action) => {
+        state.isCreatingTransaction = false;
+        state.createTransactionError = action.payload;
       })
       .addCase(editTransaction.pending, (state) => {
         state.isEditingTransaction = true;
@@ -63,6 +80,50 @@ const transactionSlice = createSlice({
       });
   },
 });
+
+export const getTransactions = createAsyncThunk(
+  "transaction/getTransactions",
+  async (token, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/company/all-transactions?page=0&limit=10000`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      return response.data.data[0];
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch transactions";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getCompanyTransactions = createAsyncThunk(
+  "transaction/getCompanyTransactions",
+  async ({ token, id }, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/company/getCompanyCredits/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch transactions";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
 
 export const createTransaction = createAsyncThunk(
   "transaction/createTransaction",
@@ -87,28 +148,6 @@ export const createTransaction = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to create transaction";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const getTransactions = createAsyncThunk(
-  "transaction/getTransactions",
-  async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/company/all-transactions?page=0&limit=10000`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      return response.data.data[0];
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch transactions";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }

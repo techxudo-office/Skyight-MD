@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { Input, Button, Spinner } from "../../components/components";
+import { Input, Button, Spinner, Select } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { adminValidation } from "../../utils/validations";
+import { adminValidation, ticketValidation } from "../../utils/validations";
 import { createNotification } from "../../_core/features/notificationSlice";
+import { getCompanies } from "../../_core/features/companySlice";
 
 let inputFields = [
   {
@@ -34,13 +35,32 @@ const initialState = {
 };
 
 const CreateNotification = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
-  const [active, setActive] = useState(true);
   const [formData, setFormData] = useState(initialState);
+  const [selectedCompany, setSelectedCompany] = useState(null);
   const { userData } = useSelector((state) => state.auth);
+  const { companies, isLoadingCompanies } = useSelector(
+    (state) => state.company
+  );
   const { isCreatingNotification } = useSelector((state) => state.notification);
+
+  useEffect(() => {
+    dispatch(getCompanies(userData?.token));
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log(isCreatingNotification,"Loader")
+  }, [isCreatingNotification]);
+
+  const handleRoleSelect = (role) => {
+    let data = {
+      id: role.value,
+      name: role.label,
+    };
+    setSelectedCompany(data);
+    setFormData((prev) => ({ ...prev, company_id: data.id }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,24 +72,22 @@ const CreateNotification = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!adminValidation(formData, setErrors)) {
+    if (!ticketValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
       return;
     }
 
     const payload = {
-      title: formData.title,
-      email: formData.email,
-      description: formData.description,
-      company_id: Number(formData.company_id),
-      is_active: active,
+      title: formData?.title,
+      description: formData?.description,
+      company_id: Number(formData?.company_id),
     };
-    console.log(payload);
 
     dispatch(createNotification({ data: payload, token: userData?.token }))
       .unwrap()
       .then(() => {
         setFormData(initialState);
+        setSelectedCompany(null)
       });
   };
 
@@ -79,7 +97,7 @@ const CreateNotification = () => {
       <CardLayoutContainer>
         <CardLayoutHeader
           className="flex items-center justify-between"
-          heading="Create Admin"
+          heading="Create Notification"
         />
         <form onSubmit={handleSubmit} noValidate>
           <CardLayoutBody>
@@ -100,6 +118,19 @@ const CreateNotification = () => {
                   )}
                 </div>
               ))}
+              <Select
+                id="companies"
+                label="Company"
+                height="h-12"
+                value={selectedCompany ? selectedCompany.name : ""}
+                onChange={handleRoleSelect}
+                options={companies?.map((item) => ({
+                  value: item.id,
+                  label: item.name,
+                }))}
+                placeholder="Select a Company"
+                isLoading={isLoadingCompanies}
+              />
             </div>
           </CardLayoutBody>
           <CardLayoutFooter>

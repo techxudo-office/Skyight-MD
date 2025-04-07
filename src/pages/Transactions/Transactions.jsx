@@ -19,24 +19,37 @@ import {
 import "./Transaction.css";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
-import { getTransactions } from "../../_core/features/transactionSlice";
+import {
+  getCompanyTransactions,
+  getTransactions,
+} from "../../_core/features/transactionSlice";
 import EditTransactionModal from "./EditTransactionModal/EditTransactionModal";
+import { useParams } from "react-router-dom";
 
-const Transactions = () => {
+const Transactions = ({ isCompanyDetail }) => {
   const dispatch = useDispatch();
-
+  const { companyId } = useParams();
   const { userData } = useSelector((state) => state.auth);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const { transactions, isLoadingTransactions } = useSelector(
-    (state) => state.transaction
-  );
   const [transactionId, setTransactionId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const {
+    transactions,
+    companyTransactions,
+    isLoadingTransactions,
+    isLoadingCompanyTransactions,
+  } = useSelector((state) => state.transaction);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   useEffect(() => {
-    dispatch(getTransactions(userData?.token));
-  }, [dispatch, userData?.token]);
+    if (isCompanyDetail) {
+      dispatch(
+        getCompanyTransactions({ token: userData?.token, id: companyId })
+      );
+    } else {
+      dispatch(getTransactions(userData?.token));
+    }
+  }, [dispatch, userData?.token, companyId]);
 
   const handleView = (row) => {
     setSelectedTransaction(row);
@@ -56,15 +69,15 @@ const Transactions = () => {
 
   const columns = [
     {
-      name: "TRANSACTION ID",
-      selector: (row) => row?.id,
+      name: "COMPANY",
+      selector: (row) => row?.company?.name,
       sortable: false,
       minwidth: "150px",
       center: true,
     },
     {
-      name: "COMPANY",
-      selector: (row) => row?.company?.name,
+      name: "TRANSACTION ID",
+      selector: (row) => row?.id,
       sortable: false,
       minwidth: "150px",
       center: true,
@@ -106,7 +119,7 @@ const Transactions = () => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          {row.status === "pending" && (
+          {row.status === "pending" && !isCompanyDetail && (
             <CustomTooltip content={"Edit"}>
               <MdEditSquare
                 className="text-base cursor-pointer text-primary"
@@ -140,9 +153,17 @@ const Transactions = () => {
           <Table
             pagination={true}
             columnsData={columns}
-            tableData={transactions || []}
-            progressPending={isLoadingTransactions}
-            paginationTotalRows={transactions.length}
+            tableData={isCompanyDetail ? companyTransactions : transactions}
+            progressPending={
+              isCompanyDetail
+                ? isLoadingCompanyTransactions
+                : isLoadingTransactions
+            }
+            paginationTotalRows={
+              isCompanyDetail
+                ? companyTransactions?.length
+                : transactions?.length
+            }
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

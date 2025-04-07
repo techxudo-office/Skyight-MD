@@ -79,6 +79,10 @@ export const routesData = [
         element: <CompanyTickets />,
       },
       {
+        path: "company/details/transactions/:companyId",
+        element: <Transactions isCompanyDetail={true} />,
+      },
+      {
         path: "company/details/refunded-requests/:companyId",
         element: <CompanyRefundedRequests />,
       },

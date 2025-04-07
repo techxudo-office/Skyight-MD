@@ -105,7 +105,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
       role: role.label,
     };
     setSelectedRole(data);
-    setFormData((prev) => ({ ...prev, role_id: data.role }));
+    setFormData((prev) => ({ ...prev, role_id: data.id }));
   };
 
   const handleSubmit = () => {

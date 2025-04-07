@@ -1,28 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
   Table,
-  SecondaryButton,
   ConfirmModal,
-  Dropdown,
   Tag,
   CustomTooltip,
-  Button,
 } from "../../components/components";
-import { getFlightBookings } from "../../utils/api_handler";
-
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
-  CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import toast from "react-hot-toast";
-import MainTable from "../../components/MainTable/MainTable";
-
-import { FaEye, FaMoneyBillWave } from "react-icons/fa";
-import axios from "axios";
-import { baseUrl, getToken } from "../../utils/api_handler";
+import { FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getRefundFlight,
@@ -156,15 +145,9 @@ const RefundRequests = () => {
             progressPending={isGetRefundsLoading}
             paginationTotalRows={refundBookings?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
-
-            // viewColumns={viewColumns}
-            // data={data||[]}
-            // actions={actionsData}
           />
         </CardLayoutBody>
-        <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>
-      {/* <MainTable columns={columns} data={data} />; */}
     </>
   );
 };
