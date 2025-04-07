@@ -6,7 +6,7 @@ import {
 } from "../../../components/CardLayout/CardLayout";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
@@ -19,6 +19,7 @@ import { getCompanyBookings } from "../../../_core/features/bookingSlice";
 
 const CompanyCancelledRequests = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { companyId } = useParams();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
@@ -93,7 +94,11 @@ const CompanyCancelledRequests = () => {
         <div className="flex items-center gap-x-4">
           <span
             className="text-xl cursor-pointer"
-            onClick={() => handleView(row)}
+            onClick={() =>
+              navigate(`/dashboard/company/details/cancelled-requests/booking-details/${companyId}`, {
+                state: row,
+              })
+            }
           >
             <FaEye title="View" className="text-green-500" />
           </span>
