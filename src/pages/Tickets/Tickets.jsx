@@ -75,16 +75,18 @@ const Tickets = () => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          <CustomTooltip content={"Edit"}>
-            <MdEditSquare
-              onClick={() => {
-                setTicketData(row);
-                setIsEditModalOpen(true);
-              }}
-              title="Edit"
-              className="text-lg text-blue-500 cursor-pointer"
-            />
-          </CustomTooltip>
+          {row?.status !== "closed" && (
+            <CustomTooltip content={"Edit"}>
+              <MdEditSquare
+                onClick={() => {
+                  setTicketData(row);
+                  setIsEditModalOpen(true);
+                }}
+                title="Edit"
+                className="text-lg text-blue-500 cursor-pointer"
+              />
+            </CustomTooltip>
+          )}
         </div>
       ),
       sortable: false,
