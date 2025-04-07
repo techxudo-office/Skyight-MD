@@ -19,24 +19,37 @@ import {
 import "./Transaction.css";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
-import { getTransactions } from "../../_core/features/transactionSlice";
+import {
+  getCompanyTransactions,
+  getTransactions,
+} from "../../_core/features/transactionSlice";
 import EditTransactionModal from "./EditTransactionModal/EditTransactionModal";
+import { useParams } from "react-router-dom";
 
-const Transactions = () => {
+const Transactions = ({ isCompanyDetail }) => {
   const dispatch = useDispatch();
-
+  const { companyId } = useParams();
   const { userData } = useSelector((state) => state.auth);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const { transactions, isLoadingTransactions } = useSelector(
-    (state) => state.transaction
-  );
   const [transactionId, setTransactionId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const {
+    transactions,
+    companyTransactions,
+    isLoadingTransactions,
+    isLoadingCompanyTransactions,
+  } = useSelector((state) => state.transaction);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   useEffect(() => {
-    dispatch(getTransactions(userData?.token));
-  }, [dispatch, userData?.token]);
+    if (isCompanyDetail) {
+      dispatch(
+        getCompanyTransactions({ token: userData?.token, id: companyId })
+      );
+    } else {
+      dispatch(getTransactions(userData?.token));
+    }
+  }, [dispatch, userData?.token, companyId]);
 
   const handleView = (row) => {
     setSelectedTransaction(row);
@@ -106,7 +119,7 @@ const Transactions = () => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          {row.status === "pending" && (
+          {row.status === "pending" && !isCompanyDetail && (
             <CustomTooltip content={"Edit"}>
               <MdEditSquare
                 className="text-base cursor-pointer text-primary"
@@ -140,100 +153,110 @@ const Transactions = () => {
           <Table
             pagination={true}
             columnsData={columns}
-            tableData={transactions || []}
-            progressPending={isLoadingTransactions}
-            paginationTotalRows={transactions.length}
+            tableData={isCompanyDetail ? companyTransactions : transactions}
+            progressPending={
+              isCompanyDetail
+                ? isLoadingCompanyTransactions
+                : isLoadingTransactions
+            }
+            paginationTotalRows={
+              isCompanyDetail
+                ? companyTransactions?.length
+                : transactions?.length
+            }
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
 
         <CardLayoutFooter />
       </CardLayoutContainer>
-      <ModalWrapper
-        isOpen={isViewModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Transaction Details"
-      >
-        {selectedTransaction && (
-          <div className="max-w-md p-6 mx-auto bg-white border border-gray-300 rounded-lg shadow-lg">
-            <h2 className="pb-2 mb-4 text-2xl font-bold text-center border-b">
-              Transaction Invoice
-            </h2>
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-gray-600">Transaction ID:</span>
-              <span className="font-semibold">
-                {selectedTransaction?.id || "N/A"}
-              </span>
-            </div>
-            <img
-              src={selectedTransaction?.document_url}
-              alt="Document"
-              className="object-cover w-full h-40 mb-4 border rounded-md"
-            />
-            <div className="space-y-2 text-sm">
-              <p>
-                <strong className="text-text">Bank Holder Name:</strong>{" "}
-                <span className="font-medium">
-                  {selectedTransaction?.account_holder_name}
+      {!isCompanyDetail && (
+        <ModalWrapper
+          isOpen={isViewModalOpen}
+          onRequestClose={closeModal}
+          contentLabel="Transaction Details"
+        >
+          {selectedTransaction && (
+            <div className="max-w-md p-6 mx-auto bg-white border border-gray-300 rounded-lg shadow-lg">
+              <h2 className="pb-2 mb-4 text-2xl font-bold text-center border-b">
+                Transaction Invoice
+              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm text-gray-600">Transaction ID:</span>
+                <span className="font-semibold">
+                  {selectedTransaction?.id || "N/A"}
                 </span>
-              </p>
-              <p>
-                <strong className="text-text">Bank number:</strong>{" "}
-                <span className="font-medium">
-                  {selectedTransaction?.bank_number}
-                </span>
-              </p>
-              <p>
-                <strong className="text-text">Bank:</strong>{" "}
-                <span className="font-medium">
-                  {selectedTransaction?.bank_name}
-                </span>
-              </p>
-              <p>
-                <strong className="text-text">Comment:</strong>{" "}
-                <span className="font-medium">
-                  {selectedTransaction?.comment}
-                </span>
-              </p>
-              <p>
-                <strong className="text-text">Payment Date:</strong>{" "}
-                <span className="font-medium">
-                  {dayjs(selectedTransaction?.payment_date).format(
-                    "DD-MMM-YYYY h:mm a"
-                  )}
-                </span>
-              </p>
-              <p>
-                <strong className="text-text">Amount:</strong>{" "}
-                <span className="font-medium text-greenColor">
-                  ${selectedTransaction?.amount}
-                </span>
-              </p>
-              <p className="flex items-center w-40 gap-x-2">
-                <strong className="text-text">Status:</strong>{" "}
-                <Tag value={selectedTransaction?.status} />
-              </p>
-              {selectedTransaction?.status === "rejected" && (
-                <p className="flex items-center gap-x-2">
-                  <strong className="text-text">Reasons:</strong>{" "}
-                  <span className="font-medium text-black">
-                    {selectedTransaction?.reasons
-                      ?.map((item) => item.reason)
-                      .join(", ")}
+              </div>
+              <img
+                src={selectedTransaction?.document_url}
+                alt="Document"
+                className="object-cover w-full h-40 mb-4 border rounded-md"
+              />
+              <div className="space-y-2 text-sm">
+                <p>
+                  <strong className="text-text">Bank Holder Name:</strong>{" "}
+                  <span className="font-medium">
+                    {selectedTransaction?.account_holder_name}
                   </span>
                 </p>
-              )}
+                <p>
+                  <strong className="text-text">Bank number:</strong>{" "}
+                  <span className="font-medium">
+                    {selectedTransaction?.bank_number}
+                  </span>
+                </p>
+                <p>
+                  <strong className="text-text">Bank:</strong>{" "}
+                  <span className="font-medium">
+                    {selectedTransaction?.bank_name}
+                  </span>
+                </p>
+                <p>
+                  <strong className="text-text">Comment:</strong>{" "}
+                  <span className="font-medium">
+                    {selectedTransaction?.comment}
+                  </span>
+                </p>
+                <p>
+                  <strong className="text-text">Payment Date:</strong>{" "}
+                  <span className="font-medium">
+                    {dayjs(selectedTransaction?.payment_date).format(
+                      "DD-MMM-YYYY h:mm a"
+                    )}
+                  </span>
+                </p>
+                <p>
+                  <strong className="text-text">Amount:</strong>{" "}
+                  <span className="font-medium text-greenColor">
+                    ${selectedTransaction?.amount}
+                  </span>
+                </p>
+                <p className="flex items-center w-40 gap-x-2">
+                  <strong className="text-text">Status:</strong>{" "}
+                  <Tag value={selectedTransaction?.status} />
+                </p>
+                {selectedTransaction?.status === "rejected" && (
+                  <p className="flex items-center gap-x-2">
+                    <strong className="text-text">Reasons:</strong>{" "}
+                    <span className="font-medium text-black">
+                      {selectedTransaction?.reasons
+                        ?.map((item) => item.reason)
+                        .join(", ")}
+                    </span>
+                  </p>
+                )}
+              </div>
+              <div className="flex justify-end mt-6">
+                <Button
+                  onClick={closeModal}
+                  text="Close"
+                  className="px-4 py-2 text-white rounded-md hover:bg-primary bg-redColor"
+                />
+              </div>
             </div>
-            <div className="flex justify-end mt-6">
-              <Button
-                onClick={closeModal}
-                text="Close"
-                className="px-4 py-2 text-white rounded-md hover:bg-primary bg-redColor"
-              />
-            </div>
-          </div>
-        )}
-      </ModalWrapper>
+          )}
+        </ModalWrapper>
+      )}
     </>
   );
 };

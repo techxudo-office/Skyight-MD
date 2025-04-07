@@ -19,9 +19,7 @@ const CompanyDetails = () => {
       path: "cancelled-requests",
     },
     { title: "Notifications", path: "notifications" },
-    { title: "Credits", path: "credits" },
-    { title: "Activity", path: "activity" },
-    { title: "History", path: "history" },
+    { title: "Transactions", path: "transactions" },
   ];
 
   return (
