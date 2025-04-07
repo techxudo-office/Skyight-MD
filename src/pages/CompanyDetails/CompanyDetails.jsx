@@ -12,14 +12,16 @@ const CompanyDetails = () => {
   const { companyId } = useParams();
 
   const companySections = [
+    { title: "Profit", path: "profit" },
     { title: "Tickets", path: "tickets" },
+    { title: "Transactions", path: "transactions" },
     { title: "Refunded Requests", path: "refunded-requests" },
     {
       title: "Cancelled Requests",
       path: "cancelled-requests",
     },
-    { title: "Notifications", path: "notifications" },
-    { title: "Transactions", path: "transactions" },
+    // { title: "Notifications", path: "notifications" },
+    { title: "Revenue Generated", path: "revenue-generated" },
   ];
 
   return (
