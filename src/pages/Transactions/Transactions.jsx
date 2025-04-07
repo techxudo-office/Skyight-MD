@@ -56,6 +56,13 @@ const Transactions = () => {
 
   const columns = [
     {
+      name: "TRANSACTION ID",
+      selector: (row) => row?.id,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+    },
+    {
       name: "COMPANY",
       selector: (row) => row?.company?.name,
       sortable: false,
@@ -206,6 +213,16 @@ const Transactions = () => {
                 <strong className="text-text">Status:</strong>{" "}
                 <Tag value={selectedTransaction?.status} />
               </p>
+              {selectedTransaction?.status === "rejected" && (
+                <p className="flex items-center gap-x-2">
+                  <strong className="text-text">Reasons:</strong>{" "}
+                  <span className="font-medium text-black">
+                    {selectedTransaction?.reasons
+                      ?.map((item) => item.reason)
+                      .join(", ")}
+                  </span>
+                </p>
+              )}
             </div>
             <div className="flex justify-end mt-6">
               <Button
