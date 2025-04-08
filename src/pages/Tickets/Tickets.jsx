@@ -45,6 +45,13 @@ const Tickets = () => {
 
   const columns = [
     {
+      name: "TICKET ID",
+      selector: (row) => row.id,
+      sortable: false,
+      minwidth: "150px",
+      center: true,
+    },
+    {
       name: "TITLE",
       selector: (row) => row.title,
       sortable: false,

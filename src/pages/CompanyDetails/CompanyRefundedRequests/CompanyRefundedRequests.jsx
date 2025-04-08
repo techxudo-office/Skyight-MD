@@ -23,15 +23,15 @@ const CompanyRefundedRequests = () => {
   );
 
   useEffect(() => {
-    dispatch(
-      getCompanyBookings({ token: userData?.token, id: companyId })
-    ).then(() => {
-      const refunded = companyBookings.filter(
-        (booking) => booking.booking_status === "Refunded"
-      );
-      setRefundedRequests(refunded);
-    });
+    dispatch(getCompanyBookings({ token: userData?.token, id: companyId }));
   }, []);
+
+  useEffect(() => {
+    const refunded = companyBookings.filter(
+      (booking) => booking.booking_status === "Refunded"
+    );
+    setRefundedRequests(refunded);
+  }, [companyBookings]);
 
   const columns = [
     {

@@ -46,7 +46,6 @@ const Table = ({
   return (
     <div className="container mx-auto overflow-x-auto ">
       <DataTable
-
         columns={modifiedColumns}
         data={paginatedData}
         pagination={pagination}
