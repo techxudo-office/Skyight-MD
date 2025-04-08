@@ -26,12 +26,11 @@ const CompanyDetails = () => {
     { title: "Profit", path: "profit" },
     { title: "Tickets", path: "tickets" },
     { title: "Transactions", path: "transactions" },
-    { title: "Refunded", path: "refunded-requests" },
+    { title: "Refunded", path: "refunded" },
     {
       title: "Cancelled",
-      path: "cancelled-requests",
+      path: "cancelled",
     },
-    { title: "Revenue Generated", path: "revenue-generated" },
   ];
 
   useEffect(() => {

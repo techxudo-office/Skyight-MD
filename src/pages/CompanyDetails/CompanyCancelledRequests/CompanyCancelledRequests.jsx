@@ -90,7 +90,7 @@ const CompanyCancelledRequests = () => {
             className="text-xl cursor-pointer"
             onClick={() =>
               navigate(
-                `/dashboard/company/details/cancelled-requests/booking-details/${companyId}`,
+                `/dashboard/company/details/cancelled/booking-details/${companyId}`,
                 {
                   state: row,
                 }

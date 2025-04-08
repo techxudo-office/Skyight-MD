@@ -90,7 +90,7 @@ const CompanyRefundedRequests = () => {
             className="text-xl cursor-pointer"
             onClick={() =>
               navigate(
-                `/dashboard/company/details/refunded-requests/booking-details/${companyId}`,
+                `/dashboard/company/details/refunded/booking-details/${companyId}`,
                 {
                   state: row,
                 }
