@@ -44,7 +44,7 @@ const Table = ({
   //   return <p className="p-5 text-center text-text">No Data Found</p>
   // }
   return (
-    <div className="overflow-x-auto container mx-auto ">
+    <div className="container mx-auto overflow-x-auto ">
       <DataTable
 
         columns={modifiedColumns}
@@ -55,13 +55,13 @@ const Table = ({
         onChangePage={handlePageChange}
         paginationServer={true}
         noRowsPerPage={noRowsPerPage}
-        noDataComponent={
-          tableData?.length > 0 ? (
-            <Loader />
-          ) : (
-            <div>There are no records to display</div>
-          )
-        }
+        // noDataComponent={
+        //   tableData?.length > 0 ? (
+        //     <Loader />
+        //   ) : (
+        //     <div>There are no records to display</div>
+        //   )
+        // }
         progressPending={progressPending}
         progressComponent={<Loader />}
         customStyles={{

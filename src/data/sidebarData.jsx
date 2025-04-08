@@ -1,6 +1,13 @@
 import { AiFillHome } from "react-icons/ai";
 import { FaSquarePollHorizontal } from "react-icons/fa6";
-import { MdAccountBalanceWallet, MdCancelScheduleSend, MdDoorbell, MdEditSquare, MdOutlineGroups, MdOutlineNoteAlt } from "react-icons/md";
+import {
+  MdAccountBalanceWallet,
+  MdCancelScheduleSend,
+  MdDoorbell,
+  MdEditSquare,
+  MdOutlineGroups,
+  MdOutlineNoteAlt,
+} from "react-icons/md";
 import { FaBusinessTime } from "react-icons/fa6";
 import { TbTransactionDollar } from "react-icons/tb";
 import { PiBankBold } from "react-icons/pi";
@@ -12,25 +19,20 @@ import { HiRectangleGroup } from "react-icons/hi2";
 import { IoMdBookmark } from "react-icons/io";
 import { RiRefund2Fill } from "react-icons/ri";
 export const sidebarLinks = [
-  // {
-  //   title: "Home",
-  //   path: "/",
-  //   icon: <AiFillHome />,
-  // },
   {
     title: "Companies",
     path: "companies",
-    icon: <HiRectangleGroup />
+    icon: <HiRectangleGroup />,
+  },
+  {
+    title: "Apply Commisions",
+    path: "apply-commisions",
+    icon: <BiSolidDollarCircle />,
   },
   {
     title: "Bookings",
     icon: <IoMdBookmark />,
     sublinks: [
-      {
-        title: "Apply Commisions",
-        path: "apply-commisions",
-        icon: <BiSolidDollarCircle />,
-      },
       {
         title: "Transactions",
         path: "transactions",
@@ -67,9 +69,8 @@ export const sidebarLinks = [
         path: "banks",
         icon: <PiBankBold />,
       },
-    ]
+    ],
   },
-
   {
     title: "Reasons",
     path: "reasons",
@@ -94,14 +95,13 @@ export const sidebarLinks = [
         path: "admins",
         icon: <FaUserShield />,
       },
-    ]
+    ],
   },
   {
     title: "Notifications",
     path: "notifications",
     icon: <MdDoorbell />,
   },
-
 ];
 
 // import {

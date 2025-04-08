@@ -15,9 +15,9 @@ const CompanyDetails = () => {
     { title: "Profit", path: "profit" },
     { title: "Tickets", path: "tickets" },
     { title: "Transactions", path: "transactions" },
-    { title: "Refunded Requests", path: "refunded-requests" },
+    { title: "Refunded", path: "refunded-requests" },
     {
-      title: "Cancelled Requests",
+      title: "Cancelled",
       path: "cancelled-requests",
     },
     // { title: "Notifications", path: "notifications" },
