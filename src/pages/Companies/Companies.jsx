@@ -10,7 +10,7 @@ import { CustomTooltip, Table, Tag } from "../../components/components";
 import { getCompanies } from "../../_core/features/companySlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { FaEye, FaUser } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 const Companies = () => {
   const navigate = useNavigate();
@@ -64,14 +64,6 @@ const Companies = () => {
               className="text-lg cursor-pointer text-greenColor"
               onClick={() => {
                 navigate(`/dashboard/company/details/${row.id}`);
-              }}
-            />
-          </CustomTooltip>
-          <CustomTooltip content={"Users"}>
-            <FaUser
-              className="text-base cursor-pointer text-primary"
-              onClick={() => {
-                navigate(`/dashboard/company/users/${row.id}`);
               }}
             />
           </CustomTooltip>

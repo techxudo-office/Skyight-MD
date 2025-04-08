@@ -11,6 +11,10 @@ const initialState = {
   companyTickets: [],
   isLoadingCompanyTickets: false,
   companyTicketsError: null,
+
+  companyRevenue: "",
+  isLoadingCompanyRevenue: false,
+  companyRevenueError: null,
 };
 
 const companySlice = createSlice({
@@ -40,6 +44,17 @@ const companySlice = createSlice({
       .addCase(getCompanyTickets.rejected, (state, action) => {
         state.isLoadingCompanyTickets = false;
         state.companyTicketsError = action.payload;
+      })
+      .addCase(getCompanyRevenue.pending, (state) => {
+        state.isLoadingCompanyRevenue = true;
+      })
+      .addCase(getCompanyRevenue.fulfilled, (state, action) => {
+        state.companyRevenue = action.payload;
+        state.isLoadingCompanyRevenue = false;
+      })
+      .addCase(getCompanyRevenue.rejected, (state, action) => {
+        state.isLoadingCompanyRevenue = false;
+        state.companyRevenueError = action.payload;
       })
       .addCase(createRole.pending, (state) => {
         state.isLoadingCreateRole = true;
@@ -98,6 +113,29 @@ export const getCompanyTickets = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch companies.";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getCompanyRevenue = createAsyncThunk(
+  "company/getCompanyRevenue",
+  async ({ token, id }, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/company/get-revenue/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch company revenue.";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }

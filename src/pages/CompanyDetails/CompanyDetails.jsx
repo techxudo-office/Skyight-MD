@@ -6,12 +6,23 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { FaEye } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  FaChartLine,
+  FaUserAlt,
+  FaTachometerAlt,
+  FaClipboardList,
+} from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getCompanyRevenue } from "../../_core/features/companySlice";
 
 const CompanyDetails = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { companyId } = useParams();
-
+  const { userData } = useSelector((state) => state.auth);
+  const { companyRevenue } = useSelector((state) => state.company);
   const companySections = [
+    { title: "Users", path: "users" },
     { title: "Profit", path: "profit" },
     { title: "Tickets", path: "tickets" },
     { title: "Transactions", path: "transactions" },
@@ -20,9 +31,12 @@ const CompanyDetails = () => {
       title: "Cancelled",
       path: "cancelled-requests",
     },
-    // { title: "Notifications", path: "notifications" },
     { title: "Revenue Generated", path: "revenue-generated" },
   ];
+
+  useEffect(() => {
+    dispatch(getCompanyRevenue({ token: userData?.token, id: companyId }));
+  }, []);
 
   return (
     <>
@@ -33,11 +47,30 @@ const CompanyDetails = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
+          <div className="grid grid-cols-1 gap-6 py-3 md:grid-cols-2 lg:grid-cols-2">
+            <div className="p-3 transition-all duration-300 bg-white border-t-4 shadow-md border-primary rounded-xl hover:shadow-lg">
+              <div className="flex items-center space-x-4">
+                <FaClipboardList className="text-3xl text-primary" />
+                <div>
+                  <h3 className="text-lg text-gray-700 mdt-semibold">
+                    Revenue Generated
+                  </h3>
+                  <p className="mt-2 text-2xl font-bold text-gray-900">
+                    {companyRevenue.toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {companySections.map((section) => (
               <div
                 key={section.path}
-                onClick={() => navigate(`/dashboard/company/details/${section.path}/${companyId}`)}
+                onClick={() =>
+                  navigate(
+                    `/dashboard/company/details/${section.path}/${companyId}`
+                  )
+                }
                 className="flex items-center justify-between p-5 bg-white shadow-md cursor-pointer rounded-xl hover:shadow-lg"
               >
                 <div className="flex items-center gap-3">
