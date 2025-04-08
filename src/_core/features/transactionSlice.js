@@ -43,8 +43,7 @@ const transactionSlice = createSlice({
       })
       .addCase(getCompanyTransactions.fulfilled, (state, action) => {
         state.isLoadingCompanyTransactions = false;
-        console.log(action?.payload,"Transaction")
-        state.companyTransactions = action?.payload?.credit_request;
+        state.companyTransactions = action?.payload[0];
       })
       .addCase(getCompanyTransactions.rejected, (state, action) => {
         state.isLoadingCompanyTransactions = false;
@@ -108,7 +107,7 @@ export const getCompanyTransactions = createAsyncThunk(
   async ({ token, id }, thunkAPI) => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/company/getCompanyCredits/${id}`,
+        `${BASE_URL}/api/company/getCompanyCredits/${id}?page=0&limit=10000`,
         {
           headers: {
             Authorization: token,

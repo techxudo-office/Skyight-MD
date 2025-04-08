@@ -55,13 +55,13 @@ const Table = ({
         onChangePage={handlePageChange}
         paginationServer={true}
         noRowsPerPage={noRowsPerPage}
-        // noDataComponent={
-        //   tableData?.length > 0 ? (
-        //     <Loader />
-        //   ) : (
-        //     <div>There are no records to display</div>
-        //   )
-        // }
+        noDataComponent={
+          tableData?.length > 0 ? (
+            <Loader />
+          ) : (
+            <div>There are no records to display</div>
+          )
+        }
         progressPending={progressPending}
         progressComponent={<Loader />}
         customStyles={{

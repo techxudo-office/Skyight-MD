@@ -119,7 +119,7 @@ const Transactions = ({ isCompanyDetail }) => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          {row.status === "pending" && !isCompanyDetail && (
+          {row.status === "pending" && (
             <CustomTooltip content={"Edit"}>
               <MdEditSquare
                 className="text-base cursor-pointer text-primary"
