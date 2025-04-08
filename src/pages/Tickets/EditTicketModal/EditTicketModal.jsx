@@ -11,14 +11,11 @@ import {
   Button,
   Spinner,
   ModalWrapper,
-  Select,
   Switch,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
-import { editUser } from "../../../_core/features/userSlice";
-import { ticketValidation, userValidation } from "../../../utils/validations";
+import { ticketValidation } from "../../../utils/validations";
 import { editTicket } from "../../../_core/features/ticketSlice";
 
 Modal.setAppElement("#root");
@@ -38,6 +35,13 @@ const inputFields = [
   },
 ];
 
+const statusOptions = [
+  { label: "Open", value: "open" },
+  { label: "In Progress", value: "in-progress" },
+  { label: "Closed", value: "closed" },
+  { label: "Rejected", value: "rejected" },
+];
+
 const initialState = {
   title: "",
   description: "",
@@ -47,7 +51,7 @@ const initialState = {
 const EditTicketModal = ({ isOpen, onClose, data }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
-  const [active, setActive] = useState(data?.status === "open" ? true : false);
+  const [status, setStatus] = useState(data?.status || "open");
   const [formData, setFormData] = useState(initialState);
   const { userData } = useSelector((state) => state.auth);
   const { isUpdatingTicket } = useSelector((state) => state.ticket);
@@ -60,10 +64,11 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
         description: data?.description || "",
         ticket_id: data?.id || "",
       });
+      setStatus(data?.status || "open");
     }
   }, [data]);
   useEffect(() => {
-    console.log(isUpdatingTicket,"STATE")
+    console.log(isUpdatingTicket, "STATE");
   }, [isUpdatingTicket]);
 
   const handleChange = (e) => {
@@ -81,7 +86,7 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
       title: formData.title,
       description: formData.description,
       ticket_id: Number(formData.ticket_id),
-      status: active ? "open" : "closed",
+      status,
     };
 
     dispatch(editTicket({ data: payload, token: userData?.token })).then(() => {
@@ -116,7 +121,20 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
             ))}
           </div>
           <div className="mt-4">
-            <Switch label={"Status:"} onChange={setActive} value={active} />
+            <label className="block mb-1 font-medium text-gray-700">
+              Status:
+            </label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+            >
+              {statusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
         </CardLayoutBody>
         <CardLayoutFooter>

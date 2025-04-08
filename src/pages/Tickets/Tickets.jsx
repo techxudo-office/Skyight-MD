@@ -75,7 +75,7 @@ const Tickets = () => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          {row?.status !== "closed" && (
+          {row?.status !== "closed" && row?.status !== "rejected" && (
             <CustomTooltip content={"Edit"}>
               <MdEditSquare
                 onClick={() => {
