@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Table, Tag } from "../../components/components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -10,23 +10,39 @@ import {
 import { FaEye } from "react-icons/fa";
 import { IoIosAirplane } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { getFlightBookings } from "../../_core/features/bookingSlice";
+import {
+  getCompanyBookings,
+  getFlightBookings,
+} from "../../_core/features/bookingSlice";
 import dayjs from "dayjs";
 
-const FlightBookings = () => {
+const FlightBookings = ({ isCompanyDetail }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { companyId } = useParams();
   const { adminData } = useSelector((state) => state.auth);
-  const { flightBookings, isLoadingFlightBookings } = useSelector(
-    (state) => state.booking
-  );
+  const {
+    flightBookings,
+    companyBookings,
+    isLoadingFlightBookings,
+    isLoadingCompanyBookings,
+  } = useSelector((state) => state.booking);
+
+  useEffect(() => {
+    if (isCompanyDetail) {
+      dispatch(getCompanyBookings({ token: adminData?.token, id: companyId }));
+    } else {
+      dispatch(getFlightBookings(adminData?.token));
+    }
+  }, [navigate]);
+
   const columns = [
     {
       name: "ROUTE",
       selector: (row) => (
-        <span className="flex w-52 items-center lg:justify-center  gap-2 text-sm text-text">
+        <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
           {row.origin}
-          <div className="flex justify-center items-center gap-1">
+          <div className="flex items-center justify-center gap-1">
             <span className="h-0.5 w-3 bg-primary"></span>
             <IoIosAirplane className="text-lg text-primary" />
             <span className="h-0.5 w-3 bg-primary"></span>
@@ -78,7 +94,8 @@ const FlightBookings = () => {
             navigate("/dashboard/booking-details", {
               state: row,
             });
-          }}>
+          }}
+        >
           <FaEye title="View" className="text-green-500 " />
         </span>
       ),
@@ -87,23 +104,24 @@ const FlightBookings = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getFlightBookings(adminData?.token));
-  }, []);
-
   return (
     <CardLayoutContainer removeBg={true}>
       <CardLayoutHeader
         removeBorder={true}
-        heading={"Flight Bookings"}
-        className="flex justify-between items-center"></CardLayoutHeader>
+        heading={isCompanyDetail ? "Company Bookings" : "Flight Bookings"}
+        className="flex items-center justify-between"
+      ></CardLayoutHeader>
       <CardLayoutBody removeBorder={true}>
         <Table
           pagination={true}
           columnsData={columns}
-          tableData={flightBookings || []}
-          progressPending={isLoadingFlightBookings}
-          paginationTotalRows={flightBookings.length}
+          tableData={isCompanyDetail ? companyBookings : flightBookings}
+          progressPending={
+            isCompanyDetail ? isLoadingCompanyBookings : isLoadingFlightBookings
+          }
+          paginationTotalRows={
+            isCompanyDetail ? companyBookings.length : flightBookings.length
+          }
           paginationComponentOptions={{ noRowsPerPage: "10" }}
         />
       </CardLayoutBody>

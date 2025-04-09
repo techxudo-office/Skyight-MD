@@ -342,42 +342,7 @@ export const getFlightBookings = createAsyncThunk(
         }
 
         if (responseData.length > 0) {
-          const extractedData = responseData.map(
-            ({
-              origin,
-              destination,
-              booking_reference_id,
-              total_fare,
-              currency,
-              booking_status,
-              created_at,
-              actions,
-              updated_at,
-              transaction_identifier,
-              Timelimit,
-              id,
-              rate,
-              persantage,
-              canceled_at,
-            }) => ({
-              origin,
-              destination,
-              booking_reference_id,
-              total_fare,
-              currency,
-              booking_status,
-              created_at,
-              actions,
-              updated_at,
-              transaction_identifier,
-              Timelimit,
-              id,
-              rate,
-              persantage,
-              canceled_at,
-            })
-          );
-          return extractedData;
+          return responseData;
         } else {
           throw new Error("No bookings found.");
         }

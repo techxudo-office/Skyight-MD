@@ -23,7 +23,7 @@ const CompanyDetails = () => {
   const { companyRevenue } = useSelector((state) => state.company);
   const companySections = [
     { title: "Users", path: "users" },
-    { title: "Profit", path: "profit" },
+    { title: "Bookings", path: "bookings" },
     { title: "Tickets", path: "tickets" },
     { title: "Transactions", path: "transactions" },
     { title: "Refunded", path: "refunded" },
