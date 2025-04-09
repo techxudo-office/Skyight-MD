@@ -1,10 +1,12 @@
-export const updateAccountValidation = (password, fullName) => {
+export const updateAccountValidation = (password = "", fullName = "") => {
   const errors = [];
   password = password.trim();
   fullName = fullName.trim();
+
   if (!fullName) errors.push("Full name is required");
   else if (fullName.length < 3)
     errors.push("Full name must be at least 3 characters long");
+
   if (!password) errors.push("Password is required");
   else {
     if (password.length < 8)
@@ -20,6 +22,7 @@ export const updateAccountValidation = (password, fullName) => {
         "Password must contain at least one special character (!@#$%^&*)"
       );
   }
+
   return errors.length ? errors.join("\n") : null;
 };
 

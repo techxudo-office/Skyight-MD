@@ -14,8 +14,6 @@ import { updateAccountValidation } from "../../utils/validations";
 const Settings = () => {
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
-
-  const [base64IMG, setBase64IMG] = useState();
   const [editingField, setEditingField] = useState(null);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
   const { adminData, isUpdatingAccount, isLoadingUserInfo } = useSelector(
@@ -57,15 +55,17 @@ const Settings = () => {
       return;
     }
 
-    const payload = {
-      full_name: profileData.full_name,
-      password: profileData.password,
-      is_active: toggle,
-    };
+    const formData = new FormData();
+    formData.append("full_name", profileData.full_name);
+    formData.append("password", profileData.password);
+    formData.append("is_active", toggle);
+    if (profileImage) {
+      formData.append("image", profileImage);
+    }
 
     dispatch(
       updateAccount({
-        data: payload,
+        data: formData,
         token: adminData.token,
         id: adminData.admin.id,
       })
@@ -77,17 +77,10 @@ const Settings = () => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-
-      reader.onload = () => {
-        console.log("called: ", reader);
-        setBase64IMG(reader.result);
-      };
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(file);
     }
   };
-  console.log("base64IMG", base64IMG);
   const profileFields = [
     {
       label: "Full Name",
@@ -147,7 +140,7 @@ const Settings = () => {
         >
           <div className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group">
             <img
-              src={base64IMG || profileImage}
+              src={profileImage}
               alt="profile-img"
               className="object-cover w-full h-full rounded-full"
             />
