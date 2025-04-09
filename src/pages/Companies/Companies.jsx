@@ -15,7 +15,7 @@ import { FaEye } from "react-icons/fa";
 const Companies = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { companies, isLoadingCompanies } = useSelector(
     (state) => state.company
   );
@@ -76,8 +76,8 @@ const Companies = () => {
   ];
 
   useEffect(() => {
-    dispatch(getCompanies(userData?.token));
-  }, [dispatch, userData?.token]);
+    dispatch(getCompanies(adminData?.token));
+  }, [dispatch, adminData?.token]);
 
   return (
     <>

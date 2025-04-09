@@ -60,7 +60,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
   const [active, setActive] = useState(data?.is_active);
   const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isEditingAdmin } = useSelector((state) => state.admin);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
@@ -79,7 +79,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
   }, [data, roles]);
 
   useEffect(() => {
-    dispatch(getUserRoles(userData?.token));
+    dispatch(getUserRoles(adminData?.token));
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -110,7 +110,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
     };
 
     dispatch(
-      editAdmin({ data: payload, token: userData?.token, id: data?.id })
+      editAdmin({ data: payload, token: adminData?.token, id: data?.id })
     ).then(() => {
       onClose();
     });

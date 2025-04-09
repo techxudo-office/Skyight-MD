@@ -29,11 +29,11 @@ const Roles = () => {
   const { roles, isLoadingRoles, isDeletingRole } = useSelector(
     (state) => state.role
   );
-  const userData = useSelector((state) => state.auth.userData);
+  const adminData = useSelector((state) => state.auth.adminData);
 
   useEffect(() => {
-    dispatch(getRoles(userData?.token));
-  }, [dispatch, userData?.token]);
+    dispatch(getRoles(adminData?.token));
+  }, [dispatch, adminData?.token]);
 
   const roleColumns = [
     {
@@ -95,7 +95,7 @@ const Roles = () => {
   //     return;
   //   }
 
-  //   dispatch(deleteRole({ id: deleteId, token: userData?.token })).then(() => {
+  //   dispatch(deleteRole({ id: deleteId, token: adminData?.token })).then(() => {
   //     setModalStatus(false);
   //     setDeleteId(null);
   //   });

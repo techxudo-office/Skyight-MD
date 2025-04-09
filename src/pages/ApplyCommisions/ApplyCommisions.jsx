@@ -40,13 +40,13 @@
 //   ];
 
 //   const dispatch = useDispatch();
-//   const { userData } = useSelector((state) => state.auth);
+//   const { adminData } = useSelector((state) => state.auth);
 //   const { settingData, isSettingLoading, errorSetting } = useSelector(
 //     (state) => state.setting
 //   );
 
 //   useEffect(() => {
-//     dispatch(getSetting(userData?.token));
+//     dispatch(getSetting(adminData?.token));
 //   }, [dispatch]);
 
 //   return (
@@ -92,15 +92,15 @@ import EditCommisionModal from "./EditCommisionModal/EditCommisionModal";
 const ApplyCommisions = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { commisions, isLoadingCommision } = useSelector(
     (state) => state.commision
   );
 
   useEffect(() => {
-    dispatch(getCommision(userData?.token));
-  }, [userData?.token]);
+    dispatch(getCommision(adminData?.token));
+  }, [adminData?.token]);
 
   const columns = [
     {

@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 const FlightBookings = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { flightBookings, isLoadingFlightBookings } = useSelector(
     (state) => state.booking
   );
@@ -88,7 +88,7 @@ const FlightBookings = () => {
   ];
 
   useEffect(() => {
-    dispatch(getFlightBookings(userData?.token));
+    dispatch(getFlightBookings(adminData?.token));
   }, []);
 
   return (

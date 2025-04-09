@@ -17,13 +17,13 @@ const CompanyCancelledRequests = () => {
   const navigate = useNavigate();
   const { companyId } = useParams();
   const [cancelledRequests, setCancelledRequests] = useState([]);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { companyBookings, isLoadingCompanyBookings } = useSelector(
     (state) => state.booking
   );
 
   useEffect(() => {
-    dispatch(getCompanyBookings({ token: userData?.token, id: companyId }));
+    dispatch(getCompanyBookings({ token: adminData?.token, id: companyId }));
   }, []);
 
   useEffect(() => {

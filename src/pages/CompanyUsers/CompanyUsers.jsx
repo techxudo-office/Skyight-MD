@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 const Companies = () => {
   const { companyId } = useParams();
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { companyUsers, isLoadingCompanyUsers } = useSelector(
     (state) => state.user
   );
@@ -79,9 +79,9 @@ const Companies = () => {
 
   useEffect(() => {
     if (companyId) {
-      dispatch(getCompanyUsers({ token: userData?.token, id: companyId }));
+      dispatch(getCompanyUsers({ token: adminData?.token, id: companyId }));
     }
-  }, [userData?.token, companyId]);
+  }, [adminData?.token, companyId]);
 
   return (
     <>

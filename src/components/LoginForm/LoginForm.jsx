@@ -16,13 +16,13 @@ import { login } from "../../_core/features/authSlice";
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userData, isLoading } = useSelector((state) => state.auth);
+  const { adminData, isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (userData) {
+    if (adminData) {
       navigate("/dashboard");
     }
-  }, [userData, navigate]);
+  }, [adminData, navigate]);
 
   const loginHandler = async (payload, resetForm) => {
     dispatch(login(payload)).then(() => {

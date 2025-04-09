@@ -15,7 +15,7 @@ const Sidebar = ({ status, updateStatus }) => {
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileView, setMobileView] = useState(false);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!status) {
@@ -144,7 +144,7 @@ const Sidebar = ({ status, updateStatus }) => {
             </div>
             {status && (
               <h3 className="font-semibold text-text text-center">
-                {`${userData?.admin?.full_name}`}
+                {`${adminData?.admin?.full_name}`}
               </h3>
             )}
           </CardLayoutHeader>

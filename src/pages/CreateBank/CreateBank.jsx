@@ -23,7 +23,7 @@ const CreateBank = () => {
   const [modalstatus, setModalstatus] = useState(false);
   const [bankName, setBankName] = useState("");
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isCreatingbank } = useSelector((state) => state.bank);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +40,7 @@ const CreateBank = () => {
       bank: bankName,
     };
     setModalstatus(false);
-    dispatch(createBank({ token: userData?.token, data: payload })).then(() => {
+    dispatch(createBank({ token: adminData?.token, data: payload })).then(() => {
       navigate("/dashboard/banks");
     });
   };

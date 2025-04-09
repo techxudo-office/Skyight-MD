@@ -25,7 +25,7 @@ const Tickets = () => {
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
   const [ticketData, setTicketData] = useState(null);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { tickets, isLoadingTickets } = useSelector((state) => state.ticket);
 
@@ -40,7 +40,7 @@ const Tickets = () => {
   };
 
   useEffect(() => {
-    dispatch(getTickets(userData?.token));
+    dispatch(getTickets(adminData?.token));
   }, []);
 
   const columns = [

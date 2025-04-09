@@ -32,7 +32,7 @@ const CancelRequests = () => {
   const dispatch = useDispatch();
   const [modalStatus, setModalStatus] = useState(false)
   const [cancelId, setCancelId] = useState()
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { flightBookings, isLoadingFlightBookings, isCancelRequestLoading } =
     useSelector((state) => state.booking);
   const columns = [
@@ -112,11 +112,11 @@ const CancelRequests = () => {
   ];
 
   const handleCancelRequest = (id) => {
-    dispatch(cancelRequestFlight({ id, token: userData?.token }));
+    dispatch(cancelRequestFlight({ id, token: adminData?.token }));
   };
 
   useEffect(() => {
-    dispatch(getFlightBookings(userData?.token));
+    dispatch(getFlightBookings(adminData?.token));
   }, []);
   const canceledBooking = flightBookings.filter(
     (item) => item.booking_status === "requested-cancellation"

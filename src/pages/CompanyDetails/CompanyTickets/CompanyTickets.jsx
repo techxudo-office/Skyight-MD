@@ -21,7 +21,7 @@ const CompanyTickets = () => {
   const { companyId } = useParams();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { companyTickets, isLoadingCompanyTickets } = useSelector(
     (state) => state.company
   );
@@ -85,7 +85,7 @@ const CompanyTickets = () => {
   ];
 
   useEffect(() => {
-    dispatch(getCompanyTickets({ token: userData?.token, id: companyId }));
+    dispatch(getCompanyTickets({ token: adminData?.token, id: companyId }));
   }, []);
 
   return (

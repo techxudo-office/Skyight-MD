@@ -20,7 +20,7 @@ Modal.setAppElement("#root");
 
 const EditCommisionModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { commisions, isEditingcommision } = useSelector(
     (state) => state.commision
   );
@@ -62,7 +62,7 @@ const EditCommisionModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(editcommision({ data: formData, token: userData?.token })).then(
+    dispatch(editcommision({ data: formData, token: adminData?.token })).then(
       () => { 
         onClose();
       }

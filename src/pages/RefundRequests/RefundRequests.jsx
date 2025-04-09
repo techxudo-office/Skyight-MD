@@ -26,12 +26,12 @@ const RefundRequests = () => {
   const dispatch = useDispatch();
   const [modalStatus, setModalStatus] = useState(false);
   const [refundId, setRefundId] = useState();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { refundBookings, isGetRefundsLoading, isRefundRequestLoading } =
     useSelector((state) => state.booking);
 
   useEffect(() => {
-    dispatch(getRefundFlight(userData?.token));
+    dispatch(getRefundFlight(adminData?.token));
   }, []);
 
   const columns = [
@@ -115,7 +115,7 @@ const RefundRequests = () => {
   ];
 
   const handleAcceptRefund = (id) => {
-    dispatch(refundRequestFlight({ id, token: userData?.token }));
+    dispatch(refundRequestFlight({ id, token: adminData?.token }));
   };
 
   console.log("get refund booking", refundBookings);

@@ -29,7 +29,7 @@ import { useParams } from "react-router-dom";
 const Transactions = ({ isCompanyDetail }) => {
   const dispatch = useDispatch();
   const { companyId } = useParams();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [transactionId, setTransactionId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -44,12 +44,12 @@ const Transactions = ({ isCompanyDetail }) => {
   useEffect(() => {
     if (isCompanyDetail) {
       dispatch(
-        getCompanyTransactions({ token: userData?.token, id: companyId })
+        getCompanyTransactions({ token: adminData?.token, id: companyId })
       );
     } else {
-      dispatch(getTransactions(userData?.token));
+      dispatch(getTransactions(adminData?.token));
     }
-  }, [dispatch, userData?.token, companyId]);
+  }, [dispatch, adminData?.token, companyId]);
 
   const handleView = (row) => {
     setSelectedTransaction(row);

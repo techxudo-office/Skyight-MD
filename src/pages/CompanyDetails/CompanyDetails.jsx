@@ -19,7 +19,7 @@ const CompanyDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { companyId } = useParams();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { companyRevenue } = useSelector((state) => state.company);
   const companySections = [
     { title: "Users", path: "users" },
@@ -34,7 +34,7 @@ const CompanyDetails = () => {
   ];
 
   useEffect(() => {
-    dispatch(getCompanyRevenue({ token: userData?.token, id: companyId }));
+    dispatch(getCompanyRevenue({ token: adminData?.token, id: companyId }));
   }, []);
 
   return (

@@ -30,7 +30,7 @@ const Users = ({ isCompanyUser }) => {
   const [modalStatus, setModalStatus] = useState(false);
   const [editUserData, setEditUserData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const {
     users,
     isLoadingUsers,
@@ -117,7 +117,7 @@ const Users = ({ isCompanyUser }) => {
       return;
     }
 
-    dispatch(deleteUser({ id: deleteId, token: userData?.token })).then(() => {
+    dispatch(deleteUser({ id: deleteId, token: adminData?.token })).then(() => {
       setModalStatus(false);
       setDeleteId(null);
     });
@@ -130,9 +130,9 @@ const Users = ({ isCompanyUser }) => {
 
   useEffect(() => {
     if (isCompanyUser) {
-      dispatch(getCompanyUsers({ token: userData?.token, id: companyId }));
+      dispatch(getCompanyUsers({ token: adminData?.token, id: companyId }));
     } else {
-      dispatch(getUsers(userData?.token));
+      dispatch(getUsers(adminData?.token));
     }
   }, []);
 

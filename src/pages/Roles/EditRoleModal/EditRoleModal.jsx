@@ -35,7 +35,7 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
   const dispatch = useDispatch();
 
   const [rolesData, setRolesData] = useState(roleData || {});
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isEditingRole } = useSelector((state) => state.role);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
     };
 
     dispatch(
-      editRole({ data: payload, token: userData?.token, id: rolesData?.id })
+      editRole({ data: payload, token: adminData?.token, id: rolesData?.id })
     ).then(() => {
       onClose();
     });

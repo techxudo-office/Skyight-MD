@@ -44,7 +44,7 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(data?.status || "open");
   const [formData, setFormData] = useState(initialState);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isUpdatingTicket } = useSelector((state) => state.ticket);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
       admin_response: formData?.admin_response,
     };
 
-    dispatch(editTicket({ data: payload, token: userData?.token })).then(() => {
+    dispatch(editTicket({ data: payload, token: adminData?.token })).then(() => {
       onClose();
     });
   };

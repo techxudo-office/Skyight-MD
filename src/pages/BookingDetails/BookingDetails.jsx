@@ -29,7 +29,7 @@ const TicketDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isLoadingBookingDetails, bookingDetails } = useSelector((state) => state.booking);
   const printRef = useRef();
 
@@ -47,12 +47,12 @@ const TicketDetails = () => {
   useEffect(() => {
     if (location.state) {
       const refId = location.state.id;
-      dispatch(getBookingDetails({ id: refId, token: userData?.token }))
+      dispatch(getBookingDetails({ id: refId, token: adminData?.token }))
         .then((resp) => {
           console.log(resp, "bookingDetails");
         });
     }
-  }, [location.state, userData?.token]);
+  }, [location.state, adminData?.token]);
 
   const now = dayjs.utc();
   const timeLimit = dayjs(bookingDetails?.Timelimit);

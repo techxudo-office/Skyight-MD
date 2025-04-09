@@ -25,7 +25,7 @@ import dayjs from "dayjs";
 
 const Reasons = () => {
 
-  const { userData } = useSelector((state) => state.auth)
+  const { adminData } = useSelector((state) => state.auth)
   const { reasons, isLoadingReasons, isLoadingDeleteReason, isEditingReason } = useSelector((state) => state.reasons)
   const navigate = useNavigate();
   const dispatch = useDispatch()
@@ -82,7 +82,7 @@ const Reasons = () => {
             text: `Are you really Want to delete this reason of id ${row.id}`,
             onAbort: () => setModalObject((prev) => ({ ...prev, status: false })),
             onConfirm: () => {
-              dispatch(deleteReason({ token: userData.token, id: row.id }))
+              dispatch(deleteReason({ token: adminData.token, id: row.id }))
               setModalObject((prev) => ({ ...prev, status: false }))
             }
 
@@ -118,7 +118,7 @@ const Reasons = () => {
 
   useEffect(() => {
     // gettingReasons();
-    dispatch(getReasons(userData?.token))
+    dispatch(getReasons(adminData?.token))
   }, []);
 
   const handleEdit = () => {
@@ -126,7 +126,7 @@ const Reasons = () => {
       toast.error("Reason must be at least 4 characters.");
       return;
     }
-    dispatch(editReason({ token: userData.token, data: updateReason, id: editId })).then(() => {
+    dispatch(editReason({ token: adminData.token, data: updateReason, id: editId })).then(() => {
       setModalWrapper((prev) => ({ ...prev, isOpen: false }))
     })
   }

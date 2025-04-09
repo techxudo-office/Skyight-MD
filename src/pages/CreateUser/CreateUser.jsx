@@ -56,7 +56,7 @@ const CreateUser = () => {
   });
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
   const { isCreatingUser } = useSelector((state) => state.user);
   const { companies, isLoadingCompanies } = useSelector(
@@ -64,8 +64,8 @@ const CreateUser = () => {
   );
 
   useEffect(() => {
-    dispatch(getUserRoles(userData?.token));
-    dispatch(getCompanies(userData?.token));
+    dispatch(getUserRoles(adminData?.token));
+    dispatch(getCompanies(adminData?.token));
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -111,7 +111,7 @@ const CreateUser = () => {
       company_id: Number(formData.company_id),
     };
 
-    dispatch(createUser({ data: payload, token: userData?.token })).then(() => {
+    dispatch(createUser({ data: payload, token: adminData?.token })).then(() => {
       onClose();
     });
   };

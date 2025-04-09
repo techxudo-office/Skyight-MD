@@ -24,13 +24,13 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isEditingTransaction } = useSelector((state) => state.transaction);
   const { reasons, isLoadingReasons } = useSelector((state) => state.reasons);
 
   useEffect(() => {
-    dispatch(getReasons(userData?.token));
-  }, [userData?.token]);
+    dispatch(getReasons(adminData?.token));
+  }, [adminData?.token]);
 
   const handleSubmit = () => {
     if (!toggle && !selectedValues.length) {
@@ -44,7 +44,7 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
       reasonIds: !toggle ? selectedValues.map((item) => item.value) : null,
     };
 
-    dispatch(editTransaction({ data: payload, token: userData?.token })).then(
+    dispatch(editTransaction({ data: payload, token: adminData?.token })).then(
       () => {
         onClose();
       }

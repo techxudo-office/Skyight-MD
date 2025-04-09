@@ -15,14 +15,14 @@ const AppRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const auth = localStorage.getItem("auth_token");
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!auth) {
       toast.error("Logout Successfully");
       navigate("/", { replace: true });
     }
-  }, [location.pathname, userData?.token, navigate]);
+  }, [location.pathname, adminData?.token, navigate]);
 
   return (
     <Routes>
@@ -36,7 +36,7 @@ const AppRoutes = () => {
                   index={child.index}
                   path={child.path}
                   element={
-                    child.protected && !userData?.token ? (
+                    child.protected && !adminData?.token ? (
                       <Navigate to="/" replace />
                     ) : (
                       child.element
@@ -52,7 +52,7 @@ const AppRoutes = () => {
             key={index}
             path={route.path}
             element={
-              route.protected && !userData?.token ? (
+              route.protected && !adminData?.token ? (
                 <Navigate to="/" replace />
               ) : (
                 route.element

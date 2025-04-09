@@ -16,7 +16,7 @@ const CreateReason = () => {
   const dispatch = useDispatch()
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isCreatingReason, createReasonError } = useSelector((state) => state.reasons)
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ const CreateReason = () => {
       toast.error("Reason must be at least 4 characters.");
       return;
     } else {
-      dispatch(createReason({ token: userData?.token, data: { reason: reason } })).then(() => {
+      dispatch(createReason({ token: adminData?.token, data: { reason: reason } })).then(() => {
         if (!createReasonError) {
           navigate("/dashboard/reasons")
         }

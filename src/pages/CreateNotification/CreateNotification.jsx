@@ -39,14 +39,14 @@ const CreateNotification = () => {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState(initialState);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { companies, isLoadingCompanies } = useSelector(
     (state) => state.company
   );
   const { isCreatingNotification } = useSelector((state) => state.notification);
 
   useEffect(() => {
-    dispatch(getCompanies(userData?.token));
+    dispatch(getCompanies(adminData?.token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const CreateNotification = () => {
       company_id: Number(formData?.company_id),
     };
 
-    dispatch(createNotification({ data: payload, token: userData?.token }))
+    dispatch(createNotification({ data: payload, token: adminData?.token }))
       .unwrap()
       .then(() => {
         setFormData(initialState);

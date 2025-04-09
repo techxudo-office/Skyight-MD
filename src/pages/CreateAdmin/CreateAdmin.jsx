@@ -49,12 +49,12 @@ const CreateAdmin = () => {
   const [active, setActive] = useState(true);
   const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { isCreatingAdmin } = useSelector((state) => state.admin);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
   useEffect(() => {
-    dispatch(getRoles(userData?.token));
+    dispatch(getRoles(adminData?.token));
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -90,7 +90,7 @@ const CreateAdmin = () => {
     };
     
 
-    dispatch(createAdmin({ data: payload, token: userData?.token }))
+    dispatch(createAdmin({ data: payload, token: adminData?.token }))
       .unwrap()
       .then(() => {
         setFormData(initialState);

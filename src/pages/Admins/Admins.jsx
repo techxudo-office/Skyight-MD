@@ -24,7 +24,7 @@ const Admin = () => {
   const [modalStatus, setModalStatus] = useState(false);
   const [editAdminData, setEditAdminData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { admins, isLoadingAdmins, isDeletingAdmin } = useSelector(
     (state) => state.admin
   );
@@ -107,7 +107,7 @@ const Admin = () => {
       return;
     }
 
-    dispatch(deleteAdmin({ id: deleteId, token: userData?.token })).then(() => {
+    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(() => {
       setModalStatus(false);
       setDeleteId(null);
     });
@@ -119,7 +119,7 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    dispatch(getAdmins(userData?.token));
+    dispatch(getAdmins(adminData?.token));
   }, []);
 
   return (

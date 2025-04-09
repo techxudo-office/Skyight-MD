@@ -32,7 +32,7 @@ const Banks = () => {
     navigate("/dashboard/create-bank");
   };
 
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { banks, isLoadingBanks, isLoadingDeleteBank, isEditingBank } =
     useSelector((state) => state.bank);
 
@@ -51,7 +51,7 @@ const Banks = () => {
   });
 
   useEffect(() => {
-    dispatch(getBanks(userData?.token));
+    dispatch(getBanks(adminData?.token));
   }, []);
 
   const columns = [
@@ -91,7 +91,7 @@ const Banks = () => {
                   setModalObject((prev) => ({ ...prev, status: false })),
                 onConfirm: () => {
                   dispatch(
-                    deleteBank({ token: userData.token, id: Number(row.id) })
+                    deleteBank({ token: adminData.token, id: Number(row.id) })
                   ).then(() =>
                     setModalObject((prev) => ({ ...prev, status: false }))
                   );
@@ -135,7 +135,7 @@ const Banks = () => {
       return;
     } else {
       dispatch(
-        editBank({ token: userData.token, data: updateBank, id: editId })
+        editBank({ token: adminData.token, data: updateBank, id: editId })
       ).then(() => {
         setModalWrapper((prev) => ({ ...prev, isOpen: false }));
       });

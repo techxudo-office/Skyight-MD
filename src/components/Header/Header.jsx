@@ -26,7 +26,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const [dropdownStatus, setDropDownStatus] = useState(false);
   const [CreditsDropdownOpen, setCreditsDropdownOpen] = useState(false);
   const [isNotiHovered, setIsNotiHovered] = useState(false);
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { credits, isLoadingCredits } = useSelector((state) => state.booking);
 
   const dropdownOptions = [
@@ -82,12 +82,12 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   ];
 
   const refreshCredits = () => {
-    dispatch(getCredits(userData?.token));
+    dispatch(getCredits(adminData?.token));
   };
 
   useEffect(() => {
     refreshCredits();
-  }, [dispatch, userData?.token]);
+  }, [dispatch, adminData?.token]);
 
   const dropdownHandler = () => {
     setDropDownStatus(!dropdownStatus);

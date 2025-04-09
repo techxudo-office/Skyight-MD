@@ -4,7 +4,7 @@ import { BASE_URL } from "../../utils/ApiBaseUrl";
 import toast from "react-hot-toast";
 
 const initialState = {
-  userData: null,
+  adminData: null,
   isLoading: false,
   loginError: null,
 
@@ -36,7 +36,7 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.userData = action.payload;
+        state.adminData = action.payload;
         if (action.payload?.token) {
           localStorage.setItem("auth_token", action.payload.token);
         }
@@ -46,7 +46,7 @@ const authSlice = createSlice({
         state.loginError = action.payload;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.userData = null;
+        state.adminData = null;
         localStorage.removeItem("auth_token");
       })
       .addCase(forgotPassword.pending, (state) => {
@@ -100,8 +100,8 @@ const authSlice = createSlice({
       .addCase(updateAccount.fulfilled, (state, action) => {
         console.log(action.payload, "UserInfo");
         state.isUpdatingAccount = false;
-        state.userData = {
-          ...state.userData,
+        state.adminData = {
+          ...state.adminData,
           admin: action.payload,
         };
       })

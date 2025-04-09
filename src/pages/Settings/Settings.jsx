@@ -19,7 +19,7 @@ const Settings = () => {
   const [toggle, setToggle] = useState(false);
   const [editingField, setEditingField] = useState(null);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
-  const { userData, isUpdatingAccount, isLoadingUserInfo } = useSelector(
+  const { adminData, isUpdatingAccount, isLoadingUserInfo } = useSelector(
     (state) => state.auth
   );
   const [profileImage, setProfileImage] = useState(
@@ -33,20 +33,20 @@ const Settings = () => {
   });
 
   useEffect(() => {
-    if (userData) {
-      console.log(userData, "UserData");
+    if (adminData) {
+      console.log(adminData, "UserData");
       setProfileData({
-        full_name: userData.admin.full_name || "",
-        email: userData.admin.email || "",
-        mobile_number: userData.admin.mobile_number || "",
-        is_active: userData.admin.is_active || "",
-        // password: userData.admin.password || "",
+        full_name: adminData.admin.full_name || "",
+        email: adminData.admin.email || "",
+        mobile_number: adminData.admin.mobile_number || "",
+        is_active: adminData.admin.is_active || "",
+        // password: adminData.admin.password || "",
       });
     }
-  }, [userData, roles]);
+  }, [adminData, roles]);
 
   // useEffect(() => {
-  //   // dispatch(getUserInfo(userData?.token));
+  //   // dispatch(getUserInfo(adminData?.token));
   // }, []);
 
   const handleChange = (e, field) => {
@@ -72,8 +72,8 @@ const Settings = () => {
     dispatch(
       updateAccount({
         data: payload,
-        token: userData.token,
-        id: userData.admin.id,
+        token: adminData.token,
+        id: adminData.admin.id,
       })
     );
 
