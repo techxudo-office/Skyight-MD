@@ -46,11 +46,13 @@ const CreateNotification = () => {
   const { isCreatingNotification } = useSelector((state) => state.notification);
 
   useEffect(() => {
-    dispatch(getCompanies(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getCompanies(adminData?.token));
+    }
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(isCreatingNotification,"Loader")
+    console.log(isCreatingNotification, "Loader");
   }, [isCreatingNotification]);
 
   const handleRoleSelect = (role) => {
@@ -87,7 +89,7 @@ const CreateNotification = () => {
       .unwrap()
       .then(() => {
         setFormData(initialState);
-        setSelectedCompany(null)
+        setSelectedCompany(null);
       });
   };
 

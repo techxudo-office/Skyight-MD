@@ -29,7 +29,9 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
   const { reasons, isLoadingReasons } = useSelector((state) => state.reasons);
 
   useEffect(() => {
-    dispatch(getReasons(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getReasons(adminData?.token));
+    }
   }, [adminData?.token]);
 
   const handleSubmit = () => {

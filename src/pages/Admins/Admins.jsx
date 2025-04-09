@@ -107,10 +107,12 @@ const Admin = () => {
       return;
     }
 
-    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(() => {
-      setModalStatus(false);
-      setDeleteId(null);
-    });
+    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(
+      () => {
+        setModalStatus(false);
+        setDeleteId(null);
+      }
+    );
   };
 
   const abortDeleteHandler = () => {
@@ -119,7 +121,9 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    dispatch(getAdmins(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getAdmins(adminData?.token));
+    }
   }, []);
 
   return (

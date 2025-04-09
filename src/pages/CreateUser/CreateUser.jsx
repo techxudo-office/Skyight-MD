@@ -64,8 +64,10 @@ const CreateUser = () => {
   );
 
   useEffect(() => {
-    dispatch(getUserRoles(adminData?.token));
-    dispatch(getCompanies(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getUserRoles(adminData?.token));
+      dispatch(getCompanies(adminData?.token));
+    }
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -111,9 +113,11 @@ const CreateUser = () => {
       company_id: Number(formData.company_id),
     };
 
-    dispatch(createUser({ data: payload, token: adminData?.token })).then(() => {
-      onClose();
-    });
+    dispatch(createUser({ data: payload, token: adminData?.token })).then(
+      () => {
+        onClose();
+      }
+    );
   };
 
   return (

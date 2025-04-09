@@ -29,12 +29,14 @@ const FlightBookings = ({ isCompanyDetail }) => {
   } = useSelector((state) => state.booking);
 
   useEffect(() => {
-    if (isCompanyDetail) {
-      dispatch(getCompanyBookings({ token: adminData?.token, id: companyId }));
-    } else {
-      dispatch(getFlightBookings(adminData?.token));
-    }
-  }, [navigate]);
+    if (!adminData?.token) return;
+
+    const action = isCompanyDetail
+      ? getCompanyBookings({ token: adminData.token, id: companyId })
+      : getFlightBookings(adminData.token);
+
+    dispatch(action);
+  }, [adminData?.token, isCompanyDetail, companyId, dispatch]);
 
   const columns = [
     {

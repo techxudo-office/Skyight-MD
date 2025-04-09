@@ -85,7 +85,9 @@ const CompanyTickets = () => {
   ];
 
   useEffect(() => {
-    dispatch(getCompanyTickets({ token: adminData?.token, id: companyId }));
+    if (adminData?.token) {
+      dispatch(getCompanyTickets({ token: adminData?.token, id: companyId }));
+    }
   }, []);
 
   return (

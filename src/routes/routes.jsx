@@ -19,10 +19,10 @@ const AppRoutes = () => {
 
   useEffect(() => {
     if (!auth) {
-      toast.error("Logout Successfully");
+      toast.success("Logout Successfully");
       navigate("/", { replace: true });
     }
-  }, [location.pathname, adminData?.token, navigate]);
+  }, [auth]);
 
   return (
     <Routes>

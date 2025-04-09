@@ -30,8 +30,8 @@ import { MdCancelScheduleSend } from "react-icons/md";
 const CancelRequests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [modalStatus, setModalStatus] = useState(false)
-  const [cancelId, setCancelId] = useState()
+  const [modalStatus, setModalStatus] = useState(false);
+  const [cancelId, setCancelId] = useState();
   const { adminData } = useSelector((state) => state.auth);
   const { flightBookings, isLoadingFlightBookings, isCancelRequestLoading } =
     useSelector((state) => state.booking);
@@ -87,10 +87,10 @@ const CancelRequests = () => {
     {
       name: "",
       selector: (row) => (
-        <div className="flex items-center gap-x-6 text-xl">
+        <div className="flex items-center text-xl gap-x-6">
           <CustomTooltip content={"Details"}>
             <FaEye
-              className="t cursor-pointer text-greenColor"
+              className="cursor-pointer t text-greenColor"
               onClick={() =>
                 navigate("/dashboard/booking-details", {
                   state: row,
@@ -99,10 +99,13 @@ const CancelRequests = () => {
             />
           </CustomTooltip>
           <CustomTooltip content={"Accept"}>
-            <MdCancelScheduleSend className="text-redColor cursor-pointer" onClick={() => {
-              setModalStatus(true)
-              setCancelId(row.id)
-            }} />
+            <MdCancelScheduleSend
+              className="cursor-pointer text-redColor"
+              onClick={() => {
+                setModalStatus(true);
+                setCancelId(row.id);
+              }}
+            />
           </CustomTooltip>
         </div>
       ),
@@ -116,7 +119,9 @@ const CancelRequests = () => {
   };
 
   useEffect(() => {
-    dispatch(getFlightBookings(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getFlightBookings(adminData?.token));
+    }
   }, []);
   const canceledBooking = flightBookings.filter(
     (item) => item.booking_status === "requested-cancellation"
@@ -127,12 +132,11 @@ const CancelRequests = () => {
         text={"Are you want to accept this cancellation request?"}
         status={modalStatus}
         onConfirm={() => {
-          handleCancelRequest(cancelId)
-          setModalStatus(false)
+          handleCancelRequest(cancelId);
+          setModalStatus(false);
         }}
         loading={isCancelRequestLoading}
-        onAbort={()=>setModalStatus(false)}
-
+        onAbort={() => setModalStatus(false)}
       />
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader

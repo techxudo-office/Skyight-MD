@@ -37,7 +37,9 @@ const CompanyDetails = () => {
   ];
 
   useEffect(() => {
-    dispatch(getCompanyRevenue({ token: adminData?.token, id: companyId }));
+    if (adminData?.token) {
+      dispatch(getCompanyRevenue({ token: adminData?.token, id: companyId }));
+    }
   }, []);
 
   return (

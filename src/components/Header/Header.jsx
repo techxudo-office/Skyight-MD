@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation()
+  const location = useLocation();
   const [dropdownStatus, setDropDownStatus] = useState(false);
   const [CreditsDropdownOpen, setCreditsDropdownOpen] = useState(false);
   const [isNotiHovered, setIsNotiHovered] = useState(false);
@@ -86,7 +86,9 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   };
 
   useEffect(() => {
-    refreshCredits();
+    if (adminData?.token) {
+      refreshCredits();
+    }
   }, [dispatch, adminData?.token]);
 
   const dropdownHandler = () => {
@@ -109,11 +111,9 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   };
   useEffect(() => {
     if (location.pathname === "/dashboard/notifications") {
-      setIsNotiHovered(false)
+      setIsNotiHovered(false);
     }
-
-  }, [location.pathname])
-
+  }, [location.pathname]);
 
   return (
     <>
@@ -126,38 +126,47 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
               <CustomTooltip content={"Open / close"}>
                 <button
                   className="text-gray-700 transition hover:text-gray-900"
-                  onClick={sidebarHandler}>
+                  onClick={sidebarHandler}
+                >
                   <GiHamburgerMenu size={22} />{" "}
                 </button>
               </CustomTooltip>
               <div className="flex items-center "></div>
             </div>
             <div className="flex items-center sm:gap-3">
-              {location.pathname !== "/dashboard/notifications" && <div
-                className="relative py-2"
-                onMouseEnter={() => setIsNotiHovered(true)}
-                onMouseLeave={() => setIsNotiHovered(false)}>
-                <CustomTooltip content={"Notifications"}>
-                  <div className="max-md:hidden" onClick={() => navigate("/dashboard/notifications")}>
-                    <MdNotificationsNone className="text-2xl cursor-pointer text-text" />
-                  </div>
-                </CustomTooltip>
+              {location.pathname !== "/dashboard/notifications" && (
+                <div
+                  className="relative py-2"
+                  onMouseEnter={() => setIsNotiHovered(true)}
+                  onMouseLeave={() => setIsNotiHovered(false)}
+                >
+                  <CustomTooltip content={"Notifications"}>
+                    <div
+                      className="max-md:hidden"
+                      onClick={() => navigate("/dashboard/notifications")}
+                    >
+                      <MdNotificationsNone className="text-2xl cursor-pointer text-text" />
+                    </div>
+                  </CustomTooltip>
 
-                {isNotiHovered && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute top-10 right-0 w-[500px] bg-white shadow-lg rounded-lg p-3 z-50">
-                    <Notifications />
-                  </motion.div>
-                )}
-              </div>}
+                  {isNotiHovered && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute top-10 right-0 w-[500px] bg-white shadow-lg rounded-lg p-3 z-50"
+                    >
+                      <Notifications />
+                    </motion.div>
+                  )}
+                </div>
+              )}
               <div className="relative">
                 <CustomTooltip content={CreditsDropdownOpen ? null : "credits"}>
                   <button
-                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-blue-100 hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}>
+                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-blue-100 hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
+                  >
                     {isLoadingCredits ? (
                       <span className="flex items-center gap-2">
                         <HiOutlineRefresh className="animate-spin max-sm:hidden" />
@@ -166,7 +175,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     ) : credits ? (
                       <span
                         onClick={refreshCredits}
-                        className="flex items-center gap-2">
+                        className="flex items-center gap-2"
+                      >
                         <HiOutlineRefresh className="max-sm:hidden" />
                         <span>PKR {credits?.Balence.toLocaleString()}</span>
                       </span>
@@ -177,8 +187,9 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                       </span>
                     )}
                     <MdArrowDropDown
-                      className={`text-xl ${CreditsDropdownOpen ? "rotate-180" : ""
-                        } transition-all duration-300`}
+                      className={`text-xl ${
+                        CreditsDropdownOpen ? "rotate-180" : ""
+                      } transition-all duration-300`}
                       onClick={() => setCreditsDropdownOpen((prev) => !prev)}
                     />
                     <div className="absolute right-0 top-14">

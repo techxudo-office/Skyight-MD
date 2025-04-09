@@ -76,7 +76,9 @@ const Companies = () => {
   ];
 
   useEffect(() => {
-    dispatch(getCompanies(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getCompanies(adminData?.token));
+    }
   }, [dispatch, adminData?.token]);
 
   return (

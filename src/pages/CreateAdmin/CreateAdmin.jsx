@@ -54,7 +54,9 @@ const CreateAdmin = () => {
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
   useEffect(() => {
-    dispatch(getRoles(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getRoles(adminData?.token));
+    }
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -88,7 +90,6 @@ const CreateAdmin = () => {
       role_id: Number(formData.role_id),
       is_active: active,
     };
-    
 
     dispatch(createAdmin({ data: payload, token: adminData?.token }))
       .unwrap()

@@ -23,7 +23,9 @@ const CompanyCancelledRequests = () => {
   );
 
   useEffect(() => {
-    dispatch(getCompanyBookings({ token: adminData?.token, id: companyId }));
+    if (adminData?.token) {
+      dispatch(getCompanyBookings({ token: adminData?.token, id: companyId }));
+    }
   }, []);
 
   useEffect(() => {

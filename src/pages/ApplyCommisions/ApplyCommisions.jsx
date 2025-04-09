@@ -99,7 +99,9 @@ const ApplyCommisions = () => {
   );
 
   useEffect(() => {
-    dispatch(getCommision(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getCommision(adminData?.token));
+    }
   }, [adminData?.token]);
 
   const columns = [
@@ -185,7 +187,7 @@ const ApplyCommisions = () => {
   ];
 
   return (
-    <div className="  ">
+    <div className="">
       {isEditModalOpen && (
         <EditCommisionModal
           isOpen={isEditModalOpen}

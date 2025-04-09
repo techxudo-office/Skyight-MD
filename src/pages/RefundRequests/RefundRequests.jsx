@@ -31,8 +31,10 @@ const RefundRequests = () => {
     useSelector((state) => state.booking);
 
   useEffect(() => {
-    dispatch(getRefundFlight(adminData?.token));
-  }, []);
+    if (adminData?.token) {
+      dispatch(getRefundFlight(adminData?.token));
+    }
+  }, [adminData?.token]);
 
   const columns = [
     {

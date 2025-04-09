@@ -79,7 +79,9 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
   }, [data, roles]);
 
   useEffect(() => {
-    dispatch(getUserRoles(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getUserRoles(adminData?.token));
+    }
   }, [dispatch]);
 
   const handleChange = (e) => {

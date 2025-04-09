@@ -40,8 +40,10 @@ const Tickets = () => {
   };
 
   useEffect(() => {
-    dispatch(getTickets(adminData?.token));
-  }, []);
+    if (adminData?.token) {
+      dispatch(getTickets(adminData?.token));
+    }
+  }, [adminData?.token]);
 
   const columns = [
     {

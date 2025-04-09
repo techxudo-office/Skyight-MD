@@ -30,7 +30,9 @@ const TicketDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { adminData } = useSelector((state) => state.auth);
-  const { isLoadingBookingDetails, bookingDetails } = useSelector((state) => state.booking);
+  const { isLoadingBookingDetails, bookingDetails } = useSelector(
+    (state) => state.booking
+  );
   const printRef = useRef();
 
   // const downloadAsPDF = async () => {
@@ -45,12 +47,13 @@ const TicketDetails = () => {
   // };
 
   useEffect(() => {
-    if (location.state) {
+    if (location.state && adminData?.token) {
       const refId = location.state.id;
-      dispatch(getBookingDetails({ id: refId, token: adminData?.token }))
-        .then((resp) => {
+      dispatch(getBookingDetails({ id: refId, token: adminData?.token })).then(
+        (resp) => {
           console.log(resp, "bookingDetails");
-        });
+        }
+      );
     }
   }, [location.state, adminData?.token]);
 
@@ -60,7 +63,7 @@ const TicketDetails = () => {
   const localTimeLimit = timelimit.toLocaleString("en-GB");
 
   if (isLoadingBookingDetails) {
-    return <Spinner className={"text-primary"} />
+    return <Spinner className={"text-primary"} />;
   }
 
   return (
@@ -88,7 +91,8 @@ const TicketDetails = () => {
               bookingDetails.flightSegments.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between gap-5 max-sm:flex-wrap text-text py-5">
+                  className="flex items-center justify-between gap-5 py-5 max-sm:flex-wrap text-text"
+                >
                   <div className="flex flex-col items-start">
                     <h2 className="mb-2 text-2xl font-semibold text-primary">
                       Departure
@@ -139,7 +143,10 @@ const TicketDetails = () => {
           </div>
         </CardLayoutContainer>
         <CardLayoutContainer>
-          <CardLayoutHeader className={"mb-2 text-text"} heading="Passenger Details" />
+          <CardLayoutHeader
+            className={"mb-2 text-text"}
+            heading="Passenger Details"
+          />
 
           {bookingDetails && (
             <Table
@@ -208,8 +215,9 @@ const TicketDetails = () => {
             className={"mb-2 text-text"}
             heading={"Pricing Information"}
           />
-          <h2 className="text-xl font-semibold text-text p-5">
-            Total Fare: {Number(bookingDetails?.total_fare).toLocaleString()} PKR
+          <h2 className="p-5 text-xl font-semibold text-text">
+            Total Fare: {Number(bookingDetails?.total_fare).toLocaleString()}{" "}
+            PKR
           </h2>
         </CardLayoutContainer>
 

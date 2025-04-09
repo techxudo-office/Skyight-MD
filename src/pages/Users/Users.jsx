@@ -129,12 +129,14 @@ const Users = ({ isCompanyUser }) => {
   };
 
   useEffect(() => {
-    if (isCompanyUser) {
-      dispatch(getCompanyUsers({ token: adminData?.token, id: companyId }));
-    } else {
-      dispatch(getUsers(adminData?.token));
-    }
-  }, []);
+    if (!adminData?.token) return;
+
+    const action = isCompanyUser
+      ? getCompanyUsers({ token: adminData.token, id: companyId })
+      : getUsers(adminData.token);
+
+    dispatch(action);
+  }, [dispatch, adminData?.token, companyId, isCompanyUser]);
 
   return (
     <>

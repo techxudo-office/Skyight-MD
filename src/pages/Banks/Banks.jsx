@@ -40,18 +40,20 @@ const Banks = () => {
     status: false,
     text: "",
     loading: false,
-    onAbort: () => { },
-    onConfirm: () => { },
+    onAbort: () => {},
+    onConfirm: () => {},
   });
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
     isOpen: false,
     contentLabel: "",
-    onRequestClose: () => { },
+    onRequestClose: () => {},
   });
 
   useEffect(() => {
-    dispatch(getBanks(adminData?.token));
+    if (adminData?.token) {
+      dispatch(getBanks(adminData?.token));
+    }
   }, []);
 
   const columns = [

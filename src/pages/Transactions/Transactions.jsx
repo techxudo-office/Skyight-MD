@@ -42,14 +42,14 @@ const Transactions = ({ isCompanyDetail }) => {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   useEffect(() => {
-    if (isCompanyDetail) {
-      dispatch(
-        getCompanyTransactions({ token: adminData?.token, id: companyId })
-      );
-    } else {
-      dispatch(getTransactions(adminData?.token));
-    }
-  }, [dispatch, adminData?.token, companyId]);
+    if (!adminData?.token) return;
+
+    const action = isCompanyDetail
+      ? getCompanyTransactions({ token: adminData.token, id: companyId })
+      : getTransactions(adminData.token);
+
+    dispatch(action);
+  }, [dispatch, adminData?.token, companyId, isCompanyDetail]);
 
   const handleView = (row) => {
     setSelectedTransaction(row);
