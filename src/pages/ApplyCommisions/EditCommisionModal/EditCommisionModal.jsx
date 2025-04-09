@@ -63,8 +63,7 @@ const EditCommisionModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = () => {
     dispatch(editcommision({ data: formData, token: userData?.token })).then(
-      () => {
-        toast.success("Commision updated successfully!");
+      () => { 
         onClose();
       }
     );

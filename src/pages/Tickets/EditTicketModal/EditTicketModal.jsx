@@ -11,27 +11,19 @@ import {
   Button,
   Spinner,
   ModalWrapper,
-  Switch,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { ticketValidation } from "../../../utils/validations";
 import { editTicket } from "../../../_core/features/ticketSlice";
 
 Modal.setAppElement("#root");
 
 const inputFields = [
   {
-    name: "title",
-    label: "Title*",
+    name: "admin_response",
+    label: "Admin Response*",
     type: "text",
-    placeholder: "Enter Title",
-  },
-  {
-    name: "description",
-    label: "Description*",
-    type: "text",
-    placeholder: "Enter Description",
+    placeholder: "Enter Admin Response",
   },
 ];
 
@@ -43,9 +35,8 @@ const statusOptions = [
 ];
 
 const initialState = {
-  title: "",
-  description: "",
   ticket_id: "",
+  admin_response: "",
 };
 
 const EditTicketModal = ({ isOpen, onClose, data }) => {
@@ -58,18 +49,10 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data, "data");
-      setFormData({
-        title: data?.title || "",
-        description: data?.description || "",
-        ticket_id: data?.id || "",
-      });
+      setFormData({ ticket_id: data?.id || "" });
       setStatus(data?.status || "open");
     }
   }, [data]);
-  useEffect(() => {
-    console.log(isUpdatingTicket, "STATE");
-  }, [isUpdatingTicket]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,16 +60,16 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
   };
 
   const handleSubmit = () => {
-    if (!ticketValidation(formData, setErrors)) {
-      toast.error("Please fix the errors before submitting.");
+    if (!formData?.admin_response?.trim()) {
+      setErrors({ ...errors, admin_response: "Admin response is required" });
+      toast.error("Admin response is required");
       return;
     }
 
     const payload = {
-      title: formData.title,
-      description: formData.description,
-      ticket_id: Number(formData.ticket_id),
       status,
+      ticket_id: formData?.ticket_id,
+      admin_response: formData?.admin_response,
     };
 
     dispatch(editTicket({ data: payload, token: userData?.token })).then(() => {
@@ -103,7 +86,7 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="relative">
             {inputFields.map(({ name, label, type }) => (
               <div key={name} className="relative">
                 <Input
