@@ -234,16 +234,17 @@ const Transactions = ({ isCompanyDetail }) => {
                 <strong className="text-text">Status:</strong>{" "}
                 <Tag value={selectedTransaction?.status} />
               </p>
-              {selectedTransaction?.status === "rejected" && (
-                <p className="flex items-center gap-x-2">
-                  <strong className="text-text">Reasons:</strong>{" "}
-                  <span className="font-medium text-black">
-                    {selectedTransaction?.reasons
-                      ?.map((item) => item.reason)
-                      .join(", ")}
-                  </span>
-                </p>
-              )}
+              {selectedTransaction?.status === "rejected" &&
+                selectedTransaction?.reasons.length > 0 && (
+                  <p className="flex items-center gap-x-2">
+                    <strong className="text-text">Reasons:</strong>{" "}
+                    <span className="font-medium text-black">
+                      {selectedTransaction?.reasons
+                        ?.map((item) => item.reason)
+                        .join(", ")}
+                    </span>
+                  </p>
+                )}
             </div>
             <div className="flex justify-end mt-6">
               <Button

@@ -14,13 +14,16 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanyRevenue } from "../../_core/features/companySlice";
+import { Loader } from "../../components/components";
 
 const CompanyDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { companyId } = useParams();
   const { adminData } = useSelector((state) => state.auth);
-  const { companyRevenue } = useSelector((state) => state.company);
+  const { companyRevenue, isLoadingCompanyRevenue } = useSelector(
+    (state) => state.company
+  );
   const companySections = [
     { title: "Users", path: "users" },
     { title: "Bookings", path: "bookings" },
@@ -47,19 +50,23 @@ const CompanyDetails = () => {
         />
         <CardLayoutBody removeBorder={true}>
           <div className="grid grid-cols-1 gap-6 py-3 md:grid-cols-2 lg:grid-cols-2">
-            <div className="p-3 transition-all duration-300 bg-white border-t-4 shadow-md border-primary rounded-xl hover:shadow-lg">
-              <div className="flex items-center space-x-4">
-                <FaClipboardList className="text-3xl text-primary" />
-                <div>
-                  <h3 className="text-lg text-gray-700 mdt-semibold">
-                    Revenue Generated
-                  </h3>
-                  <p className="mt-2 text-2xl font-bold text-gray-900">
-                    {companyRevenue.toLocaleString()}
-                  </p>
+            {isLoadingCompanyRevenue ? (
+              <Loader />
+            ) : (
+              <div className="p-3 transition-all duration-300 bg-white border-t-4 shadow-md border-primary rounded-xl hover:shadow-lg">
+                <div className="flex items-center space-x-4">
+                  <FaClipboardList className="text-3xl text-primary" />
+                  <div>
+                    <h3 className="text-lg text-gray-700 mdt-semibold">
+                      Revenue Generated
+                    </h3>
+                    <p className="mt-2 text-2xl font-bold text-gray-900">
+                      {companyRevenue.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {companySections.map((section) => (
