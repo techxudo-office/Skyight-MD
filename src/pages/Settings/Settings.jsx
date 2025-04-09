@@ -15,13 +15,13 @@ const Settings = () => {
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
 
-  const [base64IMG, setBase64IMG] = useState()
-  const [toggle, setToggle] = useState(false);
+  const [base64IMG, setBase64IMG] = useState();
   const [editingField, setEditingField] = useState(null);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
   const { adminData, isUpdatingAccount, isLoadingUserInfo } = useSelector(
     (state) => state.auth
   );
+  const [toggle, setToggle] = useState(adminData?.admin?.is_active);
   const [profileImage, setProfileImage] = useState(
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
   );
@@ -34,20 +34,14 @@ const Settings = () => {
 
   useEffect(() => {
     if (adminData) {
-      console.log(adminData, "UserData");
       setProfileData({
         full_name: adminData.admin.full_name || "",
         email: adminData.admin.email || "",
         mobile_number: adminData.admin.mobile_number || "",
         is_active: adminData.admin.is_active || "",
-        // password: adminData.admin.password || "",
       });
     }
   }, [adminData, roles]);
-
-  // useEffect(() => {
-  //   // dispatch(getUserInfo(adminData?.token));
-  // }, []);
 
   const handleChange = (e, field) => {
     setProfileData({ ...profileData, [field]: e.target.value });
@@ -83,17 +77,17 @@ const Settings = () => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
 
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(file);
 
       reader.onload = () => {
-        console.log('called: ', reader)
-        setBase64IMG(reader.result)
-      }
+        console.log("called: ", reader);
+        setBase64IMG(reader.result);
+      };
     }
   };
-  console.log("base64IMG", base64IMG)
+  console.log("base64IMG", base64IMG);
   const profileFields = [
     {
       label: "Full Name",

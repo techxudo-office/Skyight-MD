@@ -168,7 +168,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                         onClick={refreshCredits}
                         className="flex items-center gap-2">
                         <HiOutlineRefresh className="max-sm:hidden" />
-                        <span>PKR {credits?.Balence}</span>
+                        <span>PKR {credits?.Balence.toLocaleString()}</span>
                       </span>
                     ) : (
                       <span className="flex items-center gap-2">
