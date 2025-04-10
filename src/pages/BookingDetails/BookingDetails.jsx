@@ -156,51 +156,37 @@ const TicketDetails = () => {
                   name: "NAME",
                   selector: (row) => row.given_name,
                   sortable: false,
-                   
-                  center: true,
                 },
                 {
                   name: "TYPE",
                   selector: (row) => row.passenger_type_code,
                   sortable: false,
-                   
-                  center: true,
                 },
                 {
                   name: "BIRTH DATE",
                   selector: (row) => dayjs(row.birth_date).format("D-MMM-YYYY"),
                   sortable: false,
-                   
-                  center: true,
                 },
                 {
                   name: "PASSPORT NUMBER",
                   selector: (row) => row.doc_id,
                   sortable: false,
-                   
-                  center: true,
                 },
                 {
                   name: "EXPIRY",
                   selector: (row) =>
                     dayjs(row.expire_date).format("D-MMM-YYYY"),
                   sortable: false,
-                   
-                  center: true,
                 },
                 {
                   name: "ISSUANCE",
                   selector: (row) => row.doc_issue_country,
                   sortable: false,
-                   
-                  center: true,
                 },
                 {
                   name: "NATIONALITY",
                   selector: (row) => row.nationality,
                   sortable: false,
-                   
-                  center: true,
                 },
               ]}
               tableData={bookingDetails?.passengers || []}

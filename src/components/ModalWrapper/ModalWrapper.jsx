@@ -16,7 +16,7 @@ export default function ModalWrapper({
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      contentLabel={60}
+      contentLabel={contentLabel}
       className={`modal-content relative w-[600px] bg-white text-text border-4 rounded-xl border-primary max-h-[90%] overflow-auto  shadow-lg p-6 ${className}`}
       overlayClassName="modal-overlay fixed inset-0 flex justify-center items-center"
       closeTimeoutMS={300}
