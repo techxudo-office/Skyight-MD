@@ -53,7 +53,6 @@ const FlightBookings = ({ isCompanyDetail }) => {
         </span>
       ),
       sortable: false,
-      center: true,
       wrap: true,
       grow: 4,
     },
@@ -61,22 +60,19 @@ const FlightBookings = ({ isCompanyDetail }) => {
       name: "PNR",
       selector: (row) => row.booking_reference_id,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
       grow: 2,
     },
     {
       name: "TOTAL FARE",
       selector: (row) => row.total_fare,
       sortable: false,
-      center: true,
       grow: 2,
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.booking_status} />,
       sortable: false,
-      center: true,
       wrap: true,
       grow: 4,
     },
@@ -84,7 +80,6 @@ const FlightBookings = ({ isCompanyDetail }) => {
       name: "CREATED AT",
       selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
       sortable: false,
-      center: true,
       grow: 2,
     },
     {
@@ -102,7 +97,6 @@ const FlightBookings = ({ isCompanyDetail }) => {
         </span>
       ),
       sortable: false,
-      center: true,
     },
   ];
 

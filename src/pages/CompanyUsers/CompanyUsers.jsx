@@ -25,35 +25,30 @@ const Companies = () => {
       name: "NAME",
       selector: (row) => `${row.first_name} ${row.last_name}`,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "NAME",
       selector: (row) => `${row.first_name} ${row.last_name}`,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "CREATED AT",
       selector: (row) => dayjs(row.created_at).format("ddd-DD-MMM-YYYY"),
       sortable: false,
-      center: true,
     },
     {
       name: "WEBSITE",
       selector: (row) => row.website,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "",
@@ -72,8 +67,7 @@ const Companies = () => {
         </div>
       ),
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
   ];
 

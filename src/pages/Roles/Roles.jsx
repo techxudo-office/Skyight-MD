@@ -42,22 +42,19 @@ const Roles = () => {
       name: "ROLE",
       selector: (row) => row.role,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "ROLE ID",
       selector: (row) => row.id,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "",
@@ -85,8 +82,7 @@ const Roles = () => {
         </div>
       ),
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
   ];
 

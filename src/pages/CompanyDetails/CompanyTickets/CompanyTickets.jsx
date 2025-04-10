@@ -41,30 +41,26 @@ const CompanyTickets = () => {
       name: "TITLE",
       selector: (row) => row.title,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "DESCRIPTION",
       selector: (row) => row.description,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "Date",
       selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
       grow: 2,
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.status} />,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "",
@@ -79,8 +75,7 @@ const CompanyTickets = () => {
         </div>
       ),
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
   ];
 

@@ -72,40 +72,34 @@ const Transactions = ({ isCompanyDetail }) => {
       name: "COMPANY",
       selector: (row) => row?.company?.name,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "TRANSACTION ID",
       selector: (row) => row?.id,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "BANK",
       selector: (row) => row.bank_name,
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
     },
     {
       name: "PAYMENT DATE",
       selector: (row) => dayjs(row.payment_date).format("ddd-DD-MMM-YYYY"),
       sortable: false,
-      center: true,
     },
     {
       name: "AMOUNT",
       selector: (row) => row.amount,
       sortable: false,
-      center: true,
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.status} />,
       sortable: false,
-      center: true,
       wrap: true,
       grow: 2,
     },
@@ -130,7 +124,6 @@ const Transactions = ({ isCompanyDetail }) => {
         </div>
       ),
       sortable: false,
-      center: true,
     },
   ];
 

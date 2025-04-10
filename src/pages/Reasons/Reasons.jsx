@@ -62,19 +62,16 @@ const Reasons = () => {
       name: "Created At",
       selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
       sortable: false,
-      center: true,
     },
     {
       name: "Reason",
       selector: (row) => row.reason,
       sortable: false,
-      center: true,
     },
     {
       name: "ID",
       selector: (row) => row.id,
       sortable: false,
-      center: true,
       wrap: true,
     },
     {
@@ -122,7 +119,6 @@ const Reasons = () => {
         </div>
       ),
       sortable: false,
-      center: true,
       wrap: true,
     },
   ];

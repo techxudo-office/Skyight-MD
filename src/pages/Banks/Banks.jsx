@@ -61,14 +61,12 @@ const Banks = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: false,
-      center: true,
       grow: 2,
     },
     {
       name: "Bank",
       selector: (row) => row.bank,
       sortable: false,
-      center: true,
       wrap: true,
       grow: 4,
     },
@@ -76,8 +74,7 @@ const Banks = () => {
       name: "Date",
       selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
       sortable: false,
-      minwidth: "150px",
-      center: true,
+       
       grow: 2,
     },
     {
@@ -126,7 +123,6 @@ const Banks = () => {
         </div>
       ),
       sortable: false,
-      center: true,
       wrap: true,
     },
   ];

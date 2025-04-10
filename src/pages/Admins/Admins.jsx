@@ -34,36 +34,26 @@ const Admin = () => {
       name: "ADMIN ID",
       selector: (row) => row?.id,
       sortable: false,
-      minwidth: "150px",
-      center: true,
     },
     {
       name: "FULL NAME",
       selector: (row) => row?.full_name,
       sortable: false,
-      minwidth: "150px",
-      center: true,
     },
     {
       name: "EMAIL",
       selector: (row) => row?.email,
       sortable: false,
-      minwidth: "150px",
-      center: true,
     },
     {
       name: "ROLE",
       selector: (row) => row?.role?.role,
       sortable: false,
-      minwidth: "150px",
-      center: true,
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_active ? "active" : "inactive"} />,
       sortable: false,
-      minwidth: "150px",
-      center: true,
     },
     {
       name: "",
@@ -90,8 +80,6 @@ const Admin = () => {
         </div>
       ),
       sortable: false,
-      minwidth: "150px",
-      center: true,
     },
   ];
 

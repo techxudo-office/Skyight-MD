@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Loader, Spinner } from "../components";
+import { Loader } from "../components";
 import DataTable from "react-data-table-component";
 
 const Table = ({
@@ -31,8 +31,6 @@ const Table = ({
       name: "NO",
       selector: (_, index) => (currentPage - 1) * rowsPerPage + index + 1,
       sortable: false,
-      minWidth: "70px",
-      center: true,
     },
     ...columnsData?.map((col) => ({
       ...col,
@@ -40,9 +38,7 @@ const Table = ({
       wrap: col.wrap || true,
     })),
   ];
-  // if (!tableData.length && !progressPending) {
-  //   return <p className="p-5 text-center text-text">No Data Found</p>
-  // }
+
   return (
     <div className="container mx-auto overflow-x-auto ">
       <DataTable
@@ -74,6 +70,7 @@ const Table = ({
           },
           headCells: {
             style: {
+              justifyContent: "center",
               fontFamily: "Poppins",
               color: "#fff",
               fontSize: "16px",
@@ -90,6 +87,11 @@ const Table = ({
           rowsBottom: {
             style: {
               borderBottomWidth: "1px",
+            },
+          },
+          cells: {
+            style: {
+              justifyContent: "center",
             },
           },
         }}
