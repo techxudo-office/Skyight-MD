@@ -29,7 +29,7 @@ const Tickets = () => {
   const { adminData } = useSelector((state) => state.auth);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { tickets, isLoadingTickets } = useSelector((state) => state.ticket);
-  const [filteredData, setFilteredData] = useState(tickets)
+  const [filteredData, setFilteredData] = useState(tickets);
 
   const handleView = (row) => {
     setTicket(row);
@@ -49,6 +49,16 @@ const Tickets = () => {
 
   const columns = [
     {
+      name: "TITLE",
+      selector: (row) => row.title,
+      sortable: false,
+    },
+    {
+      name: "DESCRIPTION",
+      selector: (row) => row.description,
+      sortable: false,
+    },
+    {
       name: "COMPANY",
       selector: (row) => row?.user.company.name,
       sortable: false,
@@ -64,19 +74,6 @@ const Tickets = () => {
       name: "CREATED BY",
       selector: (row) => `${row?.user.first_name} ${row?.user.last_name}`,
       sortable: false,
-
-    },
-    {
-      name: "TITLE",
-      selector: (row) => row?.title,
-      sortable: false,
-
-    },
-    {
-      name: "DESCRIPTION",
-      selector: (row) => row?.description,
-      sortable: false,
-
     },
     {
       name: "STATUS",
@@ -130,6 +127,9 @@ const Tickets = () => {
         />
         <CardLayoutBody removeBorder={true}>
           {tickets && <Searchbar onFilteredData={setFilteredData} data={tickets} />}
+          {tickets && (
+            <Searchbar onFilteredData={setFilteredData} data={tickets} />
+          )}
           <Table
             pagination={true}
             columnsData={columns}
