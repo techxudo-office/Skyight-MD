@@ -29,7 +29,7 @@ const Tickets = () => {
   const { adminData } = useSelector((state) => state.auth);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { tickets, isLoadingTickets } = useSelector((state) => state.ticket);
-  const [filteredData, setFilteredData] = useState(tickets)
+  const [filteredData, setFilteredData] = useState(tickets);
 
   const handleView = (row) => {
     setTicket(row);
@@ -49,40 +49,34 @@ const Tickets = () => {
 
   const columns = [
     {
-      name: "COMPANY",
-      selector: (row) => row.user.company.name,
-      sortable: false,
-       
-    },
-    {
-      name: "TICKET ID",
-      selector: (row) => row.id,
-      sortable: false,
-       
-    },
-    {
-      name: "CREATED BY",
-      selector: (row) => `${row.user.first_name} ${row.user.full_name}`,
-      sortable: false,
-       
-    },
-    {
       name: "TITLE",
       selector: (row) => row.title,
       sortable: false,
-       
     },
     {
       name: "DESCRIPTION",
       selector: (row) => row.description,
       sortable: false,
-       
+    },
+    {
+      name: "COMPANY",
+      selector: (row) => row.user.company.name,
+      sortable: false,
+    },
+    {
+      name: "TICKET ID",
+      selector: (row) => row.id,
+      sortable: false,
+    },
+    {
+      name: "CREATED BY",
+      selector: (row) => `${row.user.first_name} ${row.user.full_name}`,
+      sortable: false,
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.status} />,
       sortable: false,
-       
     },
     {
       name: "",
@@ -109,7 +103,6 @@ const Tickets = () => {
         </div>
       ),
       sortable: false,
-       
     },
   ];
 
@@ -129,7 +122,9 @@ const Tickets = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
-         {tickets&& <Searchbar onFilteredData={setFilteredData} data={tickets}/>}
+          {tickets && (
+            <Searchbar onFilteredData={setFilteredData} data={tickets} />
+          )}
           <Table
             pagination={true}
             columnsData={columns}

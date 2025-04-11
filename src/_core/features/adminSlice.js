@@ -8,6 +8,10 @@ const initialState = {
   isLoadingAdmins: false,
   adminsError: null,
 
+  dashboard: [],
+  isLoadingDashboard: false,
+  dashboardError: null,
+
   isCreatingAdmin: false,
   createAdminError: null,
 
@@ -36,6 +40,18 @@ const adminSlice = createSlice({
         state.isLoadingAdmins = false;
         state.adminsError = action.payload;
       })
+      .addCase(getDashboardAnalytics.pending, (state) => {
+        state.isLoadingDashboard = true;
+        state.dashboardError = null;
+      })
+      .addCase(getDashboardAnalytics.fulfilled, (state, action) => {
+        state.isLoadingDashboard = false;
+        state.dashboard = action.payload;
+      })
+      .addCase(getDashboardAnalytics.rejected, (state, action) => {
+        state.isLoadingDashboard = false;
+        state.dashboardError = action.payload;
+      })
       .addCase(createAdmin.pending, (state) => {
         state.isCreatingAdmin = true;
         state.createAdminError = null;
@@ -54,7 +70,9 @@ const adminSlice = createSlice({
       })
       .addCase(deleteAdmin.fulfilled, (state, action) => {
         state.isDeletingAdmin = false;
-        state.admins = state.admins.filter((admin) => admin.id !== action.payload);
+        state.admins = state.admins.filter(
+          (admin) => admin.id !== action.payload
+        );
       })
       .addCase(deleteAdmin.rejected, (state, action) => {
         state.isDeletingAdmin = false;
@@ -92,6 +110,25 @@ export const getAdmins = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Failed to fetch admins.";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getDashboardAnalytics = createAsyncThunk(
+  "admin/getDashboardAnalytics",
+  async (token, thunkAPI) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/adminKpi`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response?.data?.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch analytics.";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }

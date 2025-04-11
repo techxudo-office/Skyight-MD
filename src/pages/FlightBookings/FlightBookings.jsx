@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Searchbar, SecondaryButton, Table, Tag } from "../../components/components";
+import {
+  Searchbar,
+  SecondaryButton,
+  Table,
+  Tag,
+} from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -18,11 +23,11 @@ const FlightBookings = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.auth);
   const { flightBookings, isLoadingFlightBookings } = useSelector(
     (state) => state.booking
   );
-  const [filteredData, setFilteredData] = useState(flightBookings)
+  const [filteredData, setFilteredData] = useState(flightBookings);
 
   const navigationHandler = () => {
     navigate("/dashboard/search-flights");
@@ -32,9 +37,9 @@ const FlightBookings = () => {
     {
       name: "ROUTE",
       selector: (row) => (
-        <span className="flex w-52 items-center lg:justify-center  gap-2 text-sm text-text">
+        <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
           {row.origin}
-          <div className="flex justify-center items-center gap-1">
+          <div className="flex items-center justify-center gap-1">
             <span className="h-0.5 w-3 bg-primary"></span>
             <IoIosAirplane className="text-lg text-primary" />
             <span className="h-0.5 w-3 bg-primary"></span>
@@ -53,7 +58,7 @@ const FlightBookings = () => {
       sortable: false,
       minwidth: "150px",
       center: true,
-      grow: 2
+      grow: 2,
     },
     {
       name: "TOTAL FARE",
@@ -61,7 +66,6 @@ const FlightBookings = () => {
       sortable: false,
       center: true,
       grow: 2,
-
     },
     {
       name: "STATUS",
@@ -69,7 +73,7 @@ const FlightBookings = () => {
       sortable: false,
       center: true,
       wrap: true,
-      grow: 4
+      grow: 4,
     },
     {
       name: "CREATED AT",
@@ -77,7 +81,6 @@ const FlightBookings = () => {
       sortable: false,
       center: true,
       grow: 2,
-
     },
     {
       name: "",
@@ -88,25 +91,18 @@ const FlightBookings = () => {
             navigate("/dashboard/booking-details", {
               state: row,
             });
-          }}>
+          }}
+        >
           <FaEye title="View" className="text-green-500 " />
         </span>
       ),
       sortable: false,
-      center: true,
     },
   ];
 
   useEffect(() => {
-    if (userData?.user?.company_id) {
-      dispatch(
-        getFlightBookings({
-          id: userData.user.company_id,
-          token: userData.token,
-        })
-      );
-    }
-  }, [dispatch, userData?.user?.company_id]);
+    dispatch(getFlightBookings(adminData.token));
+  }, [dispatch]);
 
   return (
     <>
@@ -114,7 +110,8 @@ const FlightBookings = () => {
         <CardLayoutHeader
           removeBorder={true}
           heading={"Flight Bookings"}
-          className="flex items-center justify-between">
+          className="flex items-center justify-between"
+        >
           <div className="relative">
             <SecondaryButton
               text={"Create New Booking"}
@@ -124,7 +121,9 @@ const FlightBookings = () => {
           </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          {flightBookings && <Searchbar onFilteredData={setFilteredData} data={flightBookings} />}
+          {flightBookings && (
+            <Searchbar onFilteredData={setFilteredData} data={flightBookings} />
+          )}
           <Table
             pagination={true}
             columnsData={columns}
@@ -132,7 +131,7 @@ const FlightBookings = () => {
             progressPending={isLoadingFlightBookings}
             paginationTotalRows={filteredData.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
-          // searching={false}
+            // searching={false}
           />
         </CardLayoutBody>
         <CardLayoutFooter></CardLayoutFooter>
