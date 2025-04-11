@@ -30,7 +30,6 @@ const DashboardHome = () => {
         </span>
       ),
       sortable: false,
-      center: true,
       wrap: true,
       grow: 4,
     },
@@ -39,21 +38,18 @@ const DashboardHome = () => {
       selector: (row) => row.booking_reference_id,
       sortable: false,
       minwidth: "150px",
-      center: true,
       grow: 2,
     },
     {
       name: "TOTAL FARE",
       selector: (row) => row.total_fare,
       sortable: false,
-      center: true,
       grow: 2,
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.booking_status} />,
       sortable: false,
-      center: true,
       wrap: true,
       grow: 4,
     },
@@ -61,7 +57,6 @@ const DashboardHome = () => {
       name: "CREATED AT",
       selector: (row) => dayjs(row.created_at).format("MMM-DD-YYYY"),
       sortable: false,
-      center: true,
       grow: 2,
     },
     {
@@ -79,10 +74,9 @@ const DashboardHome = () => {
         </span>
       ),
       sortable: false,
-      center: true,
     },
   ];
-  
+
   const DataArray = [
     {
       title: "Latest Transactions",
@@ -105,28 +99,24 @@ const DashboardHome = () => {
       link: "/dashboard/cancel-requests",
     },
   ];
-  
+
   useEffect(() => {
     if (!adminData.token) return;
     dispatch(getFlightBookings(adminData.token));
   }, [dispatch]);
 
-
   return (
     <div className="px-5 pb-10 space-y-10">
       <DashboardCards />
-
       {DataArray.map((section, index) => (
         <div key={index}>
           <h2 className="mb-3 text-xl font-semibold">{section.title}</h2>
           <Table
-            pagination={true}
             columnsData={columns}
             tableData={section.tableData || []}
             progressPending={isLoadingFlightBookings}
             paginationTotalRows={section.tableData.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
-            // searching={false}
           />
           <div className="mt-4 text-right">
             <button
