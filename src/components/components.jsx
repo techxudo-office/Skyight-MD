@@ -29,6 +29,7 @@ export { default as LoginForm } from "./LoginForm/LoginForm";
 export { default as DashboardCards } from "./DashboardCards/DashboardCards";
 export { default as FlightDetailCard } from "./FlightDetailCard/FlightDetailCard";
 export { default as FlightInfoCard } from "./FlightInfoCard/FlightInfoCard";
+export { default as Searchbar } from "./Searchbar/Searchbar";
 
 export { default as DeleteModal } from "./DeleteModal/DeleteModal";
 export { default as Textarea } from "./Textarea/Textarea";

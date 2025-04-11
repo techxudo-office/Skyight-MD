@@ -6,6 +6,7 @@ import {
   Tag,
   CustomTooltip,
   ConfirmModal,
+  Searchbar,
 } from "../../components/components";
 import {
   CardLayoutContainer,
@@ -28,6 +29,7 @@ const Tickets = () => {
   const { adminData } = useSelector((state) => state.auth);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { tickets, isLoadingTickets } = useSelector((state) => state.ticket);
+  const [filteredData, setFilteredData] = useState(tickets)
 
   const handleView = (row) => {
     setTicket(row);
@@ -127,12 +129,13 @@ const Tickets = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
+         {tickets&& <Searchbar onFilteredData={setFilteredData} data={tickets}/>}
           <Table
             pagination={true}
             columnsData={columns}
-            tableData={tickets || []}
+            tableData={filteredData || []}
             progressPending={isLoadingTickets}
-            paginationTotalRows={tickets.length}
+            paginationTotalRows={filteredData.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
