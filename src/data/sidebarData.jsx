@@ -1,5 +1,6 @@
 import { AiFillHome } from "react-icons/ai";
 import { FaSquarePollHorizontal } from "react-icons/fa6";
+import { TbManualGearboxFilled } from "react-icons/tb";
 import {
   MdAccountBalanceWallet,
   MdCancelScheduleSend,
@@ -7,6 +8,7 @@ import {
   MdEditSquare,
   MdOutlineGroups,
   MdOutlineNoteAlt,
+  MdSettings,
 } from "react-icons/md";
 import { FaBusinessTime } from "react-icons/fa6";
 import { TbTransactionDollar } from "react-icons/tb";
@@ -27,7 +29,7 @@ export const sidebarLinks = [
   {
     title: "Companies",
     path: "companies",
-    icon: <HiRectangleGroup />,
+    icon: <TbManualGearboxFilled />
   },
   {
     title: "Apply Commisions",
@@ -78,7 +80,7 @@ export const sidebarLinks = [
   },
   {
     title: "Settings",
-    icon: <MdAccountBalanceWallet />,
+    icon: <MdSettings />,
     sublinks: [
       {
         title: "Reasons",

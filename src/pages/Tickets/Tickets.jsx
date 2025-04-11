@@ -50,39 +50,39 @@ const Tickets = () => {
   const columns = [
     {
       name: "COMPANY",
-      selector: (row) => row.user.company.name,
+      selector: (row) => row?.user.company.name,
       sortable: false,
-       
+
     },
     {
       name: "TICKET ID",
-      selector: (row) => row.id,
+      selector: (row) => row?.id,
       sortable: false,
-       
+
     },
     {
       name: "CREATED BY",
-      selector: (row) => `${row.user.first_name} ${row.user.full_name}`,
+      selector: (row) => `${row?.user.first_name} ${row?.user.last_name}`,
       sortable: false,
-       
+
     },
     {
       name: "TITLE",
-      selector: (row) => row.title,
+      selector: (row) => row?.title,
       sortable: false,
-       
+
     },
     {
       name: "DESCRIPTION",
-      selector: (row) => row.description,
+      selector: (row) => row?.description,
       sortable: false,
-       
+
     },
     {
       name: "STATUS",
-      selector: (row) => <Tag value={row.status} />,
+      selector: (row) => <Tag value={row?.status} />,
       sortable: false,
-       
+
     },
     {
       name: "",
@@ -109,7 +109,7 @@ const Tickets = () => {
         </div>
       ),
       sortable: false,
-       
+
     },
   ];
 
@@ -129,7 +129,7 @@ const Tickets = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
-         {tickets&& <Searchbar onFilteredData={setFilteredData} data={tickets}/>}
+          {tickets && <Searchbar onFilteredData={setFilteredData} data={tickets} />}
           <Table
             pagination={true}
             columnsData={columns}

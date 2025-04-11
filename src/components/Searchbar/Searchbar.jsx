@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MdCancel } from "react-icons/md";
 
-const Searchbar = ({ 
+const Searchbar = ({
   placeholder = "Search",
   data = [],
   onFilteredData,
@@ -16,11 +16,14 @@ const Searchbar = ({
     }
 
     const term = searchTerm.toString().toLowerCase();
-    
+
     return data.filter(item => {
       return Object.values(item).some(value => {
         if (value === null || value === undefined) {
           return false;
+        }
+        if (typeof value == "object") {
+          return Object.values(value).some(val => val.toString().toLowerCase().includes(term));
         }
         return value.toString().toLowerCase().includes(term);
       });
