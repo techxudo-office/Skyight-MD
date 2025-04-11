@@ -47,8 +47,20 @@ const Tickets = () => {
 
   const columns = [
     {
+      name: "COMPANY",
+      selector: (row) => row.user.company.name,
+      sortable: false,
+       
+    },
+    {
       name: "TICKET ID",
       selector: (row) => row.id,
+      sortable: false,
+       
+    },
+    {
+      name: "CREATED BY",
+      selector: (row) => `${row.user.first_name} ${row.user.full_name}`,
       sortable: false,
        
     },

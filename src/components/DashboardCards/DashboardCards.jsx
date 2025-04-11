@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   FaChartLine,
   FaUserAlt,
@@ -6,73 +6,67 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 
-const DashboardCards = () => {
+const cardData = [
+  {
+    title: "Total Bookings",
+    value: "1,234",
+    description: "Since last month",
+    icon: <FaClipboardList className="text-3xl text-primary" />,
+  },
+  {
+    title: "Total Refunds",
+    value: "432",
+    description: "Processed refunds",
+    icon: <FaChartLine className="text-3xl text-primary" />,
+  },
+  {
+    title: "Revenue",
+    value: "$25,678",
+    description: "Gross revenue",
+    icon: <FaTachometerAlt className="text-3xl text-primary" />,
+  },
+  {
+    title: "P / L",
+    value: "$8,345",
+    description: "Profit / Loss",
+    icon: <FaChartLine className="text-3xl text-primary" />,
+  },
+  {
+    title: "Registered Users",
+    value: "3,210",
+    description: "Active users",
+    icon: <FaUserAlt className="text-3xl text-primary" />,
+  },
+];
 
+const DashboardCards = () => {
   return (
-    <>
-      <div className="w-full p-5">
-        <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
+    <div className="w-full p-5">
+      <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-5">
+        {cardData.map((card, index) => (
+          <div
+            key={index}
+            className="p-3 transition-all duration-300 bg-white border-t-4 shadow-sm border-primary rounded-xl hover:shadow-md"
+          >
             <div className="flex items-center space-x-4">
-              <FaChartLine className="text-3xl text-primary" />
+              {card.icon}
               <div>
                 <h3 className="font-semibold text-gray-700 text-md">
-                  Total Sales
+                  {card.title}
                 </h3>
-                <p className="mt-2 text-2xl font-bold text-gray-900">$12,345</p>
+                <p className="mt-2 text-2xl font-bold text-gray-900">
+                  {card.value}
+                </p>
                 <div className="mt-2 text-sm text-gray-600">
-                  <p>Since last month</p>
+                  <p>{card.description}</p>
                 </div>
               </div>
             </div>
           </div>
-
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
-            <div className="flex items-center space-x-4">
-              <FaUserAlt className="text-3xl text-primary" />
-              <div>
-                <h3 className="font-semibold text-gray-700 textmdlg">
-                  Total Users
-                </h3>
-                <p className="mt-2 text-2xl font-bold text-gray-900">2,345</p>
-                <div className="mt-2 text-sm text-gray-600">
-                  <p>Active users</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
-            <div className="flex items-center space-x-4">
-              <FaTachometerAlt className="text-3xl text-primary" />
-              <div>
-                <h3 className="text-lg text-gray-700 mdt-semibold">
-                  Performance
-                </h3>
-                <p className="mt-2 text-2xl font-bold text-gray-900">85%</p>
-                <div className="mt-2 text-sm text-gray-600">
-                  <p>Overall performance</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-3 transition-all duration-300 bg-white border-t-4 border-primary shadow-sm rounded-xl hover:shadow-md">
-            <div className="flex items-center space-x-4">
-              <FaClipboardList className="text-3xl text-primary" />
-              <div>
-                <h3 className="text-lg text-gray-700 mdt-semibold">Tasks</h3>
-                <p className="mt-2 text-2xl font-bold text-gray-900">15</p>
-                <div className="mt-2 text-sm text-gray-600">
-                  <p>Pending tasks</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 
