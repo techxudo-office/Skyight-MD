@@ -50,17 +50,17 @@ const Tickets = () => {
   const columns = [
     {
       name: "TITLE",
-      selector: (row) => row.title,
+      selector: (row) => row?.title,
       sortable: false,
     },
     {
       name: "DESCRIPTION",
-      selector: (row) => row.description,
+      selector: (row) => row?.description,
       sortable: false,
     },
     {
       name: "COMPANY",
-      selector: (row) => row?.user.company.name,
+      selector: (row) => row?.user?.company.name,
       sortable: false,
 
     },
@@ -72,7 +72,7 @@ const Tickets = () => {
     },
     {
       name: "CREATED BY",
-      selector: (row) => `${row?.user.first_name} ${row?.user.last_name}`,
+      selector: (row) => `${row?.user?.first_name} ${row?.user?.last_name}`,
       sortable: false,
     },
     {
