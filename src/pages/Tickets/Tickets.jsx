@@ -62,13 +62,11 @@ const Tickets = () => {
       name: "COMPANY",
       selector: (row) => row?.user?.company.name,
       sortable: false,
-
     },
     {
       name: "TICKET ID",
       selector: (row) => row?.id,
       sortable: false,
-
     },
     {
       name: "CREATED BY",
@@ -79,7 +77,6 @@ const Tickets = () => {
       name: "STATUS",
       selector: (row) => <Tag value={row?.status} />,
       sortable: false,
-
     },
     {
       name: "",
@@ -106,10 +103,8 @@ const Tickets = () => {
         </div>
       ),
       sortable: false,
-
     },
   ];
-
   return (
     <>
       {isEditModalOpen && (
@@ -121,12 +116,11 @@ const Tickets = () => {
       )}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
-          removeBorder={true}
+          removeBorder={true}                       
           heading={"Tickets"}
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
-          {tickets && <Searchbar onFilteredData={setFilteredData} data={tickets} />}
           {tickets && (
             <Searchbar onFilteredData={setFilteredData} data={tickets} />
           )}

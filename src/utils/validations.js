@@ -104,3 +104,15 @@ export const ticketValidation = (form, setErrors) => {
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
 };
+
+export const notificationValidation = (form, setErrors) => {
+  let newErrors = {};
+
+  if (!form.title.trim()) newErrors.title = "Title is required";
+  if (!form.description.trim())
+    newErrors.description = "Description name is required";
+  if (!form?.company_id?.trim()) newErrors.company_id = "Company is required";
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};

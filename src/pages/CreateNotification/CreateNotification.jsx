@@ -51,10 +51,6 @@ const CreateNotification = () => {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(isCreatingNotification, "Loader");
-  }, [isCreatingNotification]);
-
   const handleRoleSelect = (role) => {
     let data = {
       id: role.value,
