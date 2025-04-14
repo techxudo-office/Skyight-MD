@@ -59,7 +59,7 @@ const Input = ({
           }
           disabled={disabled}
           name={name}
-          value={value}
+          value={value ?? ""}
           placeholder={placeholder}
           onChange={onChange}
           autoComplete={autoComplete}

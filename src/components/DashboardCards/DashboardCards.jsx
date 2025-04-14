@@ -70,7 +70,7 @@ const DashboardCards = () => {
                     {card.title}
                   </h3>
                   <p className="mt-2 text-2xl font-bold text-gray-900">
-                    {card.value.toLocaleString()}
+                    {card?.value?.toLocaleString()}
                   </p>
                   <div className="mt-2 text-sm text-gray-600">
                     <p>{card.description}</p>

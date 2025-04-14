@@ -18,11 +18,11 @@ export default function Tag({ value }) {
   const defaultClass = "text-greenColor bg-greenbg border-greenColor";
 
   return (
-    <p
+    <div
       className={` text-center text-sm w-full  mx-auto border-[1px] tracking-tight px-2 py-1 rounded-lg 
         ${statusClasses[value] || defaultClass} font-semibold capitalize`}
     >
       {value}
-    </p>
+    </div>
   );
 }
