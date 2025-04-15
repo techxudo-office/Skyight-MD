@@ -116,7 +116,7 @@ const Tickets = () => {
       )}
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
-          removeBorder={true}                       
+          removeBorder={true}
           heading={"Tickets"}
           className="flex items-center justify-between"
         />
@@ -157,7 +157,7 @@ const Tickets = () => {
               </p>
               <p className="flex items-center gap-x-4">
                 <strong className="text-text">Status:</strong>
-                <span className="w-24">
+                <span>
                   <Tag value={ticket.status} />
                 </span>
               </p>

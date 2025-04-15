@@ -126,10 +126,8 @@ const FlightBookings = () => {
             progressPending={isLoadingFlightBookings}
             paginationTotalRows={filteredData.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
-            // searching={false}
           />
         </CardLayoutBody>
-        <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>
     </>
   );

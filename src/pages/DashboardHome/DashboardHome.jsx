@@ -110,8 +110,8 @@ const DashboardHome = () => {
     <div className="px-5 pb-10 space-y-10">
       <DashboardCards />
       {DataArray.map((section, index) => (
-        <div key={index}>
-          <h2 className="mb-3 text-xl font-semibold flex items-center gap-3">{section.title} {section.title === "Iran Airtour" && <img className="bg-primary w-36 p-2 rounded-md" src="https://en.iranairtour.ir/Content/Images/logo/Brand-icon.png" />}</h2>
+        <div key={index} className="w-full">
+          <h2 className="flex items-center gap-3 mb-3 text-xl font-semibold">{section.title} {section.title === "Iran Airtour" && <img className="p-2 rounded-md bg-primary w-36" src="https://en.iranairtour.ir/Content/Images/logo/Brand-icon.png" />}</h2>
           <Table
             columnsData={columns}
             tableData={section.tableData || []}

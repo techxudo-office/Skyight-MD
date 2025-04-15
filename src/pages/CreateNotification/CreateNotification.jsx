@@ -9,7 +9,11 @@ import { Input, Button, Spinner, Select } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { adminValidation, ticketValidation } from "../../utils/validations";
+import {
+  adminValidation,
+  notificationValidation,
+  ticketValidation,
+} from "../../utils/validations";
 import { createNotification } from "../../_core/features/notificationSlice";
 import { getCompanies } from "../../_core/features/companySlice";
 
@@ -70,7 +74,7 @@ const CreateNotification = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!ticketValidation(formData, setErrors)) {
+    if (!notificationValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
       return;
     }
@@ -116,19 +120,26 @@ const CreateNotification = () => {
                   )}
                 </div>
               ))}
-              <Select
-                id="companies"
-                label="Company"
-                height="h-12"
-                value={selectedCompany ? selectedCompany.name : ""}
-                onChange={handleRoleSelect}
-                options={companies?.map((item) => ({
-                  value: item.id,
-                  label: item.name,
-                }))}
-                placeholder="Select a Company"
-                isLoading={isLoadingCompanies}
-              />
+              <div>
+                <Select
+                  id="companies"
+                  label="Company"
+                  height="h-12"
+                  value={selectedCompany ? selectedCompany.name : ""}
+                  onChange={handleRoleSelect}
+                  options={companies?.map((item) => ({
+                    value: item.id,
+                    label: item.name,
+                  }))}
+                  placeholder="Select a Company"
+                  isLoading={isLoadingCompanies}
+                />
+                {errors["company_id"] && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors["company_id"]}
+                  </p>
+                )}
+              </div>
             </div>
           </CardLayoutBody>
           <CardLayoutFooter>

@@ -112,11 +112,6 @@ const LoginForm = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center justify-end w-full">
-                  <Link className="transition-all hover:text-primary">
-                    Forget Password?
-                  </Link>
-                </div>
               </div>
             </div>
           </CardLayoutBody>
