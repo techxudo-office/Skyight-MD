@@ -18,7 +18,20 @@ const DashboardCards = () => {
     if (!adminData.token) return;
     dispatch(getDashboardAnalytics(adminData.token));
   }, [dispatch]);
-
+  const topCards = [
+    {
+      title: "Revenue",
+      value: dashboard?.totalRevenue,
+      description: "Gross revenue",
+      icon: <FaTachometerAlt className="text-3xl text-primary" />,
+    },
+    {
+      title: "P / L",
+      value: dashboard?.totalRevenue,
+      description: "Profit / Loss",
+      icon: <FaChartLine className="text-3xl text-primary" />,
+    },
+  ]
   const cardData = [
     {
       title: "Total Bookings",
@@ -37,31 +50,19 @@ const DashboardCards = () => {
       value: dashboard?.totalCompany,
       description: "Active users",
       icon: <FaUserAlt className="text-3xl text-primary" />,
-    },
-    {
-      title: "Revenue",
-      value: dashboard?.totalRevenue,
-      description: "Gross revenue",
-      icon: <FaTachometerAlt className="text-3xl text-primary" />,
-    },
-    {
-      title: "P / L",
-      value: dashboard?.totalRevenue,
-      description: "Profit / Loss",
-      icon: <FaChartLine className="text-3xl text-primary" />,
-    },
+    }
   ];
   return (
     <div className="w-full p-5">
       <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
       {isLoadingDashboard ? (
         <Loader />
-      ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {cardData.map((card, index) => (
+      ) : (<>
+        <div className="grid grid-cols-1 md:grid-cols-2 mb-4 border-t-4 shadow-sm border-primary  ">
+          {topCards.map((card, index) => (
             <div
               key={index}
-              className="p-3 transition-all duration-300 bg-white border-t-4 shadow-sm border-primary rounded-xl hover:shadow-md"
+              className="p-3 transition-all duration-300 bg-white border-[1px] border-background  hover:shadow-md"
             >
               <div className="flex items-center space-x-4">
                 {card.icon}
@@ -69,8 +70,8 @@ const DashboardCards = () => {
                   <h3 className="font-semibold text-gray-700 text-md">
                     {card.title}
                   </h3>
-                  <p className="mt-2 text-2xl font-bold text-gray-900">
-                    {card.value.toLocaleString()}
+                  <p className="mt-2 text-3xl font-bold text-gray-900">
+                    {card?.value?.toLocaleString()}
                   </p>
                   <div className="mt-2 text-sm text-gray-600">
                     <p>{card.description}</p>
@@ -80,6 +81,31 @@ const DashboardCards = () => {
             </div>
           ))}
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t-4 shadow-sm border-primary ">
+          {cardData.map((card, index) => (
+            <div
+              key={index}
+              className="p-3 transition-all duration-300 bg-white border-[1px] border-background hover:shadow-md"
+            >
+              <div className="flex items-center space-x-4">
+                {card.icon}
+                <div>
+                  <h3 className="font-semibold text-gray-700 text-md">
+                    {card.title}
+                  </h3>
+                  <p className="mt-2 text-2xl font-bold text-gray-900">
+                    {card?.value?.toLocaleString()}
+                  </p>
+                  <div className="mt-2 text-sm text-gray-600">
+                    <p>{card.description}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+
       )}
     </div>
   );

@@ -6,6 +6,7 @@ import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Flag from 'react-world-flags'
 
 const DashboardHome = () => {
   const dispatch = useDispatch();
@@ -79,7 +80,7 @@ const DashboardHome = () => {
 
   const DataArray = [
     {
-      title: "Latest Transactions",
+      title: "Iran Airtour",
       tableData: flightBookings,
       link: "/dashboard/transactions",
     },
@@ -110,7 +111,7 @@ const DashboardHome = () => {
       <DashboardCards />
       {DataArray.map((section, index) => (
         <div key={index}>
-          <h2 className="mb-3 text-xl font-semibold">{section.title}</h2>
+          <h2 className="mb-3 text-xl font-semibold flex items-center gap-3">{section.title} {section.title === "Iran Airtour" && <img className="bg-primary w-36 p-2 rounded-md" src="https://en.iranairtour.ir/Content/Images/logo/Brand-icon.png" />}</h2>
           <Table
             columnsData={columns}
             tableData={section.tableData || []}

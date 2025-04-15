@@ -205,12 +205,13 @@ const Sidebar = ({ status, updateStatus }) => {
                     ))}
                   </ul>
                 </div>
-              )}
+              )
+              }
             </div>
           ))}
         </ul>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
