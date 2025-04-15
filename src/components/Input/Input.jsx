@@ -18,7 +18,7 @@ const Input = ({
   placeholder,
   autoComplete,
   setEditingField,
-  inputClass
+  inputClass,
 }) => {
   const inputRef = useRef();
   const eyeIconRef = useRef(null);
@@ -42,10 +42,12 @@ const Input = ({
       <div
         className={`relative flex items-center rounded-lg border border-gray text-text ${
           disabled ? "bg-slate-100" : "bg-white"
-        }`}>
+        }`}
+      >
         <label
           htmlFor={id}
-          className="absolute px-1 mb-2 text-sm bg-white rounded-md -top-3 left-3 text-text">
+          className="absolute px-1 mb-2 text-sm bg-white rounded-md -top-3 left-3 text-text"
+        >
           {label}
         </label>
         <input
@@ -57,7 +59,7 @@ const Input = ({
           }
           disabled={disabled}
           name={name}
-          value={value}
+          value={value ?? ""}
           placeholder={placeholder}
           onChange={onChange}
           autoComplete={autoComplete}
@@ -72,7 +74,8 @@ const Input = ({
         {disabled && profile && edit && (
           <span
             className="absolute text-xl cursor-pointer right-3 text-primary"
-            onClick={onEditClick}>
+            onClick={onEditClick}
+          >
             <MdEdit className="text-xl text-black" />
           </span>
         )}
@@ -81,7 +84,8 @@ const Input = ({
             ref={eyeIconRef}
             className="absolute cursor-pointer right-3 eye-icon"
             onMouseDown={(e) => e.preventDefault()}
-            onClick={showPasswordHandler}>
+            onClick={showPasswordHandler}
+          >
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </span>
         )}
