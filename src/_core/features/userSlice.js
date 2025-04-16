@@ -83,7 +83,6 @@ const userSlice = createSlice({
       .addCase(editUser.fulfilled, (state, action) => {
         state.isEditingUser = false;
         const updatedUser = action.payload;
-        console.log(updatedUser);
         state.users = state.users.map((user) =>
           user.id === updatedUser.id ? { ...user, ...updatedUser } : user
         );
@@ -145,7 +144,7 @@ export const createUser = createAsyncThunk(
       toast.success("User created successfully");
       return response.data;
     } catch (error) {
-      console.log(error);
+
       const errorMessage =
         error.response?.data?.message || "Failed to create user.";
       toast.error(errorMessage);
@@ -180,7 +179,7 @@ export const editUser = createAsyncThunk(
   "user/editUser",
   async ({ id, token, data }, thunkAPI) => {
     try {
-      console.log(data, "data");
+
       const response = await axios.put(`${BASE_URL}/api/user/${id}`, data, {
         headers: {
           Authorization: token,

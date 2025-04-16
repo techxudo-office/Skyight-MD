@@ -14,7 +14,7 @@ import { logo } from '../../assets/Index';
 import { MdDelete } from 'react-icons/md';
 // import {Cell}  from "@table-library/react-table-library/table";
 
-const TableNew = ({ columnsToView, tableData, actions, activeIndex, extraRows, onDeleteUser,downloadBtn }) => {
+const TableNew = ({ columnsToView, tableData, actions, activeIndex, extraRows, onDeleteUser, downloadBtn }) => {
     // const data = React.useMemo(() => tableData, []);
     const data = tableData;
     const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -26,11 +26,6 @@ const TableNew = ({ columnsToView, tableData, actions, activeIndex, extraRows, o
     const [maxLength, setmaxLength] = useState(null);
     const [editIdx, setEditIdx] = useState(null);
 
-
-    console.log('tableData', tableData)
-    // console.log('active in/dex', activeIndex)
-    // console.log('columns', columnsToView)
-    // console.log(extraRow);
 
 
 
@@ -50,7 +45,6 @@ const TableNew = ({ columnsToView, tableData, actions, activeIndex, extraRows, o
     }, [])
 
 
-    console.log('filednames', extraRows)
     useEffect(() => {
         // it is to get the field names from tableData which are  present in extraRows an and show them when click on viw button action
         if (activeIndex != null & extraRows != undefined) {
@@ -224,7 +218,7 @@ const TableNew = ({ columnsToView, tableData, actions, activeIndex, extraRows, o
         //                 <div>
         //                     <DownloadButton/>
         //                 </div>
-                    
+
 
         //         </span>
         //     )
@@ -389,7 +383,6 @@ const TableNew = ({ columnsToView, tableData, actions, activeIndex, extraRows, o
     useEffect(() => {
         setPageSize(Number(finalRowsPerPage)); // Ensure it's a number
     }, [finalRowsPerPage, setPageSize]);
-    // console.log('headers', headerGroups)
     return (
         <div className="">
 

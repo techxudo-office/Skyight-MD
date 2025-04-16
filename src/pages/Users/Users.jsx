@@ -44,31 +44,31 @@ const Users = ({ isCompanyUser }) => {
       name: "USER ID",
       selector: (row) => row?.id,
       sortable: false,
-       
+
     },
     {
       name: "FIRST NAME",
       selector: (row) => row?.first_name,
       sortable: false,
-       
+
     },
     {
       name: "LAST NAME",
       selector: (row) => row?.last_name,
       sortable: false,
-       
+
     },
     {
       name: "EMAIL",
       selector: (row) => row?.email,
       sortable: false,
-       
+
     },
     {
       name: "ROLE",
       selector: (row) => row?.role?.role,
       sortable: false,
-       
+
     },
     {
       name: "",
@@ -95,7 +95,7 @@ const Users = ({ isCompanyUser }) => {
         </div>
       ),
       sortable: false,
-       
+
     },
   ];
 
@@ -104,7 +104,6 @@ const Users = ({ isCompanyUser }) => {
   };
 
   const deleteUserHandler = () => {
-    console.log(deleteId, "deleteId TABLE");
     if (!deleteId) {
       errorToastify("Failed to delete this user");
       setModalStatus(false);

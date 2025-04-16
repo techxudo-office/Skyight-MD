@@ -70,7 +70,7 @@ export const editcommision = createAsyncThunk(
   "commision/editcommision",
   async ({ token, data }, thunkAPI) => {
     try {
-      console.log(data, "data");
+
       const response = await axios.post(
         `${BASE_URL}/api/update-Commission`,
         data,

@@ -359,7 +359,6 @@ export const getBookingDetails = createAsyncThunk(
   "booking/getBookingDetails",
   async ({ id, token }, thunkAPI) => {
     try {
-      console.log("getBookingDetails running");
       const response = await axios.get(`${BASE_URL}/api/booking/${id}`, {
         headers: {
           "Content-Type": "application/json",
@@ -570,7 +569,6 @@ export const requestRefund = createAsyncThunk(
 export const getRefundFlight = createAsyncThunk(
   "booking/getRefundFlight",
   async (token, thunkAPI) => {
-    console.log("refund api called-----");
     try {
       const response = await axios.get(`${BASE_URL}/api/refund-booking`, {
         headers: {

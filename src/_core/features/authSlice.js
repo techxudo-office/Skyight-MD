@@ -98,7 +98,6 @@ const authSlice = createSlice({
         state.isUpdatingAccount = true;
       })
       .addCase(updateAccount.fulfilled, (state, action) => {
-        console.log(action.payload, "UserInfo");
         state.isUpdatingAccount = false;
         state.adminData = {
           ...state.adminData,
@@ -241,7 +240,7 @@ export const updateAccount = createAsyncThunk(
   "auth/updateAccount",
   async ({ token, data, id }, thunkAPI) => {
     try {
-      console.log(data, "data");
+
       let response = await axios.put(
         `${BASE_URL}/api/admin/${id}`,
         data,

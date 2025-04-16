@@ -39,7 +39,6 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
   const { isEditingRole } = useSelector((state) => state.role);
 
   useEffect(() => {
-    console.log(roleData);
     if (roleData) setRolesData(roleData);
   }, [roleData]);
 

@@ -88,7 +88,6 @@ const Admin = () => {
   };
 
   const deleteUserHandler = () => {
-    console.log(deleteId, "deleteId TABLE");
     if (!deleteId) {
       errorToastify("Failed to delete this user");
       setModalStatus(false);

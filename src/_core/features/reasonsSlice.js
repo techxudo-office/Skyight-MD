@@ -142,7 +142,7 @@ export const createReason = createAsyncThunk(
       toast.success("Reason created successfully");
       return response.data.data;
     } catch (error) {
-      console.log(error);
+
       const errorMessage =
         error.response?.data?.message || "Failed to create reason.";
       toast.error(errorMessage);
@@ -159,7 +159,7 @@ export const editReason = createAsyncThunk(
       reason: data,
     };
     try {
-      console.log(data, "data");
+
       const response = await axios.put(
         `${BASE_URL}/api/reason/${id}`,
         payload,

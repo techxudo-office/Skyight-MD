@@ -85,7 +85,7 @@ export const createNotification = createAsyncThunk(
       toast.success("Notification sent successfully");
       return response.data.data;
     } catch (error) {
-      console.log(error);
+
       const errorMessage =
         error.response?.data?.message || "Failed to sent notification.";
       toast.error(errorMessage);

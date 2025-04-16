@@ -58,7 +58,7 @@ const RefundRequests = () => {
       name: "PNR",
       selector: (row) => row.booking_reference_id,
       sortable: false,
-       
+
       grow: 2,
     },
     {
@@ -114,7 +114,6 @@ const RefundRequests = () => {
     dispatch(refundRequestFlight({ id, token: adminData?.token }));
   };
 
-  console.log("get refund booking", refundBookings);
   return (
     <>
       <ConfirmModal

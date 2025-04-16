@@ -22,7 +22,6 @@ const Table = ({
   }, [tableData, currentPage, rowsPerPage]);
 
   const handlePageChange = (page) => {
-    console.log("Page Changed to:", page);
     setCurrentPage(page);
   };
 

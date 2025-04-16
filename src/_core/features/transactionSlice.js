@@ -68,7 +68,6 @@ const transactionSlice = createSlice({
       .addCase(editTransaction.fulfilled, (state, action) => {
         state.isEditingTransaction = false;
         const transaction = action.payload;
-        console.log(transaction);
         state.transactions = state.transactions.map((tran) =>
           tran.id === transaction.id ? { ...tran, ...transaction } : tran
         );
@@ -157,7 +156,7 @@ export const editTransaction = createAsyncThunk(
   "transaction/editTransaction",
   async ({ token, data }, thunkAPI) => {
     try {
-      console.log(data, "data");
+
       const response = await axios.put(
         `${BASE_URL}/api/company/update-transaction`,
         data,

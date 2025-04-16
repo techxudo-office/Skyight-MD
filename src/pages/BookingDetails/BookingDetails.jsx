@@ -51,7 +51,6 @@ const TicketDetails = () => {
       const refId = location.state.id;
       dispatch(getBookingDetails({ id: refId, token: adminData?.token })).then(
         (resp) => {
-          console.log(resp, "bookingDetails");
         }
       );
     }

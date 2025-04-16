@@ -18,7 +18,6 @@ const DownloadButton = () => {
         if (!element) {
             return
         } else {
-            console.log(element)
             const canvas = await html2canvas(element, {
                 scale: 2
             })

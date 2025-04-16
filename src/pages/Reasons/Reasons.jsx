@@ -36,7 +36,6 @@ const Reasons = () => {
   const [updateReason, setUpdateReason] = useState(null);
   const [editId, setEditId] = useState(null);
 
-  console.log("reasons", reasons);
   const navigationHandler = () => {
     navigate("/dashboard/create-reason");
   };
@@ -46,14 +45,14 @@ const Reasons = () => {
     status: false,
     text: "",
     loading: false,
-    onAbort: () => {},
-    onConfirm: () => {},
+    onAbort: () => { },
+    onConfirm: () => { },
   });
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
     isOpen: false,
     contentLabel: "",
-    onRequestClose: () => {},
+    onRequestClose: () => { },
   });
   const [deleteId, setDeleteId] = useState(null);
 

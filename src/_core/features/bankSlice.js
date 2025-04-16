@@ -88,12 +88,12 @@ export const getBanks = createAsyncThunk(
           Authorization: token,
         },
       });
-      if (response.data.data?.length > 0) {
+      if (response?.data.data?.length > 0) {
         // const extractedData = response.data.data[0].map(({ id, bank }) => ({
         //   value: id,
         //   label: bank,
         // }));
-        return response.data.data;
+        return response?.data.data;
       } else {
         throw new Error("No Banks Found");
       }
@@ -118,7 +118,7 @@ export const deleteBank = createAsyncThunk(
         }
       );
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         toast.success("bank deleted successfully");
         return id;
       }
@@ -142,9 +142,9 @@ export const createBank = createAsyncThunk(
         },
       });
       toast.success("bank created successfully");
-      return response.data.data;
+      return response?.data.data;
     } catch (error) {
-      console.log(error);
+
       const errorMessage =
         error.response?.data?.message || "Failed to create bank.";
       toast.error(errorMessage);
@@ -161,7 +161,7 @@ export const editBank = createAsyncThunk(
       bank: data,
     };
     try {
-      console.log(data, "data");
+
       const response = await axios.put(`${BASE_URL}/api/bank/`, payload, {
         headers: {
           Authorization: token,

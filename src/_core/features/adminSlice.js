@@ -85,7 +85,6 @@ const adminSlice = createSlice({
       .addCase(editAdmin.fulfilled, (state, action) => {
         state.isEditingAdmin = false;
         const updatedAdmin = action.payload;
-        console.log(updatedAdmin);
         state.admins = state.admins.map((user) =>
           user.id === updatedAdmin.id ? { ...user, ...updatedAdmin } : user
         );
@@ -148,7 +147,7 @@ export const createAdmin = createAsyncThunk(
       toast.success("Admin created successfully");
       return response.data;
     } catch (error) {
-      console.log(error);
+
       const errorMessage =
         error.response?.data?.message || "Failed to create admin.";
       toast.error(errorMessage);
@@ -183,7 +182,7 @@ export const editAdmin = createAsyncThunk(
   "admin/editAdmin",
   async ({ id, token, data }, thunkAPI) => {
     try {
-      console.log(data, "data");
+
       const response = await axios.put(`${BASE_URL}/api/admin/${id}`, data, {
         headers: {
           Authorization: token,

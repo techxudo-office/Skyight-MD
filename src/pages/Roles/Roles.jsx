@@ -42,19 +42,19 @@ const Roles = () => {
       name: "ROLE",
       selector: (row) => row.role,
       sortable: false,
-       
+
     },
     {
       name: "ROLE ID",
       selector: (row) => row.id,
       sortable: false,
-       
+
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
-       
+
     },
     {
       name: "",
@@ -63,7 +63,6 @@ const Roles = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              console.log(row, "Row");
               setEditRoleData(row);
               setIsEditModalOpen(true);
             }}
@@ -82,12 +81,11 @@ const Roles = () => {
         </div>
       ),
       sortable: false,
-       
+
     },
   ];
 
   // const deleteUserHandler = () => {
-  //   console.log(deleteId, "deleteId TABLE");
   //   if (!deleteId) {
   //     errorToastify("Failed to delete this user");
   //     setModalStatus(false);

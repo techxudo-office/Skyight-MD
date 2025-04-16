@@ -13,7 +13,6 @@ const FlightDetailCard = ({ flights }) => {
             setFlightSegments(flights.AirItinerary.OriginDestinationOptions[0].FlightSegment)
         }
     }, [flights])
-    console.log("flightSegments", flightSegments)
 
     return (
         <CardLayoutContainer className={'p-5 flightdetailpdf'}>
@@ -99,8 +98,8 @@ const FlightDetailCard = ({ flights }) => {
                                         <p className="font-semibold text-gray-700">
                                             {flight.DepartureAirport.Terminal} <span className="text-gray-500">/  {flight.DepartureAirport.Terminal} International Airport</span>
                                         </p>
-                                        <p className="text-sm text-gray-500"> 
-                                            {(flight.FlightDuration).split(":")[0].replace(0,'')}hrs : {(flight.FlightDuration).split(":")[1].replace(0,'')}mins</p>
+                                        <p className="text-sm text-gray-500">
+                                            {(flight.FlightDuration).split(":")[0].replace(0, '')}hrs : {(flight.FlightDuration).split(":")[1].replace(0, '')}mins</p>
 
                                         <p className="mt-4 font-semibold text-gray-700">
                                             {flight.ArrivalAirport.Terminal}<span className="text-gray-500">/ {flight.ArrivalAirport.Terminal} International Airport</span>

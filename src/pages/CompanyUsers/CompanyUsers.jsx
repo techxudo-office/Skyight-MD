@@ -25,19 +25,19 @@ const Companies = () => {
       name: "NAME",
       selector: (row) => `${row.first_name} ${row.last_name}`,
       sortable: false,
-       
+
     },
     {
       name: "NAME",
       selector: (row) => `${row.first_name} ${row.last_name}`,
       sortable: false,
-       
+
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
-       
+
     },
     {
       name: "CREATED AT",
@@ -48,7 +48,7 @@ const Companies = () => {
       name: "WEBSITE",
       selector: (row) => row.website,
       sortable: false,
-       
+
     },
     {
       name: "",
@@ -57,7 +57,6 @@ const Companies = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              console.log(row, "Row");
               setEditRoleData(row);
               setIsEditModalOpen(true);
             }}
@@ -67,7 +66,7 @@ const Companies = () => {
         </div>
       ),
       sortable: false,
-       
+
     },
   ];
 

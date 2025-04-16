@@ -50,7 +50,6 @@ const ticketSlice = createSlice({
         state.loadTicketsError = action.payload;
       })
       .addCase(editTicket.pending, (state) => {
-        console.log("It should be true")
         state.isUpdatingTicket = true;
         state.updateTicketError = null;
       })
@@ -85,7 +84,6 @@ export const createTicket = createAsyncThunk(
   "ticket/createTicket",
   async ({ data, token }, thunkAPI) => {
     try {
-      console.log(token, "token");
       const response = await axios.post(`${BASE_URL}/api/ticket`, data, {
         headers: {
           Authorization: token,

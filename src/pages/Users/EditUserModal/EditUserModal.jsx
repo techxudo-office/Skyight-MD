@@ -76,7 +76,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
 
   useEffect(() => {
     if (usersData) {
-      console.log(usersData, "usersData");
+
       setFormData({
         first_name: usersData?.first_name || "",
         last_name: usersData?.last_name || "",

@@ -66,7 +66,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data, "data");
+
       setFormData({
         full_name: data?.full_name || "",
         email: data?.email || "",

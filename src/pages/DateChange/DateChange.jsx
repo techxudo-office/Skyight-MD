@@ -78,7 +78,6 @@ const CancelRequests = () => {
   const gettingFlightBookings = async () => {
     const response = await getFlightBookings();
     if (response.status) {
-      console.log(response.data);
       const data = response.data;
       setBookingsData(
         data.filter(
@@ -102,7 +101,7 @@ const CancelRequests = () => {
       <ConfirmModal
         status={modalStatus}
         abortDelete={abortDeleteHandler}
-        // deleteHandler={cancelFlightBookingHandler}
+      // deleteHandler={cancelFlightBookingHandler}
       />
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
