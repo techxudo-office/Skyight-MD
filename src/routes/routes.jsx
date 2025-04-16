@@ -1,26 +1,24 @@
-import React, { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { routesData } from "../data/routesData";
 import toast from "react-hot-toast";
 
 const AppRoutes = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const auth = localStorage.getItem("auth_token");
   const { adminData } = useSelector((state) => state.auth);
 
+  const isInitialRender = useRef(true);
+
   useEffect(() => {
     if (!auth) {
-      toast.success("Logout Successfully");
-      navigate("/", { replace: true });
+      if (!isInitialRender.current) {
+        toast.success("Logged out successfully");
+        navigate("/", { replace: true });
+      } else {
+        isInitialRender.current = false;
+      }
     }
   }, [auth]);
 
@@ -47,6 +45,7 @@ const AppRoutes = () => {
             </Route>
           );
         }
+
         return (
           <Route
             key={index}
@@ -61,7 +60,6 @@ const AppRoutes = () => {
           />
         );
       })}
-      {/* <Route path="/dashboard/user/:companyId" element={<CompanyUsers />} /> */}
     </Routes>
   );
 };
