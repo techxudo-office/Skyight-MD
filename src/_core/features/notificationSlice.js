@@ -40,25 +40,21 @@ const notificationSlice = createSlice({
       .addCase(createNotification.rejected, (state, action) => {
         state.isCreatingNotification = false;
         state.createNotificationError = action.payload;
-      })
+      });
   },
 });
 
 export const getNotifications = createAsyncThunk(
   "notification/getNotifications",
-  async (token, thunkAPI) => {
+  async ({ token, id }, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/notification?isMaster=${true}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-
+      const response = await axios.get(`${BASE_URL}/api/notification/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
       if (response.status === 200) {
-        return response.data;
+        return response.data.data;
       } else {
         throw new Error("Failed to fetch notifications");
       }
@@ -76,16 +72,19 @@ export const createNotification = createAsyncThunk(
   "notification/createNotification",
   async ({ data, token }, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/SendNotificationToCompany`, data, {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `${BASE_URL}/api/SendNotificationToCompany`,
+        data,
+        {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       toast.success("Notification sent successfully");
       return response.data.data;
     } catch (error) {
-
       const errorMessage =
         error.response?.data?.message || "Failed to sent notification.";
       toast.error(errorMessage);

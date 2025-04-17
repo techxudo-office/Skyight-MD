@@ -1,33 +1,37 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect } from "react";
 import { FixedSizeList as List } from "react-window"; // Import List from react-window
 import {
   CardLayoutContainer,
   CardLayoutHeader,
 } from "../../components/CardLayout/CardLayout";
-import { getNotifications } from "../../utils/api_handler";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { Spinner, BellIcon } from "../../components/components";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getNotifications } from "../../_core/features/notificationSlice";
 
 const Notifications = () => {
-  const [notificationsData, setNotificationsData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const getNotificationsHandler = useCallback(async () => {
-    setLoading(true);
-    let response = await getNotifications();
-    if (response.status) {
-      setNotificationsData(response.data);
-    }
-    setLoading(false);
-  }, []);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { adminData } = useSelector((state) => state.auth);
+  const { notifications, isLoadingNotifications } = useSelector(
+    (state) => state.notification
+  );
 
   useEffect(() => {
-    getNotificationsHandler();
-  }, [getNotificationsHandler]);
+    if (!adminData?.token) return;
+    dispatch(
+      getNotifications({ token: adminData?.token, id: adminData?.admin?.id })
+    );
+  }, [adminData?.token]);
+
+  useEffect(() => {
+    console.log(notifications, "notifications");
+  }, [notifications]);
 
   // Render function for each item in the list
   const renderRow = ({ index, style }) => {
-    const item = notificationsData[index];
+    const item = notifications[index];
     return (
       <div style={style} key={index}>
         <CardLayoutContainer className="w-full mb-5">
@@ -59,12 +63,12 @@ const Notifications = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      {loading && <Spinner className="mx-auto text-primary" />}
+      {isLoadingNotifications && <Spinner className="mx-auto text-primary" />}
 
-      {notificationsData?.length > 0 ? (
+      {notifications?.length > 0 ? (
         <List
           height={600} // Set the height of the viewport
-          itemCount={notificationsData.length} // Number of items to render
+          itemCount={notifications.length} // Number of items to render
           itemSize={100} // Height of each item in pixels (adjust as needed)
           width="100%" // Set the width of the list
         >
@@ -72,7 +76,7 @@ const Notifications = () => {
         </List>
       ) : (
         <>
-          {!loading && (
+          {!isLoadingNotifications && (
             <h2 className="text-center capitalize text-text">
               No Notifications Found
             </h2>
