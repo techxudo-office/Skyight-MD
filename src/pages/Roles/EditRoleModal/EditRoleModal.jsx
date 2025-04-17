@@ -14,6 +14,7 @@ import {
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
 import { editRole } from "../../../_core/features/roleSlice";
+import { updateAdminData } from "../../../_core/features/authSlice";
 
 Modal.setAppElement("#root");
 
@@ -77,6 +78,15 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
     dispatch(
       editRole({ data: payload, token: adminData?.token, id: rolesData?.id })
     ).then(() => {
+      dispatch(
+        updateAdminData({
+          ...adminData,
+          admin: {
+            ...adminData.admin,
+            role: resp.payload,
+          },
+        })
+      );
       onClose();
     });
   };

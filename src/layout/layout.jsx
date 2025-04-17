@@ -19,7 +19,7 @@ const Layout = () => {
                     <Outlet />
                 </div>
                 <div className="absolute bottom-0 flex justify-center w-full py-2 bg-white">
-                    <h2 className="mt-2 text-sm font-semibold text-center text-text">© 2024 All rights reserved by SKYIGHT AIR & BOOKING SYSTEM</h2>
+                    <h2 className="mt-2 text-sm font-semibold text-center text-text">© 2025 All rights reserved by SKYIGHT AIR & BOOKING SYSTEM</h2>
                 </div>
             </div>
         </div>

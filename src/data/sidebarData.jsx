@@ -1,118 +1,126 @@
-import { AiFillHome } from "react-icons/ai";
+import { useSelector } from "react-redux";
 import { FaSquarePollHorizontal } from "react-icons/fa6";
 import { TbManualGearboxFilled } from "react-icons/tb";
 import {
   MdAccountBalanceWallet,
   MdCancelScheduleSend,
   MdDoorbell,
-  MdEditSquare,
   MdOutlineGroups,
   MdOutlineNoteAlt,
   MdSettings,
 } from "react-icons/md";
-import { FaBusinessTime } from "react-icons/fa6";
 import { TbTransactionDollar } from "react-icons/tb";
 import { PiBankBold } from "react-icons/pi";
 import { IoTicket } from "react-icons/io5";
-import { FaUserShield, FaUser } from "react-icons/fa";
-import { VscGitStashApply } from "react-icons/vsc";
+import { FaUserShield } from "react-icons/fa";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { HiRectangleGroup } from "react-icons/hi2";
 import { IoMdBookmark } from "react-icons/io";
 import { RiRefund2Fill } from "react-icons/ri";
-export const sidebarLinks = [
-  {
-    title: "Dashboard",
-    path: "/dashboard",
-    icon: <HiRectangleGroup />,
-  },
-  {
-    title: "Companies",
-    path: "companies",
-    icon: <TbManualGearboxFilled />
-  },
-  {
-    title: "Apply Commisions",
-    path: "apply-commisions",
-    icon: <BiSolidDollarCircle />,
-  },
-  {
-    title: "Bookings",
-    icon: <IoMdBookmark />,
-    sublinks: [
-      {
-        title: "Transactions",
-        path: "transactions",
-        icon: <TbTransactionDollar />,
-      },
-      {
-        title: "Tickets",
-        path: "tickets",
-        icon: <IoTicket />,
-      },
-      {
-        title: "Flight Bookings",
-        path: "flight-bookings",
-        icon: <IoMdBookmark />,
-      },
-      {
-        title: "Refund Requests",
-        path: "refund-requests",
-        icon: <RiRefund2Fill />,
-      },
-      {
-        title: "Cancel Requests",
-        path: "cancel-requests",
-        icon: <MdCancelScheduleSend />,
-      },
-    ],
-  },
-  {
-    title: "Accounts",
-    icon: <MdAccountBalanceWallet />,
-    sublinks: [
-      {
-        title: "Banks",
-        path: "banks",
-        icon: <PiBankBold />,
-      },
-    ],
-  },
-  {
-    title: "Settings",
-    icon: <MdSettings />,
-    sublinks: [
-      {
-        title: "Reasons",
-        path: "reasons",
-        icon: <MdOutlineNoteAlt />,
-      },
-    ],
-  },
-  {
-    title: "Users",
-    icon: <MdOutlineGroups />,
-    sublinks: [
-      {
-        title: "Roles",
-        path: "roles",
-        icon: <FaSquarePollHorizontal />,
-      },
-      // {
-      //   title: "Users",
-      //   path: "users",
-      //   icon: <FaUser />,
-      // },
-      {
-        title: "Admins",
-        path: "admins",
-        icon: <FaUserShield />,
-      },
-    ],
-  },
-  {
-    title: "Notifications",
-    path: "notifications",
-    icon: <MdDoorbell />,
-  },
-];
+
+export const useAdminSidebarLinks = () => {
+  const adminData = useSelector((state) => state.auth.adminData);
+  const pagePermissions = adminData?.admin?.role?.page_permission || {
+            "dashboard": true,
+            "flights": true,
+            "bookings": true,
+            "credits": true,
+            "transactions": true,
+            "history": true,
+            "administrators": true,
+            "tickets": true,
+            "help_and_support": true
+  };
+
+  return [
+    pagePermissions.dashboard && {
+      title: "Dashboard",
+      path: "/dashboard",
+      icon: <HiRectangleGroup />,
+    },
+    pagePermissions.companies && {
+      title: "Companies",
+      path: "companies",
+      icon: <TbManualGearboxFilled />,
+    },
+    pagePermissions.apply_commisions && {
+      title: "Apply Commisions",
+      path: "apply-commisions",
+      icon: <BiSolidDollarCircle />,
+    },
+    pagePermissions.bookings && {
+      title: "Bookings",
+      icon: <IoMdBookmark />,
+      sublinks: [
+        pagePermissions.transactions && {
+          title: "Transactions",
+          path: "transactions",
+          icon: <TbTransactionDollar />,
+        },
+        pagePermissions.tickets && {
+          title: "Tickets",
+          path: "tickets",
+          icon: <IoTicket />,
+        },
+        pagePermissions.flight_bookings && {
+          title: "Flight Bookings",
+          path: "flight-bookings",
+          icon: <IoMdBookmark />,
+        },
+        pagePermissions.refund_requests && {
+          title: "Refund Requests",
+          path: "refund-requests",
+          icon: <RiRefund2Fill />,
+        },
+        pagePermissions.cancel_requests && {
+          title: "Cancel Requests",
+          path: "cancel-requests",
+          icon: <MdCancelScheduleSend />,
+        },
+      ].filter(Boolean),
+    },
+    pagePermissions.accounts && {
+      title: "Accounts",
+      icon: <MdAccountBalanceWallet />,
+      sublinks: [
+        pagePermissions.banks && {
+          title: "Banks",
+          path: "banks",
+          icon: <PiBankBold />,
+        },
+      ].filter(Boolean),
+    },
+    pagePermissions.settings && {
+      title: "Settings",
+      icon: <MdSettings />,
+      sublinks: [
+        pagePermissions.reasons && {
+          title: "Reasons",
+          path: "reasons",
+          icon: <MdOutlineNoteAlt />,
+        },
+      ].filter(Boolean),
+    },
+    pagePermissions.administrators && {
+      title: "Users",
+      icon: <MdOutlineGroups />,
+      sublinks: [
+        pagePermissions.roles && {
+          title: "Roles",
+          path: "roles",
+          icon: <FaSquarePollHorizontal />,
+        },
+        pagePermissions.admins && {
+          title: "Admins",
+          path: "admins",
+          icon: <FaUserShield />,
+        },
+      ].filter(Boolean),
+    },
+    pagePermissions.help_and_support && {
+      title: "Notifications",
+      path: "notifications",
+      icon: <MdDoorbell />,
+    },
+  ].filter(Boolean);
+};

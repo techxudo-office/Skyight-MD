@@ -27,7 +27,11 @@ const initialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    updateAdminData: (state, action) => {
+      state.adminData = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -111,59 +115,72 @@ const authSlice = createSlice({
   },
 });
 
-export const login = createAsyncThunk("auth/login", async (payload, thunkAPI) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/api/login`, payload, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.status === 200) {
-      toast.success("Login Successfully");
-      return response.data.data;
+export const login = createAsyncThunk(
+  "auth/login",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/api/login`, payload, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        toast.success("Login Successfully");
+        return response.data.data;
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Login failed"
+      );
     }
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Login failed. Please try again.");
-    return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Login failed"
-    );
   }
-});
+);
 
-export const logout = createAsyncThunk("auth/logout", async (token, thunkAPI) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/logout`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    });
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (token, thunkAPI) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/logout`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
 
-    if (response.status === 200) {
-      toast.success("Logout Successfully");
-      return response.data.message;
+      if (response.status === 200) {
+        toast.success("Logout Successfully");
+        return response.data.message;
+      }
+    } catch (error) {
+      console.error("Logout Error:", error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Logout failed"
+      );
     }
-  } catch (error) {
-    console.error("Logout Error:", error);
-    return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Logout failed"
-    );
   }
-});
+);
 
 export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/forgot-password`, payload);
+      const response = await axios.post(
+        `${BASE_URL}/api/forgot-password`,
+        payload
+      );
       if (response.status === 200) {
         toast.success("Forgot Password Successfully");
         return response.data.message;
       }
     } catch (error) {
-      toast.success(error.response?.data?.message || "Forgot password request failed");
+      toast.success(
+        error.response?.data?.message || "Forgot password request failed"
+      );
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Forgot password request failed"
       );
@@ -175,7 +192,10 @@ export const register = createAsyncThunk(
   "auth/registerCompany",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/register-company`, payload);
+      const response = await axios.post(
+        `${BASE_URL}/api/register-company`,
+        payload
+      );
       if (response.status === 200) {
         toast.success("Registration successful. Verify OTP...");
         return response.data.message;
@@ -202,7 +222,10 @@ export const verifyOTP = createAsyncThunk(
   "auth/verifyOTP",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/verify-verification-code`, payload);
+      const response = await axios.post(
+        `${BASE_URL}/api/verify-verification-code`,
+        payload
+      );
       if (response.status === 200) {
         toast.success("OTP Verified Successfully");
         return response.data.message;
@@ -220,7 +243,10 @@ export const resendCode = createAsyncThunk(
   "auth/resendCode",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/resend-verification-code`, payload);
+      const response = await axios.post(
+        `${BASE_URL}/api/resend-verification-code`,
+        payload
+      );
       if (response.status === 200) {
         toast.success("Verification code resent successfully");
         return response.data.message;
@@ -240,16 +266,11 @@ export const updateAccount = createAsyncThunk(
   "auth/updateAccount",
   async ({ token, data, id }, thunkAPI) => {
     try {
-
-      let response = await axios.put(
-        `${BASE_URL}/api/admin/${id}`,
-        data,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      let response = await axios.put(`${BASE_URL}/api/admin/${id}`, data, {
+        headers: {
+          Authorization: token,
+        },
+      });
 
       if (response.status === 200) {
         toast.success("Account updated successfully");
@@ -260,8 +281,10 @@ export const updateAccount = createAsyncThunk(
         error?.response?.data?.message || "Failed while updating your Account";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
-    } 3
+    }
+    3;
   }
 );
 
+export const { updateAdminData } = authSlice.actions;
 export default authSlice.reducer;
