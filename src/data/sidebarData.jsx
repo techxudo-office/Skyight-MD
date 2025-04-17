@@ -21,15 +21,15 @@ import { RiRefund2Fill } from "react-icons/ri";
 export const useAdminSidebarLinks = () => {
   const adminData = useSelector((state) => state.auth.adminData);
   const pagePermissions = adminData?.admin?.role?.page_permission || {
-            "dashboard": true,
-            "flights": true,
-            "bookings": true,
-            "credits": true,
-            "transactions": true,
-            "history": true,
-            "administrators": true,
-            "tickets": true,
-            "help_and_support": true
+    dashboard: true,
+    flights: true,
+    bookings: true,
+    credits: true,
+    transactions: true,
+    history: true,
+    administrators: true,
+    tickets: true,
+    help_and_support: true,
   };
 
   return [
@@ -38,12 +38,12 @@ export const useAdminSidebarLinks = () => {
       path: "/dashboard",
       icon: <HiRectangleGroup />,
     },
-    pagePermissions.companies && {
+    {
       title: "Companies",
       path: "companies",
       icon: <TbManualGearboxFilled />,
     },
-    pagePermissions.apply_commisions && {
+    {
       title: "Apply Commisions",
       path: "apply-commisions",
       icon: <BiSolidDollarCircle />,
@@ -62,35 +62,35 @@ export const useAdminSidebarLinks = () => {
           path: "tickets",
           icon: <IoTicket />,
         },
-        pagePermissions.flight_bookings && {
+        pagePermissions.flights && {
           title: "Flight Bookings",
           path: "flight-bookings",
           icon: <IoMdBookmark />,
         },
-        pagePermissions.refund_requests && {
+        {
           title: "Refund Requests",
           path: "refund-requests",
           icon: <RiRefund2Fill />,
         },
-        pagePermissions.cancel_requests && {
+        {
           title: "Cancel Requests",
           path: "cancel-requests",
           icon: <MdCancelScheduleSend />,
         },
       ].filter(Boolean),
     },
-    pagePermissions.accounts && {
+    {
       title: "Accounts",
       icon: <MdAccountBalanceWallet />,
       sublinks: [
-        pagePermissions.banks && {
+        {
           title: "Banks",
           path: "banks",
           icon: <PiBankBold />,
         },
       ].filter(Boolean),
     },
-    pagePermissions.settings && {
+    {
       title: "Settings",
       icon: <MdSettings />,
       sublinks: [
@@ -105,12 +105,12 @@ export const useAdminSidebarLinks = () => {
       title: "Users",
       icon: <MdOutlineGroups />,
       sublinks: [
-        pagePermissions.roles && {
+        {
           title: "Roles",
           path: "roles",
           icon: <FaSquarePollHorizontal />,
         },
-        pagePermissions.admins && {
+        pagePermissions.administrators && {
           title: "Admins",
           path: "admins",
           icon: <FaUserShield />,
