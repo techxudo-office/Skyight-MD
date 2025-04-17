@@ -78,7 +78,7 @@ const Settings = () => {
     const file = event.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setProfileImage(file);
+      setProfileImage(imageUrl);
     }
   };
   const profileFields = [

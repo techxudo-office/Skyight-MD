@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DashboardCards, Table, Tag } from "../../components/components";
-import { getFlightBookings } from "../../_core/features/bookingSlice";
+import { getFlightBookings, getLatestBooking } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Flag from 'react-world-flags'
+import Flag from "react-world-flags";
 
 const DashboardHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { adminData } = useSelector((state) => state.auth);
-  const { flightBookings, isLoadingFlightBookings } = useSelector(
+  const { latestBookings, isLoadingLatestBookings } = useSelector(
     (state) => state.booking
   );
 
@@ -81,29 +81,29 @@ const DashboardHome = () => {
   const DataArray = [
     {
       title: "Iran Airtour",
-      tableData: flightBookings,
+      tableData: latestBookings?.booked[0],
       link: "/dashboard/transactions",
     },
     {
-      title: "Refund Requests",
-      tableData: flightBookings,
-      link: "/dashboard/refund-requests",
-    },
-    {
       title: "Recent Bookings",
-      tableData: flightBookings,
+      tableData: latestBookings?.booked[0],
       link: "/dashboard/flight-bookings",
     },
     {
+      title: "Refund Requests",
+      tableData: latestBookings?.refundedBookings[0],
+      link: "/dashboard/refund-requests",
+    },
+    {
       title: "Cancelled Orders",
-      tableData: flightBookings,
+      tableData: latestBookings?.cancelledBookings[0],
       link: "/dashboard/cancel-requests",
     },
   ];
 
   useEffect(() => {
     if (!adminData.token) return;
-    dispatch(getFlightBookings(adminData.token));
+    dispatch(getLatestBooking(adminData.token));
   }, [dispatch]);
 
   return (
@@ -111,12 +111,20 @@ const DashboardHome = () => {
       <DashboardCards />
       {DataArray.map((section, index) => (
         <div key={index} className="w-full">
-          <h2 className="flex items-center gap-3 mb-3 text-xl font-semibold">{section.title} {section.title === "Iran Airtour" && <img className="p-2 rounded-md bg-primary w-36" src="https://en.iranairtour.ir/Content/Images/logo/Brand-icon.png" />}</h2>
+          <h2 className="flex items-center gap-3 mb-3 text-xl font-semibold">
+            {section.title}{" "}
+            {section.title === "Iran Airtour" && (
+              <img
+                className="p-2 rounded-md bg-primary w-36"
+                src="https://en.iranairtour.ir/Content/Images/logo/Brand-icon.png"
+              />
+            )}
+          </h2>
           <Table
             columnsData={columns}
             tableData={section.tableData || []}
-            progressPending={isLoadingFlightBookings}
-            paginationTotalRows={section.tableData.length}
+            progressPending={isLoadingLatestBookings}
+            paginationTotalRows={section?.tableData?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
           <div className="mt-4 text-right">

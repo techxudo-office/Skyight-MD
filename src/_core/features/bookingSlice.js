@@ -20,6 +20,10 @@ const initialState = {
   isLoadingFlightBookings: false,
   flightBookingsError: null,
 
+  latestBookings: [],
+  isLoadingLatestBookings: false,
+  latestBookingsError: null,
+
   bookingDetails: [],
   isLoadingBookingDetails: false,
   bookingDetailsError: null,
@@ -115,6 +119,18 @@ const bookingSlice = createSlice({
       .addCase(getFlightBookings.rejected, (state, action) => {
         state.isLoadingFlightBookings = false;
         state.flightBookingsError = action.payload;
+      })
+      .addCase(getLatestBooking.pending, (state) => {
+        state.isLoadingLatestBookings = true;
+        state.latestBookingsError = null;
+      })
+      .addCase(getLatestBooking.fulfilled, (state, action) => {
+        state.isLoadingLatestBookings = false;
+        state.latestBookings = action.payload;
+      })
+      .addCase(getLatestBooking.rejected, (state, action) => {
+        state.isLoadingLatestBookings = false;
+        state.latestBookingsError = action.payload;
       })
       .addCase(getBookingDetails.pending, (state) => {
         state.isLoadingBookingDetails = true;
@@ -350,6 +366,27 @@ export const getFlightBookings = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch flight bookings.";
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getLatestBooking = createAsyncThunk(
+  "booking/getLatestBooking",
+  async (token, thunkAPI) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/get-latest-bookings`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+      if (response.status === 200) {
+        return response.data.data;
+      }
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch booking details";
       return thunkAPI.rejectWithValue(errorMessage);
     }
   }
