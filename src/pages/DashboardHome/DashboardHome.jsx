@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DashboardCards, Table, Tag } from "../../components/components";
-import { getFlightBookings, getLatestBooking } from "../../_core/features/bookingSlice";
+import {
+  getFlightBookings,
+  getLatestBooking,
+} from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
@@ -78,33 +81,37 @@ const DashboardHome = () => {
     },
   ];
 
-  const DataArray = [
-    {
-      title: "Iran Airtour",
-      tableData: latestBookings?.booked[0],
-      link: "/dashboard/transactions",
-    },
-    {
-      title: "Recent Bookings",
-      tableData: latestBookings?.booked[0],
-      link: "/dashboard/flight-bookings",
-    },
-    {
-      title: "Refund Requests",
-      tableData: latestBookings?.refundedBookings[0],
-      link: "/dashboard/refund-requests",
-    },
-    {
-      title: "Cancelled Orders",
-      tableData: latestBookings?.cancelledBookings[0],
-      link: "/dashboard/cancel-requests",
-    },
-  ];
-
   useEffect(() => {
     if (!adminData.token) return;
     dispatch(getLatestBooking(adminData.token));
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log(latestBookings);
+  }, [latestBookings]);
+
+  const DataArray = [
+    {
+      title: "Iran Airtour",
+      tableData: latestBookings?.booked && latestBookings?.booked[0],
+      link: "/dashboard/transactions",
+    },
+    {
+      title: "Recent Bookings",
+      tableData: latestBookings?.booked && latestBookings?.booked[0],
+      link: "/dashboard/flight-bookings",
+    },
+    {
+      title: "Refund Requests",
+      tableData: latestBookings?.booked && latestBookings?.refundedBookings[0],
+      link: "/dashboard/refund-requests",
+    },
+    {
+      title: "Cancelled Orders",
+      tableData: latestBookings?.booked && latestBookings?.booked[0],
+      link: "/dashboard/cancel-requests",
+    },
+  ];
 
   return (
     <div className="px-5 pb-10 space-y-10">
@@ -122,7 +129,7 @@ const DashboardHome = () => {
           </h2>
           <Table
             columnsData={columns}
-            tableData={section.tableData || []}
+            tableData={section?.tableData || []}
             progressPending={isLoadingLatestBookings}
             paginationTotalRows={section?.tableData?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}

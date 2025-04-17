@@ -106,6 +106,13 @@ const ApplyCommisions = () => {
 
   const columns = [
     {
+      name: "Penalty",
+      selector: (row) => row.commission,
+      sortable: false,
+      wrap: true,
+      grow: 2,
+    },
+    {
       name: "Commission",
       selector: (row) => row.commission,
       sortable: false,
