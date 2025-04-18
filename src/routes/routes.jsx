@@ -13,12 +13,12 @@ const AppRoutes = () => {
 
   useEffect(() => {
     if (!auth) {
-      if (!isInitialRender.current) {
-        navigate("/", { replace: true });
-        toast.success("Logged out successfully");
-      } else {
-        isInitialRender.current = false;
-      }
+      // if (!isInitialRender.current) {
+      toast.success("Logged out successfully");
+      navigate("/", { replace: true });
+      // } else {
+      //   isInitialRender.current = false;
+      // }
     }
   }, [auth]);
 
