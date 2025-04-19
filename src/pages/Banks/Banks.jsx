@@ -7,6 +7,7 @@ import {
   Textarea,
   Button,
   CustomTooltip,
+  Searchbar,
 } from "../../components/components";
 import { deleteBank, editBank, getBanks } from "../../_core/features/bankSlice";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
+import { MdAdd, MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
 import toast from "react-hot-toast";
 
 const Banks = () => {
@@ -26,6 +27,7 @@ const Banks = () => {
   const dispatch = useDispatch();
 
   const [updateBank, setUpdateBank] = useState(null);
+  const [filteredBanks, setFilteredBanks] = useState([]);
   const [editId, setEditId] = useState(null);
 
   const navigationHandler = () => {
@@ -40,14 +42,14 @@ const Banks = () => {
     status: false,
     text: "",
     loading: false,
-    onAbort: () => {},
-    onConfirm: () => {},
+    onAbort: () => { },
+    onConfirm: () => { },
   });
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
     isOpen: false,
     contentLabel: "",
-    onRequestClose: () => {},
+    onRequestClose: () => { },
   });
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const Banks = () => {
       name: "Date",
       selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
       sortable: false,
-       
+
       grow: 2,
     },
     {
@@ -169,16 +171,23 @@ const Banks = () => {
             <SecondaryButton
               text={"Create New Bank"}
               onClick={navigationHandler}
+              icon={<MdAdd />}
             />
           </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
+          <Searchbar
+            data={banks}
+            onFilteredData={
+              setFilteredBanks
+            }
+            searchFields={["bank", "id"]} />
           <Table
             columnsData={columns}
-            tableData={banks || []}
+            tableData={filteredBanks || []}
             pagination={true}
             progressPending={isLoadingBanks}
-            paginationTotalRows={banks?.length}
+            paginationTotalRows={filteredBanks?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

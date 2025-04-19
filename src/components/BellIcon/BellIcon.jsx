@@ -13,7 +13,7 @@ const BellIcon = ({ icon }) => {
             whileTap={{ rotate: [0, -15, 15, -15, 15, 0] }}  // Click effect
             transition={{ duration: 0.5, repeat: 1, ease: "easeInOut" }}
             className="cursor-pointer"
-            onMouseEnter={playSound}
+        // onMouseEnter={playSound}
         >
             {icon}
         </motion.div>

@@ -41,7 +41,7 @@ const Notifications = () => {
           >
             <BellIcon
               icon={
-                <IoNotificationsOutline className="text-[46px] text-[#5372D8]" />
+                <IoNotificationsOutline className="text-[30px] text-[#5372D8]" />
               }
             />
             <div>

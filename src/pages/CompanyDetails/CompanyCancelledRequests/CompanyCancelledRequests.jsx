@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, Tag } from "../../../components/components";
+import { Searchbar, Table, Tag } from "../../../components/components";
 import { IoIosAirplane } from "react-icons/io";
 import { getCompanyBookings } from "../../../_core/features/bookingSlice";
 
@@ -16,6 +16,7 @@ const CompanyCancelledRequests = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { companyId } = useParams();
+  const [filteredData, setFilteredData] = useState([]);
   const [cancelledRequests, setCancelledRequests] = useState([]);
   const { adminData } = useSelector((state) => state.auth);
   const { companyBookings, isLoadingCompanyBookings } = useSelector(
@@ -57,7 +58,7 @@ const CompanyCancelledRequests = () => {
       name: "PNR",
       selector: (row) => row.booking_reference_id,
       sortable: false,
-       
+
       grow: 2,
     },
     {
@@ -99,7 +100,7 @@ const CompanyCancelledRequests = () => {
         </div>
       ),
       sortable: false,
-       
+
     },
   ];
 
@@ -112,12 +113,13 @@ const CompanyCancelledRequests = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
+          <Searchbar onFilteredData={setFilteredData} data={companyBookings} searchFields={["booking_reference_id", "booking_status"]} />
           <Table
             pagination={true}
             columnsData={columns}
-            tableData={cancelledRequests || []}
+            tableData={filteredData || []}
             progressPending={isLoadingCompanyBookings}
-            paginationTotalRows={cancelledRequests?.length}
+            paginationTotalRows={filteredData?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

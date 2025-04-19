@@ -24,7 +24,7 @@ const EditCommisionModal = ({ isOpen, onClose }) => {
   const { commisions, isEditingcommision } = useSelector(
     (state) => state.commision
   );
-
+  const [penalty, setPenalty] = useState(0);
   const [formData, setFormData] = useState({
     PKR: 0,
     IRR: 0,
@@ -63,7 +63,7 @@ const EditCommisionModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = () => {
     dispatch(editcommision({ data: formData, token: adminData?.token })).then(
-      () => { 
+      () => {
         onClose();
       }
     );
@@ -78,18 +78,16 @@ const EditCommisionModal = ({ isOpen, onClose }) => {
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit Commision" />
         <CardLayoutBody>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-5">
             {Object.keys(formData).map((key) => (
               <div key={key}>
-                <label className="block mb-1 text-gray-600">
-                  {key.toUpperCase()}
-                </label>
                 <Input
+                  label={key.toUpperCase()}
                   name={key}
                   type="number"
                   value={formData[key]}
                   onChange={handleChange}
-                  min="0"
+                  min=""
                   placeholder={`Enter ${key.toUpperCase()}`}
                 />
               </div>

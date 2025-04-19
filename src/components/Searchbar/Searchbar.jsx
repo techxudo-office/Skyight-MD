@@ -2,15 +2,23 @@ import React, { useState, useEffect } from "react";
 import { MdCancel } from "react-icons/md";
 
 const Searchbar = ({
-  placeholder = "Search",
+  placeholder,
   data = [],
   onFilteredData,
-  className
+  className,
+  searchFields = []
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Your search function (unchanged)
-  const searchObjects = (data, searchTerm) => {
+  // Helper function to get nested property value
+  const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((acc, part) => {
+      return acc && acc[part];
+    }, obj);
+  };
+
+  // Updated search function to handle nested fields
+  const searchObjects = (data, searchTerm, fields) => {
     if (!searchTerm || searchTerm.trim() === '') {
       return data;
     }
@@ -18,23 +26,25 @@ const Searchbar = ({
     const term = searchTerm.toString().toLowerCase();
 
     return data.filter(item => {
-      return Object.values(item).some(value => {
+      // If no specific fields are provided, search all fields (including nested ones)
+      if (fields.length === 0) {
+        return JSON.stringify(item).toLowerCase().includes(term);
+      }
+
+      return fields.some(field => {
+        const value = getNestedValue(item, field);
         if (value === null || value === undefined) {
           return false;
-        }
-        if (typeof value == "object") {
-          return Object.values(value).some(val => val.toString().toLowerCase().includes(term));
         }
         return value.toString().toLowerCase().includes(term);
       });
     });
   };
 
-  // Call this effect whenever search term or data changes
   useEffect(() => {
-    const filteredData = searchObjects(data, searchTerm);
+    const filteredData = searchObjects(data, searchTerm, searchFields);
     onFilteredData && onFilteredData(filteredData);
-  }, [searchTerm, data]);
+  }, [searchTerm, data, searchFields]);
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
@@ -49,7 +59,7 @@ const Searchbar = ({
       <input
         type="text"
         className="w-full p-4 outline-none rounded-md"
-        placeholder={placeholder}
+        placeholder={placeholder || `Search ${searchFields.map((field) => field.charAt(0).toUpperCase() + field.slice(1)).join(", ").replaceAll("_", " ").replaceAll(".", " ")}`}
         value={searchTerm}
         onChange={handleInputChange}
       />

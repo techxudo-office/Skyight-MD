@@ -30,6 +30,7 @@ const Table = ({
       name: "NO",
       selector: (_, index) => (currentPage - 1) * rowsPerPage + index + 1,
       sortable: false,
+      grow: 0,
     },
     ...columnsData?.map((col) => ({
       ...col,
