@@ -14,34 +14,8 @@ import { userValidation } from "../../utils/validations";
 import { createUser } from "../../_core/features/userSlice";
 import { getUserRoles } from "../../_core/features/roleSlice";
 import { getCompanies } from "../../_core/features/companySlice";
+import { createUserInpFields } from "../../utils/InputFields";
 
-let inputFields = [
-  {
-    name: "first_name",
-    label: "First Name*",
-    type: "text",
-    placeholder: "Enter First Name",
-  },
-  {
-    name: "last_name",
-    label: "Last Name*",
-    type: "text",
-    placeholder: "Enter Last Name",
-  },
-  { name: "email", label: "Email*", type: "email", placeholder: "Enter Email" },
-  {
-    name: "mobile_number",
-    label: "Mobile Number*",
-    type: "text",
-    placeholder: "Enter Mobile Number",
-  },
-  {
-    name: "password",
-    label: "Password*",
-    type: "password",
-    placeholder: "Enter Password",
-  },
-];
 const CreateUser = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
@@ -128,7 +102,7 @@ const CreateUser = () => {
         <form onSubmit={handleSubmit} noValidate>
           <CardLayoutBody>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-              {inputFields.map(({ name, label, type }) => (
+              {createUserInpFields.map(({ name, label, type }) => (
                 <div key={name} className="relative">
                   <Input
                     id={name}

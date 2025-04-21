@@ -16,9 +16,7 @@ export { default as BookingDetails } from "./BookingDetails/BookingDetails";
 export { default as Transactions } from "./Transactions/Transactions";
 export { default as Settings } from "./Settings/Settings";
 export { default as ApplyCommisions } from "./ApplyCommisions/ApplyCommisions";
-export { default as UpdateSetting } from "./UpdateSetting/UpdateSetting";
 export { default as CreateAdmin } from "./CreateAdmin/CreateAdmin";
-export { default as UpdateAdmin } from "./UpdateAdmin/UpdateAdmin";
 export { default as Companies } from "./Companies/Companies";
 export { default as CompanyUsers } from "./CompanyUsers/CompanyUsers";
 
@@ -35,7 +33,6 @@ export { default as Tickets } from "./Tickets/Tickets";
 
 export { default as RefundRequests } from "./RefundRequests/RefundRequests";
 export { default as CancelRequests } from "./CancelRequests/CancelRequests";
-export { default as DateChange } from "./DateChange/DateChange";
 
 export { default as Login } from "./Login/Login";
 export { default as NotificationPage } from "./NotificationPage/NotificationPage";

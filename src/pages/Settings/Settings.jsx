@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateAccount } from "../../_core/features/authSlice";
 import toast from "react-hot-toast";
 import { updateAccountValidation } from "../../utils/validations";
+import { profileSettingsFields } from "../../utils/InputFields";
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -81,29 +82,6 @@ const Settings = () => {
       setProfileImage(imageUrl);
     }
   };
-  const profileFields = [
-    {
-      label: "Full Name",
-      field: "full_name",
-      type: "text",
-      edit: true,
-      placeholder: "Enter your first name",
-    },
-    {
-      label: "Email Address",
-      field: "email",
-      type: "email",
-      edit: false,
-      placeholder: "example@email.com",
-    },
-    {
-      label: "Password",
-      field: "password",
-      type: "password",
-      edit: true,
-      placeholder: "Enter new password",
-    },
-  ];
 
   const renderEditableField = (
     label,
@@ -180,7 +158,7 @@ const Settings = () => {
 
           <CardLayoutBody removeBorder={true}>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-              {profileFields.map(
+              {profileSettingsFields.map(
                 ({ label, field, type, edit, placeholder }, index) => (
                   <div key={index}>
                     {renderEditableField(label, field, type, edit, placeholder)}

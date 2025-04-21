@@ -56,17 +56,6 @@ const companySlice = createSlice({
         state.isLoadingCompanyRevenue = false;
         state.companyRevenueError = action.payload;
       })
-      .addCase(createRole.pending, (state) => {
-        state.isLoadingCreateRole = true;
-      })
-      .addCase(createRole.fulfilled, (state, action) => {
-        state.isLoadingCreateRole = false;
-        state.roles = [action.payload, ...state.roles];
-      })
-      .addCase(createRole.rejected, (state, action) => {
-        state.isLoadingCreateRole = false;
-        state.rolesError = action.payload;
-      });
   },
 });
 
@@ -136,27 +125,6 @@ export const getCompanyRevenue = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch company revenue.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const createRole = createAsyncThunk(
-  "role/createRole",
-  async ({ data, token }, thunkAPI) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/api/role`, data, {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      });
-      toast.success("Role created successfully");
-      return response.data;
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to create role.";
       toast.error(errorMessage);
       return thunkAPI.rejectWithValue(errorMessage);
     }

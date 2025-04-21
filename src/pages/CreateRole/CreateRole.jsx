@@ -7,7 +7,8 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { Input, Button, Spinner } from "../../components/components";
 import toast, { Toaster } from "react-hot-toast";
-import { createRole } from "../../utils/api_handler";
+import { useDispatch } from "react-redux";
+import { createRole } from "../../_core/features/roleSlice";
 
 const initialRolesData = {
   name: "",
@@ -60,8 +61,10 @@ const Checkbox = ({ label, checked, onChange }) => {
 };
 
 const CreateRole = () => {
-  const [rolesData, setRolesData] = useState(initialRolesData);
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const { adminData } = useSelector((state) => state.auth);
+  const [rolesData, setRolesData] = useState(initialRolesData);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,7 +86,6 @@ const CreateRole = () => {
       toast.error("Please fill in all fields");
       return;
     }
-    setLoading(true);
 
     const payload = {
       name: rolesData.name,
@@ -92,15 +94,7 @@ const CreateRole = () => {
       action_permission: rolesData.action_permission,
     };
 
-    try {
-      await createRole(payload);
-      toast.success("Role created successfully");
-      setRolesData(initialRolesData);
-    } catch (error) {
-      toast.error("Failed to create role");
-    } finally {
-      setLoading(false);
-    }
+    dispatch(createRole({ data: payload, token: adminData?.token }));
   };
 
   return (

@@ -19,41 +19,10 @@ import { getUserRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
 import { editUser } from "../../../_core/features/userSlice";
 import { userValidation } from "../../../utils/validations";
+import { editUserInpFields } from "../../../utils/InputFields";
 
 Modal.setAppElement("#root");
 
-const inputFields = [
-  {
-    name: "first_name",
-    label: "First Name*",
-    type: "text",
-    placeholder: "Enter First Name",
-  },
-  {
-    name: "last_name",
-    label: "Last Name*",
-    type: "text",
-    placeholder: "Enter Last Name",
-  },
-  {
-    name: "email",
-    label: "Email*",
-    type: "text",
-    placeholder: "Enter Email",
-  },
-  {
-    name: "password",
-    label: "Password*",
-    type: "password",
-    placeholder: "Enter New Password",
-  },
-  {
-    name: "mobile_number",
-    label: "Mobile Number*",
-    type: "text",
-    placeholder: "Enter Mobile Number",
-  },
-];
 
 const initialState = {
   first_name: "",
@@ -142,7 +111,7 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {inputFields.map(({ name, label, type }) => (
+            {editUserInpFields.map(({ name, label, type }) => (
               <div key={name} className="relative">
                 <Input
                   name={name}

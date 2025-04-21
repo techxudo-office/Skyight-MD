@@ -18,15 +18,6 @@ import { editTicket } from "../../../_core/features/ticketSlice";
 
 Modal.setAppElement("#root");
 
-const inputFields = [
-  {
-    name: "admin_response",
-    label: "Admin Response*",
-    type: "text",
-    placeholder: "Enter Admin Response",
-  },
-];
-
 const statusOptions = [
   { label: "Open", value: "open" },
   { label: "In Progress", value: "in-progress" },
@@ -72,9 +63,11 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
       admin_response: formData?.admin_response,
     };
 
-    dispatch(editTicket({ data: payload, token: adminData?.token })).then(() => {
-      onClose();
-    });
+    dispatch(editTicket({ data: payload, token: adminData?.token })).then(
+      () => {
+        onClose();
+      }
+    );
   };
 
   return (
@@ -87,21 +80,21 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
           <div className="relative">
-            {inputFields.map(({ name, label, type }) => (
-              <div key={name} className="relative">
-                <Input
-                  name={name}
-                  label={label}
-                  type={type}
-                  value={formData[name]}
-                  onChange={handleChange}
-                  placeholder={`Enter ${label}`}
-                />
-                {errors[name] && (
-                  <p className="mt-1 text-sm text-red-500">{errors[name]}</p>
-                )}
-              </div>
-            ))}
+            <div key={"admin_response"} className="relative">
+              <Input
+                name={"admin_response"}
+                label={"Admin Response*"}
+                type={"text"}
+                value={formData["admin_response"]}
+                onChange={handleChange}
+                placeholder={`Enter ${"Admin Response*"}`}
+              />
+              {errors["admin_response"] && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors["admin_response"]}
+                </p>
+              )}
+            </div>
           </div>
           <div className="mt-4">
             <label className="block mb-1 font-medium text-gray-700">

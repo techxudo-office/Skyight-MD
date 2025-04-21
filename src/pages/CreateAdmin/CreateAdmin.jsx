@@ -18,22 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminValidation } from "../../utils/validations";
 import { getRoles } from "../../_core/features/roleSlice";
 import { createAdmin } from "../../_core/features/adminSlice";
-
-let inputFields = [
-  {
-    name: "full_name",
-    label: "Full Name*",
-    type: "text",
-    placeholder: "Enter Full Name",
-  },
-  { name: "email", label: "Email*", type: "email", placeholder: "Enter Email" },
-  {
-    name: "password",
-    label: "Password*",
-    type: "password",
-    placeholder: "Enter Password",
-  },
-];
+import { createAdminInpFields } from "../../utils/InputFields";
 
 const initialState = {
   full_name: "",
@@ -112,7 +97,7 @@ const CreateAdmin = () => {
         <form onSubmit={handleSubmit} noValidate>
           <CardLayoutBody>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-              {inputFields.map(({ name, label, type }) => (
+              {createAdminInpFields.map(({ name, label, type }) => (
                 <div key={name} className="relative">
                   <Input
                     id={name}

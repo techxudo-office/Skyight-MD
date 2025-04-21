@@ -20,32 +20,9 @@ import toast from "react-hot-toast";
 import { editUser } from "../../../_core/features/userSlice";
 import { adminValidation, userValidation } from "../../../utils/validations";
 import { editAdmin } from "../../../_core/features/adminSlice";
+import { editAdminInpFields } from "../../../utils/InputFields";
 
 Modal.setAppElement("#root");
-
-const inputFields = [
-  {
-    name: "full_name",
-    label: "Full Name*",
-    type: "text",
-    disabled: false,
-    placeholder: "Enter First Name",
-  },
-  {
-    name: "email",
-    label: "Email*",
-    type: "text",
-    disabled: true,
-    placeholder: "Enter Email",
-  },
-  {
-    name: "password",
-    label: "Password*",
-    type: "password",
-    disabled: false,
-    placeholder: "Enter New Password",
-  },
-];
 
 const initialState = {
   full_name: "",
@@ -128,7 +105,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {inputFields.map(({ name, label, type, disabled }) => (
+            {editAdminInpFields.map(({ name, label, type, disabled }) => (
               <div key={name} className="relative">
                 <Input
                   name={name}

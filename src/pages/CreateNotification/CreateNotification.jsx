@@ -16,21 +16,7 @@ import {
 } from "../../utils/validations";
 import { createNotification } from "../../_core/features/notificationSlice";
 import { getCompanies } from "../../_core/features/companySlice";
-
-let inputFields = [
-  {
-    name: "title",
-    label: "Title*",
-    type: "text",
-    placeholder: "Enter Title",
-  },
-  {
-    name: "description",
-    label: "Description*",
-    type: "text",
-    placeholder: "Enter Description",
-  },
-];
+import { notificationInpFields } from "../../utils/InputFields";
 
 const initialState = {
   title: "",
@@ -104,7 +90,7 @@ const CreateNotification = () => {
         <form onSubmit={handleSubmit} noValidate>
           <CardLayoutBody>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
-              {inputFields.map(({ name, label, type }) => (
+              {notificationInpFields.map(({ name, label, type }) => (
                 <div key={name} className="relative">
                   <Input
                     id={name}
