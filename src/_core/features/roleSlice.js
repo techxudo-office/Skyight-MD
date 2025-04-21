@@ -110,8 +110,8 @@ export const getRoles = createAsyncThunk(
       });
 
       return {
-        data: response.data.data,
-        totalPages: response.data.totalPages || 1,
+        data: response?.data.data,
+        totalPages: response?.data.totalPages || 1,
       };
     } catch (error) {
       const errorMessage =

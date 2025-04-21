@@ -104,13 +104,13 @@ const ApplyCommisions = () => {
           onClose={() => setIsEditModalOpen(false)}
         />
       )}
-      <CardLayoutContainer removeBg={true}>
+      <CardLayoutContainer removeBg={true} className={""}>
         <CardLayoutHeader
           removeBorder={true}
           heading={"Apply Commisions"}
           className="flex items-center justify-between"
         />
-        <CardLayoutBody removeBorder={true}>
+        <CardLayoutBody removeBorder={true} className={"overflow-x-auto w-[900px] mx-auto "}>
           <Table
             columnsData={columns}
             tableData={[commisions] || []}
@@ -118,6 +118,7 @@ const ApplyCommisions = () => {
             paginationTotalRows={commisions?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
+
         </CardLayoutBody>
       </CardLayoutContainer>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -6,7 +6,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useNavigate } from "react-router-dom";
 
-import { CustomTooltip, Table, Tag } from "../../components/components";
+import { CustomTooltip, Searchbar, Table, Tag } from "../../components/components";
 import { getCompanies } from "../../_core/features/companySlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -15,6 +15,7 @@ import { FaEye } from "react-icons/fa";
 const Companies = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [filteredCompanies, setFilteredCompanies] = useState([])
   const { adminData } = useSelector((state) => state.auth);
   const { companies, isLoadingCompanies } = useSelector(
     (state) => state.company
@@ -79,12 +80,13 @@ const Companies = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
+          <Searchbar data={companies} onFilteredData={setFilteredCompanies} searchFields={["name", "id"]} />
           <Table
             pagination={true}
             columnsData={companiesColumns}
-            tableData={companies || []}
+            tableData={filteredCompanies || []}
             progressPending={isLoadingCompanies}
-            paginationTotalRows={companies?.length}
+            paginationTotalRows={filteredCompanies?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

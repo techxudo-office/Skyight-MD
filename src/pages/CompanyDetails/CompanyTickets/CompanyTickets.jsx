@@ -14,6 +14,7 @@ import {
   ModalWrapper,
   Button,
   Tag,
+  Searchbar,
 } from "../../../components/components";
 
 const CompanyTickets = () => {
@@ -21,6 +22,7 @@ const CompanyTickets = () => {
   const { companyId } = useParams();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
+  const [filteredTickets, setFilteredTickets] = useState([])
   const { adminData } = useSelector((state) => state.auth);
   const { companyTickets, isLoadingCompanyTickets } = useSelector(
     (state) => state.company
@@ -41,26 +43,26 @@ const CompanyTickets = () => {
       name: "TITLE",
       selector: (row) => row.title,
       sortable: false,
-       
+
     },
     {
       name: "DESCRIPTION",
       selector: (row) => row.description,
       sortable: false,
-       
+
     },
     {
       name: "Date",
       selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
       sortable: false,
-       
+
       grow: 2,
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.status} />,
       sortable: false,
-       
+
     },
     {
       name: "",
@@ -75,7 +77,7 @@ const CompanyTickets = () => {
         </div>
       ),
       sortable: false,
-       
+
     },
   ];
 
@@ -94,12 +96,13 @@ const CompanyTickets = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
+          <Searchbar data={companyTickets} onFilteredData={setFilteredTickets} searchFields={["title", "status", "created_at"]} />
           <Table
             pagination={true}
             columnsData={columns}
-            tableData={companyTickets || []}
+            tableData={filteredTickets || []}
             progressPending={isLoadingCompanyTickets}
-            paginationTotalRows={companyTickets?.length}
+            paginationTotalRows={filteredTickets?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

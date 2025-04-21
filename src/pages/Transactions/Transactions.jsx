@@ -4,6 +4,7 @@ import {
   CustomTooltip,
   ModalWrapper,
   MultiSelect,
+  Searchbar,
   SecondaryButton,
   Table,
   Tag,
@@ -30,6 +31,7 @@ const Transactions = ({ isCompanyDetail }) => {
   const dispatch = useDispatch();
   const { companyId } = useParams();
   const { adminData } = useSelector((state) => state.auth);
+  const [filteredTransaction, setFilteredTransaction] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [transactionId, setTransactionId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -72,19 +74,19 @@ const Transactions = ({ isCompanyDetail }) => {
       name: "COMPANY",
       selector: (row) => row?.company?.name,
       sortable: false,
-       
+
     },
     {
       name: "TRANSACTION ID",
       selector: (row) => row?.id,
       sortable: false,
-       
+
     },
     {
       name: "BANK",
       selector: (row) => row.bank_name,
       sortable: false,
-       
+
     },
     {
       name: "PAYMENT DATE",
@@ -143,19 +145,18 @@ const Transactions = ({ isCompanyDetail }) => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
+          <Searchbar data={isCompanyDetail ? companyTransactions : transactions} onFilteredData={setFilteredTransaction} searchFields={["company.name", "id", "status", "bank_name"]} />
           <Table
             pagination={true}
             columnsData={columns}
-            tableData={isCompanyDetail ? companyTransactions : transactions}
+            tableData={filteredTransaction}
             progressPending={
               isCompanyDetail
                 ? isLoadingCompanyTransactions
                 : isLoadingTransactions
             }
             paginationTotalRows={
-              isCompanyDetail
-                ? companyTransactions?.length
-                : transactions?.length
+              filteredTransaction.length
             }
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />

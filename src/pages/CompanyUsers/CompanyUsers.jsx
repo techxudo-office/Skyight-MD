@@ -7,7 +7,7 @@ import {
 import { MdEditSquare } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Table, Tag } from "../../components/components";
+import { Searchbar, Table, Tag } from "../../components/components";
 import { getCompanyUsers } from "../../_core/features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 const Companies = () => {
   const { companyId } = useParams();
   const dispatch = useDispatch();
+  const [filteredCompanyUsers, setFilteredCompanyUsers] = useState(second)
   const { adminData } = useSelector((state) => state.auth);
   const { companyUsers, isLoadingCompanyUsers } = useSelector(
     (state) => state.user
@@ -85,12 +86,13 @@ const Companies = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
+          <Searchbar data={companyUsers} onFilteredData={setFilteredCompanyUsers} />
           <Table
             pagination={true}
             columnsData={companiesColumns}
-            tableData={companyUsers || []}
+            tableData={filteredCompanyUsers || []}
             progressPending={isLoadingCompanyUsers}
-            paginationTotalRows={companyUsers?.length}
+            paginationTotalRows={filteredCompanyUsers?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

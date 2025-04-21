@@ -4,6 +4,7 @@ import {
   ConfirmModal,
   Table,
   Switch,
+  Searchbar,
 } from "../../components/components";
 import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
@@ -28,6 +29,7 @@ const Users = ({ isCompanyUser }) => {
   const { companyId } = useParams();
   const [deleteId, setDeleteId] = useState(null);
   const [modalStatus, setModalStatus] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [editUserData, setEditUserData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { adminData } = useSelector((state) => state.auth);
@@ -161,15 +163,16 @@ const Users = ({ isCompanyUser }) => {
           </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
+          <Searchbar data={isCompanyUser ? companyUsers : users} onFilteredData={setFilteredUsers} />
           <Table
             pagination={true}
             columnsData={userColumns}
-            tableData={isCompanyUser ? companyUsers : users}
+            tableData={filteredUsers}
             progressPending={
               isCompanyUser ? isLoadingCompanyUsers : isLoadingUsers
             }
             paginationTotalRows={
-              isCompanyUser ? companyUsers.length : users.length
+              filteredUsers.length
             }
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
