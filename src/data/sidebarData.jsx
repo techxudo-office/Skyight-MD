@@ -94,7 +94,7 @@ export const useAdminSidebarLinks = () => {
       title: "Settings",
       icon: <MdSettings />,
       sublinks: [
-        pagePermissions.reasons && {
+        {
           title: "Reasons",
           path: "reasons",
           icon: <MdOutlineNoteAlt />,

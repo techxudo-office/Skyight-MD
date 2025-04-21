@@ -1,10 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  FaChartLine,
-  FaUserAlt,
-  FaTachometerAlt,
-  FaClipboardList,
-} from "react-icons/fa";
+import { FaUserAlt, FaTachometerAlt, FaClipboardList } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboardAnalytics } from "../../_core/features/adminSlice";
 import { Loader } from "../components";
@@ -17,22 +12,15 @@ const DashboardCards = () => {
   useEffect(() => {
     if (!adminData.token) return;
     dispatch(getDashboardAnalytics(adminData.token));
-  }, [dispatch]);
-  const topCards = [
+  }, [dispatch, adminData.token]);
+
+  const cardData = [
     {
       title: "Revenue",
       value: dashboard?.totalRevenue,
       description: "Gross revenue",
       icon: <FaTachometerAlt className="text-3xl text-primary" />,
     },
-    {
-      title: "P / L",
-      value: dashboard?.totalRevenue,
-      description: "Profit / Loss",
-      icon: <FaChartLine className="text-3xl text-primary" />,
-    },
-  ]
-  const cardData = [
     {
       title: "Total Bookings",
       value: dashboard?.totalBookedBooking,
@@ -43,69 +31,43 @@ const DashboardCards = () => {
       title: "Total Refunds",
       value: dashboard?.totalRefundedBooking,
       description: "Processed refunds",
-      icon: <FaChartLine className="text-3xl text-primary" />,
+      icon: <FaClipboardList className="text-3xl text-primary" />,
     },
     {
       title: "Registered Users",
       value: dashboard?.totalCompany,
       description: "Active users",
       icon: <FaUserAlt className="text-3xl text-primary" />,
-    }
+    },
   ];
+
   return (
     <div className="w-full p-5">
       <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
       {isLoadingDashboard ? (
         <Loader />
-      ) : (<>
-        <div className="grid grid-cols-1 md:grid-cols-2 mb-4 border-t-4 shadow-sm border-primary  ">
-          {topCards.map((card, index) => (
-            <div
-              key={index}
-              className="p-3 transition-all duration-300 bg-white border-[1px] border-background  hover:shadow-md"
-            >
-              <div className="flex items-center space-x-4">
-                {card.icon}
-                <div>
-                  <h3 className="font-semibold text-gray-700 text-md">
-                    {card.title}
-                  </h3>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">
-                    {card?.value?.toLocaleString()}
-                  </p>
-                  <div className="mt-2 text-sm text-gray-600">
-                    <p>{card.description}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t-4 shadow-sm border-primary ">
+      ) : (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {cardData.map((card, index) => (
             <div
               key={index}
-              className="p-3 transition-all duration-300 bg-white border-[1px] border-background hover:shadow-md"
+              className="flex items-start p-5 transition duration-300 bg-white border border-gray-100 shadow-md rounded-xl hover:shadow-lg"
             >
-              <div className="flex items-center space-x-4">
-                {card.icon}
-                <div>
-                  <h3 className="font-semibold text-gray-700 text-md">
-                    {card.title}
-                  </h3>
-                  <p className="mt-2 text-2xl font-bold text-gray-900">
-                    {card?.value?.toLocaleString()}
-                  </p>
-                  <div className="mt-2 text-sm text-gray-600">
-                    <p>{card.description}</p>
-                  </div>
-                </div>
+              <div className="mr-4">{card.icon}</div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-600">
+                  {card.title}
+                </h3>
+                <p className="mt-1 text-2xl font-bold text-gray-900">
+                  {card?.value
+                    ? Number(String(card.value).slice(0, 7)).toLocaleString()
+                    : 0}
+                </p>
+                <p className="mt-1 text-sm text-gray-500">{card.description}</p>
               </div>
             </div>
           ))}
         </div>
-      </>
-
       )}
     </div>
   );
