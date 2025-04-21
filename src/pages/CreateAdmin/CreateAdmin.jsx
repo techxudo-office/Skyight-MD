@@ -54,9 +54,8 @@ const CreateAdmin = () => {
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
   useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getRoles(adminData?.token));
-    }
+    if (adminData?.token) return;
+    dispatch(getRoles(adminData?.token));
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -96,6 +95,7 @@ const CreateAdmin = () => {
       .then(() => {
         setFormData(initialState);
         setSelectedRole(null);
+        navigate("/dashboard/admins");
       });
   };
 

@@ -21,7 +21,7 @@ const Settings = () => {
   );
   const [toggle, setToggle] = useState(adminData?.admin?.is_active);
   const [profileImage, setProfileImage] = useState(
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
+    "https://crs-backend-dev.s3.ap-south-1.amazonaws.com/company/1745022158015_46?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAWOAVSLEDKUUOYT4U%2F20250419%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250419T002240Z&X-Amz-Expires=300&X-Amz-Signature=e0c2cf66a37bb8904694f1b6477230d6bc2775955c487bb0ccd4bf556384c9cb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject"
   );
   const [profileData, setProfileData] = useState({
     full_name: "",

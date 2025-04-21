@@ -57,28 +57,36 @@ const Admin = () => {
     },
     {
       name: "",
-      selector: (row) => (
-        <div className="flex items-center gap-x-4">
-          <span
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              setEditAdminData(row);
-              setIsEditModalOpen(true);
-            }}
-          >
-            <MdEditSquare title="Edit" className="text-blue-500" />
-          </span>
-          <span
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              setModalStatus(true);
-              setDeleteId(row.id);
-            }}
-          >
-            <MdAutoDelete title="Delete" className="text-red-500" />
-          </span>
-        </div>
-      ),
+      selector: (row) => {
+        const isSuperAdmin = row?.role?.role === "Super Admin";
+
+        return (
+          <div className="flex items-center gap-x-4">
+            {!isSuperAdmin && (
+              <>
+                <span
+                  className="text-xl cursor-pointer"
+                  onClick={() => {
+                    setEditAdminData(row);
+                    setIsEditModalOpen(true);
+                  }}
+                >
+                  <MdEditSquare title="Edit" className="text-blue-500" />
+                </span>
+                <span
+                  className="text-xl cursor-pointer"
+                  onClick={() => {
+                    setModalStatus(true);
+                    setDeleteId(row.id);
+                  }}
+                >
+                  <MdAutoDelete title="Delete" className="text-red-500" />
+                </span>
+              </>
+            )}
+          </div>
+        );
+      },
       sortable: false,
     },
   ];

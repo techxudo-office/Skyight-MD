@@ -42,75 +42,78 @@ const Roles = () => {
       name: "ROLE",
       selector: (row) => row.role,
       sortable: false,
-
     },
     {
       name: "ROLE ID",
       selector: (row) => row.id,
       sortable: false,
-
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
-
     },
     {
       name: "",
-      selector: (row) => (
-        <div className="flex items-center gap-x-4">
-          <span
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              setEditRoleData(row);
-              setIsEditModalOpen(true);
-            }}
-          >
-            <MdEditSquare title="Edit" className="text-blue-500" />
-          </span>
-          {/* <span
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              setModalStatus(true);
-              setDeleteId(row.id);
-            }}
-          >
-            <MdAutoDelete title="Delete" className="text-red-500" />
-          </span> */}
-        </div>
-      ),
+      selector: (row) => {
+        const isSuperAdmin = row?.role === "Super Admin";
+        return (
+          <div className="flex items-center gap-x-4">
+            {!isSuperAdmin && (
+              <>
+                <span
+                  className="text-xl cursor-pointer"
+                  onClick={() => {
+                    setEditRoleData(row);
+                    setIsEditModalOpen(true);
+                  }}
+                >
+                  <MdEditSquare title="Edit" className="text-blue-500" />
+                </span>
+                <span
+                  className="text-xl cursor-pointer"
+                  onClick={() => {
+                    setModalStatus(true);
+                    setDeleteId(row.id);
+                  }}
+                >
+                  <MdAutoDelete title="Delete" className="text-red-500" />
+                </span>
+              </>
+            )}
+          </div>
+        );
+      },
       sortable: false,
-
     },
   ];
 
-  // const deleteUserHandler = () => {
-  //   if (!deleteId) {
-  //     errorToastify("Failed to delete this user");
-  //     setModalStatus(false);
-  //     return;
-  //   }
+  const deleteUserHandler = () => {
+    if (!deleteId) {
+      errorToastify("Failed to delete this user");
+      setModalStatus(false);
+      return;
+    }
 
-  //   dispatch(deleteRole({ id: deleteId, token: adminData?.token })).then(() => {
-  //     setModalStatus(false);
-  //     setDeleteId(null);
-  //   });
-  // };
+    dispatch(deleteRole({ id: deleteId, token: adminData?.token })).then(() => {
+      setModalStatus(false);
+      setDeleteId(null);
+    });
+  };
 
-  // const abortDeleteHandler = () => {
-  //   setModalStatus(false);
-  //   setDeleteId(null);
-  // };
+  const abortDeleteHandler = () => {
+    setModalStatus(false);
+    setDeleteId(null);
+  };
 
   return (
     <>
-      {/* <ConfirmModal
+      <ConfirmModal
         status={modalStatus}
         loading={isDeletingRole}
         onAbort={abortDeleteHandler}
         onConfirm={deleteUserHandler}
-      /> */}
+      />
       {isEditModalOpen && (
         <EditRoleModal
           isOpen={isEditModalOpen}

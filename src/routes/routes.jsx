@@ -12,7 +12,7 @@ const AppRoutes = () => {
   const isInitialRender = useRef(true);
 
   useEffect(() => {
-    if (!auth) {
+    if (!adminData?.token) {
       // if (!isInitialRender.current) {
       toast.success("Logged out successfully");
       navigate("/", { replace: true });
