@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DashboardCards, Table, Tag } from "../../components/components";
+import { DashboardCards, DashboardComissions, Table, Tag } from "../../components/components";
 import {
   getFlightBookings,
   getLatestBooking,
@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
+import { ApplyCommisions } from "../pages";
 
 const DashboardHome = () => {
   const dispatch = useDispatch();
@@ -115,6 +116,8 @@ const DashboardHome = () => {
 
   return (
     <div className="px-5 pb-10 space-y-10">
+      <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
+      <DashboardComissions />
       <DashboardCards />
       {DataArray.map((section, index) => (
         <div key={index} className="w-full">

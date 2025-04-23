@@ -42,8 +42,7 @@ const DashboardCards = () => {
   ];
 
   return (
-    <div className="w-full p-5">
-      <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
+    <div className="w-full p-5 pt-0">
       {isLoadingDashboard ? (
         <Loader />
       ) : (
