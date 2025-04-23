@@ -34,7 +34,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
         USD: 0,
         EUR: 0,
         IQD: 0,
-        commission: 0,
+        // commission: 0,
     });
 
     useEffect(() => {
@@ -48,7 +48,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
                 USD: commisions.USD || 0,
                 EUR: commisions.EUR || 0,
                 IQD: commisions.IQD || 0,
-                commission: commisions.commission || 0,
+                // commission: commisions.commission || 0,
             });
         }
     }, [commisions]);
@@ -71,36 +71,41 @@ const DashboardComission = ({ isOpen, onClose }) => {
 
     return (
 
-        <CardLayoutContainer className={"w-2/3"} >
-            <div className="flex items-center gap-3">
+        <CardLayoutContainer className={"py-2"}  >
+            {/* <div className="flex items-center gap-3">
                 <CardLayoutHeader heading="Edit Commision" removeBorder={true} />
 
+               
+            </div> */}
+            <CardLayoutBody removeBorder={true}>
+                <div className="flex gap-3 mb-3">
+                    <div className="grid grid-cols-4 gap-5 w-2/3 ">
+                        {Object.keys(formData).map((key) => (
+                            <div key={key}>
+                                <Input
+                                    label={key.toUpperCase()}
+                                    name={key}
+                                    type="number"
+                                    value={formData[key]}
+                                    onChange={handleChange}
+                                    min=""
+                                    placeholder={`Enter ${key.toUpperCase()}`}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <div className="w-1/3 text-end text-text">
+                        <p className="text-xs">Commisions</p>
+                        <p className="text-3xl font-semibold">{commisions.commission || 68.789} <span className="text-sm text-gray">$</span></p>
+                    </div>
+                </div>
                 <Button
                     text={isEditingcommision ? <Spinner /> : "Update Commission"}
                     onClick={handleSubmit}
                     disabled={isEditingcommision}
                 />
-            </div>
-            <CardLayoutBody>
-                <div className="grid grid-cols-3 gap-5 ">
-                    {Object.keys(formData).map((key) => (
-                        <div key={key}>
-                            <Input
-                                label={key.toUpperCase()}
-                                name={key}
-                                type="number"
-                                value={formData[key]}
-                                onChange={handleChange}
-                                min=""
-                                placeholder={`Enter ${key.toUpperCase()}`}
-                            />
-                        </div>
-                    ))}
-                </div>
             </CardLayoutBody>
-            <CardLayoutFooter >
 
-            </CardLayoutFooter>
         </CardLayoutContainer>
 
     );

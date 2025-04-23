@@ -15,7 +15,7 @@ const Layout = () => {
             <Sidebar status={sidebarStatus} updateStatus={setSidebarStatus} />
             <Header sidebarStatus={sidebarStatus} setSidebarStatusHandler={setSidebarStatusHandler} />
             <div className="relative flex flex-col flex-1 min-h-screen pt-16 lg:pb-10">
-                <div className="flex justify-center w-full p-5">
+                <div className="flex justify-center w-full p-5 bg-background">
                     <Outlet />
                 </div>
                 <div className="absolute bottom-0 flex justify-center w-full py-2 bg-white">

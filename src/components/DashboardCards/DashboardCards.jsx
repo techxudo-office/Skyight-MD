@@ -42,7 +42,7 @@ const DashboardCards = () => {
   ];
 
   return (
-    <div className="w-full p-5 pt-0">
+    <div className="w-full ">
       {isLoadingDashboard ? (
         <Loader />
       ) : (
@@ -50,7 +50,7 @@ const DashboardCards = () => {
           {cardData.map((card, index) => (
             <div
               key={index}
-              className="flex items-start p-5 transition duration-300 bg-white border border-gray-100 shadow-md rounded-xl hover:shadow-lg"
+              className="flex items-start p-5 transition duration-300 bg-white shadow-inner rounded-xl hover:shadow-lg "
             >
               <div className="mr-4">{card.icon}</div>
               <div>

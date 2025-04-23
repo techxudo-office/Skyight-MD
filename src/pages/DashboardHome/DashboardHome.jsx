@@ -115,13 +115,19 @@ const DashboardHome = () => {
   ];
 
   return (
-    <div className="px-5 pb-10 space-y-10">
+    <div className=" pb-10 space-y-10 bg-background">
       <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
-      <DashboardComissions />
+      <div className="grid grid-cols-3 w-full gap-4">
+        <div className="h-full col-span-2 ">
+          <DashboardComissions />
+
+        </div>
+        <div className="h-full col-span-1  bg-primary rounded-xl"> </div>
+      </div>
       <DashboardCards />
       {DataArray.map((section, index) => (
         <div key={index} className="w-full">
-          <h2 className="flex items-center gap-3 mb-3 text-xl font-semibold">
+          <h2 className="flex items-center gap-3 mb-5 text-xl font-semibold">
             {section.title}{" "}
             {section.title === "Iran Airtour" && (
               <img
