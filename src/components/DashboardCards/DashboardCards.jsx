@@ -10,9 +10,9 @@ const DashboardCards = () => {
   const { dashboard, isLoadingDashboard } = useSelector((state) => state.admin);
 
   useEffect(() => {
-    if (!adminData.token) return;
-    dispatch(getDashboardAnalytics(adminData.token));
-  }, [dispatch, adminData.token]);
+    if (!adminData?.token) return;
+    dispatch(getDashboardAnalytics(adminData?.token));
+  }, [adminData?.token]);
 
   const cardData = [
     {

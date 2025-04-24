@@ -78,7 +78,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
             </div> */}
             <CardLayoutBody removeBorder={true}>
                 <div className="flex gap-3 mb-3">
-                    <div className="grid grid-cols-4 gap-5 w-2/3 ">
+                    <div className="grid w-2/3 grid-cols-4 gap-5 ">
                         {Object.keys(formData).map((key) => (
                             <div key={key}>
                                 <Input
