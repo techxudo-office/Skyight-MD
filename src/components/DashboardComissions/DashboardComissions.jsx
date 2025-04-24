@@ -24,6 +24,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
     const { commisions, isEditingcommision } = useSelector(
         (state) => state.commision
     );
+    const [commision, setCommision] = useState(0);
     const [penalty, setPenalty] = useState(0);
     const [formData, setFormData] = useState({
         PKR: 0,
@@ -62,7 +63,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
     };
 
     const handleSubmit = () => {
-        dispatch(editcommision({ data: formData, token: adminData?.token })).then(
+        dispatch(editcommision({ data: { ...formData, commission: Number(commision) }, token: adminData?.token })).then(
             () => {
                 onClose();
             }
@@ -74,8 +75,6 @@ const DashboardComission = ({ isOpen, onClose }) => {
         <CardLayoutContainer className={"py-2"}  >
             {/* <div className="flex items-center gap-3">
                 <CardLayoutHeader heading="Edit Commision" removeBorder={true} />
-
-               
             </div> */}
             <CardLayoutBody removeBorder={true}>
                 <div className="flex gap-3 mb-3">
@@ -97,6 +96,16 @@ const DashboardComission = ({ isOpen, onClose }) => {
                     <div className="w-1/3 text-end text-text">
                         <p className="text-xs">Commisions</p>
                         <p className="text-3xl font-semibold">{commisions.commission || 68.789} <span className="text-sm text-gray">$</span></p>
+                        <Input
+                            className={"mt-5"}
+                            label={"Commision"}
+                            name={"commision"}
+                            type="number"
+                            value={commision}
+                            onChange={(e) => setCommision(e.target.value)}
+                            min=""
+                            placeholder={`Enter Commision`}
+                        />
                     </div>
                 </div>
                 <Button

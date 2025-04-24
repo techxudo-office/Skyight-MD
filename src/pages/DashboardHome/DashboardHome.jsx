@@ -120,7 +120,6 @@ const DashboardHome = () => {
       <div className="grid grid-cols-3 w-full gap-4">
         <div className="h-full col-span-2 ">
           <DashboardComissions />
-
         </div>
         <div className="h-full col-span-1  bg-primary rounded-xl"> </div>
       </div>
