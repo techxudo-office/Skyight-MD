@@ -34,7 +34,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
         USD: 0,
         EUR: 0,
         IQD: 0,
-        commission: 0,
+        // commission: 0,
     });
 
     useEffect(() => {
@@ -48,7 +48,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
                 USD: commisions.USD || 0,
                 EUR: commisions.EUR || 0,
                 IQD: commisions.IQD || 0,
-                commission: commisions.commission || 0,
+                // commission: commisions.commission || 0,
             });
         }
     }, [commisions]);
