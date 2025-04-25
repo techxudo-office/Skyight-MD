@@ -13,7 +13,6 @@ import { TbTransactionDollar } from "react-icons/tb";
 import { PiBankBold } from "react-icons/pi";
 import { IoTicket } from "react-icons/io5";
 import { FaUserShield } from "react-icons/fa";
-import { BiSolidDollarCircle } from "react-icons/bi";
 import { HiRectangleGroup } from "react-icons/hi2";
 import { IoMdBookmark } from "react-icons/io";
 import { RiRefund2Fill } from "react-icons/ri";
@@ -43,11 +42,11 @@ export const useAdminSidebarLinks = () => {
       path: "companies",
       icon: <TbManualGearboxFilled />,
     },
-    {
-      title: "Apply Commisions",
-      path: "apply-commisions",
-      icon: <BiSolidDollarCircle />,
-    },
+    // {
+    //   title: "Apply Commisions",
+    //   path: "apply-commisions",
+    //   icon: <BiSolidDollarCircle />,
+    // },
     pagePermissions.bookings && {
       title: "Bookings",
       icon: <IoMdBookmark />,
