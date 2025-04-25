@@ -72,10 +72,9 @@ const DashboardComission = ({ onClose }) => {
                 <Input
                   label={key.toUpperCase()}
                   name={key}
-                  type="number"
-                  value={formData[key]}
+                  type="text"
+                  value={String(formData[key])}
                   onChange={handleChange}
-                  min=""
                   placeholder={`Enter ${key.toUpperCase()}`}
                 />
               </div>
@@ -91,10 +90,9 @@ const DashboardComission = ({ onClose }) => {
               className={"mt-5"}
               label={"Commision"}
               name={"commision"}
-              type="number"
-              value={commision}
+              type="text"
+              value={String(commision)}
               onChange={(e) => setCommision(e.target.value)}
-              min=""
               placeholder={`Enter Commision`}
             />
           </div>

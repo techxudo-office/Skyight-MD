@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { MdCancel } from "react-icons/md";
 
 const Searchbar = ({
@@ -10,48 +10,48 @@ const Searchbar = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Helper function to get nested property value
-  const getNestedValue = (obj, path) => {
+  // Memoized helper function
+  const getNestedValue = useCallback((obj, path) => {
     return path.split('.').reduce((acc, part) => {
       return acc && acc[part];
     }, obj);
-  };
+  }, []);
 
-  // Updated search function to handle nested fields
-  const searchObjects = (data, searchTerm, fields) => {
-    if (!searchTerm || searchTerm.trim() === '') {
-      return data;
-    }
+  // Optimized search function
+  const searchObjects = useCallback((data, term, fields) => {
+    if (!term || term.trim() === '') return data;
 
-    const term = searchTerm.toString().toLowerCase();
+    const lowerTerm = term.toLowerCase();
 
     return data.filter(item => {
-      // If no specific fields are provided, search all fields (including nested ones)
       if (fields.length === 0) {
-        return JSON.stringify(item).toLowerCase().includes(term);
+        return JSON.stringify(item).toLowerCase().includes(lowerTerm);
       }
-
       return fields.some(field => {
         const value = getNestedValue(item, field);
-        if (value === null || value === undefined) {
-          return false;
-        }
-        return value.toString().toLowerCase().includes(term);
+        return value?.toString().toLowerCase().includes(lowerTerm);
       });
     });
-  };
+  }, [getNestedValue]);
 
   useEffect(() => {
     const filteredData = searchObjects(data, searchTerm, searchFields);
-    onFilteredData && onFilteredData(filteredData);
-  }, [searchTerm, data, searchFields]);
+    onFilteredData?.((prev) => {
+      // Prevent infinite loop by checking if result actually changed
+      const prevStr = JSON.stringify(prev);
+      const newStr = JSON.stringify(filteredData);
+      return prevStr !== newStr ? filteredData : prev;
+    });
 
-  const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  }, [searchTerm, data, searchFields, onFilteredData]);
+
 
   const handleClear = () => {
     setSearchTerm("");
+  };
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   return (
@@ -59,14 +59,17 @@ const Searchbar = ({
       <input
         type="text"
         className="w-full p-4 outline-none rounded-md"
-        placeholder={placeholder || `Search ${searchFields.map((field) => field.charAt(0).toUpperCase() + field.slice(1)).join(", ").replaceAll("_", " ").replaceAll(".", " ")}`}
+        placeholder={placeholder || `Search ${searchFields.map((field) =>
+          field.charAt(0).toUpperCase() + field.slice(1)
+        ).join(", ").replaceAll(/[_\.]/g, " ")}`}
         value={searchTerm}
-        onChange={handleInputChange}
+        onChange={handleChange}  // Fixed handler
       />
       {searchTerm && (
         <button
           className="absolute right-3 text-text hover:text-gray-700"
           onClick={handleClear}
+          type="button"  // Important for buttons in forms
         >
           <MdCancel size={20} />
         </button>
