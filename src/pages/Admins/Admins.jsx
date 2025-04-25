@@ -30,11 +30,11 @@ const Admin = () => {
   );
 
   const adminColumns = [
-    {
-      name: "ADMIN ID",
-      selector: (row) => row?.id,
-      sortable: false,
-    },
+    // {
+    //   name: "ADMIN ID",
+    //   selector: (row) => row?.id,
+    //   sortable: false,
+    // },
     {
       name: "FULL NAME",
       selector: (row) => row?.full_name,

@@ -3,16 +3,22 @@ import Modal from "react-modal";
 import { CardLayoutContainer, CardLayoutBody } from "../CardLayout/CardLayout";
 import { Input, Button, Spinner } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { editcommision } from "../../_core/features/commisionSlice";
+import { editcommision, getCommision } from "../../_core/features/commisionSlice";
 
 Modal.setAppElement("#root");
 
-const DashboardComission = ({ onClose }) => {
+const DashboardComission = () => {
   const dispatch = useDispatch();
   const { adminData } = useSelector((state) => state.auth);
-  const { commisions, isEditingcommision } = useSelector(
+  const { commisions, isEditingcommision, isLoadingCommision } = useSelector(
     (state) => state.commision
   );
+  useEffect(() => {
+    if (adminData?.token) {
+      dispatch(getCommision(adminData?.token));
+    }
+  }, [])
+
   const [commision, setCommision] = useState(0);
   const [formData, setFormData] = useState({
     PKR: 0,
@@ -57,11 +63,9 @@ const DashboardComission = ({ onClose }) => {
         data: { ...formData, commission: Number(commision) },
         token: adminData?.token,
       })
-    ).then(() => {
-      onClose();
-    });
+    )
   };
-
+  if (isLoadingCommision) return <Spinner className={"text-primary"} />;
   return (
     <CardLayoutContainer className={"py-2"}>
       <CardLayoutBody removeBorder={true}>
@@ -83,7 +87,7 @@ const DashboardComission = ({ onClose }) => {
           <div className="w-1/3 text-end text-text">
             <p className="text-xs">Commisions</p>
             <p className="text-3xl font-semibold">
-              {commisions.commission || 68.789}{" "}
+              {commisions.commission || 0}{" "}
               <span className="text-sm text-gray">$</span>
             </p>
             <Input

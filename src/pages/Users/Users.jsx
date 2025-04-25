@@ -42,12 +42,12 @@ const Users = ({ isCompanyUser }) => {
   } = useSelector((state) => state.user);
 
   const userColumns = [
-    {
-      name: "USER ID",
-      selector: (row) => row?.id,
-      sortable: false,
+    // {
+    //   name: "USER ID",
+    //   selector: (row) => row?.id,
+    //   sortable: false,
 
-    },
+    // },
     {
       name: "FIRST NAME",
       selector: (row) => row?.first_name,

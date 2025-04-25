@@ -27,11 +27,11 @@ const Companies = () => {
       selector: (row) => row.name,
       sortable: false,
     },
-    {
-      name: "ID",
-      selector: (row) => row.id,
-      sortable: false,
-    },
+    // {
+    //   name: "ID",
+    //   selector: (row) => row.id,
+    //   sortable: false,
+    // },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
