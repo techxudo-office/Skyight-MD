@@ -19,10 +19,6 @@ const Sidebar = ({ status, updateStatus }) => {
   const sidebarLinks = useAdminSidebarLinks();
 
   useEffect(() => {
-    console.log(adminData, "adminData in routes");
-  }, [adminData]);
-
-  useEffect(() => {
     if (!status) {
       setActiveMenu(null);
     }
