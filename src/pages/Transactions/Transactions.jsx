@@ -77,12 +77,6 @@ const Transactions = ({ isCompanyDetail }) => {
 
     },
     {
-      name: "TRANSACTION ID",
-      selector: (row) => row?.id,
-      sortable: false,
-
-    },
-    {
       name: "BANK",
       selector: (row) => row.bank_name,
       sortable: false,
@@ -145,7 +139,7 @@ const Transactions = ({ isCompanyDetail }) => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={isCompanyDetail ? companyTransactions : transactions} onFilteredData={setFilteredTransaction} searchFields={["company.name", "id", "status", "bank_name"]} />
+          <Searchbar data={isCompanyDetail ? companyTransactions : transactions} onFilteredData={setFilteredTransaction} searchFields={["company.name", "status", "bank_name"]} />
           <Table
             pagination={true}
             columnsData={columns}

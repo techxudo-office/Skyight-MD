@@ -80,7 +80,7 @@ const Companies = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={companies} onFilteredData={setFilteredCompanies} searchFields={["name", "id"]} />
+          <Searchbar data={companies} onFilteredData={setFilteredCompanies} searchFields={["name"]} />
           <Table
             pagination={true}
             columnsData={companiesColumns}
