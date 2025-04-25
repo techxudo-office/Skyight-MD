@@ -95,7 +95,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
                     </div>
                     <div className="w-1/3 text-end text-text">
                         <p className="text-xs">Commisions</p>
-                        <p className="text-3xl font-semibold">{commisions.commission || 68.789} <span className="text-sm text-gray">$</span></p>
+                        <p className="text-3xl font-semibold">{commisions.commission || 0} <span className="text-sm text-gray">$</span></p>
                         <Input
                             className={"mt-5"}
                             label={"Commision"}
@@ -109,7 +109,7 @@ const DashboardComission = ({ isOpen, onClose }) => {
                     </div>
                 </div>
                 <Button
-                    text={isEditingcommision ? <Spinner /> : "Update Commission"}
+                    text={isEditingcommision ? <Spinner /> : "Update"}
                     onClick={handleSubmit}
                     disabled={isEditingcommision}
                 />
