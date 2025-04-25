@@ -87,10 +87,6 @@ const DashboardHome = () => {
     dispatch(getLatestBooking(adminData.token));
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(latestBookings);
-  }, [latestBookings]);
-
   const DataArray = [
     {
       title: "Iran Airtour",
@@ -115,13 +111,13 @@ const DashboardHome = () => {
   ];
 
   return (
-    <div className=" pb-10 space-y-10 bg-background">
+    <div className="pb-10 space-y-10  bg-background">
       <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
-      <div className="grid grid-cols-3 w-full gap-4">
+      <div className="grid w-full grid-cols-3 gap-4">
         <div className="h-full col-span-2 ">
           <DashboardComissions />
         </div>
-        <div className="h-full col-span-1  bg-primary rounded-xl"> </div>
+        <div className="h-full col-span-1 bg-primary rounded-xl"> </div>
       </div>
       <DashboardCards />
       {DataArray.map((section, index) => (

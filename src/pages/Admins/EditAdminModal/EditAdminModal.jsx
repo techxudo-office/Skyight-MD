@@ -15,7 +15,7 @@ import {
   Switch,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserRoles } from "../../../_core/features/roleSlice";
+import { getRoles, getUserRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
 import { editUser } from "../../../_core/features/userSlice";
 import { adminValidation, userValidation } from "../../../utils/validations";
@@ -43,7 +43,6 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
 
   useEffect(() => {
     if (data) {
-
       setFormData({
         full_name: data?.full_name || "",
         email: data?.email || "",
@@ -56,9 +55,8 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
   }, [data, roles]);
 
   useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getUserRoles(adminData?.token));
-    }
+    if (!adminData?.token) return;
+    dispatch(getRoles(adminData?.token));
   }, [dispatch]);
 
   const handleChange = (e) => {

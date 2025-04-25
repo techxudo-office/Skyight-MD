@@ -32,9 +32,8 @@ const Roles = () => {
   const adminData = useSelector((state) => state.auth.adminData);
 
   useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getRoles(adminData?.token));
-    }
+    if (!adminData?.token) return;
+    dispatch(getRoles(adminData?.token));
   }, [dispatch, adminData?.token]);
 
   const roleColumns = [

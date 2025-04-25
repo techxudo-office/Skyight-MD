@@ -6,7 +6,7 @@ const Searchbar = ({
   data = [],
   onFilteredData,
   className,
-  searchFields = []
+  searchFields = [],
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -55,7 +55,9 @@ const Searchbar = ({
   };
 
   return (
-    <div className={`relative flex items-center border border-gray text-text rounded-md my-3 w-full ${className}`}>
+    <div
+      className={`relative flex items-center border border-gray text-text rounded-md my-3 w-full ${className}`}
+    >
       <input
         type="text"
         className="w-full p-4 outline-none rounded-md"

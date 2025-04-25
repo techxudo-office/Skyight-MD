@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { editRole } from "../../../_core/features/roleSlice";
 import { updateAdminData } from "../../../_core/features/authSlice";
+import { IoIosArrowForward } from "react-icons/io";
 
 Modal.setAppElement("#root");
 
@@ -38,10 +39,8 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
   const [rolesData, setRolesData] = useState(roleData || {});
   const { adminData } = useSelector((state) => state.auth);
   const { isEditingRole } = useSelector((state) => state.role);
-
-  useEffect(() => {
-    if (roleData) setRolesData(roleData);
-  }, [roleData]);
+  const [showPagePermissions, setShowPagePermissions] = useState(false);
+  const [showActionPermissions, setShowActionPermissions] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -96,7 +95,6 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Edit Role"
-
     >
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit Role" />
@@ -118,35 +116,68 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
             />
           </div>
           <div className="mt-6">
-            <h3 className="mb-2 font-semibold">Page Permissions</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {rolesData?.page_permission &&
-                Object.keys(rolesData.page_permission).map((key) => (
-                  <Checkbox
-                    key={key}
-                    label={key.replace(/_/g, " ")}
-                    checked={rolesData.page_permission[key]}
-                    onChange={() =>
-                      handleCheckboxChange("page_permission", key)
-                    }
-                  />
-                ))}
+            <button
+              onClick={() => setShowPagePermissions((prev) => !prev)}
+              className="flex items-center justify-between w-full mb-2 font-semibold text-left"
+            >
+              <span>Page Permissions</span>
+              <IoIosArrowForward
+                className={`transition-transform duration-200 ${
+                  showPagePermissions ? "rotate-90" : "rotate-0"
+                }`}
+              />
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                showPagePermissions ? "max-h-96" : "max-h-0"
+              }`}
+            >
+              <div className="grid grid-cols-2 gap-3">
+                {rolesData?.page_permission &&
+                  Object.keys(rolesData.page_permission).map((key) => (
+                    <Checkbox
+                      key={key}
+                      label={key.replace(/_/g, " ")}
+                      checked={rolesData.page_permission[key]}
+                      onChange={() =>
+                        handleCheckboxChange("page_permission", key)
+                      }
+                    />
+                  ))}
+              </div>
             </div>
           </div>
+
           <div className="mt-6">
-            <h3 className="mb-2 font-semibold">Action Permissions</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {rolesData?.action_permission &&
-                Object.keys(rolesData.action_permission).map((key) => (
-                  <Checkbox
-                    key={key}
-                    label={key.replace(/_/g, " ")}
-                    checked={rolesData.action_permission[key]}
-                    onChange={() =>
-                      handleCheckboxChange("action_permission", key)
-                    }
-                  />
-                ))}
+            <button
+              onClick={() => setShowActionPermissions((prev) => !prev)}
+              className="flex items-center justify-between w-full mb-2 font-semibold text-left"
+            >
+              <span>Action Permissions</span>
+              <IoIosArrowForward
+                className={`transition-transform duration-200 ${
+                  showActionPermissions ? "rotate-90" : "rotate-0"
+                }`}
+              />
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                showActionPermissions ? "max-h-96" : "max-h-0"
+              }`}
+            >
+              <div className="grid grid-cols-2 gap-3">
+                {rolesData?.action_permission &&
+                  Object.keys(rolesData.action_permission).map((key) => (
+                    <Checkbox
+                      key={key}
+                      label={key.replace(/_/g, " ")}
+                      checked={rolesData.action_permission[key]}
+                      onChange={() =>
+                        handleCheckboxChange("action_permission", key)
+                      }
+                    />
+                  ))}
+              </div>
             </div>
           </div>
         </CardLayoutBody>
