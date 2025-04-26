@@ -44,13 +44,15 @@ const ExcelExportButton = ({
     };
 
     return (
-        <SecondaryButton
-            className={className}
-            text={buttonText}
-            onClick={handleExport}
-            {...buttonProps}
-            icon={<SiGooglesheets />}
-        />
+        <div className='flex items-center justify-end w-full'>
+            <SecondaryButton
+                className={className}
+                text={buttonText}
+                onClick={handleExport}
+                {...buttonProps}
+                icon={<SiGooglesheets />}
+            />
+        </div>
     );
 };
 

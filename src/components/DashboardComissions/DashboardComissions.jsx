@@ -4,6 +4,7 @@ import { CardLayoutContainer, CardLayoutBody } from "../CardLayout/CardLayout";
 import { Input, Button, Spinner } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { editcommision, getCommision } from "../../_core/features/commisionSlice";
+import { GrDocumentUpdate } from "react-icons/gr";
 
 Modal.setAppElement("#root");
 
@@ -102,7 +103,8 @@ const DashboardComission = () => {
           </div>
         </div>
         <Button
-          text={isEditingcommision ? <Spinner /> : "Update Commission"}
+          icon={<GrDocumentUpdate />}
+          text={isEditingcommision ? <Spinner /> : "Update"}
           onClick={handleSubmit}
           disabled={isEditingcommision}
         />
