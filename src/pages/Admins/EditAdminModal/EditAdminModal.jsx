@@ -70,7 +70,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
       role: role.label,
     };
     setSelectedRole(data);
-    setFormData((prev) => ({ ...prev, role_id: data.role }));
+    setFormData((prev) => ({ ...prev, role_id: data.id }));
   };
 
   const handleSubmit = () => {
@@ -82,7 +82,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
     const payload = {
       full_name: formData.full_name,
       password: formData.password,
-      // role_id: Number(formData.role_id),
+      role_id: Number(formData.role_id),
       is_active: active,
     };
 

@@ -16,6 +16,10 @@ const initialState = {
   isLoadingCredits: false,
   creditsError: null,
 
+  adminCredits: null,
+  isLoadingAdminCredits: false,
+  adminCreditsError: null,
+
   flightBookings: [],
   isLoadingFlightBookings: false,
   flightBookingsError: null,
@@ -107,6 +111,18 @@ const bookingSlice = createSlice({
       .addCase(getCredits.rejected, (state, action) => {
         state.isLoadingCredits = false;
         state.creditsError = action.payload;
+      })
+      .addCase(getAdminCredits.pending, (state) => {
+        state.isLoadingAdminCredits = true;
+        state.adminCreditsError = null;
+      })
+      .addCase(getAdminCredits.fulfilled, (state, action) => {
+        state.isLoadingAdminCredits = false;
+        state.adminCredits = action.payload;
+      })
+      .addCase(getAdminCredits.rejected, (state, action) => {
+        state.isLoadingAdminCredits = false;
+        state.adminCreditsError = action.payload;
       })
       .addCase(getFlightBookings.pending, (state) => {
         state.isLoadingFlightBookings = true;
@@ -325,6 +341,29 @@ export const getCredits = createAsyncThunk(
       const response = await axios({
         method: "GET",
         url: `${BASE_URL}/api/booking-credit`,
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data.data;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getAdminCredits = createAsyncThunk(
+  "booking/getAdminCredits",
+  async (token, thunkAPI) => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `${BASE_URL}/api/get-credit`,
         headers: {
           Authorization: token,
           "Content-Type": "application/json",

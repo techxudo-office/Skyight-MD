@@ -75,20 +75,20 @@ export const adminValidation = (form, setErrors) => {
     newErrors.email = "Invalid email format";
   }
 
-  if (!form?.password?.trim()) {
-    newErrors.password = "Password is required";
-  } else if (form.password.length < 8) {
-    newErrors.password = "Password must be at least 8 characters";
-  } else if (!/[A-Z]/.test(form.password)) {
-    newErrors.password = "Password must contain at least one uppercase letter";
-  } else if (!/[a-z]/.test(form.password)) {
-    newErrors.password = "Password must contain at least one lowercase letter";
-  } else if (!/\d/.test(form.password)) {
-    newErrors.password = "Password must contain at least one number";
-  } else if (!/[!@#$%^&*]/.test(form.password)) {
-    newErrors.password =
-      "Password must contain at least one special character (!@#$%^&*)";
-  }
+  // if (!form?.password?.trim()) {
+  //   newErrors.password = "Password is required";
+  // } else if (form.password.length < 8) {
+  //   newErrors.password = "Password must be at least 8 characters";
+  // } else if (!/[A-Z]/.test(form.password)) {
+  //   newErrors.password = "Password must contain at least one uppercase letter";
+  // } else if (!/[a-z]/.test(form.password)) {
+  //   newErrors.password = "Password must contain at least one lowercase letter";
+  // } else if (!/\d/.test(form.password)) {
+  //   newErrors.password = "Password must contain at least one number";
+  // } else if (!/[!@#$%^&*]/.test(form.password)) {
+  //   newErrors.password =
+  //     "Password must contain at least one special character (!@#$%^&*)";
+  // }
 
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
