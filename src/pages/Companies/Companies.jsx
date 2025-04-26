@@ -27,11 +27,11 @@ const Companies = () => {
       selector: (row) => row.name,
       sortable: false,
     },
-    {
-      name: "ID",
-      selector: (row) => row.id,
-      sortable: false,
-    },
+    // {
+    //   name: "ID",
+    //   selector: (row) => row.id,
+    //   sortable: false,
+    // },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
@@ -80,7 +80,7 @@ const Companies = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={companies} onFilteredData={setFilteredCompanies} searchFields={["name", "id"]} />
+          <Searchbar data={companies} onFilteredData={setFilteredCompanies} searchFields={["name"]} />
           <Table
             pagination={true}
             columnsData={companiesColumns}

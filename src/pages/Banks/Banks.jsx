@@ -59,12 +59,12 @@ const Banks = () => {
   }, []);
 
   const columns = [
-    {
-      name: "Id",
-      selector: (row) => row.id,
-      sortable: false,
-      grow: 2,
-    },
+    // {
+    //   name: "Id",
+    //   selector: (row) => row.id,
+    //   sortable: false,
+    //   grow: 2,
+    // },
     {
       name: "Bank",
       selector: (row) => row.bank,

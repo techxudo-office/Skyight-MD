@@ -7,6 +7,7 @@ import {
   CustomTooltip,
   ConfirmModal,
   Searchbar,
+  ExcelExportButton,
 } from "../../components/components";
 import {
   CardLayoutContainer,
@@ -20,6 +21,7 @@ import { getTickets } from "../../_core/features/ticketSlice";
 import { MdEditSquare } from "react-icons/md";
 import dayjs from "dayjs";
 import EditTicketModal from "./EditTicketModal/EditTicketModal";
+import { SiGooglesheets } from "react-icons/si";
 
 const Tickets = () => {
   const dispatch = useDispatch();
@@ -63,11 +65,11 @@ const Tickets = () => {
       selector: (row) => row?.user?.company.name,
       sortable: false,
     },
-    {
-      name: "TICKET ID",
-      selector: (row) => row?.id,
-      sortable: false,
-    },
+    // {
+    //   name: "TICKET ID",
+    //   selector: (row) => row?.id,
+    //   sortable: false,
+    // },
     {
       name: "CREATED BY",
       selector: (row) => `${row?.user?.first_name} ${row?.user?.last_name}`,
@@ -121,6 +123,14 @@ const Tickets = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
+          <div className="flex justify-end w-full ">
+            <ExcelExportButton
+              data={filteredData || []}
+              fileName="Tickets"
+              excludeKeys={["user"]}
+            />
+          </div>
+
           {tickets && (
             <Searchbar onFilteredData={setFilteredData} data={tickets} />
           )}

@@ -15,7 +15,7 @@ const SecondaryButton = ({ text, onClick, type = 'button', className = '', style
             >
                 {loading ? <Spinner /> :
                     <div className='flex items-center justify-center gap-1 '>
-                        <span className={`${disabled || loading ? "text-text" : "text-white"} text-xl pb-[2px] `}>{icon}</span>
+                        <span className={`${disabled || loading ? "text-text" : "text-primary"} text-xl pb-[2px] `}>{icon}</span>
                         <span className={` hover:${textColorHover} max-md:text-sm`}>{text}</span>
                     </div>
                 }

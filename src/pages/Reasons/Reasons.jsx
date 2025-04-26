@@ -67,12 +67,12 @@ const Reasons = () => {
       selector: (row) => row.reason,
       sortable: false,
     },
-    {
-      name: "ID",
-      selector: (row) => row.id,
-      sortable: false,
-      wrap: true,
-    },
+    // {
+    //   name: "ID",
+    //   selector: (row) => row.id,
+    //   sortable: false,
+    //   wrap: true,
+    // },
     {
       name: "",
       selector: (row) => (

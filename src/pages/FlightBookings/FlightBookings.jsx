@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { utils, writeFile } from "xlsx";
 import {
+  ExcelExportButton,
   Searchbar,
   SecondaryButton,
   Table,
@@ -32,6 +34,8 @@ const FlightBookings = () => {
   const navigationHandler = () => {
     navigate("/dashboard/search-flights");
   };
+
+
 
   const columns = [
     {
@@ -116,6 +120,10 @@ const FlightBookings = () => {
           </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
+          <ExcelExportButton
+            data={filteredData || []}
+            fileName="FlightBookings"
+          />
           {flightBookings && (
             <Searchbar onFilteredData={setFilteredData} data={flightBookings} />
           )}
