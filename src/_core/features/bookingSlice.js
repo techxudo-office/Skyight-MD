@@ -380,6 +380,22 @@ export const getAdminCredits = createAsyncThunk(
   }
 );
 
+export const editAdminCredits = createAsyncThunk(
+  "booking/editAdminCredits",
+  async ({ token, data }, thunkAPI) => {
+    try {
+      let response = await axios.put(`${BASE_URL}/api/update-credit`, data, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    } catch (error) {
+      toast.error("Failed while admin credits");
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const getFlightBookings = createAsyncThunk(
   "booking/getFlightBookings",
   async (token, thunkAPI) => {

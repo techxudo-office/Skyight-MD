@@ -17,10 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getReasons } from "../../../_core/features/reasonsSlice";
 import { editTransaction } from "../../../_core/features/transactionSlice";
 import toast from "react-hot-toast";
+import { editAdminCredits } from "../../../_core/features/bookingSlice";
 
 Modal.setAppElement("#root");
 
-const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
+const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
@@ -42,16 +43,25 @@ const EditTransactionModal = ({ isOpen, onClose, transactionId }) => {
 
     const payload = {
       status: toggle ? "approved" : "rejected",
-      transaction_id: transactionId,
+      transaction_id: transaction.id,
       reasonIds: !toggle ? selectedValues.map((item) => item.value) : null,
     };
 
-    dispatch(editTransaction({ data: payload, token: adminData?.token })).then(
-      () => {
+    dispatch(editTransaction({ data: payload, token: adminData?.token }))
+      .unwrap()
+      .then(() => {
+        dispatch(
+          editAdminCredits({
+            data: { amount: Number(transaction.amount) },
+            token: adminData?.token,
+          })
+        );
+      })
+      .finally(() => {
         onClose();
-      }
-    );
+      });
   };
+
   return (
     <ModalWrapper
       isOpen={isOpen}

@@ -33,7 +33,7 @@ const Transactions = ({ isCompanyDetail }) => {
   const { adminData } = useSelector((state) => state.auth);
   const [filteredTransaction, setFilteredTransaction] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [transactionId, setTransactionId] = useState(null);
+  const [transaction, setTransaction] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const {
     transactions,
@@ -59,14 +59,14 @@ const Transactions = ({ isCompanyDetail }) => {
   };
 
   const handleEdit = (row) => {
-    setTransactionId(row.id);
+    setTransaction(row);
     setIsEditModalOpen(true);
   };
 
   const closeModal = () => {
     setIsViewModalOpen(false);
     setSelectedTransaction(null);
-    setTransactionId(null);
+    setTransaction(null);
   };
 
   const columns = [
@@ -109,14 +109,14 @@ const Transactions = ({ isCompanyDetail }) => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          {row.status === "pending" && (
+          {/* {row.status === "pending" && ( */}
             <CustomTooltip content={"Edit"}>
               <MdEditSquare
                 className="text-base cursor-pointer text-primary"
                 onClick={() => handleEdit(row)}
               />
             </CustomTooltip>
-          )}
+          {/* )} */}
         </div>
       ),
       sortable: false,
@@ -129,7 +129,7 @@ const Transactions = ({ isCompanyDetail }) => {
         <EditTransactionModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          transactionId={transactionId}
+          transaction={transaction}
         />
       )}
       <CardLayoutContainer removeBg={true}>
