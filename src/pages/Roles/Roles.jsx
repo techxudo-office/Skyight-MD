@@ -55,7 +55,7 @@ const Roles = () => {
     {
       name: "",
       selector: (row) => {
-        const isSuperAdmin = row?.role === "Super Admi";
+        const isSuperAdmin = row?.role === "Super Admin";
         return (
           <div className="flex items-center gap-x-4">
             {!isSuperAdmin && (

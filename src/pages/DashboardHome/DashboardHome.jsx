@@ -1,33 +1,29 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  Tag,
+  Table,
   DashboardCards,
   DashboardComissions,
-  Table,
-  Tag,
 } from "../../components/components";
-import {
-  getAdminCredits,
-  getFlightBookings,
-  getLatestBooking,
-} from "../../_core/features/bookingSlice";
+import { getLatestBooking } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Flag from "react-world-flags";
-import { ApplyCommisions } from "../pages";
 
 const DashboardHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { adminData } = useSelector((state) => state.auth);
-  const {
-    latestBookings,
-    isLoadingLatestBookings,
-    adminCredits,
-    isLoadingAdminCredits,
-  } = useSelector((state) => state.booking);
+  const { latestBookings, isLoadingLatestBookings } = useSelector(
+    (state) => state.booking
+  );
+
+  useEffect(() => {
+    if (!adminData.token) return;
+    dispatch(getLatestBooking(adminData.token));
+  }, [dispatch]);
 
   const columns = [
     {
@@ -91,12 +87,6 @@ const DashboardHome = () => {
     },
   ];
 
-  useEffect(() => {
-    if (!adminData.token) return;
-    dispatch(getLatestBooking(adminData.token));
-    dispatch(getAdminCredits(adminData.token));
-  }, [dispatch]);
-
   const DataArray = [
     {
       title: "Iran Airtour",
@@ -123,18 +113,7 @@ const DashboardHome = () => {
   return (
     <div className="pb-10 space-y-10 bg-background">
       <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
-      <div className="grid w-full grid-cols-3 gap-4">
-        <div className="h-full col-span-2 ">
-          <DashboardComissions />
-        </div>
-        <div className="relative h-full col-span-1 overflow-hidden bg-primary rounded-xl">
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
-            <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
-            <p className="text-3xl font-bold">{adminCredits ?? "—"}</p>
-            <p className="mt-1 text-sm opacity-80">Available Balance</p>
-          </div>
-        </div>
-      </div>
+      <DashboardComissions />
       <DashboardCards />
       {DataArray.map((section, index) => (
         <div key={index} className="w-full">
