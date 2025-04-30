@@ -1,26 +1,19 @@
-import React, { useEffect, useRef } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { routesData } from "../data/routesData";
 import toast from "react-hot-toast";
 
 const AppRoutes = () => {
   const navigate = useNavigate();
-  const auth = localStorage.getItem("auth_token");
   const { adminData } = useSelector((state) => state.auth);
-
-  const isInitialRender = useRef(true);
 
   useEffect(() => {
     if (!adminData?.token) {
-      // if (!isInitialRender.current) {
       toast.success("Logged out successfully");
       navigate("/", { replace: true });
-      // } else {
-      //   isInitialRender.current = false;
-      // }
     }
-  }, [auth]);
+  }, []);
 
   return (
     <Routes>
@@ -33,13 +26,7 @@ const AppRoutes = () => {
                   key={childIndex}
                   index={child.index}
                   path={child.path}
-                  element={
-                    child.protected && !adminData?.token ? (
-                      <Navigate to="/" replace />
-                    ) : (
-                      child.element
-                    )
-                  }
+                  element={child.element}
                 />
               ))}
             </Route>
@@ -50,13 +37,7 @@ const AppRoutes = () => {
           <Route
             key={index}
             path={route.path}
-            element={
-              route.protected && !adminData?.token ? (
-                <Navigate to="/" replace />
-              ) : (
-                route.element
-              )
-            }
+            element={route.element}
           />
         );
       })}

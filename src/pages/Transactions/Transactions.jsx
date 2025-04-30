@@ -74,13 +74,11 @@ const Transactions = ({ isCompanyDetail }) => {
       name: "COMPANY",
       selector: (row) => row?.company?.name,
       sortable: false,
-
     },
     {
       name: "BANK",
       selector: (row) => row.bank_name,
       sortable: false,
-
     },
     {
       name: "PAYMENT DATE",
@@ -109,14 +107,14 @@ const Transactions = ({ isCompanyDetail }) => {
               onClick={() => handleView(row)}
             />
           </CustomTooltip>
-          {/* {row.status === "pending" && ( */}
+          {row.status === "pending" && (
             <CustomTooltip content={"Edit"}>
               <MdEditSquare
                 className="text-base cursor-pointer text-primary"
                 onClick={() => handleEdit(row)}
               />
             </CustomTooltip>
-          {/* )} */}
+          )}
         </div>
       ),
       sortable: false,
@@ -139,7 +137,11 @@ const Transactions = ({ isCompanyDetail }) => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={isCompanyDetail ? companyTransactions : transactions} onFilteredData={setFilteredTransaction} searchFields={["company.name", "status", "bank_name"]} />
+          <Searchbar
+            data={isCompanyDetail ? companyTransactions : transactions}
+            onFilteredData={setFilteredTransaction}
+            searchFields={["company.name", "status", "bank_name"]}
+          />
           <Table
             pagination={true}
             columnsData={columns}
@@ -149,9 +151,7 @@ const Transactions = ({ isCompanyDetail }) => {
                 ? isLoadingCompanyTransactions
                 : isLoadingTransactions
             }
-            paginationTotalRows={
-              filteredTransaction.length
-            }
+            paginationTotalRows={filteredTransaction.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

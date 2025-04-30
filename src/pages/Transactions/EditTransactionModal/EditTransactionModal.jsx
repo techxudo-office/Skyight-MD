@@ -59,7 +59,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
       })
       .finally(() => {
         onClose();
-      });
+      }); 
   };
 
   return (
