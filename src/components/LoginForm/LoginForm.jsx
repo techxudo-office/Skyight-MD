@@ -9,7 +9,7 @@ import { Input, Button, Spinner } from "../../components/components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../_core/features/authSlice";
 
@@ -59,7 +59,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <Toaster />
+      
       <CardLayoutContainer className={"max-w-md p-3 m-auto shadow-2xl"}>
         <CardLayoutHeader
           heading="Login"

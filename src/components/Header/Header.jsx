@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { FaUser, FaUserCircle } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
@@ -117,7 +117,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   return (
     <>
-      <Toaster />
+      
       <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg ">
         <div className="px-2 mx-auto">
           <div className="flex items-center justify-between p-2 sm:p-4">

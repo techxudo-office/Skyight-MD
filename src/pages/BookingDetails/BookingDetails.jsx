@@ -67,7 +67,7 @@ const TicketDetails = () => {
 
   return (
     <>
-      <Toaster />
+      
       <div ref={printRef} className="flex flex-col w-full gap-5">
         <CardLayoutContainer>
           <CardLayoutBody className={"flex flex-wrap gap-3 justify-between"}>

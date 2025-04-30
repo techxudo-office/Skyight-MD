@@ -6,7 +6,7 @@ import {
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import { Input, Button, Spinner } from "../../components/components";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { createRole } from "../../_core/features/roleSlice";
 
@@ -99,7 +99,7 @@ const CreateRole = () => {
 
   return (
     <>
-      <Toaster />
+      
       <CardLayoutContainer>
         <CardLayoutHeader
           heading="Create Role"

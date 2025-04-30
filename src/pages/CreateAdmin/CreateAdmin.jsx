@@ -13,7 +13,7 @@ import {
   Switch,
 } from "../../components/components";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { adminValidation } from "../../utils/validations";
 import { getRoles } from "../../_core/features/roleSlice";
@@ -86,7 +86,7 @@ const CreateAdmin = () => {
 
   return (
     <>
-      <Toaster />
+      
       <CardLayoutContainer>
         <CardLayoutHeader
           className="flex items-center justify-between"

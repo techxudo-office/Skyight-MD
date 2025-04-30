@@ -6,14 +6,9 @@ import {
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import { Input, Button, Spinner, Select } from "../../components/components";
-import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  adminValidation,
-  notificationValidation,
-  ticketValidation,
-} from "../../utils/validations";
+import { notificationValidation } from "../../utils/validations";
 import { createNotification } from "../../_core/features/notificationSlice";
 import { getCompanies } from "../../_core/features/companySlice";
 import { notificationInpFields } from "../../utils/InputFields";
@@ -81,7 +76,6 @@ const CreateNotification = () => {
 
   return (
     <>
-      <Toaster />
       <CardLayoutContainer>
         <CardLayoutHeader
           className="flex items-center justify-between"

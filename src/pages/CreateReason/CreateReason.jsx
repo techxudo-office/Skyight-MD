@@ -7,7 +7,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { Button, Spinner, SecondaryButton, Input, Textarea } from "../../components/components";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { createReason } from "../../_core/features/reasonsSlice";
 
@@ -37,7 +37,7 @@ const CreateReason = () => {
 
   return (
     <>
-      <Toaster />
+      
       <CardLayoutContainer>
         <CardLayoutHeader heading="Create Reason" />
 

@@ -7,7 +7,7 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { Input, Button, Spinner, Select } from "../../components/components";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { FaCaretDown } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { userValidation } from "../../utils/validations";
@@ -96,7 +96,7 @@ const CreateUser = () => {
 
   return (
     <>
-      <Toaster />
+      
       <CardLayoutContainer>
         <CardLayoutHeader heading="Create User" />
         <form onSubmit={handleSubmit} noValidate>
