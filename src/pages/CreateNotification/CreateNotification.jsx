@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { Input, Button, Spinner, Select } from "../../components/components";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { notificationValidation } from "../../utils/validations";
-import { createNotification } from "../../_core/features/notificationSlice";
-import { getCompanies } from "../../_core/features/companySlice";
 import { notificationInpFields } from "../../utils/InputFields";
+import { notificationValidation } from "../../utils/validations";
+import { getCompanies } from "../../_core/features/companySlice";
+import { createNotification } from "../../_core/features/notificationSlice";
+import { Input, Button, Spinner, Select } from "../../components/components";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   title: "",
@@ -21,6 +22,7 @@ const initialState = {
 
 const CreateNotification = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState(initialState);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -71,6 +73,7 @@ const CreateNotification = () => {
       .then(() => {
         setFormData(initialState);
         setSelectedCompany(null);
+        navigate(-1);
       });
   };
 

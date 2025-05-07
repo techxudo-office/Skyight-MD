@@ -103,7 +103,7 @@ export const getRoles = createAsyncThunk(
   "role/getRoles",
   async (token, thunkAPI) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/role`, {
+      const response = await axios.get(`${BASE_URL}/api/role?is_deleted=false`, {
         headers: {
           Authorization: token,
         },

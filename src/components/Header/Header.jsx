@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
-import { FaUser, FaUserCircle } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreditsDropdown, CustomTooltip, Dropdown } from "../components";
@@ -9,11 +7,7 @@ import { HiOutlineRefresh } from "react-icons/hi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoHome } from "react-icons/io5";
 import { SlSettings } from "react-icons/sl";
-import {
-  MdNotificationsNone,
-  MdArrowDropDown,
-  MdSettings,
-} from "react-icons/md";
+import { MdNotificationsNone, MdArrowDropDown } from "react-icons/md";
 import { motion } from "framer-motion";
 import Notifications from "../Notifications/Notifications";
 import { getCredits } from "../../_core/features/bookingSlice";
@@ -28,6 +22,9 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const [isNotiHovered, setIsNotiHovered] = useState(false);
   const { adminData } = useSelector((state) => state.auth);
   const { credits, isLoadingCredits } = useSelector((state) => state.booking);
+  const [profileImage, setProfileImage] = useState(
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
+  );
 
   const dropdownOptions = [
     {
@@ -117,18 +114,16 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   return (
     <>
-      
       <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg ">
         <div className="px-2 mx-auto">
           <div className="flex items-center justify-between p-2 sm:p-4">
-            {" "}
             <div className="flex items-end gap-3">
               <CustomTooltip content={"Open / close"}>
                 <button
                   className="text-gray-700 transition hover:text-gray-900"
                   onClick={sidebarHandler}
                 >
-                  <GiHamburgerMenu size={22} />{" "}
+                  <GiHamburgerMenu size={22} />
                 </button>
               </CustomTooltip>
               <div className="flex items-center "></div>
@@ -205,22 +200,22 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
               </div>
               <CustomTooltip content={dropdownStatus ? null : "profile"}>
                 <div className="px-3">
-                  <FaUserCircle
+                  <div
                     onClick={dropdownHandler}
-                    className="text-4xl transition-all cursor-pointer text-text"
-                  />
+                    className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group"
+                  >
+                    <img
+                      src={profileImage}
+                      alt="profile-img"
+                      className="object-cover w-full h-full rounded-full"
+                    />
+                  </div>
                   <Dropdown
                     status={dropdownStatus}
                     changeStatus={setDropDownStatus}
                     options={dropdownOptions}
                     className={"max-md:hidden"}
                   />
-                  {/* <Dropdown
-                    status={dropdownStatus}
-                    changeStatus={setDropDownStatus}
-                    options={mobileDropdownOptions}
-                    className={"md:hidden"}
-                  /> */}
                 </div>
               </CustomTooltip>
             </div>
