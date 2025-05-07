@@ -9,6 +9,7 @@ import {
 } from "../../_core/features/commisionSlice";
 import { getAdminCredits } from "../../_core/features/bookingSlice";
 import { GrDocumentUpdate } from "react-icons/gr";
+import { Toaster } from "react-hot-toast";
 
 Modal.setAppElement("#root");
 
@@ -74,59 +75,62 @@ const DashboardComission = () => {
   };
   if (isLoadingCommision) return <Spinner className={"text-primary"} />;
   return (
-    <CardLayoutContainer className={"py-2"}>
-      <CardLayoutBody removeBorder={true}>
-        <div className="grid w-full grid-cols-3 gap-4">
-          <div className="h-full col-span-2 ">
-            <div className="flex gap-3 mb-3">
-              <div className="grid w-2/3 grid-cols-4 gap-5 ">
-                {Object.keys(formData).map((key) => (
-                  <div key={key}>
-                    <Input
-                      label={key.toUpperCase()}
-                      name={key}
-                      type="text"
-                      value={String(formData[key])}
-                      onChange={handleChange}
-                      placeholder={`Enter ${key.toUpperCase()}`}
-                    />
-                  </div>
-                ))}
+    <>
+      <Toaster />
+      <CardLayoutContainer className={"py-2"}>
+        <CardLayoutBody removeBorder={true}>
+          <div className="grid w-full grid-cols-3 gap-4">
+            <div className="h-full col-span-2 ">
+              <div className="flex gap-3 mb-3">
+                <div className="grid w-2/3 grid-cols-4 gap-5 ">
+                  {Object.keys(formData).map((key) => (
+                    <div key={key}>
+                      <Input
+                        label={key.toUpperCase()}
+                        name={key}
+                        type="number"
+                        value={formData[key]}
+                        onChange={handleChange}
+                        placeholder={`Enter ${key.toUpperCase()}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="w-1/3 text-end text-text">
+                  <p className="text-xs">Commisions</p>
+                  <p className="text-3xl font-semibold">
+                    {commisions.commission || 0}{" "}
+                    <span className="text-sm text-gray">$</span>
+                  </p>
+                  <Input
+                    className={"mt-5"}
+                    label={"Commision"}
+                    name={"commision"}
+                    type="number"
+                    value={commision}
+                    onChange={(e) => setCommision(e.target.value)}
+                    placeholder={`Enter Commision`}
+                  />
+                </div>
               </div>
-              <div className="w-1/3 text-end text-text">
-                <p className="text-xs">Commisions</p>
-                <p className="text-3xl font-semibold">
-                  {commisions.commission || 0}{" "}
-                  <span className="text-sm text-gray">$</span>
-                </p>
-                <Input
-                  className={"mt-5"}
-                  label={"Commision"}
-                  name={"commision"}
-                  type="text"
-                  value={String(commision)}
-                  onChange={(e) => setCommision(e.target.value)}
-                  placeholder={`Enter Commision`}
-                />
+              <Button
+                icon={<GrDocumentUpdate />}
+                text={isEditingcommision ? <Spinner /> : "Update"}
+                onClick={handleSubmit}
+                disabled={isEditingcommision}
+              />
+            </div>
+            <div className="relative h-full col-span-1 overflow-hidden bg-primary rounded-xl">
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
+                <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
+                <p className="text-3xl font-bold">{adminCredits ?? "—"}</p>
+                <p className="mt-1 text-sm opacity-80">Available Balance</p>
               </div>
             </div>
-            <Button
-              icon={<GrDocumentUpdate />}
-              text={isEditingcommision ? <Spinner /> : "Update"}
-              onClick={handleSubmit}
-              disabled={isEditingcommision}
-            />
           </div>
-          <div className="relative h-full col-span-1 overflow-hidden bg-primary rounded-xl">
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
-              <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
-              <p className="text-3xl font-bold">{adminCredits ?? "—"}</p>
-              <p className="mt-1 text-sm opacity-80">Available Balance</p>
-            </div>
-          </div>
-        </div>
-      </CardLayoutBody>
-    </CardLayoutContainer>
+        </CardLayoutBody>
+      </CardLayoutContainer>
+    </>
   );
 };
 
