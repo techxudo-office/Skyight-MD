@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
+import makeRequest from "./ApiHelper";
+
 
 const initialState = {
   admins: [],
@@ -99,106 +98,81 @@ const adminSlice = createSlice({
 export const getAdmins = createAsyncThunk(
   "admin/getAdmins",
   async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/admin`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response?.data?.data?.admins;
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch admins.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    const response = await makeRequest(
+      'GET',
+      '/api/admin',
+      {
+        token,
+        errorMessage: "Failed to fetch admins."
+      }
+    );
+    return response?.data?.data.admins || response;
   }
 );
 
 export const getDashboardAnalytics = createAsyncThunk(
   "admin/getDashboardAnalytics",
   async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/adminKpi`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response?.data?.data;
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch analytics.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    const response = await makeRequest(
+      'GET',
+      '/api/adminKpi',
+      {
+        token,
+        errorMessage: "Failed to fetch analytics."
+      }
+    );
+    return response?.data.data;
   }
 );
 
 export const createAdmin = createAsyncThunk(
   "admin/createAdmin",
   async ({ data, token }, thunkAPI) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/api/admin`, data, {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      });
-      toast.success("Admin created successfully");
-      return response.data;
-    } catch (error) {
-
-      const errorMessage =
-        error.response?.data?.message || "Failed to create admin.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    const response = await makeRequest(
+      'POST',
+      '/api/admin',
+      {
+        data,
+        token,
+        successMessage: "Admin created successfully",
+        errorMessage: "Failed to create admin.",
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+    return response;
   }
 );
 
 export const deleteAdmin = createAsyncThunk(
   "admin/deleteAdmin",
   async ({ id, token }, thunkAPI) => {
-    try {
-      const response = await axios.delete(`${BASE_URL}/api/admin/${id}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Admin deleted successfully");
-        return id;
+    await makeRequest(
+      'DELETE',
+      `/api/admin/${id}`,
+      {
+        token,
+        successMessage: "Admin deleted successfully",
+        errorMessage: "Failed while deleting this admin"
       }
-    } catch (error) {
-      const errorMessage = "Failed while deleting this admin";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return id;
   }
 );
 
 export const editAdmin = createAsyncThunk(
   "admin/editAdmin",
   async ({ id, token, data }, thunkAPI) => {
-    try {
-
-      const response = await axios.put(`${BASE_URL}/api/admin/${id}`, data, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Admin updated successfully");
-        return response.data.data;
+    const response = await makeRequest(
+      'PUT',
+      `/api/admin/${id}`,
+      {
+        data,
+        token,
+        successMessage: "Admin updated successfully",
+        errorMessage: "Failed while updating this admin"
       }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed while updating this admin";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return response?.data.data || response;
   }
 );
 

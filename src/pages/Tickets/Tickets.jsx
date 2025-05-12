@@ -28,7 +28,7 @@ const Tickets = () => {
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
   const [ticketData, setTicketData] = useState(null);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { tickets, isLoadingTickets } = useSelector((state) => state.ticket);
   const [filteredData, setFilteredData] = useState(tickets);

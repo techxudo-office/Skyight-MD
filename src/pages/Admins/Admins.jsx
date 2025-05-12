@@ -24,11 +24,10 @@ const Admin = () => {
   const [modalStatus, setModalStatus] = useState(false);
   const [editAdminData, setEditAdminData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { admins, isLoadingAdmins, isDeletingAdmin } = useSelector(
     (state) => state.admin
   );
-
   const adminColumns = [
     // {
     //   name: "ADMIN ID",

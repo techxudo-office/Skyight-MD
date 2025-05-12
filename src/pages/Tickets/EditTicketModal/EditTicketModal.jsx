@@ -35,7 +35,7 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(data?.status || "open");
   const [formData, setFormData] = useState(initialState);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { isUpdatingTicket } = useSelector((state) => state.ticket);
 
   useEffect(() => {

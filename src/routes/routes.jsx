@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 const AppRoutes = () => {
   const navigate = useNavigate();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
 
   useEffect(() => {
     if (!adminData?.token) {

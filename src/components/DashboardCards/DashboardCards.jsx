@@ -6,7 +6,7 @@ import { Loader } from "../components";
 
 const DashboardCards = () => {
   const dispatch = useDispatch();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { dashboard, isLoadingDashboard } = useSelector((state) => state.admin);
 
   useEffect(() => {

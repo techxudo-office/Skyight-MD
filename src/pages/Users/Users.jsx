@@ -32,7 +32,7 @@ const Users = ({ isCompanyUser }) => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [editUserData, setEditUserData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const {
     users,
     isLoadingUsers,

@@ -16,7 +16,7 @@ const CreateReason = () => {
   const dispatch = useDispatch()
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { isCreatingReason, createReasonError } = useSelector((state) => state.reasons)
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +37,7 @@ const CreateReason = () => {
 
   return (
     <>
-      
+
       <CardLayoutContainer>
         <CardLayoutHeader heading="Create Reason" />
 

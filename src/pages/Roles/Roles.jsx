@@ -29,7 +29,7 @@ const Roles = () => {
   const { roles, isLoadingRoles, isDeletingRole } = useSelector(
     (state) => state.role
   );
-  const adminData = useSelector((state) => state.auth.adminData);
+  const { adminData } = useSelector((state) => state.persist);
 
   useEffect(() => {
     if (!adminData?.token) return;
@@ -143,7 +143,7 @@ const Roles = () => {
             columnsData={roleColumns}
             tableData={roles || []}
             progressPending={isLoadingRoles}
-            paginationTotalRows={roles.length}
+            paginationTotalRows={roles?.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

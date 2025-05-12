@@ -34,7 +34,7 @@ const CreateAdmin = () => {
   const [active, setActive] = useState(true);
   const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { isCreatingAdmin } = useSelector((state) => state.admin);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
@@ -86,7 +86,7 @@ const CreateAdmin = () => {
 
   return (
     <>
-      
+
       <CardLayoutContainer>
         <CardLayoutHeader
           className="flex items-center justify-between"

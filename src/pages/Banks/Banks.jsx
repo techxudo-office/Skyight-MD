@@ -34,7 +34,7 @@ const Banks = () => {
     navigate("/dashboard/create-bank");
   };
 
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { banks, isLoadingBanks, isLoadingDeleteBank, isEditingBank } =
     useSelector((state) => state.bank);
 

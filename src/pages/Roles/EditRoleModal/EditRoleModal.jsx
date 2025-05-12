@@ -37,7 +37,7 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
   const dispatch = useDispatch();
 
   const [rolesData, setRolesData] = useState(roleData || {});
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { isEditingRole } = useSelector((state) => state.role);
   const [showPagePermissions, setShowPagePermissions] = useState(false);
   const [showActionPermissions, setShowActionPermissions] = useState(false);
@@ -122,15 +122,13 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
             >
               <span>Page Permissions</span>
               <IoIosArrowForward
-                className={`transition-transform duration-200 ${
-                  showPagePermissions ? "rotate-90" : "rotate-0"
-                }`}
+                className={`transition-transform duration-200 ${showPagePermissions ? "rotate-90" : "rotate-0"
+                  }`}
               />
             </button>
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                showPagePermissions ? "max-h-96" : "max-h-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${showPagePermissions ? "max-h-96" : "max-h-0"
+                }`}
             >
               <div className="grid grid-cols-2 gap-3">
                 {rolesData?.page_permission &&
@@ -155,15 +153,13 @@ const EditRoleModal = ({ isOpen, onClose, roleData }) => {
             >
               <span>Action Permissions</span>
               <IoIosArrowForward
-                className={`transition-transform duration-200 ${
-                  showActionPermissions ? "rotate-90" : "rotate-0"
-                }`}
+                className={`transition-transform duration-200 ${showActionPermissions ? "rotate-90" : "rotate-0"
+                  }`}
               />
             </button>
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                showActionPermissions ? "max-h-96" : "max-h-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${showActionPermissions ? "max-h-96" : "max-h-0"
+                }`}
             >
               <div className="grid grid-cols-2 gap-3">
                 {rolesData?.action_permission &&

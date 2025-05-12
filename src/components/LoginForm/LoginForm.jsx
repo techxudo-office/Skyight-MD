@@ -11,12 +11,12 @@ import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../_core/features/authSlice";
+import { login } from "../../_core/features/persistSlice";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { adminData, isLoading } = useSelector((state) => state.auth);
+  const { adminData, isLoading } = useSelector((state) => state.persist);
 
   useEffect(() => {
     if (adminData) {
@@ -59,7 +59,7 @@ const LoginForm = () => {
 
   return (
     <>
-      
+
       <CardLayoutContainer className={"max-w-md p-3 m-auto shadow-2xl"}>
         <CardLayoutHeader
           heading="Login"
@@ -71,9 +71,8 @@ const LoginForm = () => {
             <div>
               <div className="flex flex-col gap-5">
                 <div
-                  className={`relative ${
-                    formik.touched.email && formik.errors.email ? "mb-5" : ""
-                  }`}>
+                  className={`relative ${formik.touched.email && formik.errors.email ? "mb-5" : ""
+                    }`}>
                   <Input
                     placeholder={"abc.xcv@gmail.com"}
                     id={"email"}
@@ -91,11 +90,10 @@ const LoginForm = () => {
                   )}
                 </div>
                 <div
-                  className={`relative ${
-                    formik.touched.password && formik.errors.password
-                      ? "mb-5"
-                      : ""
-                  }`}>
+                  className={`relative ${formik.touched.password && formik.errors.password
+                    ? "mb-5"
+                    : ""
+                    }`}>
                   <Input
                     placeholder={"********"}
                     id={"password"}

@@ -63,7 +63,7 @@ const Checkbox = ({ label, checked, onChange }) => {
 const CreateRole = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const [rolesData, setRolesData] = useState(initialRolesData);
 
   const handleInputChange = (e) => {
@@ -99,7 +99,7 @@ const CreateRole = () => {
 
   return (
     <>
-      
+
       <CardLayoutContainer>
         <CardLayoutHeader
           heading="Create Role"

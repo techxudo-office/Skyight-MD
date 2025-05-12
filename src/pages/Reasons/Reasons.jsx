@@ -28,14 +28,13 @@ import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 
 const Reasons = () => {
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { reasons, isLoadingReasons, isLoadingDeleteReason, isEditingReason } =
     useSelector((state) => state.reasons);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [updateReason, setUpdateReason] = useState(null);
   const [editId, setEditId] = useState(null);
-
   const navigationHandler = () => {
     navigate("/dashboard/create-reason");
   };

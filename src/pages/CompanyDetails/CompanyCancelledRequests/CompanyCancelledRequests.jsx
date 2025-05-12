@@ -18,7 +18,7 @@ const CompanyCancelledRequests = () => {
   const { companyId } = useParams();
   const [filteredData, setFilteredData] = useState([]);
   const [cancelledRequests, setCancelledRequests] = useState([]);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { companyBookings, isLoadingCompanyBookings } = useSelector(
     (state) => state.booking
   );

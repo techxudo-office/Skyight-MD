@@ -24,7 +24,7 @@ const CreateNotification = () => {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState(initialState);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { companies, isLoadingCompanies } = useSelector(
     (state) => state.company
   );

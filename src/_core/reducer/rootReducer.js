@@ -17,6 +17,8 @@ import reasonsReducer from "../features/reasonsSlice"
 import commisionReducer from "../features/commisionSlice"
 import bankReducer from "../features/bankSlice"
 import adminReducer from "../features/adminSlice"
+import persistedReducer from "../features/persistSlice";
+import persistReducer from "redux-persist/es/persistReducer";
 const appReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
@@ -31,6 +33,7 @@ const appReducer = combineReducers({
   commision: commisionReducer,
   bank: bankReducer,
   admin: adminReducer,
+  persist: persistedReducer,
 });
 
 const rootReducer = (state, action) => {
@@ -41,4 +44,13 @@ const rootReducer = (state, action) => {
   }
   return appReducer(state, action);
 };
-export default rootReducer;
+
+const persistedReducers = persistReducer(
+  {
+    key: "root",
+    storage,
+    whitelist: ["persist"] // No root-level persistence
+  },
+  rootReducer
+);
+export default persistedReducers;

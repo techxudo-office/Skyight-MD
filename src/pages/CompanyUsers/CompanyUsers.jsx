@@ -16,7 +16,7 @@ const Companies = () => {
   const { companyId } = useParams();
   const dispatch = useDispatch();
   const [filteredCompanyUsers, setFilteredCompanyUsers] = useState(second)
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { companyUsers, isLoadingCompanyUsers } = useSelector(
     (state) => state.user
   );

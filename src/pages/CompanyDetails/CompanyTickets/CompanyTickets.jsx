@@ -23,7 +23,7 @@ const CompanyTickets = () => {
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
   const [filteredTickets, setFilteredTickets] = useState([])
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { companyTickets, isLoadingCompanyTickets } = useSelector(
     (state) => state.company
   );

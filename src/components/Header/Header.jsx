@@ -26,7 +26,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const [dropdownStatus, setDropDownStatus] = useState(false);
   const [CreditsDropdownOpen, setCreditsDropdownOpen] = useState(false);
   const [isNotiHovered, setIsNotiHovered] = useState(false);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { credits, isLoadingCredits } = useSelector((state) => state.booking);
 
   const dropdownOptions = [
@@ -117,7 +117,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   return (
     <>
-      
+
       <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg ">
         <div className="px-2 mx-auto">
           <div className="flex items-center justify-between p-2 sm:p-4">
@@ -187,9 +187,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                       </span>
                     )}
                     <MdArrowDropDown
-                      className={`text-xl ${
-                        CreditsDropdownOpen ? "rotate-180" : ""
-                      } transition-all duration-300`}
+                      className={`text-xl ${CreditsDropdownOpen ? "rotate-180" : ""
+                        } transition-all duration-300`}
                       onClick={() => setCreditsDropdownOpen((prev) => !prev)}
                     />
                     <div className="absolute right-0 top-14">

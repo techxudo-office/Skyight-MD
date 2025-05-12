@@ -26,7 +26,7 @@ const RefundRequests = () => {
   const dispatch = useDispatch();
   const [modalStatus, setModalStatus] = useState(false);
   const [refundId, setRefundId] = useState();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { refundBookings, isGetRefundsLoading, isRefundRequestLoading } =
     useSelector((state) => state.booking);
 

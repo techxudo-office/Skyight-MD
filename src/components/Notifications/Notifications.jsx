@@ -13,7 +13,7 @@ import { getNotifications } from "../../_core/features/notificationSlice";
 const Notifications = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { notifications, isLoadingNotifications } = useSelector(
     (state) => state.notification
   );

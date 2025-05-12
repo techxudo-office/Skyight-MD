@@ -25,7 +25,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { isEditingTransaction } = useSelector((state) => state.transaction);
   const { reasons, isLoadingReasons } = useSelector((state) => state.reasons);
 
@@ -59,7 +59,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
       })
       .finally(() => {
         onClose();
-      }); 
+      });
   };
 
   return (

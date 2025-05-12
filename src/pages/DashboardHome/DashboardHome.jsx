@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const DashboardHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { latestBookings, isLoadingLatestBookings } = useSelector(
     (state) => state.booking
   );

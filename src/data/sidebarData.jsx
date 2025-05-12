@@ -18,7 +18,7 @@ import { IoMdBookmark } from "react-icons/io";
 import { RiRefund2Fill } from "react-icons/ri";
 
 export const useAdminSidebarLinks = () => {
-  const adminData = useSelector((state) => state.auth.adminData);
+  const adminData = useSelector((state) => state.persist.adminData);
   const pagePermissions = adminData?.admin?.role?.page_permission || {
     dashboard: true,
     flights: true,

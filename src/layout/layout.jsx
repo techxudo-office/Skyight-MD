@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const Layout = () => {
   const [sidebarStatus, setSidebarStatus] = useState(true);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
 
   const setSidebarStatusHandler = (status) => {
     setSidebarStatus(status);

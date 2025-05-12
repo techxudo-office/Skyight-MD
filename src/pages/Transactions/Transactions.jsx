@@ -30,7 +30,7 @@ import { useParams } from "react-router-dom";
 const Transactions = ({ isCompanyDetail }) => {
   const dispatch = useDispatch();
   const { companyId } = useParams();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const [filteredTransaction, setFilteredTransaction] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [transaction, setTransaction] = useState(null);

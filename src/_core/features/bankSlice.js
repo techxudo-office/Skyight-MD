@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
+import makeRequest from "./ApiHelper";
+
 
 const initialState = {
   banks: [],
@@ -81,103 +80,75 @@ const bankSlice = createSlice({
 
 export const getBanks = createAsyncThunk(
   "booking/getBanks",
-  async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/bank`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      if (response?.data.data?.length > 0) {
-        // const extractedData = response.data.data[0].map(({ id, bank }) => ({
-        //   value: id,
-        //   label: bank,
-        // }));
-        return response?.data.data;
-      } else {
-        throw new Error("No Banks Found");
+  async (token) => {
+    const response = await makeRequest(
+      'GET',
+      '/api/bank',
+      {
+        token,
+        errorMessage: "Failed to fetch banks"
       }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch banks";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
+    );
+    console.log("response", response);
+    if (response?.data?.data.length > 0) {
+      return response.data.data;
     }
+
   }
 );
+
 export const deleteBank = createAsyncThunk(
   "bank/deleteBank",
-  async ({ token, id }, thunkAPI) => {
-    try {
-      const response = await axios.delete(
-        `${BASE_URL}/api/bank?bank_id=${id}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-
-      if (response?.status === 200) {
-        toast.success("bank deleted successfully");
-        return id;
+  async ({ token, id }) => {
+    await makeRequest(
+      'DELETE',
+      `/api/bank?bank_id=${id}`,
+      {
+        token,
+        successMessage: "Bank deleted successfully",
+        errorMessage: "Failed to delete bank"
       }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to delete bank.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return id;
   }
 );
 
 export const createBank = createAsyncThunk(
   "bank/createBank",
-  async ({ data, token }, thunkAPI) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/api/bank`, data, {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      });
-      toast.success("bank created successfully");
-      return response?.data.data;
-    } catch (error) {
-
-      const errorMessage =
-        error.response?.data?.message || "Failed to create bank.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+  async ({ data, token }) => {
+    const response = await makeRequest(
+      'POST',
+      '/api/bank',
+      {
+        data,
+        token,
+        successMessage: "Bank created successfully",
+        errorMessage: "Failed to create bank",
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+    return response?.data || response;
   }
 );
 
 export const editBank = createAsyncThunk(
   "bank/editBank",
-  async ({ id, token, data }, thunkAPI) => {
+  async ({ id, token, data }) => {
     const payload = {
       bank_id: id,
       bank: data,
     };
-    try {
-
-      const response = await axios.put(`${BASE_URL}/api/bank/`, payload, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("bank updated successfully");
-        return response.data.data;
+    const response = await makeRequest(
+      'PUT',
+      '/api/bank',
+      {
+        data: payload,
+        token,
+        successMessage: "Bank updated successfully",
+        errorMessage: "Failed while updating this bank"
       }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed while updating this bank";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return response?.data.data || response;
   }
 );
 

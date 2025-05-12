@@ -30,7 +30,7 @@ const CreateUser = () => {
   });
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
   const { isCreatingUser } = useSelector((state) => state.user);
   const { companies, isLoadingCompanies } = useSelector(
@@ -96,7 +96,7 @@ const CreateUser = () => {
 
   return (
     <>
-      
+
       <CardLayoutContainer>
         <CardLayoutHeader heading="Create User" />
         <form onSubmit={handleSubmit} noValidate>

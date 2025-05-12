@@ -12,7 +12,7 @@ import EditCommisionModal from "./EditCommisionModal/EditCommisionModal";
 
 const ApplyCommisions = () => {
   const dispatch = useDispatch();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { commisions, isLoadingCommision } = useSelector(
     (state) => state.commision

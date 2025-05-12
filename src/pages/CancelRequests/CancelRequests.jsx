@@ -32,7 +32,7 @@ const CancelRequests = () => {
   const dispatch = useDispatch();
   const [modalStatus, setModalStatus] = useState(false);
   const [cancelId, setCancelId] = useState();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { flightBookings, isLoadingFlightBookings, isCancelRequestLoading } =
     useSelector((state) => state.booking);
   const columns = [
@@ -57,7 +57,7 @@ const CancelRequests = () => {
       name: "PNR",
       selector: (row) => row.booking_reference_id,
       sortable: false,
-       
+
       grow: 2,
     },
     {

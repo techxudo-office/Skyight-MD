@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
+import makeRequest from "./ApiHelper";
 
 const initialState = {
   commisions: [],
@@ -49,49 +47,33 @@ const commisionSlice = createSlice({
 });
 export const getCommision = createAsyncThunk(
   "commision/getCommision",
-  async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/fetch-commission`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response.data.data;
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch commisions";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+  async (token) => {
+    const response = await makeRequest(
+      'GET',
+      '/api/fetch-commission',
+      {
+        token,
+        errorMessage: "Failed to fetch commissions"
+      }
+    );
+    return response?.data.data || response;
   }
 );
 
 export const editcommision = createAsyncThunk(
   "commision/editcommision",
-  async ({ token, data }, thunkAPI) => {
-    try {
-
-      const response = await axios.post(
-        `${BASE_URL}/api/update-Commission`,
+  async ({ token, data }) => {
+    const response = await makeRequest(
+      'POST',
+      '/api/update-Commission',
+      {
         data,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success("commision updated successfully");
-        return response.data.data;
+        token,
+        successMessage: "Commission updated successfully",
+        errorMessage: "Failed while updating this commission"
       }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        "Failed while updating this commision";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return response?.data.data || response;
   }
 );
 

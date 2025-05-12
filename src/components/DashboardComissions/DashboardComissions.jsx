@@ -15,7 +15,7 @@ Modal.setAppElement("#root");
 
 const DashboardComission = () => {
   const dispatch = useDispatch();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { adminCredits } = useSelector((state) => state.booking);
   const { commisions, isEditingcommision, isLoadingCommision } = useSelector(
     (state) => state.commision

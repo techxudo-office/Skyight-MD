@@ -20,7 +20,7 @@ const CompanyDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { companyId } = useParams();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { companyRevenue, isLoadingCompanyRevenue } = useSelector(
     (state) => state.company
   );

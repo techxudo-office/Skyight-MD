@@ -29,7 +29,7 @@ const TicketDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { isLoadingBookingDetails, bookingDetails } = useSelector(
     (state) => state.booking
   );
@@ -67,7 +67,7 @@ const TicketDetails = () => {
 
   return (
     <>
-      
+
       <div ref={printRef} className="flex flex-col w-full gap-5">
         <CardLayoutContainer>
           <CardLayoutBody className={"flex flex-wrap gap-3 justify-between"}>

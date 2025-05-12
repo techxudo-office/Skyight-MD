@@ -1,13 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
+import makeRequest from "./ApiHelper";
 
 const initialState = {
-  adminData: null,
-  isLoading: false,
-  loginError: null,
-
   isLoadingForgotPassword: false,
   forgotPasswordError: null,
 
@@ -34,21 +28,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
-        state.isLoading = true;
-        state.loginError = null;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.adminData = action.payload;
-        if (action.payload?.token) {
-          localStorage.setItem("auth_token", action.payload.token);
-        }
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.isLoading = false;
-        state.loginError = action.payload;
-      })
       .addCase(logout.fulfilled, (state) => {
         state.adminData = null;
         localStorage.removeItem("auth_token");
@@ -115,174 +94,106 @@ const authSlice = createSlice({
   },
 });
 
-export const login = createAsyncThunk(
-  "auth/login",
-  async (payload, thunkAPI) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/api/login`, payload, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status === 200) {
-        toast.success("Login Successfully");
-        return response.data.data;
-      }
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Login failed. Please try again."
-      );
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Login failed"
-      );
-    }
-  }
-);
+
 
 export const logout = createAsyncThunk(
   "auth/logout",
-  async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/logout`, {
+  async (token) => {
+    const response = await makeRequest(
+      'GET',
+      '/api/logout',
+      {
+        token,
+        successMessage: "Logout Successfully",
+        errorMessage: "Logout failed",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Logout Successfully");
-        return response.data.message;
+          "Content-Type": "application/json"
+        }
       }
-    } catch (error) {
-      console.error("Logout Error:", error);
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Logout failed"
-      );
-    }
+    );
+    return response?.message || response;
   }
 );
 
 export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
-  async (payload, thunkAPI) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/forgot-password`,
-        payload
-      );
-      if (response.status === 200) {
-        toast.success("Forgot Password Successfully");
-        return response.data.message;
+  async (payload) => {
+    const response = await makeRequest(
+      'POST',
+      '/api/forgot-password',
+      {
+        data: payload,
+        successMessage: "Forgot Password Successfully",
+        errorMessage: "Forgot password request failed"
       }
-    } catch (error) {
-      toast.success(
-        error.response?.data?.message || "Forgot password request failed"
-      );
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Forgot password request failed"
-      );
-    }
+    );
+    return response?.message || response;
   }
 );
 
 export const register = createAsyncThunk(
   "auth/registerCompany",
-  async (payload, thunkAPI) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/register-company`,
-        payload
-      );
-      if (response.status === 200) {
-        toast.success("Registration successful. Verify OTP...");
-        return response.data.message;
+  async (payload) => {
+    const response = await makeRequest(
+      'POST',
+      '/api/register-company',
+      {
+        data: payload,
+        successMessage: "Registration successful. Verify OTP...",
+        errorMessage: "Registration failed. Please try again."
       }
-    } catch (error) {
-      console.error("Registration Error:", error);
-      let errorMessage = "Registration failed. Please try again.";
-
-      if (error.response) {
-        if (error.response.data.data?.errors) {
-          const errors = Object.values(error.response.data.data.errors);
-          errorMessage = errors.join(", ");
-        } else if (error.response.data.message) {
-          errorMessage = error.response.data.message;
-        }
-      }
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return response?.message || response;
   }
 );
 
 export const verifyOTP = createAsyncThunk(
   "auth/verifyOTP",
-  async (payload, thunkAPI) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/verify-verification-code`,
-        payload
-      );
-      if (response.status === 200) {
-        toast.success("OTP Verified Successfully");
-        return response.data.message;
+  async (payload) => {
+    const response = await makeRequest(
+      'POST',
+      '/api/verify-verification-code',
+      {
+        data: payload,
+        successMessage: "OTP Verified Successfully",
+        errorMessage: "OTP verification failed"
       }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "OTP verification failed");
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "OTP verification failed"
-      );
-    }
+    );
+    return response?.message || response;
   }
 );
 
 export const resendCode = createAsyncThunk(
   "auth/resendCode",
-  async (payload, thunkAPI) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/resend-verification-code`,
-        payload
-      );
-      if (response.status === 200) {
-        toast.success("Verification code resent successfully");
-        return response.data.message;
+  async (payload) => {
+    const response = await makeRequest(
+      'POST',
+      '/api/resend-verification-code',
+      {
+        data: payload,
+        successMessage: "Verification code resent successfully",
+        errorMessage: "Failed to resend verification code"
       }
-    } catch (error) {
-      let errorMessage = "Failed to resend verification code";
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      }
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return response?.message || response;
   }
 );
 
 export const updateAccount = createAsyncThunk(
   "auth/updateAccount",
-  async ({ token, data, id }, thunkAPI) => {
-    try {
-      let response = await axios.put(`${BASE_URL}/api/admin/${id}`, data, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Account updated successfully");
-        return response.data.data;
+  async ({ token, data, id }) => {
+    const response = await makeRequest(
+      'PUT',
+      `/api/admin/${id}`,
+      {
+        data,
+        token,
+        successMessage: "Account updated successfully",
+        errorMessage: "Failed while updating your Account"
       }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed while updating your Account";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-    3;
+    );
+    return response?.data || response;
   }
 );
 

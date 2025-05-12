@@ -25,7 +25,7 @@ const FlightBookings = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { flightBookings, isLoadingFlightBookings } = useSelector(
     (state) => state.booking
   );

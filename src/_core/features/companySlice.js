@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
+import makeRequest from "./ApiHelper";
+
 
 const initialState = {
   companies: [],
@@ -61,95 +60,66 @@ const companySlice = createSlice({
 
 export const getCompanies = createAsyncThunk(
   "company/getCompanies",
-  async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/allCompanies?page=0&limit=1000000000`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-
-      return {
-        data: response.data.data,
-        totalPages: response.data.totalPages || 1,
-      };
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch companies.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+  async (token) => {
+    const response = await makeRequest(
+      'GET',
+      '/api/allCompanies?page=0&limit=1000000000',
+      {
+        token,
+        errorMessage: "Failed to fetch companies."
+      }
+    );
+    return {
+      data: response.data.data,
+      totalPages: response.data.totalPages || 1,
+    };
   }
 );
 
 export const getCompanyTickets = createAsyncThunk(
   "company/getCompanyTickets",
-  async ({ token, id }, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/allTicketsByCompany/${id}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-
-      return response.data.data;
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch companies.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+  async ({ token, id }) => {
+    const response = await makeRequest(
+      'GET',
+      `/api/allTicketsByCompany/${id}`,
+      {
+        token,
+        errorMessage: "Failed to fetch company tickets."
+      }
+    );
+    return response.data.data;
   }
 );
 
 export const getCompanyRevenue = createAsyncThunk(
   "company/getCompanyRevenue",
-  async ({ token, id }, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/company/get-revenue/${id}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-
-      return response.data.data;
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch company revenue.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+  async ({ token, id }) => {
+    const response = await makeRequest(
+      'GET',
+      `/api/company/get-revenue/${id}`,
+      {
+        token,
+        errorMessage: "Failed to fetch company revenue."
+      }
+    );
+    return response.data.data;
   }
 );
 
 export const editRole = createAsyncThunk(
   "role/editRole",
-  async ({ id, token, data }, thunkAPI) => {
-    try {
-      let response = await axios.put(`${BASE_URL}/api/role/${id}`, data, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Role updated successfully");
-        return response.data.data;
+  async ({ id, token, data }) => {
+    const response = await makeRequest(
+      'PUT',
+      `/api/role/${id}`,
+      {
+        data,
+        token,
+        successMessage: "Role updated successfully",
+        errorMessage: "Failed while updating this role"
       }
-    } catch (error) {
-      const errorMessage = "Failed while updating this role";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+    );
+    return response.data.data;
   }
 );
 

@@ -16,7 +16,7 @@ const Companies = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [filteredCompanies, setFilteredCompanies] = useState([])
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { companies, isLoadingCompanies } = useSelector(
     (state) => state.company
   );

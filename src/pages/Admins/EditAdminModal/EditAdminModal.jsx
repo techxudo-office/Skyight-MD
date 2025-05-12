@@ -37,7 +37,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
   const [active, setActive] = useState(data?.is_active);
   const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
-  const { adminData } = useSelector((state) => state.auth);
+  const { adminData } = useSelector((state) => state.persist);
   const { isEditingAdmin } = useSelector((state) => state.admin);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
