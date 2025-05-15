@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { CardLayoutContainer, CardLayoutBody } from "../CardLayout/CardLayout";
 import { Input, Button, Spinner } from "../components";
@@ -9,7 +9,6 @@ import {
 } from "../../_core/features/commisionSlice";
 import { getAdminCredits } from "../../_core/features/bookingSlice";
 import { GrDocumentUpdate } from "react-icons/gr";
-import { Toaster } from "react-hot-toast";
 
 Modal.setAppElement("#root");
 
@@ -76,7 +75,6 @@ const DashboardComission = () => {
   if (isLoadingCommision) return <Spinner className={"text-primary"} />;
   return (
     <>
-      <Toaster />
       <CardLayoutContainer className={"py-2"}>
         <CardLayoutBody removeBorder={true}>
           <div className="grid w-full grid-cols-3 gap-4">

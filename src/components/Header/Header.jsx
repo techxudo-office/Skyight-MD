@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import Notifications from "../Notifications/Notifications";
 import { getCredits } from "../../_core/features/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const logoutHandler = () => {
     dispatch({ type: "user/logout" });
     localStorage.removeItem("auth_token");
+    toast.success("Logout successfully")
     dropdownHandler();
   };
 

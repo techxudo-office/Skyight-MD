@@ -1,4 +1,3 @@
-import React from "react";
 import Main from "./main";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
