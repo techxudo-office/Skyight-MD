@@ -54,7 +54,7 @@ const Table = ({
           tableData?.length > 0 ? (
             <Loader />
           ) : (
-            <div>There are no records to display</div>
+            <div className="bg-background w-full text-center text-yellowColor">There are no records to display</div>
           )
         }
         progressPending={progressPending}

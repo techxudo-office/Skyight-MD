@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import Notifications from "../Notifications/Notifications";
 import { getCredits } from "../../_core/features/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import NotificationDrop from "./NotificationDrop/NotificationDrop";
 
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
@@ -26,6 +27,27 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const [profileImage, setProfileImage] = useState(
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
   );
+
+
+  const profileDropdownRef = useRef(null);
+  const creditsDropdownRef = useRef(null);
+
+  // Click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+        setDropDownStatus(false);
+      }
+      if (creditsDropdownRef.current && !creditsDropdownRef.current.contains(event.target)) {
+        setCreditsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const dropdownOptions = [
     {
@@ -140,7 +162,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                 >
                   <CustomTooltip content={"Notifications"}>
                     <div
-                      className="max-md:hidden"
+                      className="max-md:hidden px-7"
                       onClick={() => navigate("/dashboard/notifications")}
                     >
                       <MdNotificationsNone className="text-2xl cursor-pointer text-text" />
@@ -153,9 +175,9 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.3 }}
-                      className="absolute top-10 right-0 w-[500px] bg-white shadow-lg rounded-lg p-3 z-50"
+                      className="absolute top-10 right-0 w-[300px] h-fit  bg-neutral-100 shadow-lg rounded-lg p-2 z-50"
                     >
-                      <Notifications />
+                      <NotificationDrop />
                     </motion.div>
                   )}
                 </div>
@@ -163,7 +185,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
               <div className="relative">
                 <CustomTooltip content={CreditsDropdownOpen ? null : "credits"}>
                   <button
-                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-blue-100 hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
+                    ref={creditsDropdownRef}
+                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-background hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
                   >
                     {isLoadingCredits ? (
                       <span className="flex items-center gap-2">
@@ -203,6 +226,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
               <CustomTooltip content={dropdownStatus ? null : "profile"}>
                 <div className="px-3">
                   <div
+                    ref={profileDropdownRef}
                     onClick={dropdownHandler}
                     className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group"
                   >

@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
+import makeRequest from "./ApiHelper";
 
 const initialState = {
   notifications: [],
@@ -46,49 +44,33 @@ const notificationSlice = createSlice({
 
 export const getNotifications = createAsyncThunk(
   "notification/getNotifications",
-  async ({ token, id }, thunkAPI) => {
+  async ({ token, id }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/notification/${id}`, {
-        headers: {
-          Authorization: token,
-        },
+      const response = await makeRequest('get', `/api/notification/${id}`, {
+        token,
+        errorMessage: "Failed to fetch notifications"
       });
-      if (response.status === 200) {
-        return response.data.data;
-      } else {
-        throw new Error("Failed to fetch notifications");
-      }
+      return response.data.data;
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Failed to fetch notifications. Please try again.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
+      return rejectWithValue(error);
     }
   }
 );
 
 export const createNotification = createAsyncThunk(
   "notification/createNotification",
-  async ({ data, token }, thunkAPI) => {
+  async ({ data, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/api/SendNotificationToCompany`,
+      const response = await makeRequest('post', '/api/SendNotificationToCompany', {
         data,
-        {
-          headers: {
-            Authorization: token,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      toast.success("Notification sent successfully");
+        token,
+        headers: { 'Content-Type': 'application/json' },
+        successMessage: "Notification sent successfully",
+        errorMessage: "Failed to send notification"
+      });
       return response.data.data;
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to sent notification.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
+      return rejectWithValue(error);
     }
   }
 );
