@@ -32,24 +32,24 @@ const NotificationDrop = () => {
         const item = notifications[index];
         return (
             <div style={style} key={index}>
-                <CardLayoutContainer className="w-full mb-5">
+                <CardLayoutContainer removeBg={true} className="w-full  mb-2">
                     <CardLayoutHeader
-                        className="flex flex-wrap items-center justify-start gap-5 py-3"
+                        className="flex  items-center justify-start gap-3 py-2"
                         removeBorder={true}
                     >
                         <BellIcon
                             icon={
-                                <IoNotificationsOutline className="text-[30px] text-[#5372D8]" />
+                                <IoNotificationsOutline className="text-[20px] text-[#5372D8]" />
                             }
                         />
-                        <div>
-                            <h3 className="text-[12px] text-[#333]">
+                        <div className=" ">
+                            <h3 className="text-xs text-[#333]">
                                 {new Date(item?.created_at).toISOString().split("T")[0]}
                             </h3>
-                            <h4 className="mb-0 text-[18px] font-semibold text-[#666]">
+                            <h4 className="mb-0 text-xs font-semibold text-[#666]">
                                 {item?.title}
                             </h4>
-                            <h4 className="mb-0 text-[12px] text-text">
+                            <h4 className="mb-0 text-xs text-text">
                                 {item?.description}
                             </h4>
                         </div>
@@ -62,16 +62,20 @@ const NotificationDrop = () => {
     return (
         <div className="flex flex-col h-fit items-center justify-center w-full">
             {isLoadingNotifications && <Spinner className="mx-auto text-primary" />}
-            <Link to={"dashboard/notifications"}>View more</Link>
             {notifications?.length > 0 ? (
-                <List
-                    height={300} // Set the height of the viewport
-                    itemCount={3} // Number of items to render
-                    itemSize={100} // Height of each item in pixels (adjust as needed)
-                    width="100%" // Set the width of the list
-                >
-                    {renderRow}
-                </List>
+                <>
+                    <List
+                        height={300} // Set the height of the viewport
+                        itemCount={3} // Number of items to render
+                        itemSize={100} // Height of each item in pixels (adjust as needed)
+                        width="100%" // Set the width of the list
+                    >
+                        {renderRow}
+                    </List>
+                    <Link to={"notifications"} className=" text-sm hover:underline hover:text-primary">View more</Link>
+
+                </>
+
             ) : (
                 <>
                     {!isLoadingNotifications && (
