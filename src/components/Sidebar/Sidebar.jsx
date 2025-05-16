@@ -149,9 +149,9 @@ const Sidebar = ({ status, updateStatus }) => {
                 <h3 className="mt-2 font-semibold text-center text-text">
                   {`${adminData?.admin?.full_name}`}
                 </h3>
-                <h3 className="text-center text-text">
+                {/* <h3 className="text-center text-text">
                   {`${adminData?.admin?.role?.role}`}
-                </h3>
+                </h3> */}
               </>
             )}
           </CardLayoutHeader>
