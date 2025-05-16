@@ -36,7 +36,6 @@ const RefundRequests = () => {
       dispatch(refundRequestTicket(adminData?.token));
     }
   }, [adminData?.token]);
-  console.log(refundBookings, "refundBookings")
   const columns = [
     // {
     //   name: "ROUTE",

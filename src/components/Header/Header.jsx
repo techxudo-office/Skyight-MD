@@ -33,21 +33,21 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const creditsDropdownRef = useRef(null);
 
   // Click outside handler
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
-        setDropDownStatus(false);
-      }
-      if (creditsDropdownRef.current && !creditsDropdownRef.current.contains(event.target)) {
-        setCreditsDropdownOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+  //       setDropDownStatus(false);
+  //     }
+  //     if (creditsDropdownRef.current && !creditsDropdownRef.current.contains(event.target)) {
+  //       setCreditsDropdownOpen(false);
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   const dropdownOptions = [
     {
