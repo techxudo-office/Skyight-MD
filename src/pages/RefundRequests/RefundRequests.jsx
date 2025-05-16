@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getRefundFlight,
   refundRequestFlight,
+  refundRequestTicket,
 } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
@@ -32,35 +33,35 @@ const RefundRequests = () => {
 
   useEffect(() => {
     if (adminData?.token) {
-      dispatch(getRefundFlight(adminData?.token));
+      dispatch(refundRequestTicket(adminData?.token));
     }
   }, [adminData?.token]);
-
+  console.log(refundBookings, "refundBookings")
   const columns = [
-    {
-      name: "ROUTE",
-      selector: (row) => (
-        <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
-          {row.origin}
-          <div className="flex items-center justify-center gap-1">
-            <span className="h-0.5 w-3 bg-primary"></span>
-            <IoIosAirplane className="text-lg text-primary" />
-            <span className="h-0.5 w-3 bg-primary"></span>
-          </div>
-          {row.destination}
-        </span>
-      ),
-      sortable: false,
-      wrap: true,
-      grow: 4,
-    },
-    {
-      name: "PNR",
-      selector: (row) => row.booking_reference_id,
-      sortable: false,
+    // {
+    //   name: "ROUTE",
+    //   selector: (row) => (
+    //     <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
+    //       {row.origin}
+    //       <div className="flex items-center justify-center gap-1">
+    //         <span className="h-0.5 w-3 bg-primary"></span>
+    //         <IoIosAirplane className="text-lg text-primary" />
+    //         <span className="h-0.5 w-3 bg-primary"></span>
+    //       </div>
+    //       {row.destination}
+    //     </span>
+    //   ),
+    //   sortable: false,
+    //   wrap: true,
+    //   grow: 4,
+    // },
+    // {
+    //   name: "PNR",
+    //   selector: (row) => row.booking_reference_id,
+    //   sortable: false,
 
-      grow: 2,
-    },
+    //   grow: 2,
+    // },
     {
       name: "TOTAL FARE",
       selector: (row) => row.total_fare,
@@ -69,7 +70,7 @@ const RefundRequests = () => {
     },
     {
       name: "STATUS",
-      selector: (row) => <Tag value={row.booking_status} />,
+      selector: (row) => <Tag value={row.status} />,
       sortable: false,
       wrap: true,
       grow: 4,

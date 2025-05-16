@@ -13,6 +13,7 @@ import Notifications from "../Notifications/Notifications";
 import { getCredits } from "../../_core/features/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import NotificationDrop from "./NotificationDrop/NotificationDrop";
 
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
@@ -140,7 +141,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                 >
                   <CustomTooltip content={"Notifications"}>
                     <div
-                      className="max-md:hidden"
+                      className="max-md:hidden px-7"
                       onClick={() => navigate("/dashboard/notifications")}
                     >
                       <MdNotificationsNone className="text-2xl cursor-pointer text-text" />
@@ -153,9 +154,9 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.3 }}
-                      className="absolute top-10 right-0 w-[500px] bg-white shadow-lg rounded-lg p-3 z-50"
+                      className="absolute top-10 right-0 w-[500px] h-fit  bg-white shadow-lg rounded-lg p-3 z-50"
                     >
-                      <Notifications />
+                      <NotificationDrop />
                     </motion.div>
                   )}
                 </div>
