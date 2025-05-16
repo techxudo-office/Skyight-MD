@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   CustomTooltip,
   ModalWrapper,
-  MultiSelect,
   Searchbar,
-  SecondaryButton,
   Table,
   Tag,
 } from "../../components/components";
