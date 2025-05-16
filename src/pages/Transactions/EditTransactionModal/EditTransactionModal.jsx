@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {
   CardLayoutContainer,
@@ -92,7 +92,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
         </CardLayoutBody>
         <CardLayoutFooter>
           <Button
-            text={isEditingTransaction ? <Spinner /> : "Update Transaction"}
+            text={isEditingTransaction ? <Spinner /> : "Update User"}
             onClick={handleSubmit}
             disabled={isEditingTransaction}
           />

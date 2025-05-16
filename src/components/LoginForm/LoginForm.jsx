@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -8,8 +8,7 @@ import {
 import { Input, Button, Spinner } from "../../components/components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate, Link } from "react-router-dom";
-import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../_core/features/persistSlice";
 

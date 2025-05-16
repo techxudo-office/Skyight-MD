@@ -26,7 +26,7 @@ const persistSlice = createSlice({
                     localStorage.setItem("auth_token", action.payload.token);
                 }
             })
-            .addCase(login.rejected, (state, action) => {
+            .addCase(login.rejected, (state) => {
                 state.isLoading = false;
             })
     },
