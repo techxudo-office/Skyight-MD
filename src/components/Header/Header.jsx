@@ -32,7 +32,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const profileDropdownRef = useRef(null);
   const creditsDropdownRef = useRef(null);
 
-  // // Click outside handler
+  // Click outside handler
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
   //     if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {

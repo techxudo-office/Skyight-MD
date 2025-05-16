@@ -39,7 +39,7 @@ const makeRequest = async (
     }
 
     return (
-      response.data?.data || response.data?.message || response.data || response
+      response
     );
   } catch (error) {
     const apiErrors = error.response?.data?.data?.errors;

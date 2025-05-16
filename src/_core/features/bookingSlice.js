@@ -269,7 +269,6 @@ export const getLatestBooking = createAsyncThunk(
           errorMessage: "Failed to fetch booking details"
         }
       );
-      console.log(response.data.data, "latest booking data");
       return response.data?.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

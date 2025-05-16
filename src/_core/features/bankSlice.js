@@ -89,7 +89,6 @@ export const getBanks = createAsyncThunk(
         errorMessage: "Failed to fetch banks"
       }
     );
-    console.log("response", response);
     if (response?.data?.data.length > 0) {
       return response.data.data;
     }

@@ -24,7 +24,6 @@ const NotificationDrop = () => {
     }, [adminData?.token]);
 
     useEffect(() => {
-        console.log(notifications, "notifications");
     }, [notifications]);
 
     // Render function for each item in the list
