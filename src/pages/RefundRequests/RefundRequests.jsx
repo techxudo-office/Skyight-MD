@@ -37,33 +37,39 @@ const RefundRequests = () => {
     }
   }, [adminData?.token]);
   const columns = [
-    // {
-    //   name: "ROUTE",
-    //   selector: (row) => (
-    //     <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
-    //       {row.origin}
-    //       <div className="flex items-center justify-center gap-1">
-    //         <span className="h-0.5 w-3 bg-primary"></span>
-    //         <IoIosAirplane className="text-lg text-primary" />
-    //         <span className="h-0.5 w-3 bg-primary"></span>
-    //       </div>
-    //       {row.destination}
-    //     </span>
-    //   ),
-    //   sortable: false,
-    //   wrap: true,
-    //   grow: 4,
-    // },
-    // {
-    //   name: "PNR",
-    //   selector: (row) => row.booking_reference_id,
-    //   sortable: false,
+    {
+      name: "ROUTE",
+      selector: (row) => (
+        <span className="flex items-center gap-2 text-sm  lg:justify-center text-text">
+          {row.booking.origin}
+          <div className="flex items-center justify-center gap-1">
+            <span className="h-0.5 w-3 bg-primary"></span>
+            <IoIosAirplane className="text-lg text-primary" />
+            <span className="h-0.5 w-3 bg-primary"></span>
+          </div>
+          {row.booking.destination}
+        </span>
+      ),
+      sortable: false,
+      wrap: true,
+      grow: 4,
+    },
+    {
+      name: "PNR",
+      selector: (row) => row.booking.booking_reference_id,
+      sortable: false,
 
-    //   grow: 2,
-    // },
+      grow: 2,
+    },
     {
       name: "TOTAL FARE",
-      selector: (row) => row.total_fare,
+      selector: (row) => Number(row.booking.total_fare).toLocaleString(),
+      sortable: false,
+      grow: 2,
+    },
+    {
+      name: "PENALTY",
+      selector: (row) => Number(row.total_fare).toLocaleString(),
       sortable: false,
       grow: 2,
     },
@@ -84,7 +90,7 @@ const RefundRequests = () => {
       name: "",
       selector: (row) => (
         <div className="flex items-center text-xl gap-x-6">
-          <CustomTooltip content={"Details"}>
+          {/* <CustomTooltip content={"Details"}>
             <FaEye
               className="cursor-pointer text-greenColor"
               onClick={() =>
@@ -93,7 +99,7 @@ const RefundRequests = () => {
                 })
               }
             />
-          </CustomTooltip>
+          </CustomTooltip> */}
           <CustomTooltip content={"Accept"}>
             <RiRefund2Fill
               className="cursor-pointer text-blueColor"

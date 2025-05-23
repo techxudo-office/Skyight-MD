@@ -357,7 +357,7 @@ export const refundRequestFlight = createAsyncThunk(
 );
 
 export const refundRequestTicket = createAsyncThunk(
-  "booking/getBanks",
+  "booking/getRefundTickets",
   async (token, thunkAPI) => {
     try {
       const response = await makeRequest(
@@ -369,8 +369,9 @@ export const refundRequestTicket = createAsyncThunk(
         }
       );
 
-      if (response?.data?.length > 0) {
-        return response.data[0];
+      if (response?.data?.data[0]?.length > 0) {
+
+        return response.data?.data[0];
       }
       return null;
     } catch (error) {

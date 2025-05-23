@@ -14,6 +14,8 @@ import { getCredits } from "../../_core/features/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import NotificationDrop from "./NotificationDrop/NotificationDrop";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { GoDotFill } from "react-icons/go";
 
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const [dropdownStatus, setDropDownStatus] = useState(false);
   const [CreditsDropdownOpen, setCreditsDropdownOpen] = useState(false);
   const [isNotiHovered, setIsNotiHovered] = useState(false);
+  const [showCredits, setShowCredits] = useState(false);
   const { adminData } = useSelector((state) => state.persist);
   const { credits, isLoadingCredits } = useSelector((state) => state.booking);
   const [profileImage, setProfileImage] = useState(
@@ -105,11 +108,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
     dispatch(getCredits(adminData?.token));
   };
 
-  useEffect(() => {
-    if (adminData?.token) {
-      refreshCredits();
-    }
-  }, [dispatch, adminData?.token]);
 
   const dropdownHandler = () => {
     setDropDownStatus(!dropdownStatus);
@@ -188,30 +186,40 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     ref={creditsDropdownRef}
                     className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-background hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
                   >
-                    {isLoadingCredits ? (
-                      <span className="flex items-center gap-2">
-                        <HiOutlineRefresh className="animate-spin max-sm:hidden" />
-                        <span>Refreshing...</span>
-                      </span>
-                    ) : credits ? (
-                      <span
-                        onClick={refreshCredits}
-                        className="flex items-center gap-2"
-                      >
-                        <HiOutlineRefresh className="max-sm:hidden" />
-                        <span>PKR {credits?.Balence.toLocaleString()}</span>
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <HiOutlineRefresh className="rotate-180 max-sm:hidden" />
-                        <span>No Credits</span>
-                      </span>
-                    )}
-                    <MdArrowDropDown
+                    {showCredits && <HiOutlineRefresh onClick={refreshCredits} className={`${isLoadingCredits && "animate-spin"} max-sm:hidden`} />}
+                    {showCredits ? (
+                      isLoadingCredits ? (
+                        <span className="flex items-center gap-2">
+                          <span>Refreshing...</span>
+                        </span>
+                      ) : credits ? (
+                        <span>
+                          PKR {Number(credits?.Balence || 0).toLocaleString()}
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <span>No Credits</span>
+                        </span>
+                      )) : (
+                      <p className="text-xs flex items-center"><GoDotFill /><GoDotFill /><GoDotFill /><GoDotFill /><GoDotFill /><GoDotFill /></p>
+                    )
+                    }
+                    {showCredits ?
+                      <CustomTooltip content={"Hide Credits"}>
+                        <FaEye onClick={() => setShowCredits(false)} />
+                      </CustomTooltip> :
+                      <CustomTooltip content={"Show Credits"}>
+                        <FaEyeSlash onClick={() => {
+                          refreshCredits();
+                          setShowCredits(true)
+                        }} />
+                      </CustomTooltip>
+                    }
+                    {/* <MdArrowDropDown
                       className={`text-xl ${CreditsDropdownOpen ? "rotate-180" : ""
                         } transition-all duration-300`}
                       onClick={() => setCreditsDropdownOpen((prev) => !prev)}
-                    />
+                    /> */}
                     <div className="absolute right-0 top-14">
                       {CreditsDropdownOpen && (
                         <CreditsDropdown
