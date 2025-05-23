@@ -105,14 +105,15 @@ const Sidebar = ({ status, updateStatus }) => {
   return (
     <div
       ref={sidebarRef}
-      className={`fixed lg:sticky h-screen top-0 bottom-0 z-20 bg-white shadow-md ${mobileView
+      className={`fixed lg:sticky h-screen top-0 bottom-0 z-20 bg-white shadow-md ${
+        mobileView
           ? status
             ? "w-64 h-screen"
             : "w-0 overflow-hidden"
           : status
-            ? "w-64"
-            : "w-20"
-        } flex flex-col justify-between transition-all duration-300 overflow-y-auto`}
+          ? "w-64"
+          : "w-20"
+      } flex flex-col justify-between transition-all duration-300 overflow-y-auto`}
     >
       <div className="pt-20">
         {/* Profile Section */}
@@ -122,8 +123,9 @@ const Sidebar = ({ status, updateStatus }) => {
             removeBorder={true}
           >
             <div
-              className={`relative ${status ? "w-20 h-20" : "w-14 h-14"
-                } overflow-hidden rounded-full cursor-pointer group`}
+              className={`relative ${
+                status ? "w-20 h-20" : "w-14 h-14"
+              } overflow-hidden rounded-full cursor-pointer group`}
             >
               <img
                 src={profileImage}
@@ -149,9 +151,9 @@ const Sidebar = ({ status, updateStatus }) => {
                 <h3 className="mt-2 font-semibold text-center text-text">
                   {`${adminData?.admin?.full_name}`}
                 </h3>
-                {/* <h3 className="text-center text-text">
+                <h3 className="text-center text-text">
                   {`${adminData?.admin?.role?.role}`}
-                </h3> */}
+                </h3>
               </>
             )}
           </CardLayoutHeader>
@@ -164,11 +166,12 @@ const Sidebar = ({ status, updateStatus }) => {
               {/* Main Link */}
               <li
                 onClick={() => menuItemHandler(linkIndex, link)}
-                className={`flex items-center rounded-lg p-3 cursor-pointer transition-colors ${location.pathname === `/dashboard/${link.path}` ||
-                    hasActiveSublink(link)
+                className={`flex items-center rounded-lg p-3 cursor-pointer transition-colors ${
+                  location.pathname === `/dashboard/${link.path}` ||
+                  hasActiveSublink(link)
                     ? "bg-background"
                     : "hover:bg-gray-100 text-gray-700"
-                  }`}
+                }`}
               >
                 <span className="flex items-center flex-1 gap-3">
                   <span className="text-xl">{link.icon}</span>
@@ -176,10 +179,11 @@ const Sidebar = ({ status, updateStatus }) => {
                 </span>
                 {link.sublinks && status && (
                   <IoIosArrowForward
-                    className={`text-lg transition-transform duration-200 ${shouldExpandMenu(linkIndex, link)
+                    className={`text-lg transition-transform duration-200 ${
+                      shouldExpandMenu(linkIndex, link)
                         ? "rotate-90"
                         : "rotate-0"
-                      }`}
+                    }`}
                   />
                 )}
               </li>
@@ -187,8 +191,9 @@ const Sidebar = ({ status, updateStatus }) => {
               {/* Sublinks */}
               {link.sublinks && (
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${shouldExpandMenu(linkIndex, link) ? "max-h-96" : "max-h-0"
-                    }`}
+                  className={`overflow-hidden transition-all duration-300 ${
+                    shouldExpandMenu(linkIndex, link) ? "max-h-96" : "max-h-0"
+                  }`}
                 >
                   <ul className="pl-3 mt-1 space-y-1">
                     {link.sublinks.map((sublink, sublinkIndex) => (
@@ -198,10 +203,11 @@ const Sidebar = ({ status, updateStatus }) => {
                           navigate(`/dashboard/${sublink.path}`);
                           if (mobileView) updateStatus(false);
                         }}
-                        className={`flex items-center rounded-lg p-3 cursor-pointer transition-colors ${location.pathname === `/dashboard/${sublink.path}`
+                        className={`flex items-center rounded-lg p-3 cursor-pointer transition-colors ${
+                          location.pathname === `/dashboard/${sublink.path}`
                             ? "text-primary"
                             : "hover:bg-gray-100 text-gray-700"
-                          }`}
+                        }`}
                       >
                         <span className="flex items-center gap-3">
                           <span className="text-lg">{sublink.icon}</span>
