@@ -30,6 +30,7 @@ import {
   CompanyTickets,
   CompanyRefundedRequests,
   CompanyCancelledRequests,
+  SupportChatPage
 } from "../pages/pages";
 
 export const routesData = [
@@ -95,6 +96,7 @@ export const routesData = [
         path: "company/details/cancelled/booking-details/:companyId",
         element: <BookingDetails />,
       },
+      { path: "supportChat", element: <SupportChatPage /> },
     ],
   },
   { path: "*", element: <NotFound /> },

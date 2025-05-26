@@ -37,3 +37,4 @@ export { default as CancelRequests } from "./CancelRequests/CancelRequests";
 export { default as Login } from "./Login/Login";
 export { default as NotificationPage } from "./NotificationPage/NotificationPage";
 export { default as CreateNotification } from "./CreateNotification/CreateNotification";
+export { default as SupportChatPage } from "./SupportChat/SupportChat";

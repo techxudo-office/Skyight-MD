@@ -16,6 +16,7 @@ import { FaUserShield } from "react-icons/fa";
 import { HiRectangleGroup } from "react-icons/hi2";
 import { IoMdBookmark } from "react-icons/io";
 import { RiRefund2Fill } from "react-icons/ri";
+import { IoIosChatboxes } from "react-icons/io";
 
 export const useAdminSidebarLinks = () => {
   const adminData = useSelector((state) => state.persist.adminData);
@@ -120,6 +121,11 @@ export const useAdminSidebarLinks = () => {
       title: "Notifications",
       path: "notifications",
       icon: <MdDoorbell />,
+    },
+    {
+      title: "Support Chat",
+      path: "supportChat",
+      icon: <IoIosChatboxes />,
     },
   ].filter(Boolean);
 };
