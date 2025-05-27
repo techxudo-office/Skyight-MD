@@ -81,7 +81,7 @@ const transactionSlice = createSlice({
 
 export const getTransactions = createAsyncThunk(
   "transaction/getTransactions",
-  async (token, thunkAPI) => {
+  async ({ token, logoutHandler }, thunkAPI) => {
     try {
       const response = await axios.get(
         `${BASE_URL}/api/company/all-transactions?page=0&limit=10000`,
@@ -89,6 +89,7 @@ export const getTransactions = createAsyncThunk(
           headers: {
             Authorization: token,
           },
+          logoutCallback: logoutHandler,
         }
       );
       return response.data.data[0];
@@ -103,7 +104,7 @@ export const getTransactions = createAsyncThunk(
 
 export const getCompanyTransactions = createAsyncThunk(
   "transaction/getCompanyTransactions",
-  async ({ token, id }, thunkAPI) => {
+  async ({ token, id, logoutHandler }, thunkAPI) => {
     try {
       const response = await axios.get(
         `${BASE_URL}/api/company/getCompanyCredits/${id}?page=0&limit=10000`,
@@ -111,6 +112,7 @@ export const getCompanyTransactions = createAsyncThunk(
           headers: {
             Authorization: token,
           },
+          logoutCallback: logoutHandler,
         }
       );
       return response.data.data;
@@ -156,7 +158,6 @@ export const editTransaction = createAsyncThunk(
   "transaction/editTransaction",
   async ({ token, data }, thunkAPI) => {
     try {
-
       const response = await axios.put(
         `${BASE_URL}/api/company/update-transaction`,
         data,

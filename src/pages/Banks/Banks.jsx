@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   SecondaryButton,
@@ -19,13 +19,14 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { MdAdd, MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
+import { MdAdd, MdDelete, MdEditSquare } from "react-icons/md";
 import toast from "react-hot-toast";
+import useLogout from "../../hooks/useLogout";
 
 const Banks = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const logoutHandler = useLogout();
   const [updateBank, setUpdateBank] = useState(null);
   const [filteredBanks, setFilteredBanks] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -42,19 +43,19 @@ const Banks = () => {
     status: false,
     text: "",
     loading: false,
-    onAbort: () => { },
-    onConfirm: () => { },
+    onAbort: () => {},
+    onConfirm: () => {},
   });
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
     isOpen: false,
     contentLabel: "",
-    onRequestClose: () => { },
+    onRequestClose: () => {},
   });
 
   useEffect(() => {
     if (adminData?.token) {
-      dispatch(getBanks(adminData?.token));
+      dispatch(getBanks({ token: adminData.token, logoutHandler }));
     }
   }, []);
 
@@ -178,10 +179,9 @@ const Banks = () => {
         <CardLayoutBody removeBorder={true}>
           <Searchbar
             data={banks}
-            onFilteredData={
-              setFilteredBanks
-            }
-            searchFields={["bank", "id"]} />
+            onFilteredData={setFilteredBanks}
+            searchFields={["bank", "id"]}
+          />
           <Table
             columnsData={columns}
             tableData={filteredBanks || []}

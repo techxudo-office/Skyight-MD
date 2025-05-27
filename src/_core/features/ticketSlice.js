@@ -138,12 +138,13 @@ export const editTicket = createAsyncThunk(
 
 export const getTickets = createAsyncThunk(
   "ticket/getTickets",
-  async (token, thunkAPI) => {
+  async ({ token, logoutHandler }, thunkAPI) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/ticket/all`, {
         headers: {
           Authorization: token,
         },
+        logoutCallback: logoutHandler,
       });
 
       if (response.status === 200) {

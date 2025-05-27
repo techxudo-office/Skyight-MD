@@ -24,10 +24,12 @@ import {
 } from "../../_core/features/transactionSlice";
 import EditTransactionModal from "./EditTransactionModal/EditTransactionModal";
 import { useParams } from "react-router-dom";
+import useLogout from "../../hooks/useLogout";
 
 const Transactions = ({ isCompanyDetail }) => {
   const dispatch = useDispatch();
   const { companyId } = useParams();
+  const logoutHandler = useLogout();
   const { adminData } = useSelector((state) => state.persist);
   const [filteredTransaction, setFilteredTransaction] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -45,8 +47,12 @@ const Transactions = ({ isCompanyDetail }) => {
     if (!adminData?.token) return;
 
     const action = isCompanyDetail
-      ? getCompanyTransactions({ token: adminData.token, id: companyId })
-      : getTransactions(adminData.token);
+      ? getCompanyTransactions({
+          token: adminData.token,
+          id: companyId,
+          logoutHandler,
+        })
+      : getTransactions({ token: adminData.token, logoutHandler });
 
     dispatch(action);
   }, [dispatch, adminData?.token, companyId, isCompanyDetail]);

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "./ApiHelper";
 
-
 const initialState = {
   roles: [],
   isLoadingRoles: false,
@@ -17,7 +16,6 @@ const initialState = {
 
   isDeletingRole: false,
   deleteRoleError: null,
-
 };
 
 const roleSlice = createSlice({
@@ -89,7 +87,6 @@ const roleSlice = createSlice({
         state.roles = state.roles.map((role) =>
           role.id == updatedRole.id ? { ...role, ...updatedRole } : role
         );
-
       })
       .addCase(editRole.rejected, (state, action) => {
         state.isEditingRole = false;
@@ -100,15 +97,12 @@ const roleSlice = createSlice({
 
 export const getRoles = createAsyncThunk(
   "role/getRoles",
-  async (token) => {
-    const response = await makeRequest(
-      'GET',
-      '/api/role',
-      {
-        token,
-        errorMessage: "Failed to fetch roles."
-      }
-    );
+  async ({ token, logoutHandler }) => {
+    const response = await makeRequest("GET", "/api/role", {
+      token,
+      logoutCallback: logoutHandler,
+      errorMessage: "Failed to fetch roles.",
+    });
 
     return {
       data: response?.data?.data,
@@ -120,14 +114,10 @@ export const getRoles = createAsyncThunk(
 export const getUserRoles = createAsyncThunk(
   "role/getUserRoles",
   async (token) => {
-    const response = await makeRequest(
-      'GET',
-      '/api/userRole',
-      {
-        token,
-        errorMessage: "Failed to fetch user roles."
-      }
-    );
+    const response = await makeRequest("GET", "/api/userRole", {
+      token,
+      errorMessage: "Failed to fetch user roles.",
+    });
     return {
       data: response.data?.data,
       totalPages: response.data?.totalPages || 1,
@@ -138,17 +128,13 @@ export const getUserRoles = createAsyncThunk(
 export const createRole = createAsyncThunk(
   "role/createRole",
   async ({ data, token }) => {
-    const response = await makeRequest(
-      'POST',
-      '/api/role',
-      {
-        data,
-        token,
-        successMessage: "Role created successfully",
-        errorMessage: "Failed to create role.",
-        headers: { "Content-Type": "application/json" }
-      }
-    );
+    const response = await makeRequest("POST", "/api/role", {
+      data,
+      token,
+      successMessage: "Role created successfully",
+      errorMessage: "Failed to create role.",
+      headers: { "Content-Type": "application/json" },
+    });
     return response.data;
   }
 );
@@ -156,15 +142,11 @@ export const createRole = createAsyncThunk(
 export const deleteRole = createAsyncThunk(
   "role/deleteRole",
   async ({ id, token }) => {
-    await makeRequest(
-      'DELETE',
-      `/api/role/${id}`,
-      {
-        token,
-        successMessage: "Role deleted successfully",
-        errorMessage: "Failed while deleting this role"
-      }
-    );
+    await makeRequest("DELETE", `/api/role/${id}`, {
+      token,
+      successMessage: "Role deleted successfully",
+      errorMessage: "Failed while deleting this role",
+    });
     return id;
   }
 );
@@ -172,16 +154,12 @@ export const deleteRole = createAsyncThunk(
 export const editRole = createAsyncThunk(
   "role/editRole",
   async ({ id, token, data }) => {
-    const response = await makeRequest(
-      'PUT',
-      `/api/role/${id}`,
-      {
-        data,
-        token,
-        successMessage: "Role updated successfully",
-        errorMessage: "Failed while updating this role"
-      }
-    );
+    const response = await makeRequest("PUT", `/api/role/${id}`, {
+      data,
+      token,
+      successMessage: "Role updated successfully",
+      errorMessage: "Failed while updating this role",
+    });
     return response.data?.data;
   }
 );

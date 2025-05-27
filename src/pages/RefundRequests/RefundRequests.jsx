@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   ConfirmModal,
   Tag,
   CustomTooltip,
 } from "../../components/components";
-import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
-import { FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getRefundFlight,
   refundRequestFlight,
   refundRequestTicket,
 } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
 import { RiRefund2Fill } from "react-icons/ri";
+import useLogout from "../../hooks/useLogout";
 
 const RefundRequests = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logoutHandler = useLogout();
   const [modalStatus, setModalStatus] = useState(false);
   const [refundId, setRefundId] = useState();
   const { adminData } = useSelector((state) => state.persist);
@@ -33,14 +31,14 @@ const RefundRequests = () => {
 
   useEffect(() => {
     if (adminData?.token) {
-      dispatch(refundRequestTicket(adminData?.token));
+      dispatch(refundRequestTicket({ token: adminData.token, logoutHandler }));
     }
   }, [adminData?.token]);
   const columns = [
     {
       name: "ROUTE",
       selector: (row) => (
-        <span className="flex items-center gap-2 text-sm  lg:justify-center text-text">
+        <span className="flex items-center gap-2 text-sm lg:justify-center text-text">
           {row.booking.origin}
           <div className="flex items-center justify-center gap-1">
             <span className="h-0.5 w-3 bg-primary"></span>

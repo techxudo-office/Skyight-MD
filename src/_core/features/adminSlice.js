@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "./ApiHelper";
 
-
 const initialState = {
   admins: [],
   isLoadingAdmins: false,
@@ -97,15 +96,12 @@ const adminSlice = createSlice({
 
 export const getAdmins = createAsyncThunk(
   "admin/getAdmins",
-  async (token, thunkAPI) => {
-    const response = await makeRequest(
-      'GET',
-      '/api/admin',
-      {
-        token,
-        errorMessage: "Failed to fetch admins."
-      }
-    );
+  async ({ token, logoutHandler }, thunkAPI) => {
+    const response = await makeRequest("GET", "/api/admin", {
+      token,
+      logoutCallback: logoutHandler,
+      errorMessage: "Failed to fetch admins.",
+    });
     return response?.data?.data.admins || response;
   }
 );
@@ -113,14 +109,10 @@ export const getAdmins = createAsyncThunk(
 export const getDashboardAnalytics = createAsyncThunk(
   "admin/getDashboardAnalytics",
   async (token, thunkAPI) => {
-    const response = await makeRequest(
-      'GET',
-      '/api/adminKpi',
-      {
-        token,
-        errorMessage: "Failed to fetch analytics."
-      }
-    );
+    const response = await makeRequest("GET", "/api/adminKpi", {
+      token,
+      errorMessage: "Failed to fetch analytics.",
+    });
     return response?.data.data;
   }
 );
@@ -128,17 +120,13 @@ export const getDashboardAnalytics = createAsyncThunk(
 export const createAdmin = createAsyncThunk(
   "admin/createAdmin",
   async ({ data, token }, thunkAPI) => {
-    const response = await makeRequest(
-      'POST',
-      '/api/admin',
-      {
-        data,
-        token,
-        successMessage: "Admin created successfully",
-        errorMessage: "Failed to create admin.",
-        headers: { "Content-Type": "application/json" }
-      }
-    );
+    const response = await makeRequest("POST", "/api/admin", {
+      data,
+      token,
+      successMessage: "Admin created successfully",
+      errorMessage: "Failed to create admin.",
+      headers: { "Content-Type": "application/json" },
+    });
     return response;
   }
 );
@@ -146,15 +134,11 @@ export const createAdmin = createAsyncThunk(
 export const deleteAdmin = createAsyncThunk(
   "admin/deleteAdmin",
   async ({ id, token }, thunkAPI) => {
-    await makeRequest(
-      'DELETE',
-      `/api/admin/${id}`,
-      {
-        token,
-        successMessage: "Admin deleted successfully",
-        errorMessage: "Failed while deleting this admin"
-      }
-    );
+    await makeRequest("DELETE", `/api/admin/${id}`, {
+      token,
+      successMessage: "Admin deleted successfully",
+      errorMessage: "Failed while deleting this admin",
+    });
     return id;
   }
 );
@@ -162,16 +146,12 @@ export const deleteAdmin = createAsyncThunk(
 export const editAdmin = createAsyncThunk(
   "admin/editAdmin",
   async ({ id, token, data }, thunkAPI) => {
-    const response = await makeRequest(
-      'PUT',
-      `/api/admin/${id}`,
-      {
-        data,
-        token,
-        successMessage: "Admin updated successfully",
-        errorMessage: "Failed while updating this admin"
-      }
-    );
+    const response = await makeRequest("PUT", `/api/admin/${id}`, {
+      data,
+      token,
+      successMessage: "Admin updated successfully",
+      errorMessage: "Failed while updating this admin",
+    });
     return response?.data.data || response;
   }
 );

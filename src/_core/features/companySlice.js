@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "./ApiHelper";
 
-
 const initialState = {
   companies: [],
   isLoadingCompanies: false,
@@ -54,19 +53,20 @@ const companySlice = createSlice({
       .addCase(getCompanyRevenue.rejected, (state, action) => {
         state.isLoadingCompanyRevenue = false;
         state.companyRevenueError = action.payload;
-      })
+      });
   },
 });
 
 export const getCompanies = createAsyncThunk(
   "company/getCompanies",
-  async (token) => {
+  async ({ token, logoutHandler }) => {
     const response = await makeRequest(
-      'GET',
-      '/api/allCompanies?page=0&limit=1000000000',
+      "GET",
+      "/api/allCompanies?page=0&limit=1000000000",
       {
         token,
-        errorMessage: "Failed to fetch companies."
+        logoutCallback: logoutHandler,
+        errorMessage: "Failed to fetch companies.",
       }
     );
     return {
@@ -80,11 +80,11 @@ export const getCompanyTickets = createAsyncThunk(
   "company/getCompanyTickets",
   async ({ token, id }) => {
     const response = await makeRequest(
-      'GET',
+      "GET",
       `/api/allTicketsByCompany/${id}`,
       {
         token,
-        errorMessage: "Failed to fetch company tickets."
+        errorMessage: "Failed to fetch company tickets.",
       }
     );
     return response.data.data;
@@ -95,11 +95,11 @@ export const getCompanyRevenue = createAsyncThunk(
   "company/getCompanyRevenue",
   async ({ token, id }) => {
     const response = await makeRequest(
-      'GET',
+      "GET",
       `/api/company/get-revenue/${id}`,
       {
         token,
-        errorMessage: "Failed to fetch company revenue."
+        errorMessage: "Failed to fetch company revenue.",
       }
     );
     return response.data.data;
@@ -109,16 +109,12 @@ export const getCompanyRevenue = createAsyncThunk(
 export const editRole = createAsyncThunk(
   "role/editRole",
   async ({ id, token, data }) => {
-    const response = await makeRequest(
-      'PUT',
-      `/api/role/${id}`,
-      {
-        data,
-        token,
-        successMessage: "Role updated successfully",
-        errorMessage: "Failed while updating this role"
-      }
-    );
+    const response = await makeRequest("PUT", `/api/role/${id}`, {
+      data,
+      token,
+      successMessage: "Role updated successfully",
+      errorMessage: "Failed while updating this role",
+    });
     return response.data.data;
   }
 );

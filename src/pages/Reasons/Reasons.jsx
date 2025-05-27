@@ -26,34 +26,52 @@ import {
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
+import useLogout from "../../hooks/useLogout";
 
 const Reasons = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const logoutHandler = useLogout();
+  const [editId, setEditId] = useState(null);
+  const [updateReason, setUpdateReason] = useState(null);
   const { adminData } = useSelector((state) => state.persist);
   const { reasons, isLoadingReasons, isLoadingDeleteReason, isEditingReason } =
     useSelector((state) => state.reasons);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [updateReason, setUpdateReason] = useState(null);
-  const [editId, setEditId] = useState(null);
+
   const navigationHandler = () => {
     navigate("/dashboard/create-reason");
   };
-
-  const [reasonsData, setReasonsData] = useState([]);
   const [modalObject, setModalObject] = useState({
     status: false,
     text: "",
     loading: false,
-    onAbort: () => { },
-    onConfirm: () => { },
+    onAbort: () => {},
+    onConfirm: () => {},
   });
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
     isOpen: false,
     contentLabel: "",
-    onRequestClose: () => { },
+    onRequestClose: () => {},
   });
-  const [deleteId, setDeleteId] = useState(null);
+
+  useEffect(() => {
+    if (adminData?.token) {
+      dispatch(getReasons({ token: adminData?.token, logoutHandler }));
+    }
+  }, [adminData?.token]);
+
+  const handleEdit = () => {
+    if (updateReason.trim().length < 4) {
+      toast.error("Reason must be at least 4 characters.");
+      return;
+    }
+    dispatch(
+      editReason({ token: adminData.token, data: updateReason, id: editId })
+    ).then(() => {
+      setModalWrapper((prev) => ({ ...prev, isOpen: false }));
+    });
+  };
 
   const columns = [
     {
@@ -66,12 +84,6 @@ const Reasons = () => {
       selector: (row) => row.reason,
       sortable: false,
     },
-    // {
-    //   name: "ID",
-    //   selector: (row) => row.id,
-    //   sortable: false,
-    //   wrap: true,
-    // },
     {
       name: "",
       selector: (row) => (
@@ -120,24 +132,6 @@ const Reasons = () => {
       wrap: true,
     },
   ];
-
-  useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getReasons(adminData?.token));
-    }
-  }, [adminData?.token]);
-
-  const handleEdit = () => {
-    if (updateReason.trim().length < 4) {
-      toast.error("Reason must be at least 4 characters.");
-      return;
-    }
-    dispatch(
-      editReason({ token: adminData.token, data: updateReason, id: editId })
-    ).then(() => {
-      setModalWrapper((prev) => ({ ...prev, isOpen: false }));
-    });
-  };
 
   return (
     <>

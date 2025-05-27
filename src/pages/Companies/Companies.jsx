@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -6,20 +6,33 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { useNavigate } from "react-router-dom";
 
-import { CustomTooltip, Searchbar, Table, Tag } from "../../components/components";
+import {
+  CustomTooltip,
+  Searchbar,
+  Table,
+  Tag,
+} from "../../components/components";
 import { getCompanies } from "../../_core/features/companySlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
+import useLogout from "../../hooks/useLogout";
 
 const Companies = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [filteredCompanies, setFilteredCompanies] = useState([])
+  const logoutHandler = useLogout();
+  const [filteredCompanies, setFilteredCompanies] = useState([]);
   const { adminData } = useSelector((state) => state.persist);
   const { companies, isLoadingCompanies } = useSelector(
     (state) => state.company
   );
+
+  useEffect(() => {
+    if (adminData?.token) {
+      dispatch(getCompanies({ token: adminData.token, logoutHandler }));
+    }
+  }, [dispatch, adminData?.token]);
 
   const companiesColumns = [
     {
@@ -65,12 +78,6 @@ const Companies = () => {
     },
   ];
 
-  useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getCompanies(adminData?.token));
-    }
-  }, [dispatch, adminData?.token]);
-
   return (
     <>
       <CardLayoutContainer removeBg={true}>
@@ -80,7 +87,11 @@ const Companies = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={companies} onFilteredData={setFilteredCompanies} searchFields={["name"]} />
+          <Searchbar
+            data={companies}
+            onFilteredData={setFilteredCompanies}
+            searchFields={["name"]}
+          />
           <Table
             pagination={true}
             columnsData={companiesColumns}

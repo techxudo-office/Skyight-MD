@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "./ApiHelper";
 
-
 const initialState = {
   reasons: [],
   isLoadingReasons: false,
@@ -84,15 +83,12 @@ const reasonsSlice = createSlice({
 
 export const getReasons = createAsyncThunk(
   "reason/getReasons",
-  async (token) => {
-    const response = await makeRequest(
-      'GET',
-      '/api/reason',
-      {
-        token,
-        errorMessage: "Failed to fetch reasons."
-      }
-    );
+  async ({ token, logoutHandler }) => {
+    const response = await makeRequest("GET", "/api/reason", {
+      token,
+      logoutCallback: logoutHandler,
+      errorMessage: "Failed to fetch reasons.",
+    });
 
     if (response?.data?.data?.length > 0) {
       return response?.data.data;
@@ -104,15 +100,11 @@ export const getReasons = createAsyncThunk(
 export const deleteReason = createAsyncThunk(
   "reason/deleteReason",
   async ({ token, id }) => {
-    await makeRequest(
-      'DELETE',
-      `/api/reason/${id}`,
-      {
-        token,
-        successMessage: "Reason deleted successfully",
-        errorMessage: "Failed to delete reason"
-      }
-    );
+    await makeRequest("DELETE", `/api/reason/${id}`, {
+      token,
+      successMessage: "Reason deleted successfully",
+      errorMessage: "Failed to delete reason",
+    });
     return id;
   }
 );
@@ -120,17 +112,13 @@ export const deleteReason = createAsyncThunk(
 export const createReason = createAsyncThunk(
   "reason/createReason",
   async ({ data, token }) => {
-    const response = await makeRequest(
-      'POST',
-      '/api/reason',
-      {
-        data,
-        token,
-        successMessage: "Reason created successfully",
-        errorMessage: "Failed to create reason",
-        headers: { "Content-Type": "application/json" }
-      }
-    );
+    const response = await makeRequest("POST", "/api/reason", {
+      data,
+      token,
+      successMessage: "Reason created successfully",
+      errorMessage: "Failed to create reason",
+      headers: { "Content-Type": "application/json" },
+    });
     return response.data?.data;
   }
 );
@@ -142,16 +130,12 @@ export const editReason = createAsyncThunk(
       reason_id: id,
       reason: data,
     };
-    const response = await makeRequest(
-      'PUT',
-      `/api/reason/${id}`,
-      {
-        data: payload,
-        token,
-        successMessage: "Reason updated successfully",
-        errorMessage: "Failed while updating this reason"
-      }
-    );
+    const response = await makeRequest("PUT", `/api/reason/${id}`, {
+      data: payload,
+      token,
+      successMessage: "Reason updated successfully",
+      errorMessage: "Failed while updating this reason",
+    });
     return response.data?.data;
   }
 );

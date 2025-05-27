@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Tag,
@@ -11,10 +11,12 @@ import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import useLogout from "../../hooks/useLogout";
 
 const DashboardHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const logoutHandler = useLogout();
   const { adminData } = useSelector((state) => state.persist);
   const { latestBookings, isLoadingLatestBookings } = useSelector(
     (state) => state.booking
@@ -22,7 +24,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     if (!adminData.token) return;
-    dispatch(getLatestBooking(adminData.token));
+    dispatch(getLatestBooking({ token: adminData.token, logoutHandler }));
   }, [dispatch]);
 
   const columns = [

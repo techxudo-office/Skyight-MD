@@ -44,11 +44,12 @@ const notificationSlice = createSlice({
 
 export const getNotifications = createAsyncThunk(
   "notification/getNotifications",
-  async ({ token, id }, { rejectWithValue }) => {
+  async ({ token, logoutHandler, id }, { rejectWithValue }) => {
     try {
-      const response = await makeRequest('get', `/api/notification/${id}`, {
+      const response = await makeRequest("get", `/api/notification/${id}`, {
         token,
-        errorMessage: "Failed to fetch notifications"
+        logoutCallback: logoutHandler,
+        errorMessage: "Failed to fetch notifications",
       });
       return response.data.data;
     } catch (error) {
@@ -61,13 +62,17 @@ export const createNotification = createAsyncThunk(
   "notification/createNotification",
   async ({ data, token }, { rejectWithValue }) => {
     try {
-      const response = await makeRequest('post', '/api/SendNotificationToCompany', {
-        data,
-        token,
-        headers: { 'Content-Type': 'application/json' },
-        successMessage: "Notification sent successfully",
-        errorMessage: "Failed to send notification"
-      });
+      const response = await makeRequest(
+        "post",
+        "/api/SendNotificationToCompany",
+        {
+          data,
+          token,
+          headers: { "Content-Type": "application/json" },
+          successMessage: "Notification sent successfully",
+          errorMessage: "Failed to send notification",
+        }
+      );
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error);

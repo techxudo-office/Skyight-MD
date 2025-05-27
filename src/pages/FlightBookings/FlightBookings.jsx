@@ -20,22 +20,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFlightBookings } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
+import useLogout from "../../hooks/useLogout";
 
 const FlightBookings = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const logoutHandler = useLogout();
   const { adminData } = useSelector((state) => state.persist);
   const { flightBookings, isLoadingFlightBookings } = useSelector(
     (state) => state.booking
   );
   const [filteredData, setFilteredData] = useState(flightBookings);
 
-  const navigationHandler = () => {
-    navigate("/dashboard/search-flights");
-  };
-
-
+  useEffect(() => {
+    dispatch(getFlightBookings({ token: adminData.token, logoutHandler }));
+  }, [dispatch]);
 
   const columns = [
     {
@@ -99,10 +98,6 @@ const FlightBookings = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getFlightBookings(adminData.token));
-  }, [dispatch]);
-
   return (
     <>
       <CardLayoutContainer removeBg={true}>
@@ -110,8 +105,7 @@ const FlightBookings = () => {
           removeBorder={true}
           heading={"Flight Bookings"}
           className="flex items-center justify-between"
-        >
-        </CardLayoutHeader>
+        ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <ExcelExportButton
             data={filteredData || []}

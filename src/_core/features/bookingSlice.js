@@ -224,11 +224,12 @@ export const editAdminCredits = createAsyncThunk(
 
 export const getFlightBookings = createAsyncThunk(
   "booking/getFlightBookings",
-  async (token, thunkAPI) => {
+  async ({ token, logoutHandler }, thunkAPI) => {
     try {
       const response = await makeRequest("GET", "/api/booking", {
         token,
         errorMessage: "Failed to fetch flight bookings.",
+        logoutCallback: logoutHandler,
       });
 
       let responseData = response.data.data;
@@ -249,10 +250,11 @@ export const getFlightBookings = createAsyncThunk(
 
 export const getLatestBooking = createAsyncThunk(
   "booking/getLatestBooking",
-  async (token, thunkAPI) => {
+  async ({ token, logoutHandler }, thunkAPI) => {
     try {
       const response = await makeRequest("GET", "/api/get-latest-bookings", {
         token,
+        logoutCallback: logoutHandler,
         headers: { "Content-Type": "application/json" },
         errorMessage: "Failed to fetch booking details",
       });
@@ -329,10 +331,11 @@ export const refundRequestFlight = createAsyncThunk(
 
 export const refundRequestTicket = createAsyncThunk(
   "booking/getRefundTickets",
-  async (token, thunkAPI) => {
+  async ({ token, logoutHandler }, thunkAPI) => {
     try {
       const response = await makeRequest("GET", "/api/request-refund-tickets", {
         token,
+        logoutCallback: logoutHandler,
         errorMessage: "Failed to fetch request refund tickets",
       });
 

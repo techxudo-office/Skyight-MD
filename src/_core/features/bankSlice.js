@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "./ApiHelper";
 
-
 const initialState = {
   banks: [],
   isLoadingBanks: false,
@@ -80,34 +79,26 @@ const bankSlice = createSlice({
 
 export const getBanks = createAsyncThunk(
   "booking/getBanks",
-  async (token) => {
-    const response = await makeRequest(
-      'GET',
-      '/api/bank',
-      {
-        token,
-        errorMessage: "Failed to fetch banks"
-      }
-    );
+  async ({ token, logoutHandler }) => {
+    const response = await makeRequest("GET", "/api/bank", {
+      token,
+      logoutCallback: logoutHandler,
+      errorMessage: "Failed to fetch banks",
+    });
     if (response?.data?.data.length > 0) {
       return response.data.data;
     }
-
   }
 );
 
 export const deleteBank = createAsyncThunk(
   "bank/deleteBank",
   async ({ token, id }) => {
-    await makeRequest(
-      'DELETE',
-      `/api/bank?bank_id=${id}`,
-      {
-        token,
-        successMessage: "Bank deleted successfully",
-        errorMessage: "Failed to delete bank"
-      }
-    );
+    await makeRequest("DELETE", `/api/bank?bank_id=${id}`, {
+      token,
+      successMessage: "Bank deleted successfully",
+      errorMessage: "Failed to delete bank",
+    });
     return id;
   }
 );
@@ -115,17 +106,13 @@ export const deleteBank = createAsyncThunk(
 export const createBank = createAsyncThunk(
   "bank/createBank",
   async ({ data, token }) => {
-    const response = await makeRequest(
-      'POST',
-      '/api/bank',
-      {
-        data,
-        token,
-        successMessage: "Bank created successfully",
-        errorMessage: "Failed to create bank",
-        headers: { "Content-Type": "application/json" }
-      }
-    );
+    const response = await makeRequest("POST", "/api/bank", {
+      data,
+      token,
+      successMessage: "Bank created successfully",
+      errorMessage: "Failed to create bank",
+      headers: { "Content-Type": "application/json" },
+    });
     return response?.data || response;
   }
 );
@@ -137,16 +124,12 @@ export const editBank = createAsyncThunk(
       bank_id: id,
       bank: data,
     };
-    const response = await makeRequest(
-      'PUT',
-      '/api/bank',
-      {
-        data: payload,
-        token,
-        successMessage: "Bank updated successfully",
-        errorMessage: "Failed while updating this bank"
-      }
-    );
+    const response = await makeRequest("PUT", "/api/bank", {
+      data: payload,
+      token,
+      successMessage: "Bank updated successfully",
+      errorMessage: "Failed while updating this bank",
+    });
     return response?.data.data || response;
   }
 );

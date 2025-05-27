@@ -9,10 +9,12 @@ import { Spinner, BellIcon } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getNotifications } from "../../_core/features/notificationSlice";
+import useLogout from "../../hooks/useLogout";
 
 const Notifications = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logoutHandler = useLogout();
   const { adminData } = useSelector((state) => state.persist);
   const { notifications, isLoadingNotifications } = useSelector(
     (state) => state.notification
@@ -21,12 +23,15 @@ const Notifications = () => {
   useEffect(() => {
     if (!adminData?.token) return;
     dispatch(
-      getNotifications({ token: adminData?.token, id: adminData?.admin?.id })
+      getNotifications({
+        token: adminData?.token,
+        id: adminData?.admin?.id,
+        logoutHandler,
+      })
     );
   }, [adminData?.token]);
 
-  useEffect(() => {
-  }, [notifications]);
+  useEffect(() => {}, [notifications]);
 
   // Render function for each item in the list
   const renderRow = ({ index, style }) => {

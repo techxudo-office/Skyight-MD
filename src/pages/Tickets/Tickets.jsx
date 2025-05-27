@@ -21,10 +21,11 @@ import { getTickets } from "../../_core/features/ticketSlice";
 import { MdEditSquare } from "react-icons/md";
 import dayjs from "dayjs";
 import EditTicketModal from "./EditTicketModal/EditTicketModal";
-import { SiGooglesheets } from "react-icons/si";
+import useLogout from "../../hooks/useLogout";
 
 const Tickets = () => {
   const dispatch = useDispatch();
+  const logoutHandler = useLogout();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
   const [ticketData, setTicketData] = useState(null);
@@ -45,7 +46,7 @@ const Tickets = () => {
 
   useEffect(() => {
     if (adminData?.token) {
-      dispatch(getTickets(adminData?.token));
+      dispatch(getTickets({ token: adminData.token, logoutHandler }));
     }
   }, [adminData?.token]);
 

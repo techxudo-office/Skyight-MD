@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SecondaryButton,
   ConfirmModal,
@@ -16,10 +16,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import EditAdminModal from "./EditAdminModal/EditAdminModal";
 import { deleteAdmin, getAdmins } from "../../_core/features/adminSlice";
+import useLogout from "../../hooks/useLogout";
 
 const Admin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logoutHandler = useLogout();
   const [deleteId, setDeleteId] = useState(null);
   const [modalStatus, setModalStatus] = useState(false);
   const [editAdminData, setEditAdminData] = useState(null);
@@ -28,12 +30,38 @@ const Admin = () => {
   const { admins, isLoadingAdmins, isDeletingAdmin } = useSelector(
     (state) => state.admin
   );
+
+  const navigationHandler = () => {
+    navigate("/dashboard/create-admin");
+  };
+
+  const deleteUserHandler = () => {
+    if (!deleteId) {
+      errorToastify("Failed to delete this user");
+      setModalStatus(false);
+      return;
+    }
+
+    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(
+      () => {
+        setModalStatus(false);
+        setDeleteId(null);
+      }
+    );
+  };
+
+  const abortDeleteHandler = () => {
+    setModalStatus(false);
+    setDeleteId(null);
+  };
+
+  useEffect(() => {
+    if (adminData?.token) {
+      dispatch(getAdmins({ token: adminData.token, logoutHandler }));
+    }
+  }, []);
+
   const adminColumns = [
-    // {
-    //   name: "ADMIN ID",
-    //   selector: (row) => row?.id,
-    //   sortable: false,
-    // },
     {
       name: "FULL NAME",
       selector: (row) => row?.full_name,
@@ -89,36 +117,6 @@ const Admin = () => {
       sortable: false,
     },
   ];
-
-  const navigationHandler = () => {
-    navigate("/dashboard/create-admin");
-  };
-
-  const deleteUserHandler = () => {
-    if (!deleteId) {
-      errorToastify("Failed to delete this user");
-      setModalStatus(false);
-      return;
-    }
-
-    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(
-      () => {
-        setModalStatus(false);
-        setDeleteId(null);
-      }
-    );
-  };
-
-  const abortDeleteHandler = () => {
-    setModalStatus(false);
-    setDeleteId(null);
-  };
-
-  useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getAdmins(adminData?.token));
-    }
-  }, []);
 
   return (
     <>

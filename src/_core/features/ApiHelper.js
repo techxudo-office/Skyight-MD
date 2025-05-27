@@ -19,6 +19,7 @@ const makeRequest = async (
     successMessage = null,
     errorMessage = null,
     headers = {},
+    logoutCallback = null,
   }
 ) => {
   try {
@@ -38,10 +39,9 @@ const makeRequest = async (
       toast.success(successMessage);
     }
 
-    return (
-      response
-    );
+    return response;
   } catch (error) {
+    const status = error.response?.status;
     const apiErrors = error.response?.data?.data?.errors;
     const errorMsg =
       error.response?.data?.message ||
@@ -49,6 +49,10 @@ const makeRequest = async (
       "Something went wrong. Please try again.";
 
     console.log(apiErrors, errorMsg, "CATCH");
+
+    if (status === 401 && typeof logoutCallback === "function") {
+      logoutCallback();
+    }
 
     if (apiErrors && typeof apiErrors === "object") {
       const firstError = Object.values(apiErrors)[0];

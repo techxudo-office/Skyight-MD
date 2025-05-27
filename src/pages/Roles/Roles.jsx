@@ -18,10 +18,12 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteRole, getRoles } from "../../_core/features/roleSlice";
 import EditRoleModal from "./EditRoleModal/EditRoleModal";
+import useLogout from "../../hooks/useLogout";
 
 const Roles = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logoutHandler = useLogout();
   const [deleteId, setDeleteId] = useState(null);
   const [modalStatus, setModalStatus] = useState(false);
   const [editRoleData, setEditRoleData] = useState(null);
@@ -33,7 +35,7 @@ const Roles = () => {
 
   useEffect(() => {
     if (!adminData?.token) return;
-    dispatch(getRoles(adminData?.token));
+    dispatch(getRoles({ token: adminData.token, logoutHandler }));
   }, [dispatch, adminData?.token]);
 
   const roleColumns = [

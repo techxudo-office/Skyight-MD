@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
-  SecondaryButton,
   ConfirmModal,
-  Dropdown,
   Tag,
   CustomTooltip,
-  Button,
 } from "../../components/components";
 import {
   cancelRequestFlight,
@@ -19,22 +16,37 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import toast from "react-hot-toast";
-
 import { FaEye } from "react-icons/fa";
 import { IoIosAirplane } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { MdCancelScheduleSend } from "react-icons/md";
+import useLogout from "../../hooks/useLogout";
 
 const CancelRequests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logoutHandler = useLogout();
   const [modalStatus, setModalStatus] = useState(false);
   const [cancelId, setCancelId] = useState();
   const { adminData } = useSelector((state) => state.persist);
   const { flightBookings, isLoadingFlightBookings, isCancelRequestLoading } =
     useSelector((state) => state.booking);
+
+  const canceledBooking = flightBookings.filter(
+    (item) => item.booking_status === "requested-cancellation"
+  );
+
+  const handleCancelRequest = (id) => {
+    dispatch(cancelRequestFlight({ id, token: adminData?.token }));
+  };
+
+  useEffect(() => {
+    if (adminData?.token) {
+      dispatch(getFlightBookings({ token: adminData.token, logoutHandler }));
+    }
+  }, []);
+
   const columns = [
     {
       name: "ROUTE",
@@ -108,18 +120,6 @@ const CancelRequests = () => {
     },
   ];
 
-  const handleCancelRequest = (id) => {
-    dispatch(cancelRequestFlight({ id, token: adminData?.token }));
-  };
-
-  useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getFlightBookings(adminData?.token));
-    }
-  }, []);
-  const canceledBooking = flightBookings.filter(
-    (item) => item.booking_status === "requested-cancellation"
-  );
   return (
     <>
       <ConfirmModal
