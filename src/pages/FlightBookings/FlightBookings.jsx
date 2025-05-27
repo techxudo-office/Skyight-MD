@@ -111,13 +111,6 @@ const FlightBookings = () => {
           heading={"Flight Bookings"}
           className="flex items-center justify-between"
         >
-          <div className="relative">
-            <SecondaryButton
-              text={"Create New Booking"}
-              icon={<MdAdd />}
-              onClick={navigationHandler}
-            />
-          </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
           <ExcelExportButton

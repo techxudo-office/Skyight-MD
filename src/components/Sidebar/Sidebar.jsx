@@ -8,6 +8,7 @@ import {
 import { MdEdit } from "react-icons/md";
 import { useAdminSidebarLinks } from "../../data/sidebarData";
 import { useSelector } from "react-redux";
+import Profileimage from "../ProfileImage/Profileimage";
 
 const Sidebar = ({ status, updateStatus }) => {
   const sidebarRef = useRef();
@@ -127,24 +128,7 @@ const Sidebar = ({ status, updateStatus }) => {
                 status ? "w-20 h-20" : "w-14 h-14"
               } overflow-hidden rounded-full cursor-pointer group`}
             >
-              <img
-                src={profileImage}
-                alt="profile"
-                className="object-cover w-full h-full rounded-full"
-              />
-              <div
-                className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 opacity-0 group-hover:opacity-100"
-                onClick={() => fileInputRef.current.click()}
-              >
-                <MdEdit className="text-xl text-white" />
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                ref={fileInputRef}
-                onChange={handleImageChange}
-              />
+              <Profileimage />
             </div>
             {status && (
               <>

@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import NotificationDrop from "./NotificationDrop/NotificationDrop";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
+import Profileimage from "../ProfileImage/Profileimage";
 
 const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
@@ -27,10 +28,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const [showCredits, setShowCredits] = useState(false);
   const { adminData } = useSelector((state) => state.persist);
   const { credits, isLoadingCredits } = useSelector((state) => state.booking);
-  const [profileImage, setProfileImage] = useState(
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
-  );
-
 
   const profileDropdownRef = useRef(null);
   const creditsDropdownRef = useRef(null);
@@ -108,7 +105,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
     dispatch(getCredits(adminData?.token));
   };
 
-
   const dropdownHandler = () => {
     setDropDownStatus(!dropdownStatus);
   };
@@ -116,7 +112,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const logoutHandler = () => {
     dispatch({ type: "user/logout" });
     localStorage.removeItem("auth_token");
-    toast.success("Logout successfully")
+    toast.success("Logout successfully");
     dropdownHandler();
   };
 
@@ -136,7 +132,6 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   return (
     <>
-
       <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg ">
         <div className="px-2 mx-auto">
           <div className="flex items-center justify-between p-2 sm:p-4">
@@ -186,7 +181,14 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     ref={creditsDropdownRef}
                     className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-background hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
                   >
-                    {showCredits && <HiOutlineRefresh onClick={refreshCredits} className={`${isLoadingCredits && "animate-spin"} max-sm:hidden`} />}
+                    {showCredits && (
+                      <HiOutlineRefresh
+                        onClick={refreshCredits}
+                        className={`${
+                          isLoadingCredits && "animate-spin"
+                        } max-sm:hidden`}
+                      />
+                    )}
                     {showCredits ? (
                       isLoadingCredits ? (
                         <span className="flex items-center gap-2">
@@ -200,21 +202,28 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                         <span className="flex items-center gap-2">
                           <span>No Credits</span>
                         </span>
-                      )) : (
-                      <p className="text-xs flex items-center"><GoDotFill /><GoDotFill /><GoDotFill /><GoDotFill /><GoDotFill /><GoDotFill /></p>
-                    )
-                    }
-                    {showCredits ?
+                      )
+                    ) : (
+                      <p className="flex items-center text-xs">
+                        {Array.from({ length: 6 }).map((_, i) => (
+                          <GoDotFill key={i} />
+                        ))}
+                      </p>
+                    )}
+                    {showCredits ? (
                       <CustomTooltip content={"Hide Credits"}>
                         <FaEye onClick={() => setShowCredits(false)} />
-                      </CustomTooltip> :
-                      <CustomTooltip content={"Show Credits"}>
-                        <FaEyeSlash onClick={() => {
-                          refreshCredits();
-                          setShowCredits(true)
-                        }} />
                       </CustomTooltip>
-                    }
+                    ) : (
+                      <CustomTooltip content={"Show Credits"}>
+                        <FaEyeSlash
+                          onClick={() => {
+                            refreshCredits();
+                            setShowCredits(true);
+                          }}
+                        />
+                      </CustomTooltip>
+                    )}
                     {/* <MdArrowDropDown
                       className={`text-xl ${CreditsDropdownOpen ? "rotate-180" : ""
                         } transition-all duration-300`}
@@ -238,11 +247,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     onClick={dropdownHandler}
                     className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group"
                   >
-                    <img
-                      src={profileImage}
-                      alt="profile-img"
-                      className="object-cover w-full h-full rounded-full"
-                    />
+                    <Profileimage />
                   </div>
                   <Dropdown
                     status={dropdownStatus}

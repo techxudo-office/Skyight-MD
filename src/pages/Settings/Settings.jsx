@@ -11,6 +11,8 @@ import { updateAccount } from "../../_core/features/authSlice";
 import toast from "react-hot-toast";
 import { updateAccountValidation } from "../../utils/validations";
 import { profileSettingsFields } from "../../utils/InputFields";
+import Profileimage from "../../components/ProfileImage/Profileimage";
+import { uploadImage } from "../../_core/features/persistSlice";
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -21,9 +23,6 @@ const Settings = () => {
     (state) => state.auth
   );
   const [toggle, setToggle] = useState(adminData?.admin?.is_active);
-  const [profileImage, setProfileImage] = useState(
-    "https://crs-backend-dev.s3.ap-south-1.amazonaws.com/company/1745022158015_46?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAWOAVSLEDKUUOYT4U%2F20250419%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250419T002240Z&X-Amz-Expires=300&X-Amz-Signature=e0c2cf66a37bb8904694f1b6477230d6bc2775955c487bb0ccd4bf556384c9cb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject"
-  );
   const [profileData, setProfileData] = useState({
     full_name: "",
     email: "",
@@ -60,9 +59,7 @@ const Settings = () => {
     formData.append("full_name", profileData.full_name);
     formData.append("password", profileData.password);
     formData.append("is_active", toggle);
-    if (profileImage) {
-      formData.append("image", profileImage);
-    }
+    // formData.append("image", profileImage);
 
     dispatch(
       updateAccount({
@@ -77,10 +74,7 @@ const Settings = () => {
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-    }
+    dispatch(uploadImage({ img: file, token: adminData?.token }));
   };
 
   const renderEditableField = (
@@ -117,11 +111,7 @@ const Settings = () => {
           removeBorder={true}
         >
           <div className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group">
-            <img
-              src={profileImage}
-              alt="profile-img"
-              className="object-cover w-full h-full rounded-full"
-            />
+            <Profileimage />
             <div
               className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 opacity-0 group-hover:opacity-100"
               onClick={() => fileInputRef.current.click()}
