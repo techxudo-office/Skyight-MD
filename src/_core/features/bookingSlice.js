@@ -1,12 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
 import makeRequest from "./ApiHelper";
 
 const initialState = {
-
-
   credits: null,
   isLoadingCredits: false,
   creditsError: null,
@@ -14,6 +9,8 @@ const initialState = {
   adminCredits: null,
   isLoadingAdminCredits: false,
   adminCreditsError: null,
+
+  isEditingAdminCredits: false,
 
   flightBookings: [],
   isLoadingFlightBookings: false,
@@ -30,8 +27,6 @@ const initialState = {
   companyBookings: [],
   isLoadingCompanyBookings: false,
   companyBookingsError: null,
-
-
 
   refundBookings: [],
   isGetRefundsLoading: false,
@@ -72,6 +67,18 @@ const bookingSlice = createSlice({
       })
       .addCase(getAdminCredits.rejected, (state, action) => {
         state.isLoadingAdminCredits = false;
+        state.adminCreditsError = action.payload;
+      })
+      .addCase(editAdminCredits.pending, (state) => {
+        state.isEditingAdminCredits = true;
+        state.adminCreditsError = null;
+      })
+      .addCase(editAdminCredits.fulfilled, (state, action) => {
+        state.isEditingAdminCredits = false;
+        state.adminCredits = action.payload;
+      })
+      .addCase(editAdminCredits.rejected, (state, action) => {
+        state.isEditingAdminCredits = false;
         state.adminCreditsError = action.payload;
       })
       .addCase(getFlightBookings.pending, (state) => {
@@ -172,15 +179,11 @@ export const getCredits = createAsyncThunk(
   "booking/getCredits",
   async (token, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        '/api/booking-credit',
-        {
-          token,
-          headers: { "Content-Type": "application/json" },
-          errorMessage: "Something went wrong. Please try again."
-        }
-      );
+      const response = await makeRequest("GET", "/api/booking-credit", {
+        token,
+        headers: { "Content-Type": "application/json" },
+        errorMessage: "Something went wrong. Please try again.",
+      });
       return response?.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -192,15 +195,11 @@ export const getAdminCredits = createAsyncThunk(
   "booking/getAdminCredits",
   async (token, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        '/api/get-credit',
-        {
-          token,
-          headers: { "Content-Type": "application/json" },
-          errorMessage: "Something went wrong. Please try again."
-        }
-      );
+      const response = await makeRequest("GET", "/api/get-credit", {
+        token,
+        headers: { "Content-Type": "application/json" },
+        errorMessage: "Something went wrong. Please try again.",
+      });
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -212,15 +211,11 @@ export const editAdminCredits = createAsyncThunk(
   "booking/editAdminCredits",
   async ({ token, data }, thunkAPI) => {
     try {
-      await makeRequest(
-        'PUT',
-        '/api/update-credit',
-        {
-          data,
-          token,
-          errorMessage: "Failed while updating admin credits"
-        }
-      );
+      await makeRequest("PUT", "/api/update-credit", {
+        data,
+        token,
+        errorMessage: "Failed while updating admin credits",
+      });
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -231,14 +226,10 @@ export const getFlightBookings = createAsyncThunk(
   "booking/getFlightBookings",
   async (token, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        '/api/booking',
-        {
-          token,
-          errorMessage: "Failed to fetch flight bookings."
-        }
-      );
+      const response = await makeRequest("GET", "/api/booking", {
+        token,
+        errorMessage: "Failed to fetch flight bookings.",
+      });
 
       let responseData = response.data.data;
       if (!Array.isArray(responseData)) {
@@ -260,15 +251,11 @@ export const getLatestBooking = createAsyncThunk(
   "booking/getLatestBooking",
   async (token, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        '/api/get-latest-bookings',
-        {
-          token,
-          headers: { "Content-Type": "application/json" },
-          errorMessage: "Failed to fetch booking details"
-        }
-      );
+      const response = await makeRequest("GET", "/api/get-latest-bookings", {
+        token,
+        headers: { "Content-Type": "application/json" },
+        errorMessage: "Failed to fetch booking details",
+      });
       return response.data?.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -280,15 +267,11 @@ export const getBookingDetails = createAsyncThunk(
   "booking/getBookingDetails",
   async ({ id, token }, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        `/api/booking/${id}`,
-        {
-          token,
-          headers: { "Content-Type": "application/json" },
-          errorMessage: "Failed to fetch booking details"
-        }
-      );
+      const response = await makeRequest("GET", `/api/booking/${id}`, {
+        token,
+        headers: { "Content-Type": "application/json" },
+        errorMessage: "Failed to fetch booking details",
+      });
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -300,15 +283,11 @@ export const getCompanyBookings = createAsyncThunk(
   "booking/getCompanyBookings",
   async ({ id, token }, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        `/api/booking/company/${id}`,
-        {
-          token,
-          headers: { "Content-Type": "application/json" },
-          errorMessage: "Failed to fetch company bookings"
-        }
-      );
+      const response = await makeRequest("GET", `/api/booking/company/${id}`, {
+        token,
+        headers: { "Content-Type": "application/json" },
+        errorMessage: "Failed to fetch company bookings",
+      });
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -320,14 +299,10 @@ export const getRefundFlight = createAsyncThunk(
   "booking/getRefundFlight",
   async (token, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        '/api/refund-booking',
-        {
-          token,
-          errorMessage: "Failed to fetch refund bookings"
-        }
-      );
+      const response = await makeRequest("GET", "/api/refund-booking", {
+        token,
+        errorMessage: "Failed to fetch refund bookings",
+      });
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -339,16 +314,12 @@ export const refundRequestFlight = createAsyncThunk(
   "booking/refundRequestFlight",
   async ({ id, token }, thunkAPI) => {
     try {
-      await makeRequest(
-        'POST',
-        `/api/accept-request-refund-tickets/${id}`,
-        {
-          token,
-          headers: { "Content-Type": "application/json" },
-          successMessage: "Request refunded successfully",
-          errorMessage: "Failed while refunding the flight request"
-        }
-      );
+      await makeRequest("POST", `/api/accept-request-refund-tickets/${id}`, {
+        token,
+        headers: { "Content-Type": "application/json" },
+        successMessage: "Request refunded successfully",
+        errorMessage: "Failed while refunding the flight request",
+      });
       return id;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -360,17 +331,12 @@ export const refundRequestTicket = createAsyncThunk(
   "booking/getRefundTickets",
   async (token, thunkAPI) => {
     try {
-      const response = await makeRequest(
-        'GET',
-        '/api/request-refund-tickets',
-        {
-          token,
-          errorMessage: "Failed to fetch request refund tickets"
-        }
-      );
+      const response = await makeRequest("GET", "/api/request-refund-tickets", {
+        token,
+        errorMessage: "Failed to fetch request refund tickets",
+      });
 
       if (response?.data?.data[0]?.length > 0) {
-
         return response.data?.data[0];
       }
       return null;
@@ -384,16 +350,12 @@ export const cancelRequestFlight = createAsyncThunk(
   "booking/cancelRequestFlight",
   async ({ id, token }, thunkAPI) => {
     try {
-      await makeRequest(
-        'POST',
-        `/api/accept-request-cancellation/${id}`,
-        {
-          token,
-          headers: { "Content-Type": "application/json" },
-          successMessage: "Cancel request successfully",
-          errorMessage: "Failed while cancelling the flight request"
-        }
-      );
+      await makeRequest("POST", `/api/accept-request-cancellation/${id}`, {
+        token,
+        headers: { "Content-Type": "application/json" },
+        successMessage: "Cancel request successfully",
+        errorMessage: "Failed while cancelling the flight request",
+      });
       return id;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

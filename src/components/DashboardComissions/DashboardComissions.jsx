@@ -7,26 +7,23 @@ import {
   editcommision,
   getCommision,
 } from "../../_core/features/commisionSlice";
-import { getAdminCredits } from "../../_core/features/bookingSlice";
+import {
+  editAdminCredits,
+  getAdminCredits,
+} from "../../_core/features/bookingSlice";
 import { GrDocumentUpdate } from "react-icons/gr";
 
 Modal.setAppElement("#root");
 
 const DashboardComission = () => {
   const dispatch = useDispatch();
+  const [credits, setCredits] = useState(0);
+  const [commision, setCommision] = useState(0);
   const { adminData } = useSelector((state) => state.persist);
-  const { adminCredits } = useSelector((state) => state.booking);
+  const { isEditingAdminCredits } = useSelector((state) => state.booking);
   const { commisions, isEditingcommision, isLoadingCommision } = useSelector(
     (state) => state.commision
   );
-
-  useEffect(() => {
-    if (!adminData?.token) return;
-    dispatch(getCommision(adminData?.token));
-    dispatch(getAdminCredits(adminData.token));
-  }, []);
-
-  const [commision, setCommision] = useState(0);
   const [formData, setFormData] = useState({
     PKR: 0,
     IRR: 0,
@@ -36,8 +33,15 @@ const DashboardComission = () => {
     USD: 0,
     EUR: 0,
     IQD: 0,
-    // commission: 0,
   });
+
+  useEffect(() => {
+    if (!adminData?.token) return;
+    dispatch(getCommision(adminData?.token));
+    dispatch(getAdminCredits(adminData.token)).then((resp) =>
+      setCredits(resp.payload)
+    );
+  }, []);
 
   useEffect(() => {
     if (commisions) {
@@ -50,7 +54,6 @@ const DashboardComission = () => {
         USD: commisions.USD || 0,
         EUR: commisions.EUR || 0,
         IQD: commisions.IQD || 0,
-        // commission: commisions.commission || 0,
       });
       setCommision(commisions.commission || 0);
     }
@@ -112,18 +115,38 @@ const DashboardComission = () => {
                 </div>
               </div>
               <Button
-                icon={<GrDocumentUpdate />}
-                text={isEditingcommision ? <Spinner /> : "Update"}
+                text={"Update"}
                 onClick={handleSubmit}
+                icon={<GrDocumentUpdate />}
+                loading={isEditingcommision}
                 disabled={isEditingcommision}
               />
             </div>
-            <div className="relative h-full col-span-1 overflow-hidden bg-primary rounded-xl">
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
-                <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
-                <p className="text-3xl font-bold">{adminCredits ?? "—"}</p>
-                <p className="mt-1 text-sm opacity-80">Available Balance</p>
-              </div>
+            <div className="flex flex-col items-center justify-center col-span-1 p-6 text-white bg-primary rounded-xl">
+              <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
+              <Input
+                name="adminCredits"
+                type="number"
+                value={credits}
+                onChange={(e) => {
+                  setCredits(e.target.value);
+                }}
+                className="mb-3 text-black"
+                placeholder="Enter Credits"
+              />
+              <Button
+                text="Save"
+                onClick={() => {
+                  dispatch(
+                    editAdminCredits({
+                      data: { amount: Number(credits) },
+                      token: adminData.token,
+                    })
+                  );
+                }}
+                loading={isEditingAdminCredits}
+                disabled={isEditingAdminCredits}
+              />
             </div>
           </div>
         </CardLayoutBody>
