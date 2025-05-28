@@ -48,8 +48,6 @@ const makeRequest = async (
       errorMessage ||
       "Something went wrong. Please try again.";
 
-    console.log(apiErrors, errorMsg, "CATCH");
-
     if (status === 401 && typeof logoutCallback === "function") {
       logoutCallback();
     }

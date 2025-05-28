@@ -1,4 +1,4 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -24,9 +24,16 @@ const LoginForm = () => {
   }, [adminData, navigate]);
 
   const loginHandler = async (payload, resetForm) => {
-    dispatch(login(payload)).then(() => {
-      resetForm();
-    });
+    dispatch(login(payload))
+      .unwrap()
+      .then(() => {
+        resetForm();
+      })
+      .catch((err) => {
+        if (err.message === "Password is incorrect.") {
+          formik.setFieldValue("password", "");
+        }
+      });
   };
 
   const validationSchema = Yup.object({
@@ -58,72 +65,77 @@ const LoginForm = () => {
 
   return (
     <>
-
-      <CardLayoutContainer className={"max-w-md p-3 m-auto shadow-2xl"}>
-        <CardLayoutHeader
-          heading="Login"
-          className={"flex items-center justify-center pt-7 pb-0"}
-          removeBorder={true}
-        />
-        <form onSubmit={handleFormSubmit} noValidate>
-          <CardLayoutBody removeBorder={true}>
-            <div>
-              <div className="flex flex-col gap-5">
-                <div
-                  className={`relative ${formik.touched.email && formik.errors.email ? "mb-5" : ""
-                    }`}>
-                  <Input
-                    placeholder={"abc.xcv@gmail.com"}
-                    id={"email"}
-                    name={"email"}
-                    label={"Email Address*"}
-                    type={"email"}
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.email && formik.errors.email && (
-                    <div className="absolute left-0 mt-2 text-sm text-red-500">
-                      {formik.errors.email}
-                    </div>
-                  )}
-                </div>
-                <div
-                  className={`relative ${formik.touched.password && formik.errors.password
-                    ? "mb-5"
-                    : ""
-                    }`}>
-                  <Input
-                    placeholder={"********"}
-                    id={"password"}
-                    name={"password"}
-                    label={"Password*"}
-                    type={"password"}
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.password && formik.errors.password && (
-                    <div className="absolute left-0 mt-2 text-sm text-red-500">
-                      {formik.errors.password}
-                    </div>
-                  )}
+      {!adminData && (
+        <CardLayoutContainer className={"max-w-md p-3 m-auto shadow-2xl"}>
+          <CardLayoutHeader
+            heading="Login"
+            className={"flex items-center justify-center pt-7 pb-0"}
+            removeBorder={true}
+          />
+          <form onSubmit={handleFormSubmit} noValidate>
+            <CardLayoutBody removeBorder={true}>
+              <div>
+                <div className="flex flex-col gap-5">
+                  <div
+                    className={`relative ${
+                      formik.touched.email && formik.errors.email ? "mb-5" : ""
+                    }`}
+                  >
+                    <Input
+                      placeholder={"abc.xcv@gmail.com"}
+                      id={"email"}
+                      name={"email"}
+                      label={"Email Address*"}
+                      type={"email"}
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                      <div className="absolute left-0 mt-2 text-sm text-red-500">
+                        {formik.errors.email}
+                      </div>
+                    )}
+                  </div>
+                  <div
+                    className={`relative ${
+                      formik.touched.password && formik.errors.password
+                        ? "mb-5"
+                        : ""
+                    }`}
+                  >
+                    <Input
+                      placeholder={"********"}
+                      id={"password"}
+                      name={"password"}
+                      label={"Password*"}
+                      type={"password"}
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.password && formik.errors.password && (
+                      <div className="absolute left-0 mt-2 text-sm text-red-500">
+                        {formik.errors.password}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardLayoutBody>
-          <CardLayoutFooter className={"flex items-center justify-center"}>
-            <div>
-              <Button
-                text={isLoading ? <Spinner /> : "Login"}
-                disabled={isLoading}
-                onClick={formik.handleSubmit}
-                type="submit"
-              />
-            </div>
-          </CardLayoutFooter>
-        </form>
-      </CardLayoutContainer>
+            </CardLayoutBody>
+            <CardLayoutFooter className={"flex items-center justify-center"}>
+              <div>
+                <Button
+                  text={isLoading ? <Spinner /> : "Login"}
+                  disabled={isLoading}
+                  onClick={formik.handleSubmit}
+                  type="submit"
+                />
+              </div>
+            </CardLayoutFooter>
+          </form>
+        </CardLayoutContainer>
+      )}
     </>
   );
 };
