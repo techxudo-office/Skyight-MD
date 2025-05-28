@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { utils, writeFile } from "xlsx";
+import  { useEffect, useState } from "react";
 import {
   ExcelExportButton,
   Searchbar,
-  SecondaryButton,
   Table,
   Tag,
 } from "../../components/components";
@@ -12,10 +10,8 @@ import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
-  CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import { FaEye } from "react-icons/fa";
-import { MdAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getFlightBookings } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";

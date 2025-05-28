@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Table, CustomTooltip } from "../../components/components";
 import { MdEditSquare } from "react-icons/md";
 import {

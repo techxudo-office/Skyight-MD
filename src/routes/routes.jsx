@@ -1,20 +1,7 @@
-import React, { useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Routes, Route } from "react-router-dom";
 import { routesData } from "../data/routesData";
-import toast from "react-hot-toast";
 
 const AppRoutes = () => {
-  const navigate = useNavigate();
-  const { adminData } = useSelector((state) => state.persist);
-
-  useEffect(() => {
-    if (!adminData?.token) {
-      toast.success("Logged out successfully");
-      navigate("/", { replace: true });
-    }
-  }, []);
-
   return (
     <Routes>
       {routesData.map((route, index) => {
@@ -33,13 +20,7 @@ const AppRoutes = () => {
           );
         }
 
-        return (
-          <Route
-            key={index}
-            path={route.path}
-            element={route.element}
-          />
-        );
+        return <Route key={index} path={route.path} element={route.element} />;
       })}
     </Routes>
   );

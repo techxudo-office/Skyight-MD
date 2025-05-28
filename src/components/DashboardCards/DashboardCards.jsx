@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { FaUserAlt, FaTachometerAlt, FaClipboardList } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboardAnalytics } from "../../_core/features/adminSlice";

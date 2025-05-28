@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import  { useState, useRef, useEffect } from "react";
 // import { FaChevronDown } from "react-icons/fa";
 import { FaCaretDown } from "react-icons/fa";
 import { Spinner } from "../components";

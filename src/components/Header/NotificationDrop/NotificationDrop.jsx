@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { FixedSizeList as List } from "react-window"; // Import List from react-window
 
 import { IoNotificationsOutline } from "react-icons/io5";

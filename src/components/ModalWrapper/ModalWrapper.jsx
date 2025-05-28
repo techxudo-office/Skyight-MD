@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import  { forwardRef } from "react";
 import Modal from "react-modal";
 import "./ModalWrapper.css";
 import { MdCancel } from "react-icons/md";

@@ -1,18 +1,16 @@
-import React, { useEffect } from "react";
-import { FixedSizeList as List } from "react-window"; // Import List from react-window
+import { useEffect } from "react";
+import { FixedSizeList as List } from "react-window";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
 } from "../../components/CardLayout/CardLayout";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { Spinner, BellIcon } from "../../components/components";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getNotifications } from "../../_core/features/notificationSlice";
 import useLogout from "../../hooks/useLogout";
 
 const Notifications = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const logoutHandler = useLogout();
   const { adminData } = useSelector((state) => state.persist);
@@ -33,7 +31,6 @@ const Notifications = () => {
 
   useEffect(() => {}, [notifications]);
 
-  // Render function for each item in the list
   const renderRow = ({ index, style }) => {
     const item = notifications[index];
     return (
@@ -71,10 +68,10 @@ const Notifications = () => {
 
       {notifications?.length > 0 ? (
         <List
-          height={600} // Set the height of the viewport
-          itemCount={notifications.length} // Number of items to render
-          itemSize={100} // Height of each item in pixels (adjust as needed)
-          width="100%" // Set the width of the list
+          height={600}
+          itemCount={notifications.length}
+          itemSize={100}
+          width="100%"
         >
           {renderRow}
         </List>
