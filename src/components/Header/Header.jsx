@@ -1,4 +1,4 @@
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -133,8 +133,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   return (
     <>
       <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg ">
-        <div className="px-2 mx-auto">
-          <div className="flex items-center justify-between p-2 sm:p-4">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-between ">
             <div className="flex items-end gap-3">
               <CustomTooltip content={"Open / close"}>
                 <button
@@ -149,7 +149,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
             <div className="flex items-center sm:gap-3">
               {location.pathname !== "/dashboard/notifications" && (
                 <div
-                  className="relative py-2"
+                  className="relative "
                   onMouseEnter={() => setIsNotiHovered(true)}
                   onMouseLeave={() => setIsNotiHovered(false)}
                 >
@@ -184,9 +184,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     {showCredits && (
                       <HiOutlineRefresh
                         onClick={refreshCredits}
-                        className={`${
-                          isLoadingCredits && "animate-spin"
-                        } max-sm:hidden`}
+                        className={`${isLoadingCredits && "animate-spin"
+                          } max-sm:hidden`}
                       />
                     )}
                     {showCredits ? (
