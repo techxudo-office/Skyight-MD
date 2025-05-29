@@ -35,6 +35,7 @@ const Transactions = ({ isCompanyDetail }) => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [transaction, setTransaction] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [enlargeImage, setEnlargeImage] = useState(false)
   const {
     transactions,
     companyTransactions,
@@ -48,10 +49,10 @@ const Transactions = ({ isCompanyDetail }) => {
 
     const action = isCompanyDetail
       ? getCompanyTransactions({
-          token: adminData.token,
-          id: companyId,
-          logoutHandler,
-        })
+        token: adminData.token,
+        id: companyId,
+        logoutHandler,
+      })
       : getTransactions({ token: adminData.token, logoutHandler });
 
     dispatch(action);
@@ -181,7 +182,8 @@ const Transactions = ({ isCompanyDetail }) => {
             <img
               src={selectedTransaction?.document_url}
               alt="Document"
-              className="object-cover w-full h-40 mb-4 border rounded-md"
+              className={`${enlargeImage ? "h-auto w-auto object-contain object-center " : "h-40 object-cover"}  w-full  mb-4 border rounded-md`}
+              onClick={() => setEnlargeImage(prev => !prev)}
             />
             <div className="space-y-2 text-sm">
               <p>

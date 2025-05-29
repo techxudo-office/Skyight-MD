@@ -1,4 +1,4 @@
-import  { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 // import { FaChevronDown } from "react-icons/fa";
 import { FaCaretDown } from "react-icons/fa";
 import { Spinner } from "../components";
@@ -73,9 +73,8 @@ const Select = ({
       ref={selectRef}>
       <div
         onMouseEnter={onMouseEnter}
-        className={`relative ${height} rounded-md border border-gray flex items-center justify-between px-2 ${
-          disabled && "bg-slate-100"
-        }`}>
+        className={`relative ${height} rounded-md border border-gray flex items-center justify-between px-2 ${disabled && "bg-slate-100"
+          }`}>
         <label
           htmlFor={id}
           className={` text-sm bg-white  mb-2 absolute -top-3 left-3  px-1 roounded-md text-text`}>
@@ -89,9 +88,8 @@ const Select = ({
             {(value && value) || placeholder}
           </span>
           <FaCaretDown
-            className={`text-text transform transition-transform ${
-              selectStatus ? "rotate-180" : ""
-            }`}
+            className={`text-text transform transition-transform ${selectStatus ? "rotate-180" : ""
+              }`}
           />
         </div>
 
@@ -114,11 +112,10 @@ const Select = ({
                 {filteredOptions.map((option, index) => (
                   <li
                     key={index}
-                    className={`p-3 flex items-center justify-start gap-3 text-sm  hover:bg-slate-100 ${
-                      value?.value === option.value
-                        ? "text-primary font-medium"
-                        : "text-slate-500"
-                    }`}
+                    className={`p-3 flex items-center justify-start gap-3 text-sm  hover:bg-slate-100 ${value?.value === option.value
+                      ? "text-primary font-medium"
+                      : "text-slate-500"
+                      }`}
                     onClick={() => selectOptionHandler(option)}>
                     {optionIcons && <span>{optionIcons}</span>}
                     {option.label}

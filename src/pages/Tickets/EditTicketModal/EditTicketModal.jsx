@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {
   CardLayoutContainer,
@@ -40,7 +40,7 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
 
   useEffect(() => {
     if (data) {
-      setFormData({ ticket_id: data?.id || "" });
+      setFormData({ ticket_id: data?.id || "", admin_response: data?.admin_response || "" });
       setStatus(data?.status || "open");
     }
   }, [data]);

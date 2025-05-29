@@ -1,4 +1,4 @@
-import  { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaCaretDown, FaTimes } from "react-icons/fa";
 import { Spinner } from "../components";
 
@@ -102,11 +102,11 @@ const MultiSelect = ({
                                             className="text-slate-500 mt-[2px] hover:text-slate-700 cursor-pointer"
                                             onClick={(e) => removeOption(item.value, e)}
                                         />
-                                        <span className="w-[90%]"> 
-                                        {item.label}
+                                        <span className="w-[90%]">
+                                            {item.label}
 
                                         </span>
-                                        
+
                                     </span>
                                 ))}
                             </div>

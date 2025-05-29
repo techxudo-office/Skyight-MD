@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   ModalWrapper,
@@ -166,6 +166,11 @@ const Tickets = () => {
                 <strong className="text-text">Description:</strong>
                 <span className="ml-2 font-medium">{ticket.description}</span>
               </p>
+              <p>
+                <strong className="text-text">Admin Response:</strong>
+                <span className="ml-2 font-medium">{ticket.admin_response}</span>
+              </p>
+
               <p className="flex items-center gap-x-4">
                 <strong className="text-text">Status:</strong>
                 <span>

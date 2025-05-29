@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {
   CardLayoutContainer,
@@ -18,6 +18,7 @@ import { getReasons } from "../../../_core/features/reasonsSlice";
 import { editTransaction } from "../../../_core/features/transactionSlice";
 import toast from "react-hot-toast";
 import { editAdminCredits } from "../../../_core/features/bookingSlice";
+import useLogout from "../../../hooks/useLogout";
 
 Modal.setAppElement("#root");
 
@@ -28,10 +29,12 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
   const { adminData } = useSelector((state) => state.persist);
   const { isEditingTransaction } = useSelector((state) => state.transaction);
   const { reasons, isLoadingReasons } = useSelector((state) => state.reasons);
+  const logoutHandler = useLogout();
 
   useEffect(() => {
     if (adminData?.token) {
-      dispatch(getReasons(adminData?.token));
+      dispatch(getReasons({ token: adminData?.token, logoutHandler }));
+
     }
   }, [adminData?.token]);
 
