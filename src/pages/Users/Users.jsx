@@ -1,9 +1,8 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SecondaryButton,
   ConfirmModal,
   Table,
-  Switch,
   Searchbar,
 } from "../../components/components";
 import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
@@ -14,7 +13,6 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { errorToastify } from "../../helper/toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteUser,
@@ -52,25 +50,21 @@ const Users = ({ isCompanyUser }) => {
       name: "FIRST NAME",
       selector: (row) => row?.first_name,
       sortable: false,
-
     },
     {
       name: "LAST NAME",
       selector: (row) => row?.last_name,
       sortable: false,
-
     },
     {
       name: "EMAIL",
       selector: (row) => row?.email,
       sortable: false,
-
     },
     {
       name: "ROLE",
       selector: (row) => row?.role?.role,
       sortable: false,
-
     },
     {
       name: "",
@@ -97,7 +91,6 @@ const Users = ({ isCompanyUser }) => {
         </div>
       ),
       sortable: false,
-
     },
   ];
 
@@ -163,7 +156,10 @@ const Users = ({ isCompanyUser }) => {
           </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={isCompanyUser ? companyUsers : users} onFilteredData={setFilteredUsers} />
+          <Searchbar
+            data={isCompanyUser ? companyUsers : users}
+            onFilteredData={setFilteredUsers}
+          />
           <Table
             pagination={true}
             columnsData={userColumns}
@@ -171,9 +167,7 @@ const Users = ({ isCompanyUser }) => {
             progressPending={
               isCompanyUser ? isLoadingCompanyUsers : isLoadingUsers
             }
-            paginationTotalRows={
-              filteredUsers.length
-            }
+            paginationTotalRows={filteredUsers.length}
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>

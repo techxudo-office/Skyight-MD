@@ -49,7 +49,7 @@ const persistedReducers = persistReducer(
   {
     key: "root",
     storage,
-    whitelist: ["persist"] // No root-level persistence
+    whitelist: ["persist"]
   },
   rootReducer
 );
