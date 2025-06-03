@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../../utils/ApiBaseUrl";
 import toast from "react-hot-toast";
+import makeRequest from "./ApiHelper";
 
 const initialState = {
   transactions: [],
@@ -81,47 +82,33 @@ const transactionSlice = createSlice({
 
 export const getTransactions = createAsyncThunk(
   "transaction/getTransactions",
-  async ({ token, logoutHandler }, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/company/all-transactions?page=0&limit=10000`,
-        {
-          headers: {
-            Authorization: token,
-          },
-          logoutCallback: logoutHandler,
-        }
-      );
-      return response.data.data[0];
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch transactions";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+  async ({ token, logoutHandler }) => {
+    const response = await makeRequest(
+      "GET",
+      `/api/company/all-transactions?page=0&limit=10000`,
+      {
+        token,
+        logoutCallback: logoutHandler,
+        errorMessage: "Failed to fetch transactions.",
+      }
+    );
+    return response.data.data[0];
   }
 );
 
 export const getCompanyTransactions = createAsyncThunk(
   "transaction/getCompanyTransactions",
-  async ({ token, id, logoutHandler }, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/company/getCompanyCredits/${id}?page=0&limit=10000`,
-        {
-          headers: {
-            Authorization: token,
-          },
-          logoutCallback: logoutHandler,
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch transactions";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
+  async ({ token, id, logoutHandler}) => {
+    const response = await makeRequest(
+      "GET",
+      `/api/company/getCompanyCredits/${id}?page=0&limit=10000`,
+      {
+        token,
+        logoutCallback: logoutHandler,
+        errorMessage: "Failed to fetch transactions.",
+      }
+    );
+    return response.data.data;
   }
 );
 

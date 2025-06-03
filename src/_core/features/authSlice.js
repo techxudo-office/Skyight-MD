@@ -30,7 +30,6 @@ const authSlice = createSlice({
     builder
       .addCase(logout.fulfilled, (state) => {
         state.adminData = null;
-        localStorage.removeItem("auth_token");
       })
       .addCase(forgotPassword.pending, (state) => {
         state.isLoadingForgotPassword = true;

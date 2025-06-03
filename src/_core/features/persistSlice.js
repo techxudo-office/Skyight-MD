@@ -22,9 +22,6 @@ const persistSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.adminData = action.payload;
-        if (action.payload?.token) {
-          localStorage.setItem("auth_token", action.payload.token);
-        }
       })
       .addCase(login.rejected, (state) => {
         state.isLoading = false;

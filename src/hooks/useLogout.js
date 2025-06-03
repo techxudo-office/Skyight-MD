@@ -8,7 +8,6 @@ const useLogout = () => {
 
   const logoutHandler = () => {
     dispatch({ type: "user/logout" });
-    localStorage.removeItem("auth_token");
     toast.error("Session Expired");
     navigate("/login");
   };
