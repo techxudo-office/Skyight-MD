@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../../utils/ApiBaseUrl";
 import toast from "react-hot-toast";
-import makeRequest from "./ApiHelper";
+import makeRequest from "../../utils/ApiHelper";
 
 const initialState = {
   transactions: [],

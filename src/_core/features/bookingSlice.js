@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import makeRequest from "./ApiHelper";
+import makeRequest from "../../utils/ApiHelper";
 
 const initialState = {
   credits: null,
