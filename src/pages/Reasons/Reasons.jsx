@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   SecondaryButton,
@@ -9,8 +9,7 @@ import {
   Textarea,
   CustomTooltip,
 } from "../../components/components";
-import { MdDelete, MdEdit, MdEditSquare } from "react-icons/md";
-import { MdAutoDelete } from "react-icons/md";
+import { MdDelete, MdEditSquare } from "react-icons/md";
 import {
   getReasons,
   deleteReason,
@@ -32,40 +31,48 @@ const Reasons = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const logoutHandler = useLogout();
+
+  // Track which reason is being edited (by id) and its updated text
   const [editId, setEditId] = useState(null);
   const [updateReason, setUpdateReason] = useState(null);
+
   const { adminData } = useSelector((state) => state.persist);
   const { reasons, isLoadingReasons, isLoadingDeleteReason, isEditingReason } =
     useSelector((state) => state.reasons);
 
-  const navigationHandler = () => {
-    navigate("/dashboard/create-reason");
-  };
+  // For delete confirmation: controls visibility, displayed text, loading, and callbacks
   const [modalObject, setModalObject] = useState({
-    status: false,
-    text: "",
-    loading: false,
-    onAbort: () => {},
-    onConfirm: () => {},
+    status: false, // whether the confirm modal is visible
+    text: "", // prompt text to show in ConfirmModal
+    loading: false, // show spinner if delete is in progress
+    onAbort: () => {}, // callback when user cancels deletion
+    onConfirm: () => {}, // callback when user confirms deletion
   });
+
+  // For the edit modal: header, visibility, aria-label, and close callback
   const [modalWrapper, setModalWrapper] = useState({
-    header: null,
-    isOpen: false,
-    contentLabel: "",
-    onRequestClose: () => {},
+    header: null, // title of the edit modal
+    isOpen: false, // whether the edit modal is visible
+    contentLabel: "", // aria content label (can be used for accessibility)
+    onRequestClose: () => {}, // called when modal should close (e.g. backdrop click)
   });
 
   useEffect(() => {
+    // On mount (or when token changes), fetch all reasons for this admin
+    // logoutHandler is passed so that if the token is invalid, user is logged out
     if (adminData?.token) {
       dispatch(getReasons({ token: adminData?.token, logoutHandler }));
     }
   }, [adminData?.token]);
 
   const handleEdit = () => {
+    // Basic length check before dispatching edit
     if (updateReason.trim().length < 4) {
       toast.error("Reason must be at least 4 characters.");
       return;
     }
+
+    // Dispatch editReason with new text and id, then close modal on success
     dispatch(
       editReason({ token: adminData.token, data: updateReason, id: editId })
     ).then(() => {
@@ -88,14 +95,17 @@ const Reasons = () => {
       name: "",
       selector: (row) => (
         <div className="flex items-center justify-center gap-3">
+          {/* Delete button: opens ConfirmModal by setting modalObject */}
           <button
             onClick={() =>
               setModalObject({
                 status: true,
                 text: `Are you really Want to delete this reason of id ${row.id}`,
                 onAbort: () =>
+                  // Close confirm modal without action
                   setModalObject((prev) => ({ ...prev, status: false })),
                 onConfirm: () => {
+                  // Dispatch deleteReason and close modal
                   dispatch(
                     deleteReason({ token: adminData.token, id: row.id })
                   );
@@ -108,6 +118,8 @@ const Reasons = () => {
               <MdDelete className="text-lg text-redColor" />
             </CustomTooltip>
           </button>
+
+          {/* Edit button: open edit modal and preload textarea with existing reason */}
           <button
             onClick={() => {
               setEditId(row.id);
@@ -117,6 +129,7 @@ const Reasons = () => {
                 isOpen: true,
                 contentLabel: `${row.id}`,
                 onRequestClose: () => {
+                  // Close edit modal when requested
                   setModalWrapper((prev) => ({ ...prev, isOpen: false }));
                 },
               });
@@ -133,18 +146,28 @@ const Reasons = () => {
     },
   ];
 
+  const navigationHandler = () => {
+    // Navigate to screen for creating a new reason
+    navigate("/dashboard/create-reason");
+  };
+
   return (
     <>
+      {/* ConfirmModal for deletions; props come from modalObject state */}
       <ConfirmModal loading={isLoadingDeleteReason} {...modalObject} />
+
+      {/* ModalWrapper for editing a reason; opens when modalWrapper.isOpen is true */}
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
+          {/* Textarea pre-filled with the existing reason text */}
           <Textarea
             name=""
             id=""
             value={updateReason}
             onChange={(e) => setUpdateReason(e.target.value)}
-          ></Textarea>
+          />
           <CardLayoutFooter>
+            {/* Update button triggers handleEdit, shows spinner when editing in progress */}
             <Button
               text={"Update"}
               onClick={handleEdit}
@@ -153,6 +176,7 @@ const Reasons = () => {
           </CardLayoutFooter>
         </CardLayoutBody>
       </ModalWrapper>
+
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
@@ -160,13 +184,16 @@ const Reasons = () => {
           className="flex items-center justify-between"
         >
           <div className="relative">
+            {/* Button to navigate to create-reason page */}
             <SecondaryButton
               text={"Create New Reason"}
               onClick={navigationHandler}
             />
           </div>
         </CardLayoutHeader>
+
         <CardLayoutBody removeBorder={true}>
+          {/* Table displays all reasons with delete/edit actions */}
           <Table
             pagination={true}
             columnsData={columns}
@@ -176,6 +203,7 @@ const Reasons = () => {
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
+
         <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>
     </>

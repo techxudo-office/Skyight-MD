@@ -26,10 +26,11 @@ import useLogout from "../../hooks/useLogout";
 const Banks = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const logoutHandler = useLogout();
-  const [updateBank, setUpdateBank] = useState(null);
-  const [filteredBanks, setFilteredBanks] = useState([]);
-  const [editId, setEditId] = useState(null);
+  const logoutHandler = useLogout(); // Custom hook to handle secure logout logic
+
+  const [updateBank, setUpdateBank] = useState(null); // Controlled input for editing bank
+  const [filteredBanks, setFilteredBanks] = useState([]); // State for search-filtered bank list
+  const [editId, setEditId] = useState(null); // Tracks ID of the bank being edited
 
   const navigationHandler = () => {
     navigate("/dashboard/create-bank");
@@ -40,32 +41,28 @@ const Banks = () => {
     useSelector((state) => state.bank);
 
   const [modalObject, setModalObject] = useState({
-    status: false,
+    status: false, // Controls visibility of confirmation modal
     text: "",
     loading: false,
     onAbort: () => {},
     onConfirm: () => {},
   });
+
   const [modalWrapper, setModalWrapper] = useState({
     header: null,
-    isOpen: false,
+    isOpen: false, // Controls visibility of edit modal
     contentLabel: "",
     onRequestClose: () => {},
   });
 
   useEffect(() => {
+    // On component mount, fetch banks using admin token
     if (adminData?.token) {
       dispatch(getBanks({ token: adminData.token, logoutHandler }));
     }
   }, []);
 
   const columns = [
-    // {
-    //   name: "Id",
-    //   selector: (row) => row.id,
-    //   sortable: false,
-    //   grow: 2,
-    // },
     {
       name: "Bank",
       selector: (row) => row.bank,
@@ -75,9 +72,8 @@ const Banks = () => {
     },
     {
       name: "Date",
-      selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"),
+      selector: (row) => dayjs(row.created_at).format("DD-MMM-YYYY"), // Format raw date string to readable format
       sortable: false,
-
       grow: 2,
     },
     {
@@ -86,12 +82,14 @@ const Banks = () => {
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={() =>
+              // Trigger confirmation modal before deletion
               setModalObject({
                 status: true,
                 text: `Are you really Want to delete this bank of id ${row.id}`,
                 onAbort: () =>
                   setModalObject((prev) => ({ ...prev, status: false })),
                 onConfirm: () => {
+                  // Dispatch delete action and close modal afterward
                   dispatch(
                     deleteBank({ token: adminData.token, id: Number(row.id) })
                   ).then(() =>
@@ -107,6 +105,7 @@ const Banks = () => {
           </button>
           <button
             onClick={() => {
+              // Prepare edit modal by pre-filling data and opening modal
               setEditId(row.id);
               setUpdateBank(row.bank);
               setModalWrapper({
@@ -131,10 +130,12 @@ const Banks = () => {
   ];
 
   const handleEdit = () => {
+    // Validate input length before sending edit request
     if (updateBank.trim().length < 4) {
       toast.error("Bank name must be at least 4 characters.");
       return;
     } else {
+      // Dispatch edit action and close modal on success
       dispatch(
         editBank({ token: adminData.token, data: updateBank, id: editId })
       ).then(() => {
@@ -142,16 +143,20 @@ const Banks = () => {
       });
     }
   };
+
   return (
     <>
+      {/* Delete confirmation modal */}
       <ConfirmModal loading={isLoadingDeleteBank} {...modalObject} />
+
+      {/* Modal for editing a bank entry */}
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
           <Textarea
             name=""
             id=""
             value={updateBank}
-            onChange={(e) => setUpdateBank(e.target.value)}
+            onChange={(e) => setUpdateBank(e.target.value)} // Bind input to updateBank state
           ></Textarea>
           <CardLayoutFooter>
             <Button
@@ -162,6 +167,7 @@ const Banks = () => {
           </CardLayoutFooter>
         </CardLayoutBody>
       </ModalWrapper>
+
       <CardLayoutContainer removeBg={true}>
         <CardLayoutHeader
           removeBorder={true}
@@ -177,11 +183,13 @@ const Banks = () => {
           </div>
         </CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
+          {/* Searchbar filters data by "bank" and "id" fields */}
           <Searchbar
             data={banks}
             onFilteredData={setFilteredBanks}
             searchFields={["bank", "id"]}
           />
+          {/* Render table with filtered results */}
           <Table
             columnsData={columns}
             tableData={filteredBanks || []}

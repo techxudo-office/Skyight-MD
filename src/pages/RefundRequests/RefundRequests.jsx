@@ -88,16 +88,6 @@ const RefundRequests = () => {
       name: "",
       selector: (row) => (
         <div className="flex items-center text-xl gap-x-6">
-          {/* <CustomTooltip content={"Details"}>
-            <FaEye
-              className="cursor-pointer text-greenColor"
-              onClick={() =>
-                navigate("/dashboard/booking-details", {
-                  state: row,
-                })
-              }
-            />
-          </CustomTooltip> */}
           <CustomTooltip content={"Accept"}>
             <RiRefund2Fill
               className="cursor-pointer text-blueColor"

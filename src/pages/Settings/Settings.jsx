@@ -15,13 +15,17 @@ import { uploadImage, updateAccount } from "../../_core/features/persistSlice";
 
 const Settings = () => {
   const dispatch = useDispatch();
-  const fileInputRef = useRef(null);
-  const [editingField, setEditingField] = useState(null);
+  const fileInputRef = useRef(null); // To programmatically trigger hidden file input
+  const [editingField, setEditingField] = useState(null); // Tracks which field is in “edit” mode
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
   const { adminData, isUpdatingAccount, isLoadingUserInfo } = useSelector(
     (state) => state.auth
   );
+
+  // Toggle state for admin’s active/inactive status, initialized from Redux
   const [toggle, setToggle] = useState(adminData?.admin?.is_active);
+
+  // Local form state for profile fields
   const [profileData, setProfileData] = useState({
     full_name: "",
     email: "",
@@ -31,6 +35,7 @@ const Settings = () => {
 
   useEffect(() => {
     if (adminData) {
+      // Populate local form state when admin data is available or changes
       setProfileData({
         full_name: adminData.admin.full_name || "",
         email: adminData.admin.email || "",
@@ -41,10 +46,12 @@ const Settings = () => {
   }, [adminData, roles]);
 
   const handleChange = (e, field) => {
+    // Generic handler updates specific field in profileData
     setProfileData({ ...profileData, [field]: e.target.value });
   };
 
   const handleSave = () => {
+    // Validate password (and any related rules) before sending update request
     const passwordError = updateAccountValidation(
       profileData.password,
       profileData.full_name
@@ -54,11 +61,12 @@ const Settings = () => {
       return;
     }
 
+    // Construct FormData for multipart/form-data (for potential image upload)
     const formData = new FormData();
     formData.append("full_name", profileData.full_name);
     formData.append("password", profileData.password);
     formData.append("is_active", toggle);
-    // formData.append("image", profileImage);
+    // Note: image appending happens in handleImageChange
 
     dispatch(
       updateAccount({
@@ -68,11 +76,13 @@ const Settings = () => {
       })
     );
 
+    // Exit editing mode after dispatch
     setEditingField(null);
   };
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]; // Grab selected file
+    // Dispatch uploadImage to send file and token to backend
     dispatch(uploadImage({ img: file, token: adminData?.token }));
   };
 
@@ -89,14 +99,14 @@ const Settings = () => {
         <Input
           edit={edit}
           type={type}
-          profile={true}
+          profile={true} // Indicates this input is in profile settings context
           placeholder={placeholder}
           value={profileData[field]}
-          disabled={editingField !== field}
-          setEditingField={setEditingField}
-          isSelected={editingField === field}
-          onEditClick={() => setEditingField(field)}
-          onChange={(e) => handleChange(e, field)}
+          disabled={editingField !== field} // Only enable input if it’s the one being edited
+          setEditingField={setEditingField} // Pass setter so Input can signal entering edit mode
+          isSelected={editingField === field} // Highlight or style if currently selected
+          onEditClick={() => setEditingField(field)} // Clicking edit icon switches to edit mode
+          onChange={(e) => handleChange(e, field)} // Update profileData on change
         />
       </div>
     </div>
@@ -114,10 +124,12 @@ const Settings = () => {
             <div
               className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 opacity-0 group-hover:opacity-100"
               onClick={() => fileInputRef.current.click()}
+              // Clicking overlay triggers file input due to ref
             >
               <MdEdit className="text-xl text-white" />
             </div>
 
+            {/* Hidden file input to handle image selection */}
             <input
               type="file"
               accept="image/png, image/jpeg, image/jpg"
@@ -131,7 +143,9 @@ const Settings = () => {
           </h3>
         </CardLayoutHeader>
       </CardLayoutContainer>
+
       {isLoadingRoles || isLoadingUserInfo ? (
+        // Show loader while fetching roles or user info
         <Loader />
       ) : (
         <CardLayoutContainer className="w-full mb-5">
@@ -142,6 +156,7 @@ const Settings = () => {
             <h2 className="text-2xl font-semibold text-text">
               Personal Information
             </h2>
+            {/* Switch toggles account active/inactive, updates local state */}
             <Switch onChange={setToggle} value={toggle} label={"Status:"} />
           </CardLayoutHeader>
 
@@ -150,6 +165,7 @@ const Settings = () => {
               {profileSettingsFields.map(
                 ({ label, field, type, edit, placeholder }, index) => (
                   <div key={index}>
+                    {/* Render each profile field with ability to enter edit mode */}
                     {renderEditableField(label, field, type, edit, placeholder)}
                   </div>
                 )
@@ -160,7 +176,7 @@ const Settings = () => {
             <Button
               text="Update Account"
               onClick={handleSave}
-              loading={isUpdatingAccount}
+              loading={isUpdatingAccount} // Show spinner while update is in progress
               disabled={isUpdatingAccount}
             />
           </CardLayoutBody>

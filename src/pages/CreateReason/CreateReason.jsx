@@ -1,11 +1,16 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { Button, Spinner, SecondaryButton, Input, Textarea } from "../../components/components";
+import {
+  Button,
+  Spinner,
+  SecondaryButton,
+  Textarea,
+} from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,11 +18,13 @@ import { createReason } from "../../_core/features/reasonsSlice";
 
 const CreateReason = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const { adminData } = useSelector((state) => state.persist);
-  const { isCreatingReason, createReasonError } = useSelector((state) => state.reasons)
+  const { isCreatingReason, createReasonError } = useSelector(
+    (state) => state.reasons
+  );
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,19 +32,18 @@ const CreateReason = () => {
       toast.error("Reason must be at least 4 characters.");
       return;
     } else {
-      dispatch(createReason({ token: adminData?.token, data: { reason: reason } })).then(() => {
+      dispatch(
+        createReason({ token: adminData?.token, data: { reason: reason } })
+      ).then(() => {
         if (!createReasonError) {
-          navigate("/dashboard/reasons")
+          navigate("/dashboard/reasons");
         }
-      })
+      });
     }
-
-  }
-
+  };
 
   return (
     <>
-
       <CardLayoutContainer>
         <CardLayoutHeader heading="Create Reason" />
 
@@ -55,10 +61,14 @@ const CreateReason = () => {
             <SecondaryButton text="Cancel" />
           </div>
           <div>
-            <Button loading={isCreatingReason} onClick={handleSubmit} text={loading ? <Spinner /> : "Create Reason"} disabled={loading} />
+            <Button
+              loading={isCreatingReason}
+              onClick={handleSubmit}
+              text={loading ? <Spinner /> : "Create Reason"}
+              disabled={loading}
+            />
           </div>
         </CardLayoutFooter>
-
       </CardLayoutContainer>
     </>
   );

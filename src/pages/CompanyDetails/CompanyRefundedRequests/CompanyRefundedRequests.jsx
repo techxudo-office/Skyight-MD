@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -16,7 +16,7 @@ const CompanyRefundedRequests = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { companyId } = useParams();
-  const [filteredData, setFilteredData] = useState([])
+  const [filteredData, setFilteredData] = useState([]);
   const [refundedRequests, setRefundedRequests] = useState([]);
   const { adminData } = useSelector((state) => state.persist);
   const { companyBookings, isLoadingCompanyBookings } = useSelector(
@@ -24,12 +24,15 @@ const CompanyRefundedRequests = () => {
   );
 
   useEffect(() => {
+    // On component mount, fetch all bookings for the company
+    // Requires an admin token and companyId from URL params
     if (adminData?.token) {
       dispatch(getCompanyBookings({ token: adminData?.token, id: companyId }));
     }
   }, []);
 
   useEffect(() => {
+    // Filter only bookings with "Refunded" status from the fetched company bookings
     const refunded = companyBookings.filter(
       (booking) => booking.booking_status === "Refunded"
     );
@@ -43,6 +46,7 @@ const CompanyRefundedRequests = () => {
         <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
           {row.origin}
           <div className="flex items-center justify-center gap-1">
+            {/* Visual representation of a flight route between origin and destination */}
             <span className="h-0.5 w-3 bg-primary"></span>
             <IoIosAirplane className="text-lg text-primary" />
             <span className="h-0.5 w-3 bg-primary"></span>
@@ -58,7 +62,6 @@ const CompanyRefundedRequests = () => {
       name: "PNR",
       selector: (row) => row.booking_reference_id,
       sortable: false,
-
       grow: 2,
     },
     {
@@ -87,6 +90,8 @@ const CompanyRefundedRequests = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() =>
+              // Navigate to the refunded booking's detail page
+              // Passing the full booking object via location state
               navigate(
                 `/dashboard/company/details/refunded/booking-details/${companyId}`,
                 {
@@ -100,31 +105,33 @@ const CompanyRefundedRequests = () => {
         </div>
       ),
       sortable: false,
-
     },
   ];
 
   return (
-    <>
-      <CardLayoutContainer removeBg={true}>
-        <CardLayoutHeader
-          removeBorder={true}
-          heading={"Company Refunded Requests"}
-          className="flex items-center justify-between"
+    <CardLayoutContainer removeBg={true}>
+      <CardLayoutHeader
+        removeBorder={true}
+        heading={"Company Refunded Requests"}
+        className="flex items-center justify-between"
+      />
+      <CardLayoutBody removeBorder={true}>
+        {/* Handles local client-side search filtering for PNR and booking status */}
+        <Searchbar
+          data={refundedRequests}
+          onFilteredData={setFilteredData}
+          searchFields={["booking_reference_id", "booking_status"]}
         />
-        <CardLayoutBody removeBorder={true}>
-          <Searchbar data={refundedRequests} onFilteredData={setFilteredData} searchFields={["booking_reference_id", "booking_status"]} />
-          <Table
-            pagination={true}
-            columnsData={columns}
-            tableData={filteredData || []}
-            progressPending={isLoadingCompanyBookings}
-            paginationTotalRows={filteredData?.length}
-            paginationComponentOptions={{ noRowsPerPage: "10" }}
-          />
-        </CardLayoutBody>
-      </CardLayoutContainer>
-    </>
+        <Table
+          pagination={true}
+          columnsData={columns}
+          tableData={filteredData || []}
+          progressPending={isLoadingCompanyBookings}
+          paginationTotalRows={filteredData?.length}
+          paginationComponentOptions={{ noRowsPerPage: "10" }}
+        />
+      </CardLayoutBody>
+    </CardLayoutContainer>
   );
 };
 

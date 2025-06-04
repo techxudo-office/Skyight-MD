@@ -18,9 +18,14 @@ import { IoMdBookmark } from "react-icons/io";
 import { RiRefund2Fill } from "react-icons/ri";
 import { IoIosChatboxes } from "react-icons/io";
 
+// Hook that returns a filtered list of sidebar navigation links based on admin's page permissions
 export const useAdminSidebarLinks = () => {
+  // Retrieve admin data from Redux state (persisted version)
   const adminData = useSelector((state) => state.persist.adminData);
+
+  // Extract page permissions from admin role
   const pagePermissions = adminData?.admin?.role?.page_permission || {
+    // Fallback default permissions if not found
     dashboard: true,
     flights: true,
     bookings: true,
@@ -32,22 +37,23 @@ export const useAdminSidebarLinks = () => {
     help_and_support: true,
   };
 
+  // Return an array of sidebar link objects
   return [
+    // Conditionally show Dashboard if permission exists
     pagePermissions.dashboard && {
       title: "Dashboard",
       path: "/dashboard",
       icon: <HiRectangleGroup />,
     },
+
+    // Always show Companies link (not permission-based)
     {
       title: "Companies",
       path: "companies",
       icon: <TbManualGearboxFilled />,
     },
-    // {
-    //   title: "Apply Commisions",
-    //   path: "apply-commisions",
-    //   icon: <BiSolidDollarCircle />,
-    // },
+
+    // Conditionally show Bookings section with sub-links based on respective permissions
     pagePermissions.bookings && {
       title: "Bookings",
       icon: <IoMdBookmark />,
@@ -77,8 +83,10 @@ export const useAdminSidebarLinks = () => {
           path: "cancel-requests",
           icon: <MdCancelScheduleSend />,
         },
-      ].filter(Boolean),
+      ].filter(Boolean), // Filters out any falsy entries if permissions are missing
     },
+
+    // Accounts section with static link to Banks page
     {
       title: "Accounts",
       icon: <MdAccountBalanceWallet />,
@@ -90,6 +98,8 @@ export const useAdminSidebarLinks = () => {
         },
       ].filter(Boolean),
     },
+
+    // Settings section, currently only includes Reasons page
     {
       title: "Settings",
       icon: <MdSettings />,
@@ -101,6 +111,8 @@ export const useAdminSidebarLinks = () => {
         },
       ].filter(Boolean),
     },
+
+    // Conditionally render Users section if admin has 'administrators' permission
     pagePermissions.administrators && {
       title: "Users",
       icon: <MdOutlineGroups />,
@@ -117,15 +129,19 @@ export const useAdminSidebarLinks = () => {
         },
       ].filter(Boolean),
     },
+
+    // Conditionally show Notifications link
     pagePermissions.help_and_support && {
       title: "Notifications",
       path: "notifications",
       icon: <MdDoorbell />,
     },
+
+    // Static link for support chat
     {
       title: "Support Chat",
       path: "supportChat",
       icon: <IoIosChatboxes />,
     },
-  ].filter(Boolean);
+  ].filter(Boolean); // Filters out any completely falsy sections (like disabled dashboard/bookings)
 };

@@ -66,11 +66,6 @@ const Tickets = () => {
       selector: (row) => row?.user?.company.name,
       sortable: false,
     },
-    // {
-    //   name: "TICKET ID",
-    //   selector: (row) => row?.id,
-    //   sortable: false,
-    // },
     {
       name: "CREATED BY",
       selector: (row) => `${row?.user?.first_name} ${row?.user?.last_name}`,
@@ -168,7 +163,9 @@ const Tickets = () => {
               </p>
               <p>
                 <strong className="text-text">Admin Response:</strong>
-                <span className="ml-2 font-medium">{ticket.admin_response}</span>
+                <span className="ml-2 font-medium">
+                  {ticket.admin_response}
+                </span>
               </p>
 
               <p className="flex items-center gap-x-4">

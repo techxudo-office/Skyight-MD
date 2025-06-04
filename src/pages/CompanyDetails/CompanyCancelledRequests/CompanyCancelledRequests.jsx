@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -24,12 +24,14 @@ const CompanyCancelledRequests = () => {
   );
 
   useEffect(() => {
+    // On mount, fetch company bookings only if admin token is present.
     if (adminData?.token) {
       dispatch(getCompanyBookings({ token: adminData?.token, id: companyId }));
     }
   }, []);
 
   useEffect(() => {
+    // Whenever company bookings are updated, filter only the cancelled ones.
     const refunded = companyBookings.filter(
       (booking) => booking.booking_status === "cancelled"
     );
@@ -43,6 +45,7 @@ const CompanyCancelledRequests = () => {
         <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
           {row.origin}
           <div className="flex items-center justify-center gap-1">
+            {/* Visually represents flight route between origin and destination */}
             <span className="h-0.5 w-3 bg-primary"></span>
             <IoIosAirplane className="text-lg text-primary" />
             <span className="h-0.5 w-3 bg-primary"></span>
@@ -58,7 +61,6 @@ const CompanyCancelledRequests = () => {
       name: "PNR",
       selector: (row) => row.booking_reference_id,
       sortable: false,
-
       grow: 2,
     },
     {
@@ -87,6 +89,7 @@ const CompanyCancelledRequests = () => {
           <span
             className="text-xl cursor-pointer"
             onClick={() =>
+              // Navigates to a detailed view of the cancelled booking, passing full booking data via location state
               navigate(
                 `/dashboard/company/details/cancelled/booking-details/${companyId}`,
                 {
@@ -100,31 +103,33 @@ const CompanyCancelledRequests = () => {
         </div>
       ),
       sortable: false,
-
     },
   ];
 
   return (
-    <>
-      <CardLayoutContainer removeBg={true}>
-        <CardLayoutHeader
-          removeBorder={true}
-          heading={"Company Cancelled Requests"}
-          className="flex items-center justify-between"
+    <CardLayoutContainer removeBg={true}>
+      <CardLayoutHeader
+        removeBorder={true}
+        heading={"Company Cancelled Requests"}
+        className="flex items-center justify-between"
+      />
+      <CardLayoutBody removeBorder={true}>
+        {/* Handles client-side filtering based on PNR and status fields */}
+        <Searchbar
+          onFilteredData={setFilteredData}
+          data={cancelledRequests}
+          searchFields={["booking_reference_id", "booking_status"]}
         />
-        <CardLayoutBody removeBorder={true}>
-          <Searchbar onFilteredData={setFilteredData} data={companyBookings} searchFields={["booking_reference_id", "booking_status"]} />
-          <Table
-            pagination={true}
-            columnsData={columns}
-            tableData={filteredData || []}
-            progressPending={isLoadingCompanyBookings}
-            paginationTotalRows={filteredData?.length}
-            paginationComponentOptions={{ noRowsPerPage: "10" }}
-          />
-        </CardLayoutBody>
-      </CardLayoutContainer>
-    </>
+        <Table
+          pagination={true}
+          columnsData={columns}
+          tableData={filteredData || []}
+          progressPending={isLoadingCompanyBookings}
+          paginationTotalRows={filteredData?.length}
+          paginationComponentOptions={{ noRowsPerPage: "10" }}
+        />
+      </CardLayoutBody>
+    </CardLayoutContainer>
   );
 };
 

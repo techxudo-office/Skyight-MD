@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -44,11 +44,6 @@ const Roles = () => {
       selector: (row) => row.role,
       sortable: false,
     },
-    // {
-    //   name: "ROLE ID",
-    //   selector: (row) => row.id,
-    //   sortable: false,
-    // },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,

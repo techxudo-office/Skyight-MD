@@ -10,7 +10,6 @@ export { default as Admins } from "./Admins/Admins";
 export { default as CreateUser } from "./CreateUser/CreateUser";
 export { default as Reasons } from "./Reasons/Reasons";
 export { default as CreateReason } from "./CreateReason/CreateReason";
-export { default as UpdateReason } from "./UpdateReason/UpdateReason";
 export { default as FlightBookings } from "./FlightBookings/FlightBookings";
 export { default as BookingDetails } from "./BookingDetails/BookingDetails";
 export { default as Transactions } from "./Transactions/Transactions";
@@ -27,7 +26,6 @@ export { default as CompanyCancelledRequests } from "./CompanyDetails/CompanyCan
 
 export { default as Banks } from "./Banks/Banks";
 export { default as CreateBank } from "./CreateBank/CreateBank";
-export { default as UpdateBank } from "./UpdateBank/UpdateBank";
 
 export { default as Tickets } from "./Tickets/Tickets";
 

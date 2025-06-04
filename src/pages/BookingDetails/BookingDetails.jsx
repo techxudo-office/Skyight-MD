@@ -1,11 +1,8 @@
-import  { useEffect, useState, useRef } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { useEffect, useRef } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
-  CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import {
   Button,
@@ -14,7 +11,6 @@ import {
   Spinner,
   CustomTooltip,
 } from "../../components/components";
-import { Toaster } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoIosAirplane, IoMdClock } from "react-icons/io";
 import dayjs from "dayjs";
@@ -23,51 +19,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBookingDetails } from "../../_core/features/bookingSlice";
 import { MdArrowBack } from "react-icons/md";
 
-dayjs.extend(utc); // Extend dayjs with UTC support
+dayjs.extend(utc); // Enables UTC plugin for consistent date parsing
 
-const TicketDetails = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+const BookingDetails = () => {
+  const printRef = useRef(); // Reference for printing-related functionality (not currently used here)
+  const location = useLocation(); // React Router hook to access passed route state
+  const navigate = useNavigate(); // React Router hook for navigation
   const dispatch = useDispatch();
   const { adminData } = useSelector((state) => state.persist);
   const { isLoadingBookingDetails, bookingDetails } = useSelector(
     (state) => state.booking
   );
-  const printRef = useRef();
-
-  // const downloadAsPDF = async () => {
-  //   const element = printRef.current;
-  //   const canvas = await html2canvas(element);
-  //   const imgData = canvas.toDataURL("image/png");
-  //   const pdf = new jsPDF("p", "mm", "a4");
-  //   const pdfWidth = pdf.internal.pageSize.getWidth();
-  //   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  //   pdf.save("download.pdf");
-  // };
 
   useEffect(() => {
+    // Fetch booking details when component mounts and required state/token exists
     if (location.state && adminData?.token) {
       const refId = location.state.id;
-      dispatch(getBookingDetails({ id: refId, token: adminData?.token })).then(
-        (resp) => {
-        }
-      );
+      dispatch(getBookingDetails({ id: refId, token: adminData?.token }));
     }
   }, [location.state, adminData?.token]);
 
-  const now = dayjs.utc();
-  const timeLimit = dayjs(bookingDetails?.Timelimit);
-  const timelimit = new Date(bookingDetails?.Timelimit);
-  const localTimeLimit = timelimit.toLocaleString("en-GB");
-
   if (isLoadingBookingDetails) {
-    return <Spinner className={"text-primary"} />;
+    return <Spinner className={"text-primary"} />; // Show loading spinner while data is being fetched
   }
 
   return (
     <>
-
       <div ref={printRef} className="flex flex-col w-full gap-5">
         <CardLayoutContainer>
           <CardLayoutBody className={"flex flex-wrap gap-3 justify-between"}>
@@ -85,7 +62,9 @@ const TicketDetails = () => {
               </div>
             </div>
           </CardLayoutBody>
+
           <CardLayoutBody>
+            {/* Looping through flight segments to render departure and arrival details */}
             {bookingDetails?.flightSegments &&
               bookingDetails.flightSegments.map((item, idx) => (
                 <div
@@ -101,11 +80,13 @@ const TicketDetails = () => {
                     </p>
                     <p className="flex items-center gap-2">
                       <IoMdClock className="text-lg text-primary" />
+                      {/* Formatting date and time for display */}
                       {dayjs(item.departure_datetime).format(
                         "MMM-DD-YYYY, hh:mm a"
                       )}
                     </p>
                   </div>
+                  {/* Displaying a visual airplane icon with separators */}
                   <div className="flex items-center gap-3 max-sm:hidden text-primary">
                     <span className="h-0.5 rounded-full md:w-12 xl:w-28 bg-primary"></span>
                     <IoIosAirplane className="text-5xl" />
@@ -127,20 +108,24 @@ const TicketDetails = () => {
               ))}
           </CardLayoutBody>
         </CardLayoutContainer>
+
         <CardLayoutContainer>
           <div className="flex justify-between p-4 text-text">
             <div>
               <span className="font-semibold">Booked On: </span>
+              {/* Parsing UTC created_at date for local display */}
               {dayjs
                 .utc(bookingDetails?.created_at)
                 .format("DD MMM YYYY, h:mm a")}
             </div>
             <div>
               <span className="font-semibold">TKT Time Limit: </span>
+              {/* Formatting deadline to issue ticket */}
               {dayjs(bookingDetails?.Timelimit).format("DD MMM YYYY, h:mm a")}
             </div>
           </div>
         </CardLayoutContainer>
+
         <CardLayoutContainer>
           <CardLayoutHeader
             className={"mb-2 text-text"}
@@ -150,6 +135,7 @@ const TicketDetails = () => {
           {bookingDetails && (
             <Table
               pagination={true}
+              // Column definitions for each passenger detail
               columnsData={[
                 {
                   name: "NAME",
@@ -188,20 +174,24 @@ const TicketDetails = () => {
                   sortable: false,
                 },
               ]}
-              tableData={bookingDetails?.passengers || []}
+              tableData={bookingDetails?.passengers || []} // Populating table with passenger array
               progressPending={isLoadingBookingDetails}
               paginationTotalRows={bookingDetails?.passengers?.length}
               paginationComponentOptions={{ noRowsPerPage: "10" }}
             />
           )}
         </CardLayoutContainer>
+
         <CardLayoutContainer>
           <CardLayoutHeader
             className={"mb-2 text-text"}
             heading={"Pricing Information"}
           />
           <h2 className="p-5 text-xl font-semibold text-text">
-            Total Fare: {Number(bookingDetails?.total_fare).toLocaleString()}{" "}
+            {/* Safely formatting total fare as localized currency */}
+            Total Fare: {Number(
+              bookingDetails?.total_fare
+            ).toLocaleString()}{" "}
             PKR
           </h2>
         </CardLayoutContainer>
@@ -213,6 +203,7 @@ const TicketDetails = () => {
                 icon={<MdArrowBack />}
                 id={"hide-buttons"}
                 text="Go Back"
+                // Navigates back to previous route in history stack
                 onClick={() => {
                   navigate(-1);
                 }}
@@ -225,4 +216,4 @@ const TicketDetails = () => {
   );
 };
 
-export default TicketDetails;
+export default BookingDetails;

@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -19,6 +19,8 @@ import { createUserInpFields } from "../../utils/InputFields";
 const CreateUser = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
+
+  // formData holds the input values and selected role/company IDs
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -28,8 +30,11 @@ const CreateUser = () => {
     role_id: "",
     company_id: "",
   });
+
+  // Separate state for displaying selected role and company labels in the Select components
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
+
   const { adminData } = useSelector((state) => state.persist);
   const { userRoles, isLoadingUserRoles } = useSelector((state) => state.role);
   const { isCreatingUser } = useSelector((state) => state.user);
@@ -39,6 +44,7 @@ const CreateUser = () => {
 
   useEffect(() => {
     if (adminData?.token) {
+      // Fetch user roles and companies once on component mount (if token available)
       dispatch(getUserRoles(adminData?.token));
       dispatch(getCompanies(adminData?.token));
     }
@@ -46,6 +52,7 @@ const CreateUser = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // Update formData state dynamically for all text inputs by name
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -53,6 +60,7 @@ const CreateUser = () => {
   };
 
   const handleRoleSelect = (role) => {
+    // On role selection, update selectedRole for display and role_id for submission
     let data = {
       id: role.value,
       role: role.label,
@@ -62,6 +70,7 @@ const CreateUser = () => {
   };
 
   const handleCompanySelect = (role) => {
+    // On company selection, update selectedCompany for display and company_id for submission
     let data = {
       id: role.value,
       name: role.label,
@@ -72,11 +81,13 @@ const CreateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validate inputs using external validation util; show toast if errors found
     if (!userValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
       return;
     }
 
+    // Prepare payload with proper types before dispatching creation
     const payload = {
       first_name: formData.first_name,
       last_name: formData.last_name,
@@ -87,6 +98,7 @@ const CreateUser = () => {
       company_id: Number(formData.company_id),
     };
 
+    // Dispatch createUser async thunk; on success, close modal/form (onClose assumed external)
     dispatch(createUser({ data: payload, token: adminData?.token })).then(
       () => {
         onClose();
@@ -96,12 +108,12 @@ const CreateUser = () => {
 
   return (
     <>
-
       <CardLayoutContainer>
         <CardLayoutHeader heading="Create User" />
         <form onSubmit={handleSubmit} noValidate>
           <CardLayoutBody>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-5 mb-7">
+              {/* Dynamically render all input fields from createUserInpFields config */}
               {createUserInpFields.map(({ name, label, type }) => (
                 <div key={name} className="relative">
                   <Input
@@ -113,11 +125,13 @@ const CreateUser = () => {
                     value={formData[name]}
                     onChange={handleChange}
                   />
+                  {/* Display validation error messages if any */}
                   {errors[name] && (
                     <p className="mt-1 text-sm text-red-500">{errors[name]}</p>
                   )}
                 </div>
               ))}
+              {/* Role select dropdown: loads options from userRoles, shows loading spinner if fetching */}
               <Select
                 id="userRoles"
                 label="Role"
@@ -131,6 +145,7 @@ const CreateUser = () => {
                 placeholder="Select a Role"
                 isLoading={isLoadingUserRoles}
               />
+              {/* Company select dropdown: loads options from companies, shows loading spinner if fetching */}
               <Select
                 id="companies"
                 label="Company"
@@ -148,6 +163,7 @@ const CreateUser = () => {
           </CardLayoutBody>
 
           <CardLayoutFooter>
+            {/* Submit button shows spinner when user creation is in progress */}
             <Button
               text={isCreatingUser ? <Spinner /> : "Create User"}
               disabled={isCreatingUser}

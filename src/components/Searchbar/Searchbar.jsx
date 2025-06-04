@@ -90,4 +90,3 @@ const Searchbar = ({
 };
 
 export default Searchbar;
-r;

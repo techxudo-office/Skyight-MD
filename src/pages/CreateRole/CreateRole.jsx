@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { createRole } from "../../_core/features/roleSlice";
 
 const initialRolesData = {
-  name: "",
-  description: "",
+  name: "", // Role name input
+  description: "", // Role description input
   page_permission: {
+    // Boolean flags for page-level permissions, keyed by page name
     dashboard: false,
     flights: false,
     bookings: false,
@@ -25,6 +26,7 @@ const initialRolesData = {
     help_and_support: false,
   },
   action_permission: {
+    // Boolean flags for specific action permissions keyed by action name
     read_admin: false,
     write_admin: false,
     read_company: false,
@@ -46,6 +48,7 @@ const initialRolesData = {
   },
 };
 
+// Simple controlled checkbox component for permission toggles
 const Checkbox = ({ label, checked, onChange }) => {
   return (
     <label className="flex items-center space-x-2">
@@ -67,26 +70,30 @@ const CreateRole = () => {
   const [rolesData, setRolesData] = useState(initialRolesData);
 
   const handleInputChange = (e) => {
+    // Update the role name or description in state based on input name
     const { name, value } = e.target;
     setRolesData({ ...rolesData, [name]: value });
   };
 
   const handleCheckboxChange = (category, key) => {
+    // Toggle the boolean permission flag nested inside page_permission or action_permission
     setRolesData((prevState) => ({
       ...prevState,
       [category]: {
         ...prevState[category],
-        [key]: !prevState[category][key],
+        [key]: !prevState[category][key], // flip true/false value
       },
     }));
   };
 
   const handleSubmit = async () => {
+    // Basic validation to ensure required fields are not empty
     if (!rolesData.name.trim() || !rolesData.description.trim()) {
       toast.error("Please fill in all fields");
       return;
     }
 
+    // Prepare payload exactly matching backend expected format
     const payload = {
       name: rolesData.name,
       description: rolesData.description,
@@ -94,74 +101,74 @@ const CreateRole = () => {
       action_permission: rolesData.action_permission,
     };
 
+    // Dispatch async action to create a role with admin token authentication
     dispatch(createRole({ data: payload, token: adminData?.token }));
   };
 
   return (
-    <>
-
-      <CardLayoutContainer>
-        <CardLayoutHeader
-          heading="Create Role"
-          className="flex items-center justify-between"
-        />
-        <CardLayoutBody>
-          <div className="flex mb-5 space-x-5">
-            <Input
-              placeholder="Enter Role Name"
-              label="Role Name*"
-              type="text"
-              name="name"
-              value={rolesData.name}
-              onChange={handleInputChange}
-            />
-            <Input
-              placeholder="Enter Role Description"
-              label="Role Description*"
-              type="text"
-              name="description"
-              value={rolesData.description}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-5">
-            <h3 className="mb-2 font-semibold">Page Permissions</h3>
-            <div className="grid grid-cols-3 gap-3">
-              {Object.keys(rolesData.page_permission).map((key) => (
-                <Checkbox
-                  key={key}
-                  label={key.replace(/_/g, " ")}
-                  checked={rolesData.page_permission[key]}
-                  onChange={() => handleCheckboxChange("page_permission", key)}
-                />
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-2 font-semibold">Action Permissions</h3>
-            <div className="grid grid-cols-3 gap-3">
-              {Object.keys(rolesData.action_permission).map((key) => (
-                <Checkbox
-                  key={key}
-                  label={key.replace(/_/g, " ")}
-                  checked={rolesData.action_permission[key]}
-                  onChange={() =>
-                    handleCheckboxChange("action_permission", key)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-        </CardLayoutBody>
-        <CardLayoutFooter>
-          <Button
-            text={loading ? <Spinner /> : "Create Role"}
-            disabled={loading}
-            onClick={handleSubmit}
+    <CardLayoutContainer>
+      <CardLayoutHeader
+        heading="Create Role"
+        className="flex items-center justify-between"
+      />
+      <CardLayoutBody>
+        <div className="flex mb-5 space-x-5">
+          {/* Controlled inputs for role name and description */}
+          <Input
+            placeholder="Enter Role Name"
+            label="Role Name*"
+            type="text"
+            name="name"
+            value={rolesData.name}
+            onChange={handleInputChange}
           />
-        </CardLayoutFooter>
-      </CardLayoutContainer>
-    </>
+          <Input
+            placeholder="Enter Role Description"
+            label="Role Description*"
+            type="text"
+            name="description"
+            value={rolesData.description}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-5">
+          <h3 className="mb-2 font-semibold">Page Permissions</h3>
+          <div className="grid grid-cols-3 gap-3">
+            {/* Render checkboxes dynamically for each page permission */}
+            {Object.keys(rolesData.page_permission).map((key) => (
+              <Checkbox
+                key={key}
+                label={key.replace(/_/g, " ")} // Replace underscores for readability
+                checked={rolesData.page_permission[key]}
+                onChange={() => handleCheckboxChange("page_permission", key)}
+              />
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-2 font-semibold">Action Permissions</h3>
+          <div className="grid grid-cols-3 gap-3">
+            {/* Render checkboxes dynamically for each action permission */}
+            {Object.keys(rolesData.action_permission).map((key) => (
+              <Checkbox
+                key={key}
+                label={key.replace(/_/g, " ")} // Make labels human-readable
+                checked={rolesData.action_permission[key]}
+                onChange={() => handleCheckboxChange("action_permission", key)}
+              />
+            ))}
+          </div>
+        </div>
+      </CardLayoutBody>
+      <CardLayoutFooter>
+        {/* Submit button with loading spinner while request is processing */}
+        <Button
+          text={loading ? <Spinner /> : "Create Role"}
+          disabled={loading}
+          onClick={handleSubmit}
+        />
+      </CardLayoutFooter>
+    </CardLayoutContainer>
   );
 };
 
