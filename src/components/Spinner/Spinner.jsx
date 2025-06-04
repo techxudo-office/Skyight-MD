@@ -1,5 +1,3 @@
-import React from "react";
-
 const Spinner = ({ className }) => {
   return (
     <>
@@ -10,7 +8,7 @@ const Spinner = ({ className }) => {
               className ? className : "border-white"
             } border-solid rounded-full animate-spin`}
           ></div>
-          <div className="absolute inset-0 flex justify-center items-center">
+          <div className="absolute inset-0 flex items-center justify-center">
             <div
               className={`w-4 h-4 ${
                 className ? className : "bg-white"

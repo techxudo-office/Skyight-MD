@@ -9,30 +9,39 @@ import { GoDownload } from "react-icons/go";
 
 const DownloadButton = () => {
   const printRef = useRef();
+
+  // Handles PDF download of hidden ticket component
   const handleDownloadPdf = async () => {
     const element = printRef.current;
-    if (!element) {
-      return;
-    } else {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-      });
-      const data = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "px",
-        format: "a4",
-      });
-      const imageProperties = pdf.getImageProperties(data);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight =
-        (imageProperties.height * pdfWidth) / imageProperties.width;
-      // const pdfHeight = pdf.internal.pageSize.getHeight()
-      pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("ETicket.pdf");
-    }
+    if (!element) return;
+
+    // Converts the hidden DOM node into a canvas using html2canvas
+    const canvas = await html2canvas(element, {
+      scale: 2, // Increase resolution for better PDF quality
+    });
+
+    const data = canvas.toDataURL("image/png");
+
+    // Initialize jsPDF instance with A4 page size in portrait mode
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: "a4",
+    });
+
+    const imageProperties = pdf.getImageProperties(data);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+
+    // Maintain image aspect ratio to fit into PDF width
+    const pdfHeight =
+      (imageProperties.height * pdfWidth) / imageProperties.width;
+
+    // Add captured image to PDF and trigger download
+    pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("ETicket.pdf");
   };
 
+  // Passenger data to populate the passenger detail table dynamically
   const passengers = [
     {
       title: "MR",
@@ -75,22 +84,23 @@ const DownloadButton = () => {
       ticket: "2470791786",
     },
   ];
+
   return (
     <>
+      {/* Hidden component rendered off-screen for PDF generation */}
       <div
         ref={printRef}
         className="absolute -left-[999px] mx-auto bg-white shadow-lg text-text rounded-md p-4"
       >
-        {/* Header */}
+        {/* Ticket header including logo and title */}
         <div className="flex items-center justify-between px-10 pb-2 text-lg font-bold text-center">
           <img src={skyightLogo} className="w-24" alt="" />
           E-Ticket Receipt & Itinerary
         </div>
 
-        {/* Airline Info */}
+        {/* Flight booking summary including airline, PNR, etc. */}
         <div className="flex items-center justify-between py-4 border-t border-b border-gray px-9">
           <div className="flex items-center space-x-2">
-            {/* <img src="/pia-logo.svg" alt="PIA Logo" className="h-10" /> */}
             <span className="text-lg font-bold">PIA</span>
           </div>
           <div className="font-mono text-2xl font-bold leading-5 text-primary text-end">
@@ -101,8 +111,9 @@ const DownloadButton = () => {
           </div>
         </div>
 
-        {/* Booking & Flight Details */}
+        {/* Key booking and flight summary boxes */}
         <div className="grid grid-cols-3 gap-2 p-2 text-sm uppercase bg-gray-100 rounded-md">
+          {/* Each box displays a summary item like agency, PNR, etc. */}
           <div className="flex flex-col justify-between h-20 p-2 py-4 text-sm rounded-lg bg-bluebg">
             <p className="text-xs font-semibold">Agency</p>
             <p className="text-sm font-semibold">
@@ -127,16 +138,17 @@ const DownloadButton = () => {
           </div>
         </div>
 
-        {/* Flight Details */}
+        {/* Flight details with timeline and features */}
         <div className="p-2 mt-4 font-semibold text-white bg-primary rounded-t-md">
           FLIGHT DETAILS
         </div>
         <div className="p-3 py-5 border-gray">
           <p className="font-bold">Karachi [KHI] → Multan [MUX]</p>
           <p className="pb-4">Fri, Mar 28, 2025</p>
+
+          {/* Departure, duration, and arrival info with timeline visual */}
           <div className="flex items-center justify-between pt-3 border-t border-lightgray">
             <div className="flex items-center mt-2 space-x-2">
-              {/* <img src="/pia-plane.svg" alt="Flight Icon" className="h-5" /> */}
               <p className="font-semibold">Pakistan International Airlines</p>
             </div>
             <div className="flex items-center gap-3 text-sm">
@@ -144,7 +156,6 @@ const DownloadButton = () => {
                 <p className="font-semibold leading-4 text-text">13:30</p>
                 <p className="font-semibold text-gray">KHI</p>
               </div>
-
               <div className="flex flex-col items-center text-center">
                 <p className="font-semibold text-primary">2 hrs 10 mins</p>
                 <div className="flex items-center gap-2">
@@ -153,7 +164,6 @@ const DownloadButton = () => {
                   <span className="h-0.5 w-8 bg-primary"></span>
                 </div>
               </div>
-
               <div className="text-center">
                 <p className="font-semibold leading-4 text-text">15:40</p>
                 <p className="font-semibold text-gray">ISB</p>
@@ -163,20 +173,21 @@ const DownloadButton = () => {
               Flight Time: 1 Hour 25 minutes | PK-330
             </p>
           </div>
+
+          {/* Flight features like baggage, meal, class */}
           <div className="flex items-center gap-3 p-2 mt-3 text-sm font-semibold border-l-4 text-gray bg-bluebg border-primary ">
             <p className="flex items-center gap-3">
               <BsFillSuitcaseFill className="text-lg text-text" />
-              Baggage Allowance: Total 20.0 KG (As per airline policy){" "}
+              Baggage Allowance: Total 20.0 KG (As per airline policy)
             </p>
             <p className="flex items-center gap-3 px-4 border-l border-r border-lightgray">
-              {" "}
-              <GiMeal className="text-xl text-text" /> Meal Included{" "}
+              <GiMeal className="text-xl text-text" /> Meal Included
             </p>
             <p>ECONOMY</p>
           </div>
         </div>
 
-        {/* Passenger Details */}
+        {/* Passenger details table generated from array */}
         <div className="p-3 mt-8 font-semibold text-white bg-primary rounded-t-md">
           PASSENGER DETAILS
         </div>
@@ -214,8 +225,10 @@ const DownloadButton = () => {
           </table>
         </div>
       </div>
+
+      {/* PDF Download Button */}
       <button
-        className="p-2 border rounded-full hover:bg-slate-200 bg-bluebg border-primary text-primary "
+        className="p-2 border rounded-full hover:bg-slate-200 bg-bluebg border-primary text-primary"
         onClick={handleDownloadPdf}
       >
         <GoDownload className="text-lg" />

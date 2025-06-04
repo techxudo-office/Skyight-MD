@@ -1,4 +1,3 @@
-import React from "react";
 import "./Switch.css";
 
 const Switch = ({ onChange, label, disabled = false, value = true }) => {

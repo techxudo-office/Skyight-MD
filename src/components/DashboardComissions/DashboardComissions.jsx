@@ -13,17 +13,22 @@ import {
 } from "../../_core/features/bookingSlice";
 import { GrDocumentUpdate } from "react-icons/gr";
 
+// Required for accessibility with react-modal
 Modal.setAppElement("#root");
 
 const DashboardComission = () => {
   const dispatch = useDispatch();
-  const [credits, setCredits] = useState(0);
-  const [commision, setCommision] = useState(0);
+
+  const [credits, setCredits] = useState(0); // Admin credit amount
+  const [commision, setCommision] = useState(0); // Overall commission value
+
   const { adminData } = useSelector((state) => state.persist);
   const { isEditingAdminCredits } = useSelector((state) => state.booking);
   const { commisions, isEditingcommision, isLoadingCommision } = useSelector(
     (state) => state.commision
   );
+
+  // Form state for individual currency commission values
   const [formData, setFormData] = useState({
     PKR: 0,
     IRR: 0,
@@ -36,14 +41,18 @@ const DashboardComission = () => {
   });
 
   useEffect(() => {
+    // Fetch commission and admin credits when component mounts
     if (!adminData?.token) return;
+
     dispatch(getCommision(adminData?.token));
-    dispatch(getAdminCredits(adminData.token)).then((resp) =>
-      setCredits(resp.payload)
+
+    dispatch(getAdminCredits(adminData.token)).then(
+      (resp) => setCredits(resp.payload) // Update local state with fetched credits
     );
   }, []);
 
   useEffect(() => {
+    // Pre-fill form with fetched commission data when available
     if (commisions) {
       setFormData({
         PKR: commisions.PKR || 0,
@@ -59,14 +68,16 @@ const DashboardComission = () => {
     }
   }, [commisions]);
 
+  // Handle individual currency field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: Number(value),
+      [name]: Number(value), // Ensure numeric type
     }));
   };
 
+  // Submit updated commission data to backend
   const handleSubmit = () => {
     dispatch(
       editcommision({
@@ -75,7 +86,9 @@ const DashboardComission = () => {
       })
     );
   };
+
   if (isLoadingCommision) return <Spinner className={"text-primary"} />;
+
   return (
     <>
       <CardLayoutContainer className={"py-2"}>
@@ -83,6 +96,7 @@ const DashboardComission = () => {
           <div className="grid w-full grid-cols-3 gap-4">
             <div className="h-full col-span-2 ">
               <div className="flex gap-3 mb-3">
+                {/* Grid of currency commission inputs */}
                 <div className="grid w-2/3 grid-cols-4 gap-5 ">
                   {Object.keys(formData).map((key) => (
                     <div key={key}>
@@ -97,6 +111,8 @@ const DashboardComission = () => {
                     </div>
                   ))}
                 </div>
+
+                {/* Overall commission section */}
                 <div className="w-1/3 text-end text-text">
                   <p className="text-xs">Commisions</p>
                   <p className="text-3xl font-semibold">
@@ -114,6 +130,8 @@ const DashboardComission = () => {
                   />
                 </div>
               </div>
+
+              {/* Update button for commission */}
               <Button
                 text={"Update"}
                 onClick={handleSubmit}
@@ -122,6 +140,8 @@ const DashboardComission = () => {
                 disabled={isEditingcommision}
               />
             </div>
+
+            {/* Admin credits section */}
             <div className="flex flex-col items-center justify-center col-span-1 p-6 text-white bg-primary rounded-xl">
               <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
               <Input
@@ -137,6 +157,7 @@ const DashboardComission = () => {
               <Button
                 text="Save"
                 onClick={() => {
+                  // Dispatch action to update admin credits
                   dispatch(
                     editAdminCredits({
                       data: { amount: Number(credits) },

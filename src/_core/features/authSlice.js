@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "../../utils/ApiHelper";
 
+// Initial state for authentication-related operations
 const initialState = {
   isLoadingForgotPassword: false,
   forgotPasswordError: null,
@@ -13,24 +14,26 @@ const initialState = {
 
   isLoadingResendCode: false,
   resendCodeError: null,
-
-  isUpdatingAccount: false,
-  updateAccountError: null,
 };
 
+// Auth slice to manage registration, password reset, OTP verification, and account update
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    // Manually update admin data in the state
     updateAdminData: (state, action) => {
       state.adminData = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
+      // Clears admin data on logout
       .addCase(logout.fulfilled, (state) => {
         state.adminData = null;
       })
+
+      // Forgot password cases
       .addCase(forgotPassword.pending, (state) => {
         state.isLoadingForgotPassword = true;
         state.forgotPasswordError = null;
@@ -42,6 +45,8 @@ const authSlice = createSlice({
         state.isLoadingForgotPassword = false;
         state.forgotPasswordError = action.payload;
       })
+
+      // Registration cases
       .addCase(register.pending, (state) => {
         state.isLoadingRegister = true;
         state.registerError = null;
@@ -53,6 +58,8 @@ const authSlice = createSlice({
         state.isLoadingRegister = false;
         state.registerError = action.payload;
       })
+
+      // OTP verification cases
       .addCase(verifyOTP.pending, (state) => {
         state.isLoadingVerifyOTP = true;
         state.verifyOTPError = null;
@@ -64,6 +71,8 @@ const authSlice = createSlice({
         state.isLoadingVerifyOTP = false;
         state.verifyOTPError = action.payload;
       })
+
+      // Resend verification code cases
       .addCase(resendCode.pending, (state) => {
         state.isLoadingResendCode = true;
         state.resendCodeError = null;
@@ -74,127 +83,79 @@ const authSlice = createSlice({
       .addCase(resendCode.rejected, (state, action) => {
         state.isLoadingResendCode = false;
         state.resendCodeError = action.payload;
-      })
-
-      .addCase(updateAccount.pending, (state) => {
-        state.isUpdatingAccount = true;
-      })
-      .addCase(updateAccount.fulfilled, (state, action) => {
-        state.isUpdatingAccount = false;
-        state.adminData = {
-          ...state.adminData,
-          admin: action.payload,
-        };
-      })
-      .addCase(updateAccount.rejected, (state, action) => {
-        state.isUpdatingAccount = false;
-        state.updateAccountError = action.payload;
       });
   },
 });
 
+// Async thunk to handle admin logout
+export const logout = createAsyncThunk("auth/logout", async (token) => {
+  const response = await makeRequest("GET", "/api/logout", {
+    token,
+    successMessage: "Logout Successfully",
+    errorMessage: "Logout failed",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+  return response?.message || response;
+});
 
-
-export const logout = createAsyncThunk(
-  "auth/logout",
-  async (token) => {
-    const response = await makeRequest(
-      'GET',
-      '/api/logout',
-      {
-        token,
-        successMessage: "Logout Successfully",
-        errorMessage: "Logout failed",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      }
-    );
-    return response?.message || response;
-  }
-);
-
+// Async thunk to send forgot password request
 export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (payload) => {
-    const response = await makeRequest(
-      'POST',
-      '/api/forgot-password',
-      {
-        data: payload,
-        successMessage: "Forgot Password Successfully",
-        errorMessage: "Forgot password request failed"
-      }
-    );
+    const response = await makeRequest("POST", "/api/forgot-password", {
+      data: payload,
+      successMessage: "Forgot Password Successfully",
+      errorMessage: "Forgot password request failed",
+    });
     return response?.message || response;
   }
 );
 
+// Async thunk for company registration
 export const register = createAsyncThunk(
   "auth/registerCompany",
   async (payload) => {
-    const response = await makeRequest(
-      'POST',
-      '/api/register-company',
-      {
-        data: payload,
-        successMessage: "Registration successful. Verify OTP...",
-        errorMessage: "Registration failed. Please try again."
-      }
-    );
+    const response = await makeRequest("POST", "/api/register-company", {
+      data: payload,
+      successMessage: "Registration successful. Verify OTP...",
+      errorMessage: "Registration failed. Please try again.",
+    });
     return response?.message || response;
   }
 );
 
-export const verifyOTP = createAsyncThunk(
-  "auth/verifyOTP",
-  async (payload) => {
-    const response = await makeRequest(
-      'POST',
-      '/api/verify-verification-code',
-      {
-        data: payload,
-        successMessage: "OTP Verified Successfully",
-        errorMessage: "OTP verification failed"
-      }
-    );
-    return response?.message || response;
-  }
-);
+// Async thunk to verify the OTP code
+export const verifyOTP = createAsyncThunk("auth/verifyOTP", async (payload) => {
+  const response = await makeRequest("POST", "/api/verify-verification-code", {
+    data: payload,
+    successMessage: "OTP Verified Successfully",
+    errorMessage: "OTP verification failed",
+  });
+  return response?.message || response;
+});
 
+// Async thunk to resend the verification code
 export const resendCode = createAsyncThunk(
   "auth/resendCode",
   async (payload) => {
     const response = await makeRequest(
-      'POST',
-      '/api/resend-verification-code',
+      "POST",
+      "/api/resend-verification-code",
       {
         data: payload,
         successMessage: "Verification code resent successfully",
-        errorMessage: "Failed to resend verification code"
+        errorMessage: "Failed to resend verification code",
       }
     );
     return response?.message || response;
   }
 );
 
-export const updateAccount = createAsyncThunk(
-  "auth/updateAccount",
-  async ({ token, data, id }) => {
-    const response = await makeRequest(
-      'PUT',
-      `/api/admin/${id}`,
-      {
-        data,
-        token,
-        successMessage: "Account updated successfully",
-        errorMessage: "Failed while updating your Account"
-      }
-    );
-    return response?.data || response;
-  }
-);
-
+// Export action to manually update admin data from components
 export const { updateAdminData } = authSlice.actions;
+
+// Export reducer
 export default authSlice.reducer;

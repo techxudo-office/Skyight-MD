@@ -1,11 +1,10 @@
-import  { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
 } from "../CardLayout/CardLayout";
-import { MdEdit } from "react-icons/md";
 import { useAdminSidebarLinks } from "../../data/sidebarData";
 import { useSelector } from "react-redux";
 import Profileimage from "../ProfileImage/Profileimage";
@@ -14,92 +13,91 @@ const Sidebar = ({ status, updateStatus }) => {
   const sidebarRef = useRef();
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeMenu, setActiveMenu] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null); // Index of currently expanded parent menu
   const [mobileView, setMobileView] = useState(false);
   const { adminData } = useSelector((state) => state.persist);
-  const sidebarLinks = useAdminSidebarLinks();
+  const sidebarLinks = useAdminSidebarLinks(); // Array of link objects, each may have `sublinks`
 
   useEffect(() => {
     if (!status) {
+      // If sidebar is closed, collapse any open submenu
       setActiveMenu(null);
     }
     if (activeMenu != null || status) {
+      // If any menu is open OR sidebar is open, ensure `status` remains true
       updateStatus(true);
     }
   }, [activeMenu, status]);
 
   const menuItemHandler = (index, link) => {
     if (link.sublinks && link.sublinks.length > 0) {
-      // Toggle the menu regardless of active state
+      // If this parent link has sublinks, toggle it open/closed
       setActiveMenu((prevIndex) => (prevIndex === index ? null : index));
     } else if (link.path) {
+      // If no sublinks, simply navigate to the path
       navigate(link.path);
-      if (mobileView) updateStatus(false);
+      if (mobileView) updateStatus(false); // In mobile view, collapse sidebar after navigation
     }
   };
 
   useEffect(() => {
+    // On URL change, auto-expand the menu containing the current route
     let matchedMenu = null;
     let matchedSubmenu = null;
 
     sidebarLinks.forEach((link, index) => {
       if (`/dashboard/${link.path}` === location.pathname) {
-        matchedMenu = index;
+        matchedMenu = index; // Exact match on top-level link
       } else if (link.sublinks) {
         const sublinkIndex = link.sublinks.findIndex(
           (sublink) => `/dashboard/${sublink.path}` === location.pathname
         );
         if (sublinkIndex !== -1) {
-          matchedMenu = index;
+          matchedMenu = index; // Parent index for the active sublink
           matchedSubmenu = sublinkIndex;
         }
       }
     });
-    setActiveMenu(matchedMenu);
+    setActiveMenu(matchedMenu); // Expand only the menu containing current route
   }, [location.pathname]);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 780) {
+        // If viewport is small, switch to mobile mode
         setMobileView(true);
-        updateStatus(false);
+        updateStatus(false); // Collapse sidebar by default in mobile
       } else {
+        // Desktop mode
         setMobileView(false);
-        updateStatus(true);
+        updateStatus(true); // Always show sidebar on desktop
       }
     };
 
-    handleResize();
+    handleResize(); // Initialize on mount
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [updateStatus]);
 
-  const [profileImage, setProfileImage] = useState(
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjUuYcnZ-xqlGZiDZvuUy_iLx3Nj6LSaZSzQ&s"
-  );
-
-  const fileInputRef = useRef(null);
-
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      // Creates a temporary URL for preview, but currently unused
       const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
     }
   };
 
-  // Check if a menu item has an active sublink
+  // Returns true if any sublink’s path matches the current URL
   const hasActiveSublink = (link) => {
     return link.sublinks?.some(
       (sublink) => `/dashboard/${sublink.path}` === location.pathname
     );
   };
 
-  // Check if menu should be shown as expanded
+  // Determines whether the parent menu should be expanded
   const shouldExpandMenu = (index, link) => {
-    // Always show if manually opened
-    if (activeMenu === index) return true;
-    // Show if contains active sublink and not manually closed
+    if (activeMenu === index) return true; // Manually opened by click
+    // Could also auto-open if a sublink is active; commented out because handled in useEffect
     // return hasActiveSublink(link) && activeMenu !== null;
   };
 
@@ -109,11 +107,11 @@ const Sidebar = ({ status, updateStatus }) => {
       className={`fixed lg:sticky h-screen top-0 bottom-0 z-20 bg-white shadow-md ${
         mobileView
           ? status
-            ? "w-64 h-screen"
-            : "w-0 overflow-hidden"
+            ? "w-64 h-screen" // Mobile: expanded width when `status` is true
+            : "w-0 overflow-hidden" // Mobile: hidden when `status` is false
           : status
-          ? "w-64"
-          : "w-20"
+          ? "w-64" // Desktop: expanded width
+          : "w-20" // Desktop: collapsed width
       } flex flex-col justify-between transition-all duration-300 overflow-y-auto`}
     >
       <div className="pt-20">
@@ -132,6 +130,7 @@ const Sidebar = ({ status, updateStatus }) => {
             </div>
             {status && (
               <>
+                {/* Only show name and role when sidebar is expanded */}
                 <h3 className="mt-2 font-semibold text-center text-text">
                   {`${adminData?.admin?.full_name}`}
                 </h3>
@@ -147,10 +146,11 @@ const Sidebar = ({ status, updateStatus }) => {
         <ul className="px-2 py-4 space-y-1">
           {sidebarLinks.map((link, linkIndex) => (
             <div key={linkIndex} className="w-full">
-              {/* Main Link */}
+              {/* Main Link (parent) */}
               <li
                 onClick={() => menuItemHandler(linkIndex, link)}
                 className={`flex items-center rounded-lg p-3 cursor-pointer transition-colors ${
+                  // Highlight if exactly on this link’s route or any of its sublink routes
                   location.pathname === `/dashboard/${link.path}` ||
                   hasActiveSublink(link)
                     ? "bg-background"
@@ -165,14 +165,14 @@ const Sidebar = ({ status, updateStatus }) => {
                   <IoIosArrowForward
                     className={`text-lg transition-transform duration-200 ${
                       shouldExpandMenu(linkIndex, link)
-                        ? "rotate-90"
-                        : "rotate-0"
+                        ? "rotate-90" // Rotate arrow when expanded
+                        : "rotate-0" // Default arrow orientation
                     }`}
                   />
                 )}
               </li>
 
-              {/* Sublinks */}
+              {/* Sublinks (only rendered if this link has sublinks) */}
               {link.sublinks && (
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
@@ -185,9 +185,10 @@ const Sidebar = ({ status, updateStatus }) => {
                         key={sublinkIndex}
                         onClick={() => {
                           navigate(`/dashboard/${sublink.path}`);
-                          if (mobileView) updateStatus(false);
+                          if (mobileView) updateStatus(false); // Collapse on mobile
                         }}
                         className={`flex items-center rounded-lg p-3 cursor-pointer transition-colors ${
+                          // Highlight active sublink
                           location.pathname === `/dashboard/${sublink.path}`
                             ? "text-primary"
                             : "hover:bg-gray-100 text-gray-700"

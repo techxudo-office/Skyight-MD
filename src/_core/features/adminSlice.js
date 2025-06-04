@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "../../utils/ApiHelper";
 
+// Initial state includes loading and error states for various admin operations
 const initialState = {
   admins: [],
   isLoadingAdmins: false,
@@ -26,6 +27,7 @@ const adminSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Get Admins
       .addCase(getAdmins.pending, (state) => {
         state.isLoadingAdmins = true;
         state.adminsError = null;
@@ -38,6 +40,8 @@ const adminSlice = createSlice({
         state.isLoadingAdmins = false;
         state.adminsError = action.payload;
       })
+
+      // Get Dashboard Analytics
       .addCase(getDashboardAnalytics.pending, (state) => {
         state.isLoadingDashboard = true;
         state.dashboardError = null;
@@ -50,24 +54,29 @@ const adminSlice = createSlice({
         state.isLoadingDashboard = false;
         state.dashboardError = action.payload;
       })
+
+      // Create Admin
       .addCase(createAdmin.pending, (state) => {
         state.isCreatingAdmin = true;
         state.createAdminError = null;
       })
       .addCase(createAdmin.fulfilled, (state, action) => {
         state.isCreatingAdmin = false;
-        state.admins.push(action.payload);
+        state.admins.push(action.payload); // Append the newly created admin to list
       })
       .addCase(createAdmin.rejected, (state, action) => {
         state.isCreatingAdmin = false;
         state.createAdminError = action.payload;
       })
+
+      // Delete Admin
       .addCase(deleteAdmin.pending, (state) => {
         state.isDeletingAdmin = true;
         state.deleteAdminError = null;
       })
       .addCase(deleteAdmin.fulfilled, (state, action) => {
         state.isDeletingAdmin = false;
+        // Remove the deleted admin from the list using the returned id
         state.admins = state.admins.filter(
           (admin) => admin.id !== action.payload
         );
@@ -76,6 +85,8 @@ const adminSlice = createSlice({
         state.isDeletingAdmin = false;
         state.deleteAdminError = action.payload;
       })
+
+      // Edit Admin
       .addCase(editAdmin.pending, (state) => {
         state.isEditingAdmin = true;
         state.editAdminError = null;
@@ -83,6 +94,7 @@ const adminSlice = createSlice({
       .addCase(editAdmin.fulfilled, (state, action) => {
         state.isEditingAdmin = false;
         const updatedAdmin = action.payload;
+        // Replace only the edited admin's data in the list
         state.admins = state.admins.map((user) =>
           user.id === updatedAdmin.id ? { ...user, ...updatedAdmin } : user
         );
@@ -94,18 +106,20 @@ const adminSlice = createSlice({
   },
 });
 
+// Thunk to fetch list of admins with logout fallback on auth failure
 export const getAdmins = createAsyncThunk(
   "admin/getAdmins",
   async ({ token, logoutHandler }, thunkAPI) => {
     const response = await makeRequest("GET", "/api/admin", {
       token,
-      logoutCallback: logoutHandler,
+      logoutCallback: logoutHandler, // triggers logout if token is expired/unauthorized
       errorMessage: "Failed to fetch admins.",
     });
-    return response?.data?.data.admins || response;
+    return response?.data?.data.admins || response; // Return cleaned-up list of admins
   }
 );
 
+// Thunk to fetch dashboard stats for the admin panel
 export const getDashboardAnalytics = createAsyncThunk(
   "admin/getDashboardAnalytics",
   async (token, thunkAPI) => {
@@ -117,6 +131,7 @@ export const getDashboardAnalytics = createAsyncThunk(
   }
 );
 
+// Thunk to create a new admin account
 export const createAdmin = createAsyncThunk(
   "admin/createAdmin",
   async ({ data, token }, thunkAPI) => {
@@ -131,6 +146,7 @@ export const createAdmin = createAsyncThunk(
   }
 );
 
+// Thunk to delete a specific admin by ID
 export const deleteAdmin = createAsyncThunk(
   "admin/deleteAdmin",
   async ({ id, token }, thunkAPI) => {
@@ -139,10 +155,11 @@ export const deleteAdmin = createAsyncThunk(
       successMessage: "Admin deleted successfully",
       errorMessage: "Failed while deleting this admin",
     });
-    return id;
+    return id; // Only return ID so reducer can filter out that admin
   }
 );
 
+// Thunk to update an admin's information
 export const editAdmin = createAsyncThunk(
   "admin/editAdmin",
   async ({ id, token, data }, thunkAPI) => {

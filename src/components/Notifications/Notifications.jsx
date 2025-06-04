@@ -12,7 +12,8 @@ import useLogout from "../../hooks/useLogout";
 
 const Notifications = () => {
   const dispatch = useDispatch();
-  const logoutHandler = useLogout();
+  const logoutHandler = useLogout(); // Custom hook to log user out (used if token is invalid/expired)
+
   const { adminData } = useSelector((state) => state.persist);
   const { notifications, isLoadingNotifications } = useSelector(
     (state) => state.notification
@@ -20,6 +21,8 @@ const Notifications = () => {
 
   useEffect(() => {
     if (!adminData?.token) return;
+
+    // Dispatch async thunk to fetch notifications, passing token and logout handler in case of auth failure
     dispatch(
       getNotifications({
         token: adminData?.token,
@@ -29,10 +32,11 @@ const Notifications = () => {
     );
   }, [adminData?.token]);
 
-  useEffect(() => {}, [notifications]);
+  useEffect(() => {}, [notifications]); // This is redundant unless you're planning side effects
 
+  // Function to render a single notification row — used by react-window for virtualized rendering
   const renderRow = ({ index, style }) => {
-    const item = notifications[index];
+    const item = notifications[index]; // Efficiently accesses only the visible notification for rendering
     return (
       <div style={style} key={index}>
         <CardLayoutContainer className="w-full mb-5">
@@ -46,6 +50,7 @@ const Notifications = () => {
               }
             />
             <div>
+              {/* Formats ISO date and only keeps the YYYY-MM-DD portion */}
               <h3 className="text-[12px] text-[#333]">
                 {new Date(item?.created_at).toISOString().split("T")[0]}
               </h3>
@@ -64,19 +69,22 @@ const Notifications = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
+      {/* Show loading spinner while fetching notifications */}
       {isLoadingNotifications && <Spinner className="mx-auto text-primary" />}
 
       {notifications?.length > 0 ? (
+        // Virtualized list for performance: only renders items visible in viewport
         <List
-          height={600}
-          itemCount={notifications.length}
-          itemSize={100}
+          height={600} // Height of the scrollable area
+          itemCount={notifications.length} // Total number of notifications
+          itemSize={100} // Fixed height for each item (required by react-window)
           width="100%"
         >
-          {renderRow}
+          {renderRow} // Pass row renderer function
         </List>
       ) : (
         <>
+          {/* Fallback message shown if not loading and no data present */}
           {!isLoadingNotifications && (
             <h2 className="text-center capitalize text-text">
               No Notifications Found

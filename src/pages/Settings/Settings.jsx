@@ -7,12 +7,11 @@ import {
 import { Button, Input, Loader, Switch } from "../../components/components";
 import { MdEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAccount } from "../../_core/features/authSlice";
 import toast from "react-hot-toast";
 import { updateAccountValidation } from "../../utils/validations";
 import { profileSettingsFields } from "../../utils/InputFields";
 import Profileimage from "../../components/ProfileImage/Profileimage";
-import { uploadImage } from "../../_core/features/persistSlice";
+import { uploadImage, updateAccount } from "../../_core/features/persistSlice";
 
 const Settings = () => {
   const dispatch = useDispatch();

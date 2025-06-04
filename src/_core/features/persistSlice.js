@@ -4,6 +4,8 @@ import makeRequest from "../../utils/ApiHelper";
 const initialState = {
   adminData: null,
   isLoading: false,
+
+  isUpdatingAccount: false,
 };
 
 const persistSlice = createSlice({
@@ -34,6 +36,21 @@ const persistSlice = createSlice({
             image_url: action?.payload?.image_url,
           },
         };
+      })
+      // Update admin account details
+      .addCase(updateAccount.pending, (state) => {
+        state.isUpdatingAccount = true;
+      })
+      .addCase(updateAccount.fulfilled, (state, action) => {
+        state.isUpdatingAccount = false;
+        // Merge updated admin info with existing state
+        state.adminData = {
+          ...state.adminData,
+          admin: action.payload,
+        };
+      })
+      .addCase(updateAccount.rejected, (state, action) => {
+        state.isUpdatingAccount = false;
       });
   },
 });
@@ -50,6 +67,20 @@ export const login = createAsyncThunk("persist/login", async (payload) => {
   });
   return response.data?.data;
 });
+
+// Async thunk to update admin account information
+export const updateAccount = createAsyncThunk(
+  "persist/updateAccount",
+  async ({ token, data, id }) => {
+    const response = await makeRequest("PUT", `/api/admin/${id}`, {
+      data,
+      token,
+      successMessage: "Account updated successfully",
+      errorMessage: "Failed while updating your Account",
+    });
+    return response?.data || response;
+  }
+);
 
 export const uploadImage = createAsyncThunk(
   "persist/uploadImage",

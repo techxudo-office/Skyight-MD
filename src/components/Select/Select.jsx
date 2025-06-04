@@ -1,11 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-// import { FaChevronDown } from "react-icons/fa";
 import { FaCaretDown } from "react-icons/fa";
 import { Spinner } from "../components";
 
 const Select = ({
   id,
-  key,
   label,
   disabled,
   options,
@@ -70,26 +68,32 @@ const Select = ({
   return (
     <div
       className={`flex flex-col ${className ? className : "w-full"}`}
-      ref={selectRef}>
+      ref={selectRef}
+    >
       <div
         onMouseEnter={onMouseEnter}
-        className={`relative ${height} rounded-md border border-gray flex items-center justify-between px-2 ${disabled && "bg-slate-100"
-          }`}>
+        className={`relative ${height} rounded-md border border-gray flex items-center justify-between px-2 ${
+          disabled && "bg-slate-100"
+        }`}
+      >
         <label
           htmlFor={id}
-          className={` text-sm bg-white  mb-2 absolute -top-3 left-3  px-1 roounded-md text-text`}>
+          className={` text-sm bg-white  mb-2 absolute -top-3 left-3  px-1 roounded-md text-text`}
+        >
           {label}
         </label>
         <div
           className="flex items-center justify-between w-full px-3 py-5 bg-transparent text-text"
-          onClick={selectHandler}>
+          onClick={selectHandler}
+        >
           <span className="flex items-center gap-3 text-text">
             <span className="text-primary">{selectIcon}</span>
             {(value && value) || placeholder}
           </span>
           <FaCaretDown
-            className={`text-text transform transition-transform ${selectStatus ? "rotate-180" : ""
-              }`}
+            className={`text-text transform transition-transform ${
+              selectStatus ? "rotate-180" : ""
+            }`}
           />
         </div>
 
@@ -112,11 +116,13 @@ const Select = ({
                 {filteredOptions.map((option, index) => (
                   <li
                     key={index}
-                    className={`p-3 flex items-center justify-start gap-3 text-sm  hover:bg-slate-100 ${value?.value === option.value
-                      ? "text-primary font-medium"
-                      : "text-slate-500"
-                      }`}
-                    onClick={() => selectOptionHandler(option)}>
+                    className={`p-3 flex items-center justify-start gap-3 text-sm  hover:bg-slate-100 ${
+                      value?.value === option.value
+                        ? "text-primary font-medium"
+                        : "text-slate-500"
+                    }`}
+                    onClick={() => selectOptionHandler(option)}
+                  >
                     {optionIcons && <span>{optionIcons}</span>}
                     {option.label}
                   </li>

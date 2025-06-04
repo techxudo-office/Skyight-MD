@@ -42,14 +42,13 @@ const Admin = () => {
       return;
     }
 
-    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(
-      () => {
-        setModalStatus(false);
-        setDeleteId(null);
-      }
-    );
+    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(() => {
+      setModalStatus(false);
+      setDeleteId(null);
+    });
   };
 
+  // Cancel delete modal
   const abortDeleteHandler = () => {
     setModalStatus(false);
     setDeleteId(null);
@@ -83,7 +82,7 @@ const Admin = () => {
       sortable: false,
     },
     {
-      name: "",
+      name: "", // Action buttons column (Edit & Delete)
       selector: (row) => {
         const isSuperAdmin = row?.role?.role === "Super Admin";
 
@@ -91,6 +90,7 @@ const Admin = () => {
           <div className="flex items-center gap-x-4">
             {!isSuperAdmin && (
               <>
+                {/* Edit Admin Button */}
                 <span
                   className="text-xl cursor-pointer"
                   onClick={() => {
@@ -100,6 +100,8 @@ const Admin = () => {
                 >
                   <MdEditSquare title="Edit" className="text-blue-500" />
                 </span>
+
+                {/* Delete Admin Button */}
                 <span
                   className="text-xl cursor-pointer"
                   onClick={() => {
@@ -120,12 +122,15 @@ const Admin = () => {
 
   return (
     <>
+      {/* Confirm Delete Modal */}
       <ConfirmModal
         status={modalStatus}
         loading={isDeletingAdmin}
         onAbort={abortDeleteHandler}
         onConfirm={deleteUserHandler}
       />
+
+      {/* Edit Admin Modal */}
       {isEditModalOpen && (
         <EditAdminModal
           isOpen={isEditModalOpen}
@@ -133,7 +138,10 @@ const Admin = () => {
           data={editAdminData}
         />
       )}
+
+      {/* Page Layout */}
       <CardLayoutContainer removeBg={true}>
+        {/* Header with "Create New Admin" button */}
         <CardLayoutHeader
           removeBorder={true}
           heading={"Admins"}
@@ -147,6 +155,8 @@ const Admin = () => {
             />
           </div>
         </CardLayoutHeader>
+
+        {/* Admin Table */}
         <CardLayoutBody removeBorder={true}>
           <Table
             pagination={true}
@@ -157,6 +167,8 @@ const Admin = () => {
             paginationComponentOptions={{ noRowsPerPage: "10" }}
           />
         </CardLayoutBody>
+
+        {/* Empty footer for consistent layout */}
         <CardLayoutFooter></CardLayoutFooter>
       </CardLayoutContainer>
     </>

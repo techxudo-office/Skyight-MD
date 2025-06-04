@@ -1,4 +1,4 @@
-import  { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { MdCancel } from "react-icons/md";
 
 const Searchbar = ({
@@ -10,41 +10,46 @@ const Searchbar = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Memoized helper function
+  // Memoized utility to safely access nested object properties using a dot-separated string path
   const getNestedValue = useCallback((obj, path) => {
-    return path.split('.').reduce((acc, part) => {
+    return path.split(".").reduce((acc, part) => {
       return acc && acc[part];
     }, obj);
   }, []);
 
-  // Optimized search function
-  const searchObjects = useCallback((data, term, fields) => {
-    if (!term || term.trim() === '') return data;
+  // Memoized search function that filters objects based on nested fields and search term
+  const searchObjects = useCallback(
+    (data, term, fields) => {
+      if (!term || term.trim() === "") return data;
 
-    const lowerTerm = term.toLowerCase();
+      const lowerTerm = term.toLowerCase();
 
-    return data.filter(item => {
-      if (fields.length === 0) {
-        return JSON.stringify(item).toLowerCase().includes(lowerTerm);
-      }
-      return fields.some(field => {
-        const value = getNestedValue(item, field);
-        return value?.toString().toLowerCase().includes(lowerTerm);
+      return data.filter((item) => {
+        if (fields.length === 0) {
+          // If no specific fields are defined, search entire object as JSON string
+          return JSON.stringify(item).toLowerCase().includes(lowerTerm);
+        }
+
+        // Search only in defined fields (including nested ones)
+        return fields.some((field) => {
+          const value = getNestedValue(item, field);
+          return value?.toString().toLowerCase().includes(lowerTerm);
+        });
       });
-    });
-  }, [getNestedValue]);
+    },
+    [getNestedValue]
+  );
 
   useEffect(() => {
     const filteredData = searchObjects(data, searchTerm, searchFields);
+
+    // Only update parent state if filtered data actually changed
     onFilteredData?.((prev) => {
-      // Prevent infinite loop by checking if result actually changed
       const prevStr = JSON.stringify(prev);
       const newStr = JSON.stringify(filteredData);
       return prevStr !== newStr ? filteredData : prev;
     });
-
   }, [searchTerm, data, searchFields, onFilteredData]);
-
 
   const handleClear = () => {
     setSearchTerm("");
@@ -60,18 +65,22 @@ const Searchbar = ({
     >
       <input
         type="text"
-        className="w-full p-4 outline-none rounded-md"
-        placeholder={placeholder || `Search ${searchFields.map((field) =>
-          field.charAt(0).toUpperCase() + field.slice(1)
-        ).join(", ").replaceAll(/[_\.]/g, " ")}`}
+        className="w-full p-4 rounded-md outline-none"
+        placeholder={
+          placeholder ||
+          `Search ${searchFields
+            .map((field) => field.charAt(0).toUpperCase() + field.slice(1))
+            .join(", ")
+            .replaceAll(/[_\.]/g, " ")}`
+        } // Auto-generates placeholder from search fields
         value={searchTerm}
-        onChange={handleChange}  // Fixed handler
+        onChange={handleChange} // Controlled input
       />
       {searchTerm && (
         <button
           className="absolute right-3 text-text hover:text-gray-700"
           onClick={handleClear}
-          type="button"  // Important for buttons in forms
+          type="button" // Prevents accidental form submission
         >
           <MdCancel size={20} />
         </button>
@@ -81,3 +90,4 @@ const Searchbar = ({
 };
 
 export default Searchbar;
+r;

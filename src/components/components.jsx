@@ -1,4 +1,3 @@
-export { default as Navbar } from "./Navbar/Navbar";
 export { default as Header } from "./Header/Header";
 export { default as Table } from "./Table/Table";
 export { default as MainTable } from "./MainTable/MainTable";
@@ -7,7 +6,6 @@ export { default as Loader } from "./Loader/Loader";
 export { default as Tag } from "./Tag/Tag";
 
 export { default as Container } from "./Container/Container";
-export { default as Form } from "./Form/Form";
 export { default as Input } from "./Input/Input";
 export { default as Select } from "./Select/Select";
 export { default as PhoneNumberInput } from "./PhoneNumberInput/PhoneNumberInput";
@@ -31,7 +29,6 @@ export { default as FlightInfoCard } from "./FlightInfoCard/FlightInfoCard";
 export { default as Searchbar } from "./Searchbar/Searchbar";
 
 export { default as DeleteModal } from "./DeleteModal/DeleteModal";
-export { default as Textarea } from "./Textarea/Textarea";
 export { default as MultiSelect } from "./MultiSelect/MultiSelect";
 export { default as DashboardComissions } from "./DashboardComissions/DashboardComissions";
 export { default as Notifications } from "./Notifications/Notifications";

@@ -18,29 +18,34 @@ const LoginForm = () => {
   const { adminData, isLoading } = useSelector((state) => state.persist);
 
   useEffect(() => {
+    // If user is already logged in, redirect to dashboard
     if (adminData) {
       navigate("/dashboard");
     }
   }, [adminData, navigate]);
 
   const loginHandler = async (payload, resetForm) => {
+    // Dispatch Redux login action and handle form reset or password error
     dispatch(login(payload))
       .unwrap()
       .then(() => {
-        resetForm();
+        resetForm(); // Reset form on successful login
       })
       .catch((err) => {
+        // Clear password field if login failed due to wrong password
         if (err.message === "Password is incorrect.") {
           formik.setFieldValue("password", "");
         }
       });
   };
 
+  // Form validation schema using Yup
   const validationSchema = Yup.object({
     email: Yup.string().required("Please enter your email"),
     password: Yup.string().required("Please enter your password"),
   });
 
+  // Initialize formik for managing form state, validation, and submission
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -52,12 +57,13 @@ const LoginForm = () => {
         email: values.email,
         password: values.password,
       };
-      loginHandler(payload, resetForm);
+      loginHandler(payload, resetForm); // Submit login request
     },
   });
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    // Prevent multiple submits while loading
     if (!isLoading) {
       formik.handleSubmit();
     }
@@ -65,6 +71,7 @@ const LoginForm = () => {
 
   return (
     <>
+      {/* Render form only if user is not logged in */}
       {!adminData && (
         <CardLayoutContainer className={"max-w-md p-3 m-auto shadow-2xl"}>
           <CardLayoutHeader
@@ -76,6 +83,7 @@ const LoginForm = () => {
             <CardLayoutBody removeBorder={true}>
               <div>
                 <div className="flex flex-col gap-5">
+                  {/* Email input with validation error */}
                   <div
                     className={`relative ${
                       formik.touched.email && formik.errors.email ? "mb-5" : ""
@@ -97,6 +105,8 @@ const LoginForm = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* Password input with validation error */}
                   <div
                     className={`relative ${
                       formik.touched.password && formik.errors.password
@@ -123,8 +133,10 @@ const LoginForm = () => {
                 </div>
               </div>
             </CardLayoutBody>
+
             <CardLayoutFooter className={"flex items-center justify-center"}>
               <div>
+                {/* Show spinner while loading, otherwise show "Login" button */}
                 <Button
                   text={isLoading ? <Spinner /> : "Login"}
                   disabled={isLoading}

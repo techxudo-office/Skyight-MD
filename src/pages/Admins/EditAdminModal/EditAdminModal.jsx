@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {
   CardLayoutContainer,
@@ -15,13 +15,13 @@ import {
   Switch,
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoles, getUserRoles } from "../../../_core/features/roleSlice";
+import { getRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
-import { editUser } from "../../../_core/features/userSlice";
-import { adminValidation, userValidation } from "../../../utils/validations";
+import { adminValidation } from "../../../utils/validations";
 import { editAdmin } from "../../../_core/features/adminSlice";
 import { editAdminInpFields } from "../../../utils/InputFields";
 
+// Set modal's root element for accessibility
 Modal.setAppElement("#root");
 
 const initialState = {
@@ -33,14 +33,17 @@ const initialState = {
 
 const EditAdminModal = ({ isOpen, onClose, data }) => {
   const dispatch = useDispatch();
+
   const [errors, setErrors] = useState({});
-  const [active, setActive] = useState(data?.is_active);
+  const [active, setActive] = useState(data?.is_active); // Boolean switch for active/inactive status
   const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
+
   const { adminData } = useSelector((state) => state.persist);
   const { isEditingAdmin } = useSelector((state) => state.admin);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
 
+  // Pre-fill form fields when `data` or `roles` change
   useEffect(() => {
     if (data) {
       setFormData({
@@ -49,21 +52,25 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
         role_id: data?.role?.id || "",
       });
 
+      // Match the role object to set in Select input
       const role = roles?.find((r) => r.id == data.role_id);
       setSelectedRole(role || null);
     }
   }, [data, roles]);
 
+  // Fetch available roles for the dropdown if token exists
   useEffect(() => {
     if (!adminData?.token) return;
     dispatch(getRoles(adminData?.token));
   }, [dispatch]);
 
+  // Handle text input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle selection from dropdown for roles
   const handleRoleSelect = (role) => {
     let data = {
       id: role.value,
@@ -73,6 +80,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
     setFormData((prev) => ({ ...prev, role_id: data.id }));
   };
 
+  // Handle final submit (validation + dispatch API call)
   const handleSubmit = () => {
     if (!adminValidation(formData, setErrors)) {
       toast.error("Please fix the errors before submitting.");
@@ -86,6 +94,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
       is_active: active,
     };
 
+    // Dispatch the editAdmin action and close modal after successful update
     dispatch(
       editAdmin({ data: payload, token: adminData?.token, id: data?.id })
     ).then(() => {
@@ -102,6 +111,7 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
       <CardLayoutContainer>
         <CardLayoutHeader heading="Edit User" />
         <CardLayoutBody>
+          {/* Inputs: Full Name, Email, Password */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {editAdminInpFields.map(({ name, label, type, disabled }) => (
               <div key={name} className="relative">
@@ -114,11 +124,14 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
                   onChange={handleChange}
                   placeholder={`Enter ${label}`}
                 />
+                {/* Inline validation error */}
                 {errors[name] && (
                   <p className="mt-1 text-sm text-red-500">{errors[name]}</p>
                 )}
               </div>
             ))}
+
+            {/* Role selection using custom Select dropdown */}
             <Select
               id="userRoles"
               label="Role"
@@ -133,16 +146,21 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
               isLoading={isLoadingRoles}
             />
           </div>
+
+          {/* Switch for active/inactive status */}
           <div className="mt-4">
             <Switch label={"Status:"} onChange={setActive} value={active} />
           </div>
         </CardLayoutBody>
+
         <CardLayoutFooter>
+          {/* Submit Button with loading spinner */}
           <Button
             text={isEditingAdmin ? <Spinner /> : "Update User"}
             onClick={handleSubmit}
             disabled={isEditingAdmin}
           />
+          {/* Cancel/Close Modal Button */}
           <Button
             text="Cancel"
             className="ml-3 bg-redColor hover:bg-red-600"

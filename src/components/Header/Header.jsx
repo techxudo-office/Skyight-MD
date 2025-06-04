@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreditsDropdown, CustomTooltip, Dropdown } from "../components";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { IoHome } from "react-icons/io5";
 import { SlSettings } from "react-icons/sl";
-import { MdNotificationsNone, MdArrowDropDown } from "react-icons/md";
+import { MdNotificationsNone } from "react-icons/md";
 import { motion } from "framer-motion";
-import Notifications from "../Notifications/Notifications";
 import { getCredits } from "../../_core/features/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
@@ -22,33 +19,23 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
+  // Dropdown states
   const [dropdownStatus, setDropDownStatus] = useState(false);
   const [CreditsDropdownOpen, setCreditsDropdownOpen] = useState(false);
   const [isNotiHovered, setIsNotiHovered] = useState(false);
+
+  // Whether to show credit amount or animated dots
   const [showCredits, setShowCredits] = useState(false);
+
   const { adminData } = useSelector((state) => state.persist);
   const { credits, isLoadingCredits } = useSelector((state) => state.booking);
 
+  // Refs to detect clicks outside dropdowns (if needed later)
   const profileDropdownRef = useRef(null);
   const creditsDropdownRef = useRef(null);
 
-  // Click outside handler
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
-  //       setDropDownStatus(false);
-  //     }
-  //     if (creditsDropdownRef.current && !creditsDropdownRef.current.contains(event.target)) {
-  //       setCreditsDropdownOpen(false);
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
-
+  // Options for profile dropdown (Settings and Logout)
   const dropdownOptions = [
     {
       name: "Setting",
@@ -66,64 +53,36 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
     },
   ];
 
-  const mobileDropdownOptions = [
-    {
-      name: "Home",
-      icon: <IoHome />,
-      handler: () => {
-        navigationHandler("/");
-      },
-    },
-    {
-      name: "Notification",
-      icon: <MdNotificationsNone />,
-      handler: () => {
-        navigationHandler("/dashboard/notifications");
-      },
-    },
-    {
-      name: "Announcement",
-      icon: <HiOutlineSpeakerphone />,
-      handler: () => {
-        navigationHandler("/dashboard/announcement");
-      },
-    },
-    {
-      name: "Setting",
-      icon: <SlSettings />,
-    },
-    {
-      name: "Logout",
-      icon: <FiLogOut />,
-      handler: () => {
-        logoutHandler();
-      },
-    },
-  ];
-
+  // Fetch latest credits from server
   const refreshCredits = () => {
     dispatch(getCredits(adminData?.token));
   };
 
+  // Toggle the profile dropdown open/close
   const dropdownHandler = () => {
     setDropDownStatus(!dropdownStatus);
   };
 
+  // Handle logout: clear store and show toast
   const logoutHandler = () => {
     dispatch({ type: "user/logout" });
     toast.success("Logout successfully");
-    dropdownHandler();
+    dropdownHandler(); // Close dropdown after action
   };
 
+  // Navigate to given path, ensuring dropdown closes first
   const navigationHandler = (path) => {
     dropdownHandler();
     navigate(`/dashboard${path}`);
   };
 
+  // Toggle sidebar open/close
   const sidebarHandler = () => {
     setSidebarStatusHandler(!sidebarStatus);
   };
+
   useEffect(() => {
+    // Close notification hover preview if we're on the notifications page
     if (location.pathname === "/dashboard/notifications") {
       setIsNotiHovered(false);
     }
@@ -134,6 +93,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
       <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg ">
         <div className="container mx-auto">
           <div className="flex items-center justify-between ">
+            {/* Sidebar toggle button */}
             <div className="flex items-end gap-3">
               <CustomTooltip content={"Open / close"}>
                 <button
@@ -143,14 +103,16 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                   <GiHamburgerMenu size={22} />
                 </button>
               </CustomTooltip>
-              <div className="flex items-center "></div>
             </div>
+
+            {/* Right-side header icons */}
             <div className="flex items-center sm:gap-3">
+              {/* Notification icon (hidden on /notifications page) */}
               {location.pathname !== "/dashboard/notifications" && (
                 <div
-                  className="relative "
-                  onMouseEnter={() => setIsNotiHovered(true)}
-                  onMouseLeave={() => setIsNotiHovered(false)}
+                  className="relative"
+                  onMouseEnter={() => setIsNotiHovered(true)} // Show dropdown on hover
+                  onMouseLeave={() => setIsNotiHovered(false)} // Hide dropdown when not hovered
                 >
                   <CustomTooltip content={"Notifications"}>
                     <div
@@ -161,32 +123,39 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                     </div>
                   </CustomTooltip>
 
+                  {/* Animated dropdown appearing below the icon */}
                   {isNotiHovered && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.3 }}
-                      className="absolute top-10 right-0 w-[300px] h-fit  bg-neutral-100 shadow-lg rounded-lg p-2 z-50"
+                      className="absolute top-10 right-0 w-[300px] h-fit bg-neutral-100 shadow-lg rounded-lg p-2 z-50"
                     >
                       <NotificationDrop />
                     </motion.div>
                   )}
                 </div>
               )}
+
+              {/* Credits display and toggle logic */}
               <div className="relative">
                 <CustomTooltip content={CreditsDropdownOpen ? null : "credits"}>
                   <button
                     ref={creditsDropdownRef}
-                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px]  bg-background hover:text-secondary  text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
+                    className={`w-full text-sm md:text-base relative flex items-center justify-center gap-1 md:gap-2 cursor-pointer p-1 px-2 md:py-2 md:px-4 border-primary border-[1px] bg-background hover:text-secondary text-primary font-semibold rounded-xl transition duration-300 ease-in-out transform focus:outline-none`}
                   >
                     {showCredits && (
+                      // Show refresh icon if credits are visible
                       <HiOutlineRefresh
                         onClick={refreshCredits}
-                        className={`${isLoadingCredits && "animate-spin"
-                          } max-sm:hidden`}
+                        className={`${
+                          isLoadingCredits && "animate-spin"
+                        } max-sm:hidden`}
                       />
                     )}
+
+                    {/* Conditional rendering: If showCredits is true, display numeric or loading text; else show dots */}
                     {showCredits ? (
                       isLoadingCredits ? (
                         <span className="flex items-center gap-2">
@@ -202,12 +171,15 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                         </span>
                       )
                     ) : (
+                      // Display six dots to indicate hidden credit amount
                       <p className="flex items-center text-xs">
                         {Array.from({ length: 6 }).map((_, i) => (
                           <GoDotFill key={i} />
                         ))}
                       </p>
                     )}
+
+                    {/* Icon to show or hide credits */}
                     {showCredits ? (
                       <CustomTooltip content={"Hide Credits"}>
                         <FaEye onClick={() => setShowCredits(false)} />
@@ -216,17 +188,14 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                       <CustomTooltip content={"Show Credits"}>
                         <FaEyeSlash
                           onClick={() => {
-                            refreshCredits();
+                            refreshCredits(); // Refresh before showing
                             setShowCredits(true);
                           }}
                         />
                       </CustomTooltip>
                     )}
-                    {/* <MdArrowDropDown
-                      className={`text-xl ${CreditsDropdownOpen ? "rotate-180" : ""
-                        } transition-all duration-300`}
-                      onClick={() => setCreditsDropdownOpen((prev) => !prev)}
-                    /> */}
+
+                    {/* Placeholder for CreditsDropdown if needed in future */}
                     <div className="absolute right-0 top-14">
                       {CreditsDropdownOpen && (
                         <CreditsDropdown
@@ -238,19 +207,21 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                   </button>
                 </CustomTooltip>
               </div>
+
+              {/* Profile image and dropdown */}
               <CustomTooltip content={dropdownStatus ? null : "profile"}>
                 <div className="px-3">
                   <div
                     ref={profileDropdownRef}
-                    onClick={dropdownHandler}
+                    onClick={dropdownHandler} // Toggle profile dropdown
                     className="relative w-16 h-16 overflow-hidden rounded-full cursor-pointer group"
                   >
                     <Profileimage />
                   </div>
                   <Dropdown
-                    status={dropdownStatus}
-                    changeStatus={setDropDownStatus}
-                    options={dropdownOptions}
+                    status={dropdownStatus} // Controls visibility
+                    changeStatus={setDropDownStatus} // Updates parent state to close
+                    options={dropdownOptions} // Options (Settings, Logout)
                     className={"max-md:hidden"}
                   />
                 </div>

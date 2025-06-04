@@ -4,6 +4,8 @@
 
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "@reduxjs/toolkit";
+
+// Importing feature-specific reducers
 import authReducer from "../features/authSlice";
 import userReducer from "../features/userSlice";
 import roleReducer from "../features/roleSlice";
@@ -11,14 +13,17 @@ import ticketReducer from "../features/ticketSlice";
 import bookingReducer from "../features/bookingSlice";
 import transactionReducer from "../features/transactionSlice";
 import notificationReducer from "../features/notificationSlice";
-import settingReducer from "../features/settingSlice"
-import companyReducer from "../features/companySlice"
-import reasonsReducer from "../features/reasonsSlice"
-import commisionReducer from "../features/commisionSlice"
-import bankReducer from "../features/bankSlice"
-import adminReducer from "../features/adminSlice"
+import settingReducer from "../features/settingSlice";
+import companyReducer from "../features/companySlice";
+import reasonsReducer from "../features/reasonsSlice";
+import commisionReducer from "../features/commisionSlice";
+import bankReducer from "../features/bankSlice";
+import adminReducer from "../features/adminSlice";
 import persistedReducer from "../features/persistSlice";
+
 import persistReducer from "redux-persist/es/persistReducer";
+
+// Combine all feature reducers into a single reducer
 const appReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
@@ -33,24 +38,32 @@ const appReducer = combineReducers({
   commision: commisionReducer,
   bank: bankReducer,
   admin: adminReducer,
-  persist: persistedReducer,
+  persist: persistedReducer, // This slice is the only one persisted
 });
 
+// Root reducer with optional global reset behavior
 const rootReducer = (state, action) => {
+  // If logout is dispatched, clear persisted data from storage
   if (action.type === "user/logout") {
     storage.removeItem("persist:root");
 
+    // Reset state to undefined, effectively clearing all reducers
     return appReducer(undefined, action);
   }
+
+  // Otherwise, proceed normally
   return appReducer(state, action);
 };
 
+// Wrap the root reducer with persistence configuration
 const persistedReducers = persistReducer(
   {
-    key: "root",
-    storage,
-    whitelist: ["persist"]
+    key: "root", // Key for persisted root object
+    storage,     // Use localStorage via redux-persist
+    whitelist: ["persist"], // Only persist the "persist" slice
   },
   rootReducer
 );
+
+// Export persisted root reducer for use in store configuration
 export default persistedReducers;

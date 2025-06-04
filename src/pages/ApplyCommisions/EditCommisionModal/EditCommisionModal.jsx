@@ -23,9 +23,7 @@ const EditCommisionModal = ({ isOpen, onClose }) => {
   const { adminData } = useSelector((state) => state.persist);
   const { commisions, isEditingcommision } = useSelector(
     (state) => state.commision
-  );
-  const [penalty, setPenalty] = useState(0);
-  const [formData, setFormData] = useState({
+  );  const [formData, setFormData] = useState({
     PKR: 0,
     IRR: 0,
     AED: 0,
