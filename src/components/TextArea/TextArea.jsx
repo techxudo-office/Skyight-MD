@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const Teaxtarea = ({
+const TeaxtArea = ({
   id,
   label,
   name,
@@ -52,4 +52,4 @@ const Teaxtarea = ({
   );
 };
 
-export default Teaxtarea;
+export default TeaxtArea;
