@@ -6,7 +6,7 @@ import {
   Tag,
   ModalWrapper,
   Button,
-  Textarea,
+  TextArea,
   CustomTooltip,
 } from "../../components/components";
 import { MdDelete, MdEditSquare } from "react-icons/md";
@@ -159,8 +159,8 @@ const Reasons = () => {
       {/* ModalWrapper for editing a reason; opens when modalWrapper.isOpen is true */}
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
-          {/* Textarea pre-filled with the existing reason text */}
-          <Textarea
+          {/* TextArea pre-filled with the existing reason text */}
+          <TextArea
             name=""
             id=""
             value={updateReason}

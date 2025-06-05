@@ -4,7 +4,7 @@ import {
   SecondaryButton,
   ConfirmModal,
   ModalWrapper,
-  Textarea,
+  TextArea,
   Button,
   CustomTooltip,
   Searchbar,
@@ -152,12 +152,12 @@ const Banks = () => {
       {/* Modal for editing a bank entry */}
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
-          <Textarea
+          <TextArea
             name=""
             id=""
             value={updateBank}
             onChange={(e) => setUpdateBank(e.target.value)} // Bind input to updateBank state
-          ></Textarea>
+          ></TextArea>
           <CardLayoutFooter>
             <Button
               text={"Update"}

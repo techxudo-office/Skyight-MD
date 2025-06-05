@@ -9,7 +9,7 @@ import {
   Button,
   Spinner,
   SecondaryButton,
-  Textarea,
+  TextArea,
 } from "../../components/components";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -49,7 +49,7 @@ const CreateReason = () => {
 
         <CardLayoutBody>
           <div className="relative">
-            <Textarea
+            <TextArea
               placeholder="Enter Reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
