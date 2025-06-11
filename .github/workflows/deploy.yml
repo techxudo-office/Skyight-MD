@@ -1,0 +1,74 @@
+name: Build, Push and Deploy Dashboard Image 
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: techxudo/skight-frontend-dashboard:latest
+
+  deploy:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to EC2 and update dist folder from Docker image with verification
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+            # Clean any previous temp container
+            docker rm -f tmp-extract-dashboard 2>/dev/null || true
+
+            echo "Pulling latest dashboard image…"
+            docker pull techxudo/skight-frontend-dashboard:latest
+
+            echo "Creating temp container…"
+            docker create --name tmp-extract-dashboard techxudo/skight-frontend-dashboard:latest
+
+            DASH_DIST=/home/ec2-user/Skyight-Dashboard/dist   # <-- dashboard path on the VM
+
+            echo "Before update:"
+            ls -l $DASH_DIST || echo "dist folder not found"
+
+            echo "Removing old dist…"
+            rm -rf $DASH_DIST
+
+            echo "Copying build out of container…"
+            docker cp tmp-extract-dashboard:/usr/share/nginx/html $DASH_DIST
+
+            echo "After update:"
+            ls -l $DASH_DIST || echo "dist folder not found"
+
+            docker rm tmp-extract-dashboard
+
+            # Ownership fix (adjust user/group if different)
+            sudo chown -R ec2-user:ec2-user $DASH_DIST
+
+            echo "Dashboard dist updated ✅"
+
+      - name: Restart Nginx (serve both B2B & dashboard)
+        run: |
+          sudo systemctl restart nginx
+          echo "Nginx restarted successfully."
