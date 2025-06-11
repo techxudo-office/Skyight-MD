@@ -4,6 +4,7 @@
 
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "@reduxjs/toolkit";
+import persistReducer from "redux-persist/es/persistReducer";
 
 // Importing feature-specific reducers
 import authReducer from "../features/authSlice";
@@ -20,8 +21,6 @@ import commisionReducer from "../features/commisionSlice";
 import bankReducer from "../features/bankSlice";
 import adminReducer from "../features/adminSlice";
 import persistedReducer from "../features/persistSlice";
-
-import persistReducer from "redux-persist/es/persistReducer";
 
 // Combine all feature reducers into a single reducer
 const appReducer = combineReducers({

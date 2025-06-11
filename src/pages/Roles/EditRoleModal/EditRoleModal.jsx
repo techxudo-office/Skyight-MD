@@ -14,8 +14,8 @@ import {
 } from "../../../components/components";
 import { useDispatch, useSelector } from "react-redux";
 import { editRole } from "../../../_core/features/roleSlice";
-import { updateAdminData } from "../../../_core/features/authSlice";
 import { IoIosArrowForward } from "react-icons/io";
+import { updateAdminData } from "../../../_core/features/authSlice";
 
 Modal.setAppElement("#root");
 
