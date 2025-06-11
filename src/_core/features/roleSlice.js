@@ -80,7 +80,6 @@ const roleSlice = createSlice({
         const updatedRole = action.payload;
 
         if (!Array.isArray(state.roles)) {
-          console.error("state.roles is not an array!", state.roles);
           return;
         }
 
