@@ -46,7 +46,7 @@ jobs:
             echo "Creating temp container…"
             docker create --name tmp-extract-dashboard techxudo/skight-frontend-dashboard:latest
 
-            DASH_DIST=/home/ec2-user/Skyight-Dashboard/dist
+            DASH_DIST=/home/ec2-user/dashboard/dist
 
             echo "Before update:"
             ls -l $DASH_DIST || echo "dist folder not found"
