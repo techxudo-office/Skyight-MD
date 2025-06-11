@@ -23,7 +23,7 @@ jobs:
           context: .
           file: ./DockerFile
           push: true
-          tags: techxudo/skight-frontend-dashboard:latest
+          tags: techxudo2/skight-frontend-dashboard:latest
 
   deploy:
     needs: build_and_push
@@ -41,10 +41,10 @@ jobs:
             docker rm -f tmp-extract-dashboard 2>/dev/null || true
 
             echo "Pulling latest dashboard image…"
-            docker pull techxudo/skight-frontend-dashboard:latest
+            docker pull techxudo2/skight-frontend-dashboard:latest
 
             echo "Creating temp container…"
-            docker create --name tmp-extract-dashboard techxudo/skight-frontend-dashboard:latest
+            docker create --name tmp-extract-dashboard techxudo2/skight-frontend-dashboard:latest
 
             DASH_DIST=/home/ec2-user/dashboard/dist
 
