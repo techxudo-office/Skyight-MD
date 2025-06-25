@@ -95,7 +95,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
         </CardLayoutBody>
         <CardLayoutFooter>
           <Button
-            text={isEditingTransaction ? <Spinner /> : "Update User"}
+            text={isEditingTransaction ? <Spinner /> : "Update Transaction"}
             onClick={handleSubmit}
             disabled={isEditingTransaction}
           />
