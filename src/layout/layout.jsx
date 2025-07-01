@@ -41,7 +41,7 @@ const Layout = () => {
             {/* Footer section fixed at bottom with copyright info */}
             <div className="absolute bottom-0 flex justify-center w-full py-2 bg-white">
               <h2 className="mt-2 text-sm font-semibold text-center text-text">
-                © 2025 All rights reserved by SKYIGHT AIR & BOOKING SYSTEM
+                © 2025 All rights reserved by Techxudo
               </h2>
             </div>
           </div>

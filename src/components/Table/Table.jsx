@@ -66,7 +66,14 @@ const Table = ({
         progressPending={progressPending} // Boolean to indicate loading state
         progressComponent={<Loader />} // Custom loading indicator
         customStyles={{
-          // Styling overrides for DataTable
+          table: {
+            style: {
+              backgroundColor: "#4FA9A8",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+              borderBottomWidth: "0px",
+            },
+          },
           headRow: {
             style: {
               backgroundColor: "#4FA9A8",
