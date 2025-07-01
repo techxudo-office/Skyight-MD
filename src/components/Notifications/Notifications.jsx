@@ -80,7 +80,7 @@ const Notifications = () => {
           itemSize={100} // Fixed height for each item (required by react-window)
           width="100%"
         >
-          {renderRow} // Pass row renderer function
+          {renderRow}
         </List>
       ) : (
         <>
