@@ -74,7 +74,7 @@ const NotificationDrop = () => {
             itemSize={100} // Each row takes 100px height
             width="100%" // Full width of the container
           >
-            {renderRow} {/* Render each row using the renderRow function */}
+            {renderRow}
           </List>
 
           {/* Link to full notifications page */}

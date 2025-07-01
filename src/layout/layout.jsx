@@ -16,7 +16,7 @@ const Layout = () => {
   };
 
   return (
-    <div className="flex ">
+    <div className="flex">
       {/* Redirect to login if no token is found (user is unauthenticated) */}
       {!adminData?.token ? (
         <Navigate to="/" replace />
