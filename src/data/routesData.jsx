@@ -1,125 +1,77 @@
-import {
-  NotFound,
-  Dashboard,
-  DashboardHome,
-  Roles,
-  Users,
-  Companies,
-  CreateUser,
-  CreateRole,
-  Reasons,
-  CreateReason,
-  FlightBookings,
-  BookingDetails,
-  Transactions,
-  Banks,
-  CreateBank,
-  Tickets,
-  Settings,
-  ApplyCommisions,
-  Login,
-  Admins,
-  CreateAdmin,
-  RefundRequests,
-  CancelRequests,
-  NotificationPage,
-  CreateNotification,
-  CompanyDetails,
-  CompanyTickets,
-  CompanyRefundedRequests,
-  CompanyCancelledRequests,
-  SupportChatPage,
-} from "../pages/pages";
+import { lazy } from "react";
 
-// Route definitions for the application
+const NotFound = lazy(() => import("../pages/Not-Found/Not-Found"));
+const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
+const DashboardHome = lazy(() => import("../pages/DashboardHome/DashboardHome"));
+const Roles = lazy(() => import("../pages/Roles/Roles"));
+const Users = lazy(() => import("../pages/Users/Users"));
+const CreateUser = lazy(() => import("../pages/CreateUser/CreateUser"));
+const CreateRole = lazy(() => import("../pages/CreateRole/CreateRole"));
+const Companies = lazy(() => import("../pages/Companies/Companies"));
+const Reasons = lazy(() => import("../pages/Reasons/Reasons"));
+const CreateReason = lazy(() => import("../pages/CreateReason/CreateReason"));
+const FlightBookings = lazy(() => import("../pages/FlightBookings/FlightBookings"));
+const BookingDetails = lazy(() => import("../pages/BookingDetails/BookingDetails"));
+const Transactions = lazy(() => import("../pages/Transactions/Transactions"));
+const Banks = lazy(() => import("../pages/Banks/Banks"));
+const CreateBank = lazy(() => import("../pages/CreateBank/CreateBank"));
+const Tickets = lazy(() => import("../pages/Tickets/Tickets"));
+const Settings = lazy(() => import("../pages/Settings/Settings"));
+const ApplyCommisions = lazy(() => import("../pages/ApplyCommisions/ApplyCommisions"));
+const Login = lazy(() => import("../pages/Login/Login"));
+const Admins = lazy(() => import("../pages/Admins/Admins"));
+const CreateAdmin = lazy(() => import("../pages/CreateAdmin/CreateAdmin"));
+const RefundRequests = lazy(() => import("../pages/RefundRequests/RefundRequests"));
+const CancelRequests = lazy(() => import("../pages/CancelRequests/CancelRequests"));
+const NotificationPage = lazy(() => import("../pages/NotificationPage/NotificationPage"));
+const CreateNotification = lazy(() => import("../pages/CreateNotification/CreateNotification"));
+const CompanyDetails = lazy(() => import("../pages/CompanyDetails/CompanyDetails"));
+const CompanyTickets = lazy(() => import("../pages/CompanyDetails/CompanyTickets/CompanyTickets"));
+const CompanyRefundedRequests = lazy(() => import("../pages/CompanyDetails/CompanyRefundedRequests/CompanyRefundedRequests"));
+const CompanyCancelledRequests = lazy(() => import("../pages/CompanyDetails/CompanyCancelledRequests/CompanyCancelledRequests"));
+const SupportChatPage = lazy(() => import("../pages/SupportChat/SupportChat"));
+
 export const routesData = [
-  { path: "/", element: <Login /> }, // Public login route
+  { path: "/", element: <Login /> },
 
   {
-    path: "/dashboard", // Main dashboard route (protected layout)
+    path: "/dashboard",
     element: <Dashboard />,
     children: [
-      { index: true, element: <DashboardHome /> }, // Default child route when /dashboard is accessed
-
-      // CRUD and listing routes for roles and users
+      { index: true, element: <DashboardHome /> },
       { path: "roles", element: <Roles /> },
       { path: "users", element: <Users /> },
       { path: "create-user", element: <CreateUser /> },
       { path: "create-role", element: <CreateRole /> },
-
       { path: "companies", element: <Companies /> },
-
-      // Dynamic route for listing company users based on company ID
-      {
-        path: "company/details/users/:companyId",
-        element: <Users isCompanyUser={true} />, // Reusing Users component with a flag
-      },
-
-      // Reason management routes
+      { path: "company/details/users/:companyId", element: <Users isCompanyUser={true} /> },
       { path: "reasons", element: <Reasons /> },
       { path: "create-reason", element: <CreateReason /> },
-
-      // Booking and transaction routes
       { path: "flight-bookings", element: <FlightBookings /> },
       { path: "booking-details", element: <BookingDetails /> },
       { path: "transactions", element: <Transactions /> },
-
-      // Bank management
       { path: "banks", element: <Banks /> },
       { path: "create-bank", element: <CreateBank /> },
-
       { path: "tickets", element: <Tickets /> },
       { path: "settings", element: <Settings /> },
       { path: "apply-commisions", element: <ApplyCommisions /> },
-
-      // Admin management
       { path: "admins", element: <Admins /> },
       { path: "create-admin", element: <CreateAdmin /> },
-
-      // Refund and cancellation requests
       { path: "refund-requests", element: <RefundRequests /> },
       { path: "cancel-requests", element: <CancelRequests /> },
-
-      // Notifications management
       { path: "notifications", element: <NotificationPage /> },
       { path: "create-notification", element: <CreateNotification /> },
-
-      // Detailed company views using dynamic :companyId param
       { path: "company/details/:companyId", element: <CompanyDetails /> },
-      {
-        path: "company/details/tickets/:companyId",
-        element: <CompanyTickets />,
-      },
-      {
-        path: "company/details/bookings/:companyId",
-        element: <FlightBookings isCompanyDetail={true} />, // Reusing booking page with flag
-      },
-      {
-        path: "company/details/transactions/:companyId",
-        element: <Transactions isCompanyDetail={true} />, // Reusing transactions page with flag
-      },
-      {
-        path: "company/details/refunded/:companyId",
-        element: <CompanyRefundedRequests />,
-      },
-      {
-        path: "company/details/refunded/booking-details/:companyId",
-        element: <BookingDetails />, // View booking details in refunded tab
-      },
-      {
-        path: "company/details/cancelled/:companyId",
-        element: <CompanyCancelledRequests />,
-      },
-      {
-        path: "company/details/cancelled/booking-details/:companyId",
-        element: <BookingDetails />, // View booking details in cancelled tab
-      },
-
-      // Route for real-time support chat interface
+      { path: "company/details/tickets/:companyId", element: <CompanyTickets /> },
+      { path: "company/details/bookings/:companyId", element: <FlightBookings isCompanyDetail={true} /> },
+      { path: "company/details/transactions/:companyId", element: <Transactions isCompanyDetail={true} /> },
+      { path: "company/details/refunded/:companyId", element: <CompanyRefundedRequests /> },
+      { path: "company/details/refunded/booking-details/:companyId", element: <BookingDetails /> },
+      { path: "company/details/cancelled/:companyId", element: <CompanyCancelledRequests /> },
+      { path: "company/details/cancelled/booking-details/:companyId", element: <BookingDetails /> },
       { path: "supportChat", element: <SupportChatPage /> },
     ],
   },
 
-  // Fallback route for undefined paths
   { path: "*", element: <NotFound /> },
 ];
