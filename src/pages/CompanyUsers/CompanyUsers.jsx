@@ -1,13 +1,14 @@
-import  { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
 import { MdEditSquare } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
-
-import { Searchbar, Table, Tag } from "../../components/components";
+import { useParams } from "react-router-dom";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import Searchbar from "../../components/Searchbar/Searchbar";
 import { getCompanyUsers } from "../../_core/features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -15,7 +16,7 @@ import dayjs from "dayjs";
 const Companies = () => {
   const { companyId } = useParams();
   const dispatch = useDispatch();
-  const [filteredCompanyUsers, setFilteredCompanyUsers] = useState(second)
+  const [filteredCompanyUsers, setFilteredCompanyUsers] = useState(second);
   const { adminData } = useSelector((state) => state.persist);
   const { companyUsers, isLoadingCompanyUsers } = useSelector(
     (state) => state.user
@@ -26,19 +27,16 @@ const Companies = () => {
       name: "NAME",
       selector: (row) => `${row.first_name} ${row.last_name}`,
       sortable: false,
-
     },
     {
       name: "NAME",
       selector: (row) => `${row.first_name} ${row.last_name}`,
       sortable: false,
-
     },
     {
       name: "STATUS",
       selector: (row) => <Tag value={row.is_deleted ? "inactive" : "active"} />,
       sortable: false,
-
     },
     {
       name: "CREATED AT",
@@ -49,7 +47,6 @@ const Companies = () => {
       name: "WEBSITE",
       selector: (row) => row.website,
       sortable: false,
-
     },
     {
       name: "",
@@ -67,7 +64,6 @@ const Companies = () => {
         </div>
       ),
       sortable: false,
-
     },
   ];
 
@@ -86,7 +82,10 @@ const Companies = () => {
           className="flex items-center justify-between"
         ></CardLayoutHeader>
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={companyUsers} onFilteredData={setFilteredCompanyUsers} />
+          <Searchbar
+            data={companyUsers}
+            onFilteredData={setFilteredCompanyUsers}
+          />
           <Table
             pagination={true}
             columnsData={companiesColumns}

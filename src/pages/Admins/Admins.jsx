@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  SecondaryButton,
-  ConfirmModal,
-  Table,
-  Tag,
-} from "../../components/components";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
 import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,10 +11,11 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
+import useLogout from "../../hooks/useLogout";
 import { useDispatch, useSelector } from "react-redux";
 import EditAdminModal from "./EditAdminModal/EditAdminModal";
 import { deleteAdmin, getAdmins } from "../../_core/features/adminSlice";
-import useLogout from "../../hooks/useLogout";
+import toast from "react-hot-toast";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const Admin = () => {
 
   const deleteUserHandler = () => {
     if (!deleteId) {
-      errorToastify("Failed to delete this user");
+      toast.error("Failed to delete this user");
       setModalStatus(false);
       return;
     }

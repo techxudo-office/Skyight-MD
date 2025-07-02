@@ -1,18 +1,15 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Switch,
-  Spinner,
-  SecondaryButton,
-  ConfirmModal,
-} from "../../components/components";
+import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
+import Spinner from "../../components/Spinner/Spinner";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,9 +37,11 @@ const CreateBank = () => {
       bank: bankName,
     };
     setModalstatus(false);
-    dispatch(createBank({ token: adminData?.token, data: payload })).then(() => {
-      navigate("/dashboard/banks");
-    });
+    dispatch(createBank({ token: adminData?.token, data: payload })).then(
+      () => {
+        navigate("/dashboard/banks");
+      }
+    );
   };
 
   return (

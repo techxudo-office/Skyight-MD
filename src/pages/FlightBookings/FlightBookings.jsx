@@ -1,10 +1,8 @@
 import  { useEffect, useState } from "react";
-import {
-  ExcelExportButton,
-  Searchbar,
-  Table,
-  Tag,
-} from "../../components/components";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import Searchbar from "../../components/Searchbar/Searchbar";
+import ExcelExportButton from "../../components/ExcelExportButton/ExcelExportButton";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
-import { CardLayoutContainer, CardLayoutBody } from "../CardLayout/CardLayout";
-import { Input, Button, Spinner } from "../components";
+import Input from "../Input/Input";
+import Button from "../Button/Button";
+import Spinner from "../Spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editcommision,
@@ -12,6 +13,7 @@ import {
   getAdminCredits,
 } from "../../_core/features/bookingSlice";
 import { GrDocumentUpdate } from "react-icons/gr";
+import { CardLayoutContainer, CardLayoutBody } from "../CardLayout/CardLayout";
 
 // Required for accessibility with react-modal
 Modal.setAppElement("#root");

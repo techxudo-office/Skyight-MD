@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  Table,
-  SecondaryButton,
-  ConfirmModal,
-  Tag,
-  ModalWrapper,
-  Button,
-  TextArea,
-  CustomTooltip,
-} from "../../components/components";
+import Table from "../../components/Table/Table";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
+import Button from "../../components/Button/Button";
+import TextArea from "../../components/TextArea/TextArea";
+import CustomTooltip from "../../components/CustomTooltip/CustomTooltip";
 import { MdDelete, MdEditSquare } from "react-icons/md";
 import {
   getReasons,
@@ -22,10 +19,10 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
+import toast from "react-hot-toast";
 import useLogout from "../../hooks/useLogout";
+import { useDispatch, useSelector } from "react-redux";
 
 const Reasons = () => {
   const navigate = useNavigate();

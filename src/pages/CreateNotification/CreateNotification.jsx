@@ -11,7 +11,10 @@ import { notificationInpFields } from "../../utils/InputFields";
 import { notificationValidation } from "../../utils/validations";
 import { getCompanies } from "../../_core/features/companySlice";
 import { createNotification } from "../../_core/features/notificationSlice";
-import { Input, Button, Spinner, Select } from "../../components/components";
+import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
+import Spinner from "../../components/Spinner/Spinner";
+import Select from "../../components/Select/Select";
 import { useNavigate } from "react-router-dom";
 
 const initialState = {

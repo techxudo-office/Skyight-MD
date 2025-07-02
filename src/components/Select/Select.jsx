@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import Spinner  from "../Spinner/Spinner";
 import { FaCaretDown } from "react-icons/fa";
-import { Spinner } from "../components";
 
 const Select = ({
   id,

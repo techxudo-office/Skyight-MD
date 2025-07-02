@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Table,
-  SecondaryButton,
-  ConfirmModal,
-  ModalWrapper,
-  TextArea,
-  Button,
-  CustomTooltip,
-  Searchbar,
-} from "../../components/components";
+import Table from "../../components/Table/Table";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
+import TextArea from "../../components/TextArea/TextArea";
+import Button from "../../components/Button/Button";
+import CustomTooltip from "../../components/CustomTooltip/CustomTooltip";
+import Searchbar from "../../components/Searchbar/Searchbar";
 import { deleteBank, editBank, getBanks } from "../../_core/features/bankSlice";
 import { useNavigate } from "react-router-dom";
 import {

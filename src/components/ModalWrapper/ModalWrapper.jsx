@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import Modal from "react-modal";
 import "./ModalWrapper.css";
 import { MdCancel } from "react-icons/md";
-import { CustomTooltip } from "../components";
+import CustomTooltip  from "../CustomTooltip/CustomTooltip";
 import { CardLayoutHeader } from "../CardLayout/CardLayout";
 
 const ModalWrapper = forwardRef(

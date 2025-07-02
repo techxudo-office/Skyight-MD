@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Tag,
-  Table,
-  DashboardCards,
-  DashboardComissions,
-} from "../../components/components";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import DashboardCards from "../../components/DashboardCards/DashboardCards";
+import DashboardComissions from "../../components/DashboardComissions/DashboardComissions";
 import { getLatestBooking } from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";

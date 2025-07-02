@@ -1,4 +1,4 @@
-import { Spinner } from "../components";
+import Spinner  from "../Spinner/Spinner";
 
 const SecondaryButton = ({
   text,

@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  Table,
-  ConfirmModal,
-  Tag,
-  CustomTooltip,
-} from "../../components/components";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import CustomTooltip from "../../components/CustomTooltip/CustomTooltip";
 import {
   cancelRequestFlight,
   getFlightBookings,

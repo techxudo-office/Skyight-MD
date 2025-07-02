@@ -1,5 +1,3 @@
-import React from "react";
-import { Notifications, SecondaryButton } from "../../components/components";
 import { MdAdd } from "react-icons/md";
 import {
   CardLayoutBody,
@@ -7,6 +5,8 @@ import {
   CardLayoutHeader,
 } from "../../components/CardLayout/CardLayout";
 import { useNavigate } from "react-router-dom";
+import Notifications from "../../components/Notifications/Notifications";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
 
 export default function NotificationPage() {
   const navigate = useNavigate();

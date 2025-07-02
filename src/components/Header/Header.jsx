@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CreditsDropdown, CustomTooltip, Dropdown } from "../components";
+import Dropdown from "../Dropdown/Dropdown";
+import CustomTooltip from "../CustomTooltip/CustomTooltip";
+import CreditsDropdown from "../CreditsDropdown/CreditsDropdown";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { SlSettings } from "react-icons/sl";

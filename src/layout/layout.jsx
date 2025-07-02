@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { Sidebar, Header } from "../components/components";
+import Header from "../components/Header/Header";
+import Sidebar from "../components/Sidebar/Sidebar";
 import { useSelector } from "react-redux";
 
 const Layout = () => {

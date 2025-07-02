@@ -1,27 +1,24 @@
 import { useEffect, useState } from "react";
 import {
-  Table,
-  ModalWrapper,
-  Button,
-  Tag,
-  CustomTooltip,
-  ConfirmModal,
-  Searchbar,
-  ExcelExportButton,
-} from "../../components/components";
-import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
+import Table from "../../components/Table/Table";
+import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
+import Button from "../../components/Button/Button";
+import Tag from "../../components/Tag/Tag";
+import CustomTooltip from "../../components/CustomTooltip/CustomTooltip";
+import Searchbar from "../../components/Searchbar/Searchbar";
+import ExcelExportButton from "../../components/ExcelExportButton/ExcelExportButton";
 import { FaEye } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { getTickets } from "../../_core/features/ticketSlice";
-import { MdEditSquare } from "react-icons/md";
 import dayjs from "dayjs";
-import EditTicketModal from "./EditTicketModal/EditTicketModal";
+import { MdEditSquare } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import useLogout from "../../hooks/useLogout";
+import { getTickets } from "../../_core/features/ticketSlice";
+import EditTicketModal from "./EditTicketModal/EditTicketModal";
 
 const Tickets = () => {
   const dispatch = useDispatch();

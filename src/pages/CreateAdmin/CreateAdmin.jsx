@@ -5,13 +5,11 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Spinner,
-  Select,
-  Switch,
-} from "../../components/components";
+import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
+import Spinner from "../../components/Spinner/Spinner";
+import Select from "../../components/Select/Select";
+import Switch from "../../components/Switch/Switch";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";

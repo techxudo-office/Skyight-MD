@@ -5,8 +5,10 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { Input, Button, Spinner } from "../../components/components";
 import toast from "react-hot-toast";
+import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
+import Spinner from "../../components/Spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { createRole } from "../../_core/features/roleSlice";
 

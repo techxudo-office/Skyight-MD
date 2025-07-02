@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { Button, ModalWrapper, SecondaryButton } from "../components";
+import Button from "../Button/Button";
+import ModalWrapper from "../ModalWrapper/ModalWrapper";
 
 const ConfirmModal = ({ status, onAbort, onConfirm, text, loading }) => {
   const modalRef = useRef();

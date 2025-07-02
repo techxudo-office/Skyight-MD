@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader } from "../components";
+import Loader  from "../Loader/Loader";
 import DataTable from "react-data-table-component";
 
 const Table = ({

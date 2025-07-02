@@ -1,8 +1,8 @@
 import  { useEffect } from "react";
-import { FaUserAlt, FaTachometerAlt, FaClipboardList } from "react-icons/fa";
+import Loader  from "../Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboardAnalytics } from "../../_core/features/adminSlice";
-import { Loader } from "../components";
+import { FaUserAlt, FaTachometerAlt, FaClipboardList } from "react-icons/fa";
 
 const DashboardCards = () => {
   const dispatch = useDispatch();

@@ -5,11 +5,11 @@ import {
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
 import { FaEye } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router-dom";
 import { FaClipboardList } from "react-icons/fa";
+import Loader  from "../../components/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCompanyRevenue } from "../../_core/features/companySlice";
-import { Loader } from "../../components/components";
 
 const CompanyDetails = () => {
   const navigate = useNavigate();

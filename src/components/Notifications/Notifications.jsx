@@ -4,11 +4,12 @@ import {
   CardLayoutContainer,
   CardLayoutHeader,
 } from "../../components/CardLayout/CardLayout";
+import useLogout from "../../hooks/useLogout";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { Spinner, BellIcon } from "../../components/components";
+import Spinner from "../../components/Spinner/Spinner";
+import BellIcon from "../../components/BellIcon/BellIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { getNotifications } from "../../_core/features/notificationSlice";
-import useLogout from "../../hooks/useLogout";
 
 const Notifications = () => {
   const dispatch = useDispatch();

@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import {
-  SecondaryButton,
-  ConfirmModal,
-  Table,
-  Searchbar,
-} from "../../components/components";
-import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
+  deleteUser,
+  getCompanyUsers,
+  getUsers,
+} from "../../_core/features/userSlice";
 import { useNavigate, useParams } from "react-router-dom";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import Table from "../../components/Table/Table";
+import Searchbar from "../../components/Searchbar/Searchbar";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteUser,
-  getCompanyUsers,
-  getUsers,
-} from "../../_core/features/userSlice";
 import EditUserModal from "./EditUserModal/EditUserModal";
+import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
+import toast from "react-hot-toast";
+
 
 const Users = ({ isCompanyUser }) => {
   const navigate = useNavigate();
@@ -94,7 +94,7 @@ const Users = ({ isCompanyUser }) => {
 
   const deleteUserHandler = () => {
     if (!deleteId) {
-      errorToastify("Failed to delete this user");
+      toast.error("Failed to delete this user");
       setModalStatus(false);
       return;
     }

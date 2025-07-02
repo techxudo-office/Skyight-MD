@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  CustomTooltip,
-  ModalWrapper,
-  Searchbar,
-  Table,
-  Tag,
-} from "../../components/components";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import Button from "../../components/Button/Button";
+import Searchbar from "../../components/Searchbar/Searchbar";
+import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
+import CustomTooltip from "../../components/CustomTooltip/CustomTooltip";
 import { FaEye } from "react-icons/fa";
 import { MdEditSquare } from "react-icons/md";
 import {
@@ -22,9 +20,9 @@ import {
   getCompanyTransactions,
   getTransactions,
 } from "../../_core/features/transactionSlice";
-import EditTransactionModal from "./EditTransactionModal/EditTransactionModal";
 import { useParams } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
+import EditTransactionModal from "./EditTransactionModal/EditTransactionModal";
 
 const Transactions = ({ isCompanyDetail }) => {
   const dispatch = useDispatch();

@@ -7,18 +7,16 @@ import {
 import { MdEditSquare } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { MdAutoDelete } from "react-icons/md";
-
-import {
-  ConfirmModal,
-  SecondaryButton,
-  Table,
-  Tag,
-} from "../../components/components";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteRole, getRoles } from "../../_core/features/roleSlice";
 import EditRoleModal from "./EditRoleModal/EditRoleModal";
 import useLogout from "../../hooks/useLogout";
+import toast from "react-hot-toast";
 
 const Roles = () => {
   const navigate = useNavigate();
@@ -86,7 +84,7 @@ const Roles = () => {
 
   const deleteUserHandler = () => {
     if (!deleteId) {
-      errorToastify("Failed to delete this user");
+      toast.error("Failed to delete this user");
       setModalStatus(false);
       return;
     }

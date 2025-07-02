@@ -1,6 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../components/components";
+import Button  from "../../components/Button/Button";
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -12,7 +11,7 @@ const NotFound = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen">
-        <h2 className="mb-7 text-5xl">404 | Not Found</h2>
+        <h2 className="text-5xl mb-7">404 | Not Found</h2>
 
         <div>
           <Button text={"Back to Previous"} onClick={goBackHandler} />

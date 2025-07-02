@@ -5,12 +5,10 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import {
-  Button,
-  Spinner,
-  SecondaryButton,
-  TextArea,
-} from "../../components/components";
+import Button from "../../components/Button/Button";
+import Spinner from "../../components/Spinner/Spinner";
+import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
+import TextArea from "../../components/TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";

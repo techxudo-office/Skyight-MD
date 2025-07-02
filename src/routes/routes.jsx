@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { routesData } from "../data/routesData";
 import { Suspense } from "react";
-import { Loader } from "../components/components";
+import Loader from "../components/Loader/Loader";
 
 const AppRoutes = () => {
   return (

@@ -4,7 +4,10 @@ import {
   CardLayoutHeader,
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
-import { Button, Input, Loader, Switch } from "../../components/components";
+import Button from "../../components/Button/Button";
+import Input from "../../components/Input/Input";
+import Loader from "../../components/Loader/Loader";
+import Switch from "../../components/Switch/Switch";
 import { MdEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";

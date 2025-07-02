@@ -5,10 +5,11 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
-import { Input, Button, Spinner, Select } from "../../components/components";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { FaCaretDown } from "react-icons/fa";
+import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
+import Spinner from "../../components/Spinner/Spinner";
+import Select from "../../components/Select/Select";
 import { useDispatch, useSelector } from "react-redux";
 import { userValidation } from "../../utils/validations";
 import { createUser } from "../../_core/features/userSlice";

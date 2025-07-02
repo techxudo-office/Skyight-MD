@@ -1,5 +1,4 @@
-import React from "react";
-import { Spinner } from "../components";
+import Spinner  from "../Spinner/Spinner";
 
 const Button = ({
   text,

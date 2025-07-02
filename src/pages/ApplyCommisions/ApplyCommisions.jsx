@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Table, CustomTooltip } from "../../components/components";
 import { MdEditSquare } from "react-icons/md";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
+import Table from "../../components/Table/Table";
+import CustomTooltip from "../../components/CustomTooltip/CustomTooltip";
 import { useDispatch, useSelector } from "react-redux";
 import { getCommision } from "../../_core/features/commisionSlice";
 import EditCommisionModal from "./EditCommisionModal/EditCommisionModal";

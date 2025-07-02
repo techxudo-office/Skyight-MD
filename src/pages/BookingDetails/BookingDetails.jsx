@@ -4,20 +4,18 @@ import {
   CardLayoutHeader,
   CardLayoutBody,
 } from "../../components/CardLayout/CardLayout";
-import {
-  Button,
-  Tag,
-  Table,
-  Spinner,
-  CustomTooltip,
-} from "../../components/components";
-import { useLocation, useNavigate } from "react-router-dom";
-import { IoIosAirplane, IoMdClock } from "react-icons/io";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import Button from "../../components/Button/Button";
+import Tag from "../../components/Tag/Tag";
+import Table from "../../components/Table/Table";
+import Spinner from "../../components/Spinner/Spinner";
+import { useLocation, useNavigate } from "react-router-dom";
+import { IoIosAirplane, IoMdClock } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookingDetails } from "../../_core/features/bookingSlice";
 import { MdArrowBack } from "react-icons/md";
+import { getBookingDetails } from "../../_core/features/bookingSlice";
+import CustomTooltip from "../../components/CustomTooltip/CustomTooltip";
 
 dayjs.extend(utc); // Enables UTC plugin for consistent date parsing
 
