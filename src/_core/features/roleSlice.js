@@ -97,7 +97,7 @@ const roleSlice = createSlice({
 export const getRoles = createAsyncThunk(
   "role/getRoles",
   async ({ token, logoutHandler }) => {
-    const response = await makeRequest("GET", "/api/role", {
+    const response = await makeRequest("GET", "/api/role?is_deleted=false", {
       token,
       logoutCallback: logoutHandler,
       errorMessage: "Failed to fetch roles.",

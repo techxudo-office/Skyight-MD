@@ -109,6 +109,7 @@ const Roles = () => {
         loading={isDeletingRole}
         onAbort={abortDeleteHandler}
         onConfirm={deleteUserHandler}
+        text={"Are you sure you want to delete this role?"}
       />
       {isEditModalOpen && (
         <EditRoleModal

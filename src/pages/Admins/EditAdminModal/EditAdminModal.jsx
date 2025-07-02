@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import { adminValidation } from "../../../utils/validations";
 import { editAdmin } from "../../../_core/features/adminSlice";
 import { editAdminInpFields } from "../../../utils/InputFields";
+import useLogout from "../../../hooks/useLogout";
 
 // Set modal's root element for accessibility
 Modal.setAppElement("#root");
@@ -33,12 +34,11 @@ const initialState = {
 
 const EditAdminModal = ({ isOpen, onClose, data }) => {
   const dispatch = useDispatch();
-
+  const logoutHandler = useLogout();
   const [errors, setErrors] = useState({});
   const [active, setActive] = useState(data?.is_active); // Boolean switch for active/inactive status
   const [formData, setFormData] = useState(initialState);
   const [selectedRole, setSelectedRole] = useState(null);
-
   const { adminData } = useSelector((state) => state.persist);
   const { isEditingAdmin } = useSelector((state) => state.admin);
   const { roles, isLoadingRoles } = useSelector((state) => state.role);
@@ -61,8 +61,8 @@ const EditAdminModal = ({ isOpen, onClose, data }) => {
   // Fetch available roles for the dropdown if token exists
   useEffect(() => {
     if (!adminData?.token) return;
-    dispatch(getRoles(adminData?.token));
-  }, [dispatch]);
+    dispatch(getRoles({ token: adminData.token, logoutHandler }));
+  }, [dispatch, adminData?.token]);
 
   // Handle text input changes
   const handleChange = (e) => {

@@ -42,10 +42,12 @@ const Admin = () => {
       return;
     }
 
-    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(() => {
-      setModalStatus(false);
-      setDeleteId(null);
-    });
+    dispatch(deleteAdmin({ id: deleteId, token: adminData?.token })).then(
+      () => {
+        setModalStatus(false);
+        setDeleteId(null);
+      }
+    );
   };
 
   // Cancel delete modal
@@ -128,14 +130,15 @@ const Admin = () => {
         loading={isDeletingAdmin}
         onAbort={abortDeleteHandler}
         onConfirm={deleteUserHandler}
+        text={"Are you sure you want to delete this admin?"}
       />
 
       {/* Edit Admin Modal */}
       {isEditModalOpen && (
         <EditAdminModal
+          data={editAdminData}
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          data={editAdminData}
         />
       )}
 
