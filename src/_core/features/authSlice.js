@@ -3,6 +3,8 @@ import makeRequest from "../../utils/ApiHelper";
 
 // Initial state for authentication-related operations
 const initialState = {
+  isLoading: false,
+
   isLoadingForgotPassword: false,
   forgotPasswordError: null,
 
@@ -28,6 +30,15 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(login.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(login.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(login.rejected, (state) => {
+        state.isLoading = false;
+      })
       // Clears admin data on logout
       .addCase(logout.fulfilled, (state) => {
         state.adminData = null;
@@ -86,6 +97,15 @@ const authSlice = createSlice({
       });
   },
 });
+
+
+export const login = createAsyncThunk("auth/login", (payload) =>
+  makeRequest("post", "/api/login", {
+    data: payload,
+    successMessage: "OTP sent successfully",
+    errorMessage: "Login failed. Please try again.",
+  })
+);
 
 // Async thunk to handle admin logout
 export const logout = createAsyncThunk("auth/logout", async (token) => {

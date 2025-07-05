@@ -3,7 +3,7 @@ import makeRequest from "../../utils/ApiHelper";
 
 const initialState = {
   adminData: null,
-  isLoading: false,
+  isLoadingVerifyOTP: false,
 
   isUpdatingAccount: false,
 };
@@ -18,15 +18,16 @@ const persistSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
-        state.isLoading = true;
+      .addCase(verifyLoginOTP.pending, (state) => {
+        state.isLoadingVerifyOTP = true;
       })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.adminData = action.payload;
+      .addCase(verifyLoginOTP.fulfilled, (state, action) => {
+        console.log(action.payload.data.data);
+        state.adminData = action.payload.data.data;
+        state.isLoadingVerifyOTP = false;
       })
-      .addCase(login.rejected, (state) => {
-        state.isLoading = false;
+      .addCase(verifyLoginOTP.rejected, (state) => {
+        state.isLoadingVerifyOTP = false;
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.adminData = {
@@ -55,19 +56,14 @@ const persistSlice = createSlice({
   },
 });
 
-export const login = createAsyncThunk("persist/login", async (payload) => {
-  const response = await makeRequest("POST", "/api/login", {
+// Submit OTP for verification after signup
+export const verifyLoginOTP = createAsyncThunk("auth/verifyLoginOTP", (payload) =>
+  makeRequest("post", "/api/verify-verification-code-login", {
     data: payload,
-    successMessage: "Login successful",
-    errorMessage: "Login failed. Please try again.",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  });
-  return response.data?.data;
-});
-
+    successMessage: "OTP Verified Successfully",
+    errorMessage: "OTP verification failed",
+  })
+);
 // Async thunk to update admin account information
 export const updateAccount = createAsyncThunk(
   "persist/updateAccount",

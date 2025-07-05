@@ -7,8 +7,8 @@ import {
   CardLayoutContainer,
   CardLayoutHeader,
 } from "../../CardLayout/CardLayout";
-import Spinner from "../../components/Spinner/Spinner";
-import BellIcon from "../../components/BellIcon/BellIcon";
+import Spinner from "../../Spinner/Spinner";
+import BellIcon from "../../BellIcon/BellIcon";
 import { getNotifications } from "../../../_core/features/notificationSlice";
 
 const NotificationDrop = () => {
