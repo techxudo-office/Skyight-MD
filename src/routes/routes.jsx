@@ -1,6 +1,6 @@
+import { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { routesData } from "../data/routesData";
-import { Suspense } from "react";
 import Loader from "../components/Loader/Loader";
 
 const AppRoutes = () => {
@@ -14,8 +14,8 @@ const AppRoutes = () => {
                 {route.children.map((child, childIndex) => (
                   <Route
                     key={childIndex}
-                    index={child.index}
                     path={child.path}
+                    index={child.index}
                     element={child.element}
                   />
                 ))}

@@ -3,12 +3,13 @@ import { FixedSizeList as List } from "react-window";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getNotifications } from "../../../_core/features/notificationSlice";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
 } from "../../CardLayout/CardLayout";
-import { BellIcon, Spinner } from "../../components";
+import Spinner from "../../components/Spinner/Spinner";
+import BellIcon from "../../components/BellIcon/BellIcon";
+import { getNotifications } from "../../../_core/features/notificationSlice";
 
 const NotificationDrop = () => {
   const dispatch = useDispatch();
