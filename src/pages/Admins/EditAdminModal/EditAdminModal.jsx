@@ -6,14 +6,12 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Spinner,
-  ModalWrapper,
-  Select,
-  Switch,
-} from "../../../components/components";
+import Input from "../../../components/Input/Input";
+import Button from "../../../components/Button/Button";
+import Spinner from "../../../components/Spinner/Spinner";
+import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
+import Select from "../../../components/Select/Select";
+import Switch from "../../../components/Switch/Switch";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";

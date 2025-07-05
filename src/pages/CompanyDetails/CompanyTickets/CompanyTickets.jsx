@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -9,20 +9,18 @@ import { FaEye } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanyTickets } from "../../../_core/features/companySlice";
-import {
-  Table,
-  ModalWrapper,
-  Button,
-  Tag,
-  Searchbar,
-} from "../../../components/components";
+import Tag from "../../../components/Tag/Tag";
+import Table from "../../../components/Table/Table";
+import Button from "../../../components/Button/Button";
+import Searchbar from "../../../components/Searchbar/Searchbar";
+import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
 
 const CompanyTickets = () => {
   const dispatch = useDispatch();
   const { companyId } = useParams();
   const [modal, setModal] = useState(false);
   const [ticket, setTicket] = useState(null);
-  const [filteredTickets, setFilteredTickets] = useState([])
+  const [filteredTickets, setFilteredTickets] = useState([]);
   const { adminData } = useSelector((state) => state.persist);
   const { companyTickets, isLoadingCompanyTickets } = useSelector(
     (state) => state.company
@@ -43,13 +41,11 @@ const CompanyTickets = () => {
       name: "TITLE",
       selector: (row) => row.title,
       sortable: false,
-
     },
     {
       name: "DESCRIPTION",
       selector: (row) => row.description,
       sortable: false,
-
     },
     {
       name: "Date",
@@ -62,7 +58,6 @@ const CompanyTickets = () => {
       name: "STATUS",
       selector: (row) => <Tag value={row.status} />,
       sortable: false,
-
     },
     {
       name: "",
@@ -77,7 +72,6 @@ const CompanyTickets = () => {
         </div>
       ),
       sortable: false,
-
     },
   ];
 
@@ -96,7 +90,11 @@ const CompanyTickets = () => {
           className="flex items-center justify-between"
         />
         <CardLayoutBody removeBorder={true}>
-          <Searchbar data={companyTickets} onFilteredData={setFilteredTickets} searchFields={["title", "status", "created_at"]} />
+          <Searchbar
+            data={companyTickets}
+            onFilteredData={setFilteredTickets}
+            searchFields={["title", "status", "created_at"]}
+          />
           <Table
             pagination={true}
             columnsData={columns}

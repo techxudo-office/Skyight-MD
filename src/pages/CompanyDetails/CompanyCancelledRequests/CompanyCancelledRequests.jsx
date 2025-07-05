@@ -6,10 +6,12 @@ import {
 } from "../../../components/CardLayout/CardLayout";
 import dayjs from "dayjs";
 import { FaEye } from "react-icons/fa";
-import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { Searchbar, Table, Tag } from "../../../components/components";
 import { IoIosAirplane } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import Tag from "../../../components/Tag/Tag";
+import Table from "../../../components/Table/Table";
+import Searchbar from "../../../components/Searchbar/Searchbar";
 import { getCompanyBookings } from "../../../_core/features/bookingSlice";
 
 const CompanyCancelledRequests = () => {

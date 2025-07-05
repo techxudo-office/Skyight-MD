@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {
   CardLayoutContainer,
@@ -6,23 +6,20 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Spinner,
-  ModalWrapper,
-  Select,
-  Switch,
-} from "../../../components/components";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserRoles } from "../../../_core/features/roleSlice";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import Input from "../../../components/Input/Input";
+import Button from "../../../components/Button/Button";
+import Select from "../../../components/Select/Select";
+import Switch from "../../../components/Switch/Switch";
+import Spinner from "../../../components/Spinner/Spinner";
+import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
+import { getUserRoles } from "../../../_core/features/roleSlice";
 import { editUser } from "../../../_core/features/userSlice";
 import { userValidation } from "../../../utils/validations";
 import { editUserInpFields } from "../../../utils/InputFields";
 
 Modal.setAppElement("#root");
-
 
 const initialState = {
   first_name: "",
@@ -45,7 +42,6 @@ const EditUserModal = ({ isOpen, onClose, usersData }) => {
 
   useEffect(() => {
     if (usersData) {
-
       setFormData({
         first_name: usersData?.first_name || "",
         last_name: usersData?.last_name || "",

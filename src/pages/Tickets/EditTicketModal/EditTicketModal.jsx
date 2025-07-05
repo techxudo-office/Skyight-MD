@@ -6,14 +6,12 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Spinner,
-  ModalWrapper,
-} from "../../../components/components";
-import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import Input from "../../../components/Input/Input";
+import Button from "../../../components/Button/Button";
+import Spinner from "../../../components/Spinner/Spinner";
+import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
 import { editTicket } from "../../../_core/features/ticketSlice";
 
 Modal.setAppElement("#root");
@@ -40,7 +38,10 @@ const EditTicketModal = ({ isOpen, onClose, data }) => {
 
   useEffect(() => {
     if (data) {
-      setFormData({ ticket_id: data?.id || "", admin_response: data?.admin_response || "" });
+      setFormData({
+        ticket_id: data?.id || "",
+        admin_response: data?.admin_response || "",
+      });
       setStatus(data?.status || "open");
     }
   }, [data]);

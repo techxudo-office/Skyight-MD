@@ -6,12 +6,10 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../../components/CardLayout/CardLayout";
-import {
-  Input,
-  Button,
-  Spinner,
-  ModalWrapper,
-} from "../../../components/components";
+import Input from "../../../components/Input/Input";
+import Button from "../../../components/Button/Button";
+import Spinner from "../../../components/Spinner/Spinner";
+import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { editcommision } from "../../../_core/features/commisionSlice";
 

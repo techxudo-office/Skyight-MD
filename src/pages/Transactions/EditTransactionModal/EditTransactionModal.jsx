@@ -6,13 +6,11 @@ import {
   CardLayoutBody,
   CardLayoutFooter,
 } from "../../../components/CardLayout/CardLayout";
-import {
-  Button,
-  Spinner,
-  ModalWrapper,
-  Switch,
-  MultiSelect,
-} from "../../../components/components";
+import Button from "../../../components/Button/Button";
+import Spinner from "../../../components/Spinner/Spinner";
+import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
+import Switch from "../../../components/Switch/Switch";
+import MultiSelect from "../../../components/MultiSelect/MultiSelect";
 import { useDispatch, useSelector } from "react-redux";
 import { getReasons } from "../../../_core/features/reasonsSlice";
 import { editTransaction } from "../../../_core/features/transactionSlice";
@@ -34,7 +32,6 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
   useEffect(() => {
     if (adminData?.token) {
       dispatch(getReasons({ token: adminData?.token, logoutHandler }));
-
     }
   }, [adminData?.token]);
 
