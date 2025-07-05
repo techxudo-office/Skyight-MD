@@ -1,6 +1,6 @@
 import { utils, writeFile } from "xlsx"; // Utilities to create sheets and export files
-import SecondaryButton  from "../SecondaryButton/SecondaryButton";
 import { SiGooglesheets } from "react-icons/si";
+import SecondaryButton  from "../../components/SecondaryButton/SecondaryButton";
 
 const ExcelExportButton = ({
   data, // Array of objects to be exported to Excel
