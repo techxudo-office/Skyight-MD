@@ -9,7 +9,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import { resendLoginCode } from "../../_core/features/authSlice";
+import { resendLoginCode } from "../../_core/features/authSlice";
 import { verifyLoginOTP } from "../../_core/features/persistSlice";
 
 const Verification = () => {
@@ -73,7 +73,7 @@ const Verification = () => {
   };
 
   const resendCodeHandler = () => {
-    // dispatch(resendLoginCode({ email }));
+    dispatch(resendLoginCode({ email }));
   };
 
   useEffect(() => {

@@ -174,6 +174,15 @@ export const resendCode = createAsyncThunk(
   }
 );
 
+// Request to resend the Login OTP code again
+export const resendLoginCode = createAsyncThunk("auth/resendLoginCode", (payload) =>
+  makeRequest("post", "/api/resend-verification-code-login", {
+    data: payload,
+    successMessage: "Verification code resent successfully",
+    errorMessage: "Failed to resend verification code",
+  })
+);
+
 // Export action to manually update admin data from components
 export const { updateAdminData } = authSlice.actions;
 
