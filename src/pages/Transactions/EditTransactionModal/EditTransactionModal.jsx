@@ -49,14 +49,14 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
 
     dispatch(editTransaction({ data: payload, token: adminData?.token }))
       .unwrap()
-      .then(() => {
-        dispatch(
-          editAdminCredits({
-            data: { amount: Number(transaction.amount) },
-            token: adminData?.token,
-          })
-        );
-      })
+      // .then(() => {
+      //   dispatch(
+      //     editAdminCredits({
+      //       data: { amount: Number(transaction.amount) },
+      //       token: adminData?.token,
+      //     })
+      //   );
+      // })
       .finally(() => {
         onClose();
       });
