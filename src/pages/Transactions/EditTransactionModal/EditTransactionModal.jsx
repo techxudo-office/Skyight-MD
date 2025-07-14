@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getReasons } from "../../../_core/features/reasonsSlice";
 import { editTransaction } from "../../../_core/features/transactionSlice";
 import toast from "react-hot-toast";
-import { editAdminCredits } from "../../../_core/features/bookingSlice";
 import useLogout from "../../../hooks/useLogout";
 
 Modal.setAppElement("#root");
@@ -49,15 +48,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
 
     dispatch(editTransaction({ data: payload, token: adminData?.token }))
       .unwrap()
-      // .then(() => {
-      //   dispatch(
-      //     editAdminCredits({
-      //       data: { amount: Number(transaction.amount) },
-      //       token: adminData?.token,
-      //     })
-      //   );
-      // })
-      .finally(() => {
+      .then(() => {
         onClose();
       });
   };

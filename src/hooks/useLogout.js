@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // Custom hook to handle user logout functionality
 const useLogout = () => {
@@ -12,9 +12,10 @@ const useLogout = () => {
   // - Shows an error toast notifying the user that the session expired
   // - Redirects user to the login page
   const logoutHandler = () => {
+    console.log("Logging out..."); // Log to console for debugging
     dispatch({ type: "user/logout" });
     toast.error("Session Expired");
-    navigate("/login");
+    navigate("/");
   };
 
   return logoutHandler; // Return logout function for use in components
