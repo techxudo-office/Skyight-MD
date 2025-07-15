@@ -60,7 +60,6 @@ const persistSlice = createSlice({
 export const verifyLoginOTP = createAsyncThunk("auth/verifyLoginOTP", (payload) =>
   makeRequest("post", "/api/verify-verification-code-login", {
     data: payload,
-    successMessage: "OTP Verified Successfully",
     errorMessage: "OTP verification failed",
   })
 );

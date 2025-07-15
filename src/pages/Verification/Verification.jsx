@@ -18,28 +18,25 @@ const Verification = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
   const loading = useSelector((state) => state.persist.isLoadingVerifyOTP);
+  const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
 
   const verificationHandler = (payload) => {
     dispatch(verifyLoginOTP(payload)).then((action) => {
       if (verifyLoginOTP.fulfilled.match(action)) {
-        console.log("Login OTP verified successfully");
         setVerificationCode(["", "", "", ""]);
         navigate("/dashboard");
+        toast.success("OTP verified successfully");
       }
     });
   };
 
   const onChangeHandler = (e, index) => {
-    const value = e.target.value;
-    if (/[^0-9]/.test(value)) {
-      return;
-    }
-    setVerificationCode((prevCode) => {
-      const newCode = [...prevCode];
-      newCode[index] = value;
-      return newCode;
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    setVerificationCode((prev) => {
+      const next = [...prev];
+      next[index] = value;
+      return next;
     });
 
     if (value !== "" && index < 3) {
@@ -53,13 +50,21 @@ const Verification = () => {
         inputRefs.current[index - 1].focus();
       }
     }
-
-    if (e.key === "Enter") {
-      const otp = verificationCode.join("");
-      if (otp.length === 4) {
-        verifyOTPHandler();
-      }
+  };
+  const onPaste = (e) => {
+    e.preventDefault();
+    const pasted =
+      e.clipboardData.getData("text/plain").match(/\d+/)?.[0].slice(0, 4) || "";
+    if (!pasted) return;
+    // fill state in one go
+    const next = ["", "", "", ""];
+    for (let i = 0; i < pasted.length; i++) {
+      next[i] = pasted[i];
     }
+    setVerificationCode(next);
+    // focus the last filled or next
+    const lastIndex = pasted.length - 1;
+    inputRefs.current[lastIndex]?.focus();
   };
 
   const verifyOTPHandler = async () => {
@@ -72,19 +77,23 @@ const Verification = () => {
     }
   };
 
-  const resendCodeHandler = () => {
-    dispatch(resendLoginCode({ email }));
-  };
+  // auto-submit as soon as all 4 boxes are non-empty:
+  useEffect(() => {
+    if (verificationCode.every((d) => d !== "")) {
+      verifyOTPHandler();
+    }
+  }, [verificationCode]);
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
-  }, []);
-
-  useEffect(() => {
     if (location.state) {
       setEmail(location.state);
     }
   }, []);
+
+  const resendCodeHandler = () => {
+    dispatch(resendLoginCode({ email }));
+  };
   return (
     <>
       <div className="flex items-center justify-center w-full h-screen animated-page">
@@ -316,6 +325,7 @@ const Verification = () => {
                       className={`w-16 h-16 text-center border-2 text-2xl outline-none rounded-lg bg-slate-100 ${
                         value !== "" ? "border-primary" : "border-slate-300"
                       }`}
+                      onPaste={(e) => onPaste(e)}
                       onChange={(e) => onChangeHandler(e, index)}
                       onKeyDown={(e) => onKeyPressHandler(e, index)}
                       ref={(el) => (inputRefs.current[index] = el)}
