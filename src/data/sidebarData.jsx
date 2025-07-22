@@ -45,6 +45,11 @@ export const useAdminSidebarLinks = () => {
       path: "/dashboard",
       icon: <HiRectangleGroup />,
     },
+    pagePermissions.flights && {
+      title: "Flight Bookings",
+      path: "flight-bookings",
+      icon: <IoMdBookmark />,
+    },
 
     // Always show Companies link (not permission-based)
     {
@@ -58,20 +63,10 @@ export const useAdminSidebarLinks = () => {
       title: "Bookings",
       icon: <IoMdBookmark />,
       sublinks: [
-        pagePermissions.transactions && {
-          title: "Transactions",
-          path: "transactions",
-          icon: <TbTransactionDollar />,
-        },
         pagePermissions.tickets && {
           title: "Tickets",
           path: "tickets",
           icon: <IoTicket />,
-        },
-        pagePermissions.flights && {
-          title: "Flight Bookings",
-          path: "flight-bookings",
-          icon: <IoMdBookmark />,
         },
         {
           title: "Refund Requests",
@@ -91,6 +86,11 @@ export const useAdminSidebarLinks = () => {
       title: "Accounts",
       icon: <MdAccountBalanceWallet />,
       sublinks: [
+        pagePermissions.transactions && {
+          title: "Transactions",
+          path: "transactions",
+          icon: <TbTransactionDollar />,
+        },
         {
           title: "Banks",
           path: "banks",
