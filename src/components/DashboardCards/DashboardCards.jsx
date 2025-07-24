@@ -28,6 +28,12 @@ const DashboardCards = () => {
       icon: <FaClipboardList className="text-3xl text-primary" />,
     },
     {
+      title: "Total Tickets",
+      value: dashboard?.totalBookedBooking,
+      description: "Since last month",
+      icon: <FaClipboardList className="text-3xl text-primary" />,
+    },
+    {
       title: "Total Refunds",
       value: dashboard?.totalRefundedBooking,
       description: "Processed refunds",

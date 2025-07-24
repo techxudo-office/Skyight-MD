@@ -57,6 +57,12 @@ const BookingDetails = () => {
                 <h1 className="flex items-center gap-2 mt-2 w-fit ">
                   Status: <Tag value={bookingDetails?.booking_status} />
                 </h1>
+                <h1 className="flex flex-wrap items-start gap-2 mt-2">
+                  Company:
+                  <span className="break-words text-primary">
+                    {bookingDetails?.company_name}
+                  </span>
+                </h1>
               </div>
             </div>
           </CardLayoutBody>
