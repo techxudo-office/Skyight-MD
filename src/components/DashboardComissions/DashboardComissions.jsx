@@ -116,11 +116,20 @@ const DashboardComission = () => {
 
                 {/* Overall commission section */}
                 <div className="w-1/3 text-end text-text">
-                  <p className="text-xs">Commisions</p>
+                  {/* <p className="text-xs">Commisions</p>
                   <p className="text-3xl font-semibold">
                     {commisions.commission || 0}{" "}
                     <span className="text-sm text-gray">$</span>
-                  </p>
+                  </p> */}
+                  <Input
+                    // className={"mt-5"}
+                    label={"Commision"}
+                    name={"commision"}
+                    type="number"
+                    value={commision}
+                    onChange={(e) => setCommision(e.target.value)}
+                    placeholder={`Enter Commision`}
+                  />
                   <Input
                     className={"mt-5"}
                     label={"Commision"}

@@ -122,14 +122,16 @@ export const getAdmins = createAsyncThunk(
 // Thunk to fetch dashboard stats for the admin panel
 export const getDashboardAnalytics = createAsyncThunk(
   "admin/getDashboardAnalytics",
-  async (token, thunkAPI) => {
-    const response = await makeRequest("GET", "/api/adminKpi", {
-      token,
-      errorMessage: "Failed to fetch analytics.",
-    });
+  async ({ token, fromDate, toDate }, thunkAPI) => {
+    const response = await makeRequest(
+      "GET",
+      `/api/adminKpi?fromDate=${fromDate}&toDate=${toDate}`,
+      { token, errorMessage: "Failed to fetch analytics." }
+    );
     return response?.data.data;
   }
 );
+
 
 // Thunk to create a new admin account
 export const createAdmin = createAsyncThunk(
@@ -150,7 +152,7 @@ export const createAdmin = createAsyncThunk(
 export const deleteAdmin = createAsyncThunk(
   "admin/deleteAdmin",
   async ({ id, token }, thunkAPI) => {
-    await makeRequest("DELETE", `/api/admin/${id}`, {
+    await makeRequest("DELETE", `/ api / admin / ${id}`, {
       token,
       successMessage: "Admin deleted successfully",
       errorMessage: "Failed while deleting this admin",
@@ -163,7 +165,7 @@ export const deleteAdmin = createAsyncThunk(
 export const editAdmin = createAsyncThunk(
   "admin/editAdmin",
   async ({ id, token, data }, thunkAPI) => {
-    const response = await makeRequest("PUT", `/api/admin/${id}`, {
+    const response = await makeRequest("PUT", `/ api / admin / ${id}`, {
       data,
       token,
       successMessage: "Admin updated successfully",
