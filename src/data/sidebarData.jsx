@@ -96,6 +96,11 @@ export const useAdminSidebarLinks = () => {
           path: "banks",
           icon: <PiBankBold />,
         },
+        {
+          title: "User Verifications",
+          path: "user-verifications",
+          icon: <PiBankBold />,
+        },
       ].filter(Boolean),
     },
 

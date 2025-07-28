@@ -48,6 +48,9 @@ const CompanyDetails = lazy(() =>
 const CompanyTickets = lazy(() =>
   import("../pages/CompanyDetails/CompanyTickets/CompanyTickets")
 );
+const UserVerifications = lazy(() =>
+  import("../pages/UserVerifications/UserVerifications")
+);
 const CompanyRefundedRequests = lazy(() =>
   import(
     "../pages/CompanyDetails/CompanyRefundedRequests/CompanyRefundedRequests"
@@ -93,6 +96,7 @@ export const routesData = [
       { path: "refund-requests", element: <RefundRequests /> },
       { path: "cancel-requests", element: <CancelRequests /> },
       { path: "notifications", element: <NotificationPage /> },
+      { path: "user-verifications", element: <UserVerifications /> },
       { path: "create-notification", element: <CreateNotification /> },
       { path: "company/details/:companyId", element: <CompanyDetails /> },
       {

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../../utils/ApiBaseUrl";
 import toast from "react-hot-toast";
+import makeRequest from "../../utils/ApiHelper";
 
 const initialState = {
   users: [],
@@ -11,6 +12,11 @@ const initialState = {
   companyUsers: [],
   isLoadingCompanyUsers: false,
   companyUsersError: null,
+
+  userVerificationForms: [],
+  isLoadingUserVerificationForms: false,
+
+  isUpdatingUserVerificationForms: false,
 
   isCreatingUser: false,
   createUserError: null,
@@ -51,6 +57,25 @@ const userSlice = createSlice({
       .addCase(getCompanyUsers.rejected, (state, action) => {
         state.isLoadingCompanyUsers = false;
         state.companyUsersError = action.payload;
+      })
+      .addCase(getUserVerificationForms.pending, (state) => {
+        state.isLoadingUserVerificationForms = true;
+      })
+      .addCase(getUserVerificationForms.fulfilled, (state, action) => {
+        state.isLoadingUserVerificationForms = false;
+        state.userVerificationForms = action.payload.data.data[0];
+      })
+      .addCase(getUserVerificationForms.rejected, (state, action) => {
+        state.isLoadingUserVerificationForms = false;
+      })
+      .addCase(updateUserVerificationForms.pending, (state) => {
+        state.isUpdatingUserVerificationForms = true;
+      })
+      .addCase(updateUserVerificationForms.fulfilled, (state, action) => {
+        state.isUpdatingUserVerificationForms = false;
+      })
+      .addCase(updateUserVerificationForms.rejected, (state, action) => {
+        state.isUpdatingUserVerificationForms = false;
       })
       .addCase(createUser.pending, (state) => {
         state.isCreatingUser = true;
@@ -129,6 +154,27 @@ export const getCompanyUsers = createAsyncThunk(
       return thunkAPI.rejectWithValue(errorMessage);
     }
   }
+);
+
+export const getUserVerificationForms = createAsyncThunk(
+  "user/getUserVerificationForms",
+  ({ token, logoutHandler }) =>
+    makeRequest("get", `/api/allForms`, {
+      token,
+      logoutHandler,
+      errorMessage: "Failed to user verification forms",
+    })
+);
+
+export const updateUserVerificationForms = createAsyncThunk(
+  "user/updateUserVerificationForms",
+  ({ id, token, payload, logoutHandler }) =>
+    makeRequest("put", `/api/update-form/${id}`, {
+      token,
+      data: payload,
+      logoutHandler,
+      errorMessage: "Failed to user verification forms",
+    })
 );
 
 export const createUser = createAsyncThunk(
