@@ -84,6 +84,7 @@ const UserVerifications = () => {
           isOpen={isViewModalOpen}
           selectedForm={selectedForm}
           setSelectedForm={setSelectedForm}
+          setIsViewModalOpen={setIsViewModalOpen}
         />
       )}
       <CardLayoutContainer removeBg>

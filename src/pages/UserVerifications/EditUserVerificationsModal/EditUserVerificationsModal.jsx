@@ -6,12 +6,16 @@ import Switch from "../../../components/Switch/Switch";
 import Button from "../../../components/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
-import { getUserVerificationForms, updateUserVerificationForms } from "../../../_core/features/userSlice";
+import {
+  getUserVerificationForms,
+  updateUserVerificationForms,
+} from "../../../_core/features/userSlice";
 
 const EditUserVerificationsModal = ({
   isOpen,
   setSelectedForm,
   selectedForm,
+  setIsViewModalOpen,
 }) => {
   const dispatch = useDispatch();
   const logoutHandler = useLogout();
@@ -122,26 +126,30 @@ const EditUserVerificationsModal = ({
             <div className="flex items-center w-1/4 gap-2">
               <strong>Status:</strong> <Tag value={selectedForm.status} />
             </div>
-            <div className="mt-4">
-              <Switch
-                label="Approve"
-                value={decision}
-                onChange={handleDecisionChange}
-              />
-            </div>
+            {selectedForm.status === "pending" && (
+              <div className="mt-4">
+                <Switch
+                  label="Approve"
+                  value={decision}
+                  onChange={handleDecisionChange}
+                />
+              </div>
+            )}
           </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button
               onClick={closeModal}
-              text="Cancel"
+              text="Close"
               className="px-4 py-2 text-black bg-gray-300 rounded hover:bg-gray-400"
             />
-            <Button
-              onClick={submitDecision}
-              text={decision ? "Approve" : "Reject"}
-              className="px-4 py-2 text-white rounded "
-              style={{ backgroundColor: decision ? "#4caf50" : "#f44336" }}
-            />
+            {selectedForm.status === "pending" && (
+              <Button
+                onClick={submitDecision}
+                text={decision ? "Approve" : "Reject"}
+                className="px-4 py-2 text-white rounded "
+                style={{ backgroundColor: decision ? "#4caf50" : "#f44336" }}
+              />
+            )}
           </div>
         </div>
       )}
