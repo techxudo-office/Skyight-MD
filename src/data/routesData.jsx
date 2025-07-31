@@ -21,6 +21,7 @@ const BookingDetails = lazy(() =>
 const Transactions = lazy(() => import("../pages/Transactions/Transactions"));
 const Banks = lazy(() => import("../pages/Banks/Banks"));
 const Offers = lazy(() => import("../pages/Offers/Offers"));
+const CreateOffer = lazy(() => import("../pages/CreateOffer/CreateOffer"));
 const CreateBank = lazy(() => import("../pages/CreateBank/CreateBank"));
 const Tickets = lazy(() => import("../pages/Tickets/Tickets"));
 const Settings = lazy(() => import("../pages/Settings/Settings"));
@@ -89,6 +90,7 @@ export const routesData = [
       { path: "transactions", element: <Transactions /> },
       { path: "banks", element: <Banks /> },
       { path: "offers", element: <Offers /> },
+      { path: "create-offer", element: <CreateOffer /> },
       { path: "create-bank", element: <CreateBank /> },
       { path: "tickets", element: <Tickets /> },
       { path: "settings", element: <Settings /> },

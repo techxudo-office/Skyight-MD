@@ -7,7 +7,7 @@ const initialState = {
 
     isLoadingDeleteOffer: false,
 
-    isCreatingbank: false,
+    isCreatingOffer: false,
 
     isEditingOffer: false,
 };
@@ -41,14 +41,14 @@ const bankSlice = createSlice({
                 state.isLoadingDeleteOffer = false;
             })
             .addCase(createOffer.pending, (state) => {
-                state.isCreatingbank = true;
+                state.isCreatingOffer = true;
             })
             .addCase(createOffer.fulfilled, (state, action) => {
-                state.isCreatingbank = false;
+                state.isCreatingOffer = false;
                 state.offers.push(action.payload);
             })
             .addCase(createOffer.rejected, (state, action) => {
-                state.isCreatingbank = false;
+                state.isCreatingOffer = false;
             })
             .addCase(editOffer.pending, (state) => {
                 state.isEditingOffer = true;
@@ -91,30 +91,26 @@ export const deleteOffer = createAsyncThunk(
 export const createOffer = createAsyncThunk(
     "offer/createOffer",
     ({ data, token }) =>
-        makeRequest("POST", "/api/offer", {
+        makeRequest("POST", "/api/create-offer", {
             data,
             token,
             successMessage: "Offer created successfully",
             errorMessage: "Failed to create offer",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
         })
 );
 
 export const editOffer = createAsyncThunk(
     "offer/editOffer",
-    async ({ id, token, data }) => {
-        const payload = {
-            bank_id: id,
-            offer: data,
-        };
-        const response = await makeRequest("PUT", "/api/offer", {
-            data: payload,
+    async ({ token, payload }) =>
+        makeRequest("PUT", "/api/update-offer", {
             token,
+            data: payload,
             successMessage: "Offer updated successfully",
             errorMessage: "Failed while updating this offer",
-        });
-        return response?.data.data || response;
-    }
+        })
 );
 
 export default bankSlice.reducer;

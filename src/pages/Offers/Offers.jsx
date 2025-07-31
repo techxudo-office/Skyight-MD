@@ -11,7 +11,7 @@ import {
   deleteOffer,
   editOffer,
   getOffers,
-} from "../../_core/features/offersSlice";
+} from "../../_core/features/offerSlice";
 import { useNavigate } from "react-router-dom";
 import {
   CardLayoutContainer,
@@ -105,7 +105,7 @@ const Offers = () => {
           </button>
           <button
             onClick={() => {
-              setEditId(row.id);
+              setEditId(Number(row.id));
               setFormValues({
                 title: row.title,
                 description: row.description,
@@ -149,14 +149,15 @@ const Offers = () => {
       toast.error("Description must be at least 10 characters.");
       return;
     }
-    const data = new FormData();
-    data.append("title", title);
-    data.append("description", description);
-    if (image) data.append("image", image);
+    const payload = new FormData();
+    payload.append("title", title);
+    payload.append("offerId", Number(editId));
+    payload.append("description", description);
+    if (image) payload.append("image", image);
 
-    dispatch(editOffer({ token: adminData.token, id: editId, data })).then(() =>
-      setModalWrapper((p) => ({ ...p, isOpen: false }))
-    );
+    dispatch(editOffer({ token: adminData.token, payload }))
+      .unwrap()
+      .then(() => setModalWrapper((p) => ({ ...p, isOpen: false })));
   };
 
   return (
