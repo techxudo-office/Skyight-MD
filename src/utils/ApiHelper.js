@@ -46,7 +46,12 @@ const makeRequest = async (
       toast.success(successMessage); // Show success toast if message is provided
     }
 
-    return response; // Return the response to the caller
+    return (
+      response.data?.data || // actual payload under `data`
+      response.data?.message || // fallback to message field
+      response.data || // or return full data object
+      response // or full axios response if none of the above
+    ); // Return the response to the caller
   } catch (error) {
     const status = error.response?.status;
     const apiErrors = error.response?.data?.data?.errors;

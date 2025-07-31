@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -12,9 +11,6 @@ import Spinner from "../../../components/Spinner/Spinner";
 import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { editcommision } from "../../../_core/features/commisionSlice";
-
-Modal.setAppElement("#root");
-// Required for accessibility, binds modal to the root app element
 
 const EditCommisionModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();

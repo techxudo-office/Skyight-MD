@@ -122,14 +122,12 @@ export const getAdmins = createAsyncThunk(
 // Thunk to fetch dashboard stats for the admin panel
 export const getDashboardAnalytics = createAsyncThunk(
   "admin/getDashboardAnalytics",
-  async ({ token, fromDate, toDate }, thunkAPI) => {
-    const response = await makeRequest(
+  ({ token, fromDate, toDate }) =>
+    makeRequest(
       "GET",
       `/api/adminKpi?fromDate=${fromDate}&toDate=${toDate}`,
       { token, errorMessage: "Failed to fetch analytics." }
-    );
-    return response?.data.data;
-  }
+    )
 );
 
 
@@ -164,15 +162,13 @@ export const deleteAdmin = createAsyncThunk(
 // Thunk to update an admin's information
 export const editAdmin = createAsyncThunk(
   "admin/editAdmin",
-  async ({ id, token, data }, thunkAPI) => {
-    const response = await makeRequest("PUT", `/ api / admin / ${id}`, {
+  ({ id, token, data }, thunkAPI) =>
+    makeRequest("PUT", `/ api / admin / ${id}`, {
       data,
       token,
       successMessage: "Admin updated successfully",
       errorMessage: "Failed while updating this admin",
-    });
-    return response?.data.data || response;
-  }
+    })
 );
 
 export default adminSlice.reducer;

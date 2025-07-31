@@ -78,17 +78,14 @@ const bankSlice = createSlice({
 });
 
 export const getBanks = createAsyncThunk(
-  "booking/getBanks",
-  async ({ token, logoutHandler }) => {
-    const response = await makeRequest("GET", "/api/bank", {
+  "bank/getBanks",
+  ({ token, logoutHandler }) =>
+    makeRequest("GET", "/api/bank", {
       token,
       logoutCallback: logoutHandler,
       errorMessage: "Failed to fetch banks",
-    });
-    if (response?.data?.data.length > 0) {
-      return response.data.data;
-    }
-  }
+    })
+
 );
 
 export const deleteBank = createAsyncThunk(
@@ -119,19 +116,13 @@ export const createBank = createAsyncThunk(
 
 export const editBank = createAsyncThunk(
   "bank/editBank",
-  async ({ id, token, data }) => {
-    const payload = {
-      bank_id: id,
-      bank: data,
-    };
-    const response = await makeRequest("PUT", "/api/bank", {
-      data: payload,
+  ({ token, payload }) =>
+    makeRequest("PUT", "/api/bank", {
       token,
+      data: payload,
       successMessage: "Bank updated successfully",
       errorMessage: "Failed while updating this bank",
-    });
-    return response?.data.data || response;
-  }
+    })
 );
 
 export default bankSlice.reducer;

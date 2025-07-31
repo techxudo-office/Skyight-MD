@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 import Spinner from "../Spinner/Spinner";
@@ -14,9 +13,6 @@ import {
 } from "../../_core/features/bookingSlice";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { CardLayoutContainer, CardLayoutBody } from "../CardLayout/CardLayout";
-
-// Required for accessibility with react-modal
-Modal.setAppElement("#root");
 
 const DashboardComission = () => {
   const dispatch = useDispatch();

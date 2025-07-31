@@ -12,7 +12,7 @@ import {
 import { TbTransactionDollar } from "react-icons/tb";
 import { PiBankBold } from "react-icons/pi";
 import { IoTicket } from "react-icons/io5";
-import { FaUserShield } from "react-icons/fa";
+import { FaUserShield, FaUser } from "react-icons/fa";
 import { HiRectangleGroup } from "react-icons/hi2";
 import { IoMdBookmark } from "react-icons/io";
 import { RiRefund2Fill } from "react-icons/ri";
@@ -99,7 +99,7 @@ export const useAdminSidebarLinks = () => {
         {
           title: "User Verifications",
           path: "user-verifications",
-          icon: <PiBankBold />,
+          icon: <FaUser />,
         },
       ].filter(Boolean),
     },
@@ -112,6 +112,11 @@ export const useAdminSidebarLinks = () => {
         {
           title: "Reasons",
           path: "reasons",
+          icon: <MdOutlineNoteAlt />,
+        },
+        {
+          title: "Offers",
+          path: "offers",
           icon: <MdOutlineNoteAlt />,
         },
       ].filter(Boolean),

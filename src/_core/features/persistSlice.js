@@ -22,8 +22,7 @@ const persistSlice = createSlice({
         state.isLoadingVerifyOTP = true;
       })
       .addCase(verifyLoginOTP.fulfilled, (state, action) => {
-        console.log(action.payload.data.data);
-        state.adminData = action.payload.data.data;
+        state.adminData = action.payload;
         state.isLoadingVerifyOTP = false;
       })
       .addCase(verifyLoginOTP.rejected, (state) => {

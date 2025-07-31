@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -16,8 +15,6 @@ import { getReasons } from "../../../_core/features/reasonsSlice";
 import { editTransaction } from "../../../_core/features/transactionSlice";
 import toast from "react-hot-toast";
 import useLogout from "../../../hooks/useLogout";
-
-Modal.setAppElement("#root");
 
 const EditTransactionModal = ({ isOpen, onClose, transaction }) => {
   const dispatch = useDispatch();

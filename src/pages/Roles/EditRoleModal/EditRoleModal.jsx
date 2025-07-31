@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Modal from "react-modal";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -14,8 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { editRole } from "../../../_core/features/roleSlice";
 import { IoIosArrowForward } from "react-icons/io";
 import { updateAdminData } from "../../../_core/features/authSlice";
-
-Modal.setAppElement("#root");
 
 const Checkbox = ({ label, checked, onChange }) => {
   return (

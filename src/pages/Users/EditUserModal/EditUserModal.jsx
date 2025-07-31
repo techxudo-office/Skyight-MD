@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -18,8 +17,6 @@ import { getUserRoles } from "../../../_core/features/roleSlice";
 import { editUser } from "../../../_core/features/userSlice";
 import { userValidation } from "../../../utils/validations";
 import { editUserInpFields } from "../../../utils/InputFields";
-
-Modal.setAppElement("#root");
 
 const initialState = {
   first_name: "",

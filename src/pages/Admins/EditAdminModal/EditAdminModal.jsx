@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -19,9 +18,6 @@ import { adminValidation } from "../../../utils/validations";
 import { editAdmin } from "../../../_core/features/adminSlice";
 import { editAdminInpFields } from "../../../utils/InputFields";
 import useLogout from "../../../hooks/useLogout";
-
-// Set modal's root element for accessibility
-Modal.setAppElement("#root");
 
 const initialState = {
   full_name: "",

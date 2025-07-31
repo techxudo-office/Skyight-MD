@@ -134,9 +134,11 @@ const Banks = () => {
       return;
     } else {
       // Dispatch edit action and close modal on success
-      dispatch(
-        editBank({ token: adminData.token, data: updateBank, id: editId })
-      ).then(() => {
+      const payload = {
+        bank_id: editId,
+        bank: updateBank,
+      };
+      dispatch(editBank({ token: adminData.token, payload })).then(() => {
         setModalWrapper((prev) => ({ ...prev, isOpen: false }));
       });
     }

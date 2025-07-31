@@ -63,7 +63,7 @@ const userSlice = createSlice({
       })
       .addCase(getUserVerificationForms.fulfilled, (state, action) => {
         state.isLoadingUserVerificationForms = false;
-        state.userVerificationForms = action.payload.data.data[0];
+        state.userVerificationForms = action.payload[0];
       })
       .addCase(getUserVerificationForms.rejected, (state, action) => {
         state.isLoadingUserVerificationForms = false;

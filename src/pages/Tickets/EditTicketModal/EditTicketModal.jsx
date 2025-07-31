@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -13,8 +12,6 @@ import Button from "../../../components/Button/Button";
 import Spinner from "../../../components/Spinner/Spinner";
 import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
 import { editTicket } from "../../../_core/features/ticketSlice";
-
-Modal.setAppElement("#root");
 
 const statusOptions = [
   { label: "Open", value: "open" },
