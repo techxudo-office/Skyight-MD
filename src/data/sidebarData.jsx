@@ -139,10 +139,22 @@ export const useAdminSidebarLinks = () => {
         },
       ].filter(Boolean),
     },
+    // Accounts section with static link to Banks page
     {
       title: "Customers",
-      path: "customers",
       icon: <FaUser />,
+      sublinks: [
+        {
+          title: "All Customers",
+          path: "customers",
+          icon: <FaUser />,
+        },
+        {
+          title: "Customer Bookings",
+          path: "customer-bookings",
+          icon: <FaUser />,
+        },
+      ].filter(Boolean),
     },
     // Conditionally show Notifications link
     pagePermissions.help_and_support && {

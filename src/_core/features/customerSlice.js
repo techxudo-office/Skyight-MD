@@ -5,6 +5,9 @@ const initialState = {
     customers: [],
     isLoadingCustomers: false,
 
+    bookings: [],
+    isLoadingCustomerBookings: false,
+
     isDeletingCustomer: false,
 
     isCreatingOffer: false,
@@ -22,12 +25,21 @@ const customerSlice = createSlice({
                 state.isLoadingCustomers = true;
             })
             .addCase(getCustomers.fulfilled, (state, action) => {
-                console.log(action.payload)
                 state.customers = action.payload[0];
                 state.isLoadingCustomers = false;
             })
             .addCase(getCustomers.rejected, (state, action) => {
                 state.isLoadingCustomers = false;
+            })
+            .addCase(getCustomerBookings.pending, (state) => {
+                state.isLoadingCustomerBookings = true;
+            })
+            .addCase(getCustomerBookings.fulfilled, (state, action) => {
+                state.bookings = action.payload;
+                state.isLoadingCustomerBookings = false;
+            })
+            .addCase(getCustomerBookings.rejected, (state, action) => {
+                state.isLoadingCustomerBookings = false;
             })
             .addCase(deleteCustomer.pending, (state) => {
                 state.isDeletingCustomer = true;
@@ -69,6 +81,16 @@ export const getCustomers = createAsyncThunk(
     "customer/getCustomers",
     ({ token, logoutHandler }) =>
         makeRequest("GET", "/api/allCustomers", {
+            token,
+            logoutCallback: logoutHandler,
+            errorMessage: "Failed to fetch Customers",
+        })
+);
+
+export const getCustomerBookings = createAsyncThunk(
+    "customer/getCustomerBookings",
+    ({ token, logoutHandler }) =>
+        makeRequest("GET", "/api/customer-booking", {
             token,
             logoutCallback: logoutHandler,
             errorMessage: "Failed to fetch Customers",
