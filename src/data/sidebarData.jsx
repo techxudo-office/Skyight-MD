@@ -139,7 +139,11 @@ export const useAdminSidebarLinks = () => {
         },
       ].filter(Boolean),
     },
-
+    {
+      title: "Customers",
+      path: "customers",
+      icon: <FaUser />,
+    },
     // Conditionally show Notifications link
     pagePermissions.help_and_support && {
       title: "Notifications",

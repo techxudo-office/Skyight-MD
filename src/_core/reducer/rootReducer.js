@@ -20,6 +20,7 @@ import reasonsReducer from "../features/reasonsSlice";
 import commisionReducer from "../features/commisionSlice";
 import bankReducer from "../features/bankSlice";
 import offerReducer from "../features/offerSlice";
+import customerReducer from "../features/customerSlice";
 import adminReducer from "../features/adminSlice";
 import persistedReducer from "../features/persistSlice";
 
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
   commision: commisionReducer,
   bank: bankReducer,
   offer: offerReducer,
+  customer: customerReducer,
   admin: adminReducer,
   persist: persistedReducer, // This slice is the only one persisted
 });

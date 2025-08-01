@@ -2,93 +2,93 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeRequest from "../../utils/ApiHelper";
 
 const initialState = {
-    offers: [],
-    isLoadingOffers: false,
+    customers: [],
+    isLoadingCustomers: false,
 
-    isLoadingDeleteOffer: false,
+    isDeletingCustomer: false,
 
     isCreatingOffer: false,
 
-    isEditingOffer: false,
+    isEditingCustomer: false,
 };
 
-const offerSlice = createSlice({
-    name: "offer",
+const customerSlice = createSlice({
+    name: "customer",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getOffers.pending, (state) => {
-                state.isLoadingOffers = true;
+            .addCase(getCustomers.pending, (state) => {
+                state.isLoadingCustomers = true;
             })
-            .addCase(getOffers.fulfilled, (state, action) => {
+            .addCase(getCustomers.fulfilled, (state, action) => {
                 console.log(action.payload)
-                state.offers = action.payload[0];
-                state.isLoadingOffers = false;
+                state.customers = action.payload[0];
+                state.isLoadingCustomers = false;
             })
-            .addCase(getOffers.rejected, (state, action) => {
-                state.isLoadingOffers = false;
+            .addCase(getCustomers.rejected, (state, action) => {
+                state.isLoadingCustomers = false;
             })
-            .addCase(deleteOffer.pending, (state) => {
-                state.isLoadingDeleteOffer = true;
+            .addCase(deleteCustomer.pending, (state) => {
+                state.isDeletingCustomer = true;
             })
-            .addCase(deleteOffer.fulfilled, (state, action) => {
-                state.isLoadingDeleteOffer = false;
-                state.offers = state.offers.filter((offer) => offer.id !== action.payload);
+            .addCase(deleteCustomer.fulfilled, (state, action) => {
+                state.isDeletingCustomer = false;
+                state.customers = state.customers.filter((offer) => offer.id !== action.payload);
             })
-            .addCase(deleteOffer.rejected, (state, action) => {
-                state.isLoadingDeleteOffer = false;
+            .addCase(deleteCustomer.rejected, (state, action) => {
+                state.isDeletingCustomer = false;
             })
             .addCase(createOffer.pending, (state) => {
                 state.isCreatingOffer = true;
             })
             .addCase(createOffer.fulfilled, (state, action) => {
                 state.isCreatingOffer = false;
-                state.offers.push(action.payload);
+                state.customers.push(action.payload);
             })
             .addCase(createOffer.rejected, (state, action) => {
                 state.isCreatingOffer = false;
             })
             .addCase(editOffer.pending, (state) => {
-                state.isEditingOffer = true;
+                state.isEditingCustomer = true;
             })
             .addCase(editOffer.fulfilled, (state, action) => {
-                state.isEditingOffer = false;
+                state.isEditingCustomer = false;
                 const updateoffer = action.payload;
-                state.offers = state.offers.map((offer) =>
+                state.customers = state.customers.map((offer) =>
                     offer.id === updateoffer.id ? { ...offer, ...updateoffer } : offer
                 );
             })
             .addCase(editOffer.rejected, (state, action) => {
-                state.isEditingOffer = false;
+                state.isEditingCustomer = false;
             });
     },
 });
 
-export const getOffers = createAsyncThunk(
-    "offer/getOffers",
+export const getCustomers = createAsyncThunk(
+    "customer/getCustomers",
     ({ token, logoutHandler }) =>
-        makeRequest("GET", "/api/offer", {
+        makeRequest("GET", "/api/allCustomers", {
             token,
             logoutCallback: logoutHandler,
-            errorMessage: "Failed to fetch Offers",
+            errorMessage: "Failed to fetch Customers",
         })
 );
 
-export const deleteOffer = createAsyncThunk(
-    "offer/deleteOffer",
+export const deleteCustomer = createAsyncThunk(
+    "customer/deleteCustomer",
     ({ token, id }) => {
-        makeRequest("DELETE", `/api/offer?bank_id=${id}`, {
+        makeRequest("DELETE", `/api/customer/${id}`, {
             token,
-            successMessage: "Offer deleted successfully",
-            errorMessage: "Failed to delete offer",
+            successMessage: "Customer deleted successfully",
+            errorMessage: "Failed to delete customer",
         });
         return id;
     }
 );
 
 export const createOffer = createAsyncThunk(
-    "offer/createOffer",
+    "customer/createOffer",
     ({ data, token }) =>
         makeRequest("POST", "/api/create-offer", {
             data,
@@ -102,7 +102,7 @@ export const createOffer = createAsyncThunk(
 );
 
 export const editOffer = createAsyncThunk(
-    "offer/editOffer",
+    "customer/editOffer",
     async ({ token, payload }) =>
         makeRequest("PUT", "/api/update-offer", {
             token,
@@ -112,4 +112,4 @@ export const editOffer = createAsyncThunk(
         })
 );
 
-export default offerSlice.reducer;
+export default customerSlice.reducer;

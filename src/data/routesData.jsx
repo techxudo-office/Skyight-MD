@@ -7,6 +7,7 @@ const DashboardHome = lazy(() =>
 );
 const Roles = lazy(() => import("../pages/Roles/Roles"));
 const Users = lazy(() => import("../pages/Users/Users"));
+const Customers = lazy(() => import("../pages/Customers/Customers"));
 const CreateUser = lazy(() => import("../pages/CreateUser/CreateUser"));
 const CreateRole = lazy(() => import("../pages/CreateRole/CreateRole"));
 const Companies = lazy(() => import("../pages/Companies/Companies"));
@@ -77,6 +78,7 @@ export const routesData = [
       { path: "roles", element: <Roles /> },
       { path: "users", element: <Users /> },
       { path: "create-user", element: <CreateUser /> },
+      { path: "customers", element: <Customers /> },
       { path: "create-role", element: <CreateRole /> },
       { path: "companies", element: <Companies /> },
       {
