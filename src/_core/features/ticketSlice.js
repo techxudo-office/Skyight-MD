@@ -1,7 +1,7 @@
+// src/store/slices/ticketSlice.ts
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
+import makeRequest from "../../utils/ApiHelper";
 
 const initialState = {
   tickets: [],
@@ -19,175 +19,112 @@ const initialState = {
   deleteTicketError: null,
 };
 
+export const createTicket = createAsyncThunk(
+  "ticket/createTicket",
+  ({ data, token }) =>
+    makeRequest("post", "/api/ticket", {
+      data,
+      token,
+      successMessage: "New Ticket Created",
+      errorMessage: "Failed to create ticket",
+    })
+);
+
+export const getTickets = createAsyncThunk(
+  "ticket/getTickets",
+  ({ token, logoutHandler }) =>
+    makeRequest("get", "/api/ticket/all", {
+      token,
+      logoutCallback: logoutHandler,
+      errorMessage: "Failed to fetch tickets",
+    })
+);
+
+export const editTicket = createAsyncThunk(
+  "ticket/editTicket",
+  ({ data, token }) =>
+    makeRequest("put", "/api/ticket", {
+      data,
+      token,
+      successMessage: "Ticket updated successfully",
+      errorMessage: "Failed while updating this ticket",
+    })
+);
+
+export const deleteTicket = createAsyncThunk(
+  "ticket/deleteTicket",
+  ({ id, token }) =>
+    makeRequest("delete", `/api/ticket?ticket_id=${id}`, {
+      token,
+      successMessage: "Ticket has been deleted",
+      errorMessage: "Failed while deleting this ticket",
+    })
+);
+
 const ticketSlice = createSlice({
   name: "ticket",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createTicket.pending, (state) => {
-        state.isCreatingTicket = true;
-        state.createTicketError = null;
+      // CREATE
+      .addCase(createTicket.pending, (s) => {
+        s.isCreatingTicket = true;
+        s.createTicketError = null;
       })
-      .addCase(createTicket.fulfilled, (state, action) => {
-        state.isCreatingTicket = false;
-        state.tickets = [action.payload, ...state.tickets];
+      .addCase(createTicket.fulfilled, (s, { payload }) => {
+        s.isCreatingTicket = false;
+        s.tickets.unshift(payload);
       })
-      .addCase(createTicket.rejected, (state, action) => {
-        state.isCreatingTicket = false;
-        state.createTicketError = action.payload;
+      .addCase(createTicket.rejected, (s, { payload }) => {
+        s.isCreatingTicket = false;
+        s.createTicketError = payload;
       })
-      .addCase(getTickets.pending, (state) => {
-        state.isLoadingTickets = true;
-        state.loadTicketsError = null;
+
+      // READ
+      .addCase(getTickets.pending, (s) => {
+        s.isLoadingTickets = true;
+        s.loadTicketsError = null;
       })
-      .addCase(getTickets.fulfilled, (state, action) => {
-        state.isLoadingTickets = false;
-        state.tickets = action.payload;
+      .addCase(getTickets.fulfilled, (s, { payload }) => {
+        s.isLoadingTickets = false;
+        s.tickets = payload;
       })
-      .addCase(getTickets.rejected, (state, action) => {
-        state.isLoadingTickets = false;
-        state.loadTicketsError = action.payload;
+      .addCase(getTickets.rejected, (s, { payload }) => {
+        s.isLoadingTickets = false;
+        s.loadTicketsError = payload;
       })
-      .addCase(editTicket.pending, (state) => {
-        state.isUpdatingTicket = true;
-        state.updateTicketError = null;
+
+      // UPDATE
+      .addCase(editTicket.pending, (s) => {
+        s.isUpdatingTicket = true;
+        s.updateTicketError = null;
       })
-      .addCase(editTicket.fulfilled, (state, action) => {
-        state.isUpdatingTicket = false;
-        state.tickets = state.tickets.map((ticket) =>
-          ticket.id === action.payload.id ? action.payload : ticket
+      .addCase(editTicket.fulfilled, (s, { payload }) => {
+        s.isUpdatingTicket = false;
+        s.tickets = s.tickets.map((t) =>
+          t.id === payload.id ? payload : t
         );
       })
-      .addCase(editTicket.rejected, (state, action) => {
-        state.isUpdatingTicket = false;
-        state.updateTicketError = action.payload;
+      .addCase(editTicket.rejected, (s, { payload }) => {
+        s.isUpdatingTicket = false;
+        s.updateTicketError = payload;
       })
-      .addCase(deleteTicket.pending, (state) => {
-        state.isDeletingTicket = true;
-        state.deleteTicketError = null;
+
+      // DELETE
+      .addCase(deleteTicket.pending, (s) => {
+        s.isDeletingTicket = true;
+        s.deleteTicketError = null;
       })
-      .addCase(deleteTicket.fulfilled, (state, action) => {
-        state.isDeletingTicket = false;
-        state.tickets = state.tickets.filter(
-          (ticket) => ticket.id !== action.payload
-        );
+      .addCase(deleteTicket.fulfilled, (s, { payload }) => {
+        s.isDeletingTicket = false;
+        s.tickets = s.tickets.filter((t) => t.id !== payload);
       })
-      .addCase(deleteTicket.rejected, (state, action) => {
-        state.isDeletingTicket = false;
-        state.deleteTicketError = action.payload;
+      .addCase(deleteTicket.rejected, (s, { payload }) => {
+        s.isDeletingTicket = false;
+        s.deleteTicketError = payload;
       });
   },
 });
-
-export const createTicket = createAsyncThunk(
-  "ticket/createTicket",
-  async ({ data, token }, thunkAPI) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/api/ticket`, data, {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("New Ticket Created");
-        return response.data.data;
-      } else {
-        throw new Error("Failed to create ticket");
-      }
-    } catch (error) {
-      const errorMessages =
-        error.response?.data?.data?.errors ||
-        "Failed to create ticket. Please try again.";
-
-      if (typeof errorMessages === "object") {
-        const formattedMessages = Object.values(errorMessages).join(", ");
-        toast.error(formattedMessages);
-        return thunkAPI.rejectWithValue(formattedMessages);
-      } else {
-        toast.error(errorMessages);
-        return thunkAPI.rejectWithValue(errorMessages);
-      }
-    }
-  }
-);
-
-export const editTicket = createAsyncThunk(
-  "ticket/editTicket",
-  async ({ data, token }, thunkAPI) => {
-    try {
-      let response = await axios.put(`${BASE_URL}/api/ticket`, data, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Ticket updated successfully");
-        return response.data.data;
-      }
-    } catch (error) {
-      const errorMessage = "Failed while updating this ticket";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const getTickets = createAsyncThunk(
-  "ticket/getTickets",
-  async ({ token, logoutHandler }, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/ticket/all`, {
-        headers: {
-          Authorization: token,
-        },
-        logoutCallback: logoutHandler,
-      });
-
-      if (response.status === 200) {
-        return response.data.data;
-      } else {
-        throw new Error("Failed to fetch tickets");
-      }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Failed to fetch tickets. Please try again.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const deleteTicket = createAsyncThunk(
-  "ticket/deleteTicket",
-  async ({ id, token }, thunkAPI) => {
-    try {
-      const response = await axios.delete(
-        `${BASE_URL}/api/ticket?ticket_id=${id}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success("Ticket has been deleted");
-        return id;
-      } else {
-        throw new Error("Failed to delete ticket");
-      }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed while deleting this ticket.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
 
 export default ticketSlice.reducer;

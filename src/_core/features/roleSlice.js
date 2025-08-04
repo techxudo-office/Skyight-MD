@@ -104,7 +104,7 @@ export const getRoles = createAsyncThunk(
     });
 
     return {
-      data: response?.data?.data,
+      data: response,
       totalPages: response?.data?.totalPages || 1,
     };
   }
@@ -118,7 +118,7 @@ export const getUserRoles = createAsyncThunk(
       errorMessage: "Failed to fetch user roles.",
     });
     return {
-      data: response.data?.data,
+      data: response,
       totalPages: response.data?.totalPages || 1,
     };
   }
@@ -159,7 +159,7 @@ export const editRole = createAsyncThunk(
       successMessage: "Role updated successfully",
       errorMessage: "Failed while updating this role",
     });
-    return response.data?.data;
+    return response;
   }
 );
 export default roleSlice.reducer;

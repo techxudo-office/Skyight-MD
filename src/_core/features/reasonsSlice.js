@@ -90,8 +90,8 @@ export const getReasons = createAsyncThunk(
       errorMessage: "Failed to fetch reasons.",
     });
 
-    if (response?.data?.data?.length > 0) {
-      return response?.data.data;
+    if (response?.length > 0) {
+      return response;
     }
     throw new Error("No reasons found");
   }
@@ -119,7 +119,7 @@ export const createReason = createAsyncThunk(
       errorMessage: "Failed to create reason",
       headers: { "Content-Type": "application/json" },
     });
-    return response.data?.data;
+    return response;
   }
 );
 
@@ -136,7 +136,7 @@ export const editReason = createAsyncThunk(
       successMessage: "Reason updated successfully",
       errorMessage: "Failed while updating this reason",
     });
-    return response.data?.data;
+    return response;
   }
 );
 

@@ -25,7 +25,7 @@ const companySlice = createSlice({
         state.isLoadingCompanies = true;
       })
       .addCase(getCompanies.fulfilled, (state, action) => {
-        state.companies = action.payload.data.companies;
+        state.companies = action.payload;
         state.isLoadingCompanies = false;
       })
       .addCase(getCompanies.rejected, (state, action) => {
@@ -69,10 +69,7 @@ export const getCompanies = createAsyncThunk(
         errorMessage: "Failed to fetch companies.",
       }
     );
-    return {
-      data: response.data.data,
-      totalPages: response.data.totalPages || 1,
-    };
+    return response.companies;
   }
 );
 
@@ -87,7 +84,7 @@ export const getCompanyTickets = createAsyncThunk(
         errorMessage: "Failed to fetch company tickets.",
       }
     );
-    return response.data.data;
+    return response
   }
 );
 
@@ -102,7 +99,7 @@ export const getCompanyRevenue = createAsyncThunk(
         errorMessage: "Failed to fetch company revenue.",
       }
     );
-    return response.data.data;
+    return response
   }
 );
 
@@ -115,7 +112,7 @@ export const editRole = createAsyncThunk(
       successMessage: "Role updated successfully",
       errorMessage: "Failed while updating this role",
     });
-    return response.data.data;
+    return response
   }
 );
 

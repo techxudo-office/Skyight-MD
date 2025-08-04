@@ -143,7 +143,7 @@ const Customers = () => {
           <Searchbar
             data={customers}
             onFilteredData={setFilteredCustomers}
-            searchFields={["First name", "Last name", "Email", "Mobile number"]}
+            searchFields={["first_name", "last_name", "email", "mobile_number"]}
           />
           <Table
             pagination={true}

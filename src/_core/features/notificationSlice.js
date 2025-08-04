@@ -51,7 +51,7 @@ export const getNotifications = createAsyncThunk(
         logoutCallback: logoutHandler,
         errorMessage: "Failed to fetch notifications",
       });
-      return response.data.data;
+      return response
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -73,7 +73,7 @@ export const createNotification = createAsyncThunk(
           errorMessage: "Failed to send notification",
         }
       );
-      return response.data.data;
+      return response
     } catch (error) {
       return rejectWithValue(error);
     }

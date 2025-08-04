@@ -115,7 +115,7 @@ export const getAdmins = createAsyncThunk(
       logoutCallback: logoutHandler, // triggers logout if token is expired/unauthorized
       errorMessage: "Failed to fetch admins.",
     });
-    return response?.data?.data.admins || response; // Return cleaned-up list of admins
+    return response?.admins || response; // Return cleaned-up list of admins
   }
 );
 

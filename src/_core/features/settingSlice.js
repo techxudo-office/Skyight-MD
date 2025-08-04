@@ -55,7 +55,7 @@ export const getSetting = createAsyncThunk(
                 }
             });
             if (response.status === 200) {
-                return response.data.data;
+                return response
             } else {
                 throw new Error("Failed to fetch settings");
             }
@@ -88,8 +88,8 @@ export const updateSetting = createAsyncThunk(
             let errorMessage = "Failed to update settings. Please try again.";
             if (error.response) {
                 errorMessage =
-                    error.response.data?.data?.errors?.commission ||
-                    error.response.data?.data?.errors?.rate ||
+                    error.response.errors?.commission ||
+                    error.response.errors?.rate ||
                     errorMessage;
             }
             toast.error(errorMessage);

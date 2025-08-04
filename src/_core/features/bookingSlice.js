@@ -184,7 +184,7 @@ export const getCredits = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         errorMessage: "Something went wrong. Please try again.",
       });
-      return response?.data.data;
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -200,7 +200,7 @@ export const getAdminCredits = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         errorMessage: "Something went wrong. Please try again.",
       });
-      return response.data.data;
+      return response
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -231,14 +231,12 @@ export const getFlightBookings = createAsyncThunk(
         errorMessage: "Failed to fetch flight bookings.",
         logoutCallback: logoutHandler,
       });
-
-      let responseData = response.data.data;
-      if (!Array.isArray(responseData)) {
-        responseData = [responseData];
+      if (!Array.isArray(response)) {
+        response = [response];
       }
 
-      if (responseData.length > 0) {
-        return responseData;
+      if (response.length > 0) {
+        return response;
       } else {
         throw new Error("No bookings found.");
       }
@@ -258,7 +256,7 @@ export const getLatestBooking = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         errorMessage: "Failed to fetch booking details",
       });
-      return response.data?.data;
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -274,7 +272,7 @@ export const getBookingDetails = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         errorMessage: "Failed to fetch booking details",
       });
-      return response.data.data;
+      return response
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -290,7 +288,7 @@ export const getCompanyBookings = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         errorMessage: "Failed to fetch company bookings",
       });
-      return response.data.data;
+      return response
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -305,7 +303,7 @@ export const getRefundFlight = createAsyncThunk(
         token,
         errorMessage: "Failed to fetch refund bookings",
       });
-      return response.data.data;
+      return response
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -339,8 +337,8 @@ export const refundRequestTicket = createAsyncThunk(
         errorMessage: "Failed to fetch request refund tickets",
       });
 
-      if (response?.data?.data[0]?.length > 0) {
-        return response.data?.data[0];
+      if (response[0]?.length > 0) {
+        return response[0];
       }
       return null;
     } catch (error) {

@@ -32,7 +32,7 @@ const transactionSlice = createSlice({
       })
       .addCase(getTransactions.fulfilled, (state, action) => {
         state.isLoadingTransactions = false;
-        state.transactions = action.payload;
+        state.transactions = action.payload[0];
       })
       .addCase(getTransactions.rejected, (state, action) => {
         state.isLoadingTransactions = false;
@@ -92,7 +92,7 @@ export const getTransactions = createAsyncThunk(
         errorMessage: "Failed to fetch transactions.",
       }
     );
-    return response.data.data[0];
+    return response;
   }
 );
 
@@ -108,7 +108,7 @@ export const getCompanyTransactions = createAsyncThunk(
         errorMessage: "Failed to fetch transactions.",
       }
     );
-    return response.data.data;
+    return response
   }
 );
 
@@ -157,7 +157,7 @@ export const editTransaction = createAsyncThunk(
 
       if (response.status === 200) {
         toast.success("Transaction updated successfully");
-        return response.data.data;
+        return response
       }
     } catch (error) {
       const errorMessage =

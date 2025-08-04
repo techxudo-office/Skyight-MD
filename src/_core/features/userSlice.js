@@ -128,7 +128,7 @@ export const getUsers = createAsyncThunk(
           Authorization: token,
         },
       });
-      return response?.data?.data;
+      return response;
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Failed to fetch users.";
@@ -146,7 +146,7 @@ export const getCompanyUsers = createAsyncThunk(
           Authorization: token,
         },
       });
-      return response?.data?.data;
+      return response;
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Failed to fetch company users.";
@@ -234,7 +234,7 @@ export const editUser = createAsyncThunk(
 
       if (response.status === 200) {
         toast.success("User updated successfully");
-        return response.data.data;
+        return response
       }
     } catch (error) {
       const errorMessage =
