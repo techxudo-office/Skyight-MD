@@ -59,7 +59,7 @@ const CompanyDetails = () => {
                   </h3>
                   <p className="mt-2 text-2xl font-bold text-gray-900">
                     {/* Format revenue with commas (e.g. 1,000,000) for readability */}
-                    {companyRevenue.toLocaleString()}
+                    {companyRevenue?.toLocaleString()}
                   </p>
                 </div>
               </div>

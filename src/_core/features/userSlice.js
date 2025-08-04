@@ -1,7 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../utils/ApiBaseUrl";
-import toast from "react-hot-toast";
 import makeRequest from "../../utils/ApiHelper";
 
 const initialState = {
@@ -15,7 +12,6 @@ const initialState = {
 
   userVerificationForms: [],
   isLoadingUserVerificationForms: false,
-
   isUpdatingUserVerificationForms: false,
 
   isCreatingUser: false,
@@ -28,55 +24,136 @@ const initialState = {
   editUserError: null,
 };
 
+// Async thunks using makeRequest
+export const getUsers = createAsyncThunk(
+  "user/getUsers",
+  ({ token, logoutCallback }) =>
+    makeRequest("get", "/api/allUsers", {
+      token,
+      logoutCallback,
+      errorMessage: "Failed to fetch users",
+    })
+);
+
+export const getCompanyUsers = createAsyncThunk(
+  "user/getCompanyUsers",
+  ({ token, id, logoutCallback }) =>
+    makeRequest("get", `/api/users/company/${id}`, {
+      token,
+      logoutCallback,
+      errorMessage: "Failed to fetch company users",
+    })
+);
+
+export const getUserVerificationForms = createAsyncThunk(
+  "user/getUserVerificationForms",
+  ({ token, logoutCallback }) =>
+    makeRequest("get", "/api/allForms", {
+      token,
+      logoutCallback,
+      errorMessage: "Failed to fetch verification forms",
+    })
+);
+
+export const updateUserVerificationForms = createAsyncThunk(
+  "user/updateUserVerificationForms",
+  ({ id, payload, token, logoutCallback }) =>
+    makeRequest("put", `/api/update-form/${id}`, {
+      token,
+      data: payload,
+      logoutCallback,
+      errorMessage: "Failed to update verification form",
+    })
+);
+
+export const createUser = createAsyncThunk(
+  "user/createUser",
+  ({ data, token }) =>
+    makeRequest("post", "/api/user", {
+      data,
+      token,
+      successMessage: "User created successfully",
+      errorMessage: "Failed to create user",
+    })
+);
+
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  ({ id, token }) =>
+    makeRequest("delete", `/api/user/${id}`, {
+      token,
+      successMessage: "User deleted successfully",
+      errorMessage: "Failed to delete user",
+    })
+);
+
+export const editUser = createAsyncThunk(
+  "user/editUser",
+  ({ id, data, token }) =>
+    makeRequest("put", `/api/user/${id}`, {
+      data,
+      token,
+      successMessage: "User updated successfully",
+      errorMessage: "Failed to update user",
+    })
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // getUsers
       .addCase(getUsers.pending, (state) => {
         state.isLoadingUsers = true;
         state.usersError = null;
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.isLoadingUsers = false;
-        state.users = action.payload[0];
+        state.users = Array.isArray(action.payload) ? action.payload[0] : action.payload;
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.isLoadingUsers = false;
         state.usersError = action.payload;
       })
+
+      // getCompanyUsers
       .addCase(getCompanyUsers.pending, (state) => {
         state.isLoadingCompanyUsers = true;
         state.companyUsersError = null;
       })
       .addCase(getCompanyUsers.fulfilled, (state, action) => {
         state.isLoadingCompanyUsers = false;
-        state.companyUsers = action.payload[0];
+        state.companyUsers = Array.isArray(action.payload) ? action.payload[0] : action.payload;
       })
       .addCase(getCompanyUsers.rejected, (state, action) => {
         state.isLoadingCompanyUsers = false;
         state.companyUsersError = action.payload;
       })
+
+      // getUserVerificationForms
       .addCase(getUserVerificationForms.pending, (state) => {
         state.isLoadingUserVerificationForms = true;
       })
       .addCase(getUserVerificationForms.fulfilled, (state, action) => {
         state.isLoadingUserVerificationForms = false;
-        state.userVerificationForms = action.payload[0];
+        state.userVerificationForms = Array.isArray(action.payload) ? action.payload[0] : action.payload;
       })
-      .addCase(getUserVerificationForms.rejected, (state, action) => {
+      .addCase(getUserVerificationForms.rejected, (state) => {
         state.isLoadingUserVerificationForms = false;
       })
       .addCase(updateUserVerificationForms.pending, (state) => {
         state.isUpdatingUserVerificationForms = true;
       })
-      .addCase(updateUserVerificationForms.fulfilled, (state, action) => {
+      .addCase(updateUserVerificationForms.fulfilled, (state) => {
         state.isUpdatingUserVerificationForms = false;
       })
-      .addCase(updateUserVerificationForms.rejected, (state, action) => {
+      .addCase(updateUserVerificationForms.rejected, (state) => {
         state.isUpdatingUserVerificationForms = false;
       })
+
+      // createUser
       .addCase(createUser.pending, (state) => {
         state.isCreatingUser = true;
         state.createUserError = null;
@@ -89,27 +166,31 @@ const userSlice = createSlice({
         state.isCreatingUser = false;
         state.createUserError = action.payload;
       })
+
+      // deleteUser
       .addCase(deleteUser.pending, (state) => {
         state.isDeletingUser = true;
         state.deleteUserError = null;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.isDeletingUser = false;
-        state.users = state.users.filter((user) => user.id !== action.payload);
+        state.users = state.users.filter((u) => u.id !== action.payload);
       })
       .addCase(deleteUser.rejected, (state, action) => {
         state.isDeletingUser = false;
         state.deleteUserError = action.payload;
       })
+
+      // editUser
       .addCase(editUser.pending, (state) => {
         state.isEditingUser = true;
         state.editUserError = null;
       })
       .addCase(editUser.fulfilled, (state, action) => {
         state.isEditingUser = false;
-        const updatedUser = action.payload;
-        state.users = state.users.map((user) =>
-          user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+        const updated = action.payload;
+        state.users = state.users.map((u) =>
+          u.id === updated.id ? { ...u, ...updated } : u
         );
       })
       .addCase(editUser.rejected, (state, action) => {
@@ -118,131 +199,5 @@ const userSlice = createSlice({
       });
   },
 });
-
-export const getUsers = createAsyncThunk(
-  "user/getUsers",
-  async (token, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/allUsers`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response;
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch users.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-export const getCompanyUsers = createAsyncThunk(
-  "user/getCompanyUsers",
-  async ({ token, id }, thunkAPI) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/users/company/${id}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response;
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch company users.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const getUserVerificationForms = createAsyncThunk(
-  "user/getUserVerificationForms",
-  ({ token, logoutHandler }) =>
-    makeRequest("get", `/api/allForms`, {
-      token,
-      logoutHandler,
-      errorMessage: "Failed to user verification forms",
-    })
-);
-
-export const updateUserVerificationForms = createAsyncThunk(
-  "user/updateUserVerificationForms",
-  ({ id, token, payload, logoutHandler }) =>
-    makeRequest("put", `/api/update-form/${id}`, {
-      token,
-      data: payload,
-      logoutHandler,
-      errorMessage: "Failed to user verification forms",
-    })
-);
-
-export const createUser = createAsyncThunk(
-  "user/createUser",
-  async ({ data, token }, thunkAPI) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/api/user`, data, {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      });
-      toast.success("User created successfully");
-      return response.data;
-    } catch (error) {
-
-      const errorMessage =
-        error.response?.data?.message || "Failed to create user.";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const deleteUser = createAsyncThunk(
-  "user/deleteUser",
-  async ({ id, token }, thunkAPI) => {
-    try {
-      const response = await axios.delete(`${BASE_URL}/api/user/${id}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("User deleted successfully");
-        return id;
-      }
-    } catch (error) {
-      const errorMessage = "Failed while deleting this user";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const editUser = createAsyncThunk(
-  "user/editUser",
-  async ({ id, token, data }, thunkAPI) => {
-    try {
-
-      const response = await axios.put(`${BASE_URL}/api/user/${id}`, data, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("User updated successfully");
-        return response
-      }
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed while updating this User";
-      toast.error(errorMessage);
-      return thunkAPI.rejectWithValue(errorMessage);
-    }
-  }
-);
 
 export default userSlice.reducer;

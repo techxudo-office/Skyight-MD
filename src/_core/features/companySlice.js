@@ -47,7 +47,7 @@ const companySlice = createSlice({
         state.isLoadingCompanyRevenue = true;
       })
       .addCase(getCompanyRevenue.fulfilled, (state, action) => {
-        state.companyRevenue = action.payload;
+        state.companyRevenue = action.payload.data === 0 ? "0" : action.payload;
         state.isLoadingCompanyRevenue = false;
       })
       .addCase(getCompanyRevenue.rejected, (state, action) => {
@@ -90,17 +90,15 @@ export const getCompanyTickets = createAsyncThunk(
 
 export const getCompanyRevenue = createAsyncThunk(
   "company/getCompanyRevenue",
-  async ({ token, id }) => {
-    const response = await makeRequest(
+  async ({ token, id }) =>
+    makeRequest(
       "GET",
       `/api/company/get-revenue/${id}`,
       {
         token,
         errorMessage: "Failed to fetch company revenue.",
       }
-    );
-    return response
-  }
+    )
 );
 
 export const editRole = createAsyncThunk(
