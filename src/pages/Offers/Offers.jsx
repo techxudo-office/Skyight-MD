@@ -39,7 +39,7 @@ const Offers = () => {
   });
 
   const { adminData } = useSelector((state) => state.persist);
-  const { offers, isLoadingOffers, isLoadingDeleteBank, isEditingBank } =
+  const { offers, isLoadingOffers, isDeletingOffer, isEditingOffer } =
     useSelector((state) => state.offer);
 
   const [modalObject, setModalObject] = useState({
@@ -90,11 +90,11 @@ const Offers = () => {
                 text: `Are you sure you want to delete offer id ${row.id}?`,
                 onAbort: () => setModalObject((p) => ({ ...p, status: false })),
                 onConfirm: () => {
-                  dispatch(
-                    deleteOffer({ token: adminData.token, id: row.id })
-                  ).then(() =>
-                    setModalObject((p) => ({ ...p, status: false }))
-                  );
+                  dispatch(deleteOffer({ token: adminData.token, id: row.id }))
+                    .unwrap()
+                    .then(() =>
+                      setModalObject((p) => ({ ...p, status: false }))
+                    );
                 },
               })
             }
@@ -162,7 +162,7 @@ const Offers = () => {
 
   return (
     <>
-      <ConfirmModal loading={isLoadingDeleteBank} {...modalObject} />
+      <ConfirmModal {...modalObject} />
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
           <div className="space-y-4">
@@ -191,7 +191,7 @@ const Offers = () => {
             <Button
               text="Update"
               onClick={handleEdit}
-              loading={isEditingBank}
+              loading={isEditingOffer}
             />
           </CardLayoutFooter>
         </CardLayoutBody>

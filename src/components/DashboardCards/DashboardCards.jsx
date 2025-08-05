@@ -7,11 +7,11 @@ import dayjs from "dayjs";
 import * as Select from "@radix-ui/react-select";
 
 const FILTER_OPTIONS = [
+  { label: "All time", value: "all-time" },
   { label: "Past Day", value: "day" },
   { label: "Past Week", value: "week" },
   { label: "Past Month", value: "month" },
   { label: "Past Year", value: "year" },
-  { label: "All time", value: "all-time" },
 ];
 
 const computeDates = (filter) => {
@@ -52,7 +52,7 @@ const DashboardCards = () => {
   const dispatch = useDispatch();
   const { adminData } = useSelector((state) => state.persist);
   const { dashboard, isLoadingDashboard } = useSelector((state) => state.admin);
-  const [filter, setFilter] = useState("day");
+  const [filter, setFilter] = useState("all-time");
 
   useEffect(() => {
     if (!adminData?.token) return;
@@ -104,7 +104,7 @@ const DashboardCards = () => {
             aria-label="Filter"
           >
             <Select.Value placeholder="Select filter" />
-            <Select.Icon className="text-gray-500">&#x25BC;</Select.Icon>{" "}
+            <Select.Icon className="text-gray-500">&#x25BC;</Select.Icon>
             {/* ▼ */}
           </Select.Trigger>
 

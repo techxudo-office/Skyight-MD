@@ -5,7 +5,7 @@ const initialState = {
     offers: [],
     isLoadingOffers: false,
 
-    isLoadingDeleteOffer: false,
+    isDeletingOffer: false,
 
     isCreatingOffer: false,
 
@@ -30,14 +30,15 @@ const offerSlice = createSlice({
                 state.isLoadingOffers = false;
             })
             .addCase(deleteOffer.pending, (state) => {
-                state.isLoadingDeleteOffer = true;
+                state.isDeletingOffer = true;
             })
             .addCase(deleteOffer.fulfilled, (state, action) => {
-                state.isLoadingDeleteOffer = false;
-                state.offers = state.offers.filter((offer) => offer.id !== action.payload);
+                state.isDeletingOffer = false;
+                console.log("Offer deleted successfully", action.payload, offers);
+                state.offers = state.offers.filter((offer) => offer.id != action.payload);
             })
             .addCase(deleteOffer.rejected, (state, action) => {
-                state.isLoadingDeleteOffer = false;
+                state.isDeletingOffer = false;
             })
             .addCase(createOffer.pending, (state) => {
                 state.isCreatingOffer = true;
@@ -76,9 +77,9 @@ export const getOffers = createAsyncThunk(
 );
 
 export const deleteOffer = createAsyncThunk(
-    "offer/deleteOffer",
+    "offer/deleteOf fer",
     ({ token, id }) => {
-        makeRequest("DELETE", `/api/offer?bank_id=${id}`, {
+        makeRequest("DELETE", `/api/offer?offerId=${id}`, {
             token,
             successMessage: "Offer deleted successfully",
             errorMessage: "Failed to delete offer",
@@ -107,6 +108,9 @@ export const editOffer = createAsyncThunk(
         makeRequest("PUT", "/api/update-offer", {
             token,
             data: payload,
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
             successMessage: "Offer updated successfully",
             errorMessage: "Failed while updating this offer",
         })
