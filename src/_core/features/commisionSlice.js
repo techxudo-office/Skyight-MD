@@ -47,23 +47,21 @@ const commisionSlice = createSlice({
 });
 export const getCommision = createAsyncThunk(
   "commision/getCommision",
-  async (token) => {
-    const response = await makeRequest(
+  async (token) =>
+    makeRequest(
       'GET',
       '/api/fetch-commission',
       {
         token,
         errorMessage: "Failed to fetch commissions"
       }
-    );
-    return response?.data.data || response;
-  }
+    )
 );
 
 export const editcommision = createAsyncThunk(
   "commision/editcommision",
-  async ({ token, data }) => {
-    const response = await makeRequest(
+  async ({ token, data }) =>
+    makeRequest(
       'POST',
       '/api/update-Commission',
       {
@@ -72,9 +70,7 @@ export const editcommision = createAsyncThunk(
         successMessage: "Commission updated successfully",
         errorMessage: "Failed while updating this commission"
       }
-    );
-    return response?.data.data || response;
-  }
+    )
 );
 
 export default commisionSlice.reducer;
