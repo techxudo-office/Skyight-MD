@@ -34,7 +34,7 @@ const offerSlice = createSlice({
             })
             .addCase(deleteOffer.fulfilled, (state, action) => {
                 state.isDeletingOffer = false;
-                console.log("Offer deleted successfully", action.payload, offers);
+                // console.log("Offer deleted successfully", action.payload, offers);
                 state.offers = state.offers.filter((offer) => offer.id != action.payload);
             })
             .addCase(deleteOffer.rejected, (state, action) => {
@@ -56,6 +56,7 @@ const offerSlice = createSlice({
             .addCase(editOffer.fulfilled, (state, action) => {
                 state.isEditingOffer = false;
                 const updateoffer = action.payload;
+                console.log("Offer updated successfully", action.payload);
                 state.offers = state.offers.map((offer) =>
                     offer.id === updateoffer.id ? { ...offer, ...updateoffer } : offer
                 );
@@ -104,7 +105,7 @@ export const createOffer = createAsyncThunk(
 
 export const editOffer = createAsyncThunk(
     "offer/editOffer",
-    async ({ token, payload }) =>
+    ({ token, payload }) =>
         makeRequest("PUT", "/api/update-offer", {
             token,
             data: payload,
