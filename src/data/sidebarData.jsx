@@ -50,14 +50,22 @@ export const useAdminSidebarLinks = () => {
       path: "flight-bookings",
       icon: <IoMdBookmark />,
     },
-
-    // Always show Companies link (not permission-based)
     {
       title: "Companies",
-      path: "companies",
       icon: <TbManualGearboxFilled />,
+      sublinks: [
+        {
+          title: "All Companies",
+          path: "companies",
+          icon: <TbManualGearboxFilled />,
+        },
+        {
+          title: "User Verifications",
+          path: "user-verifications",
+          icon: <FaUser />,
+        },
+      ].filter(Boolean),
     },
-
     // Conditionally show Bookings section with sub-links based on respective permissions
     pagePermissions.bookings && {
       title: "Bookings",

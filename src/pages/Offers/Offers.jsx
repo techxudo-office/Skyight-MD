@@ -45,7 +45,7 @@ const Offers = () => {
   const [modalObject, setModalObject] = useState({
     status: false,
     text: "",
-    loading: false,
+    loading: false, // This local loading state will control the modal's spinner
     onAbort: () => {},
     onConfirm: () => {},
   });
@@ -56,6 +56,7 @@ const Offers = () => {
     onRequestClose: () => {},
   });
 
+  // --- No changes needed in useEffect hooks ---
   useEffect(() => {
     if (adminData?.token) {
       dispatch(getOffers({ token: adminData.token, logoutHandler }));
@@ -66,6 +67,7 @@ const Offers = () => {
     setFilteredOffers(offers);
   }, [offers]);
 
+  // --- FIX IS APPLIED IN THE onConfirm LOGIC BELOW ---
   const columns = [
     { name: "Title", selector: (row) => row.title, wrap: true, grow: 2 },
     {
@@ -88,13 +90,28 @@ const Offers = () => {
               setModalObject({
                 status: true,
                 text: `Are you sure you want to delete offer id ${row.id}?`,
+                loading: false, // Ensure loading is false initially
                 onAbort: () => setModalObject((p) => ({ ...p, status: false })),
                 onConfirm: () => {
+                  // 1. Set the modal's local loading state to true
+                  setModalObject((p) => ({ ...p, loading: true }));
+                  // 2. Dispatch the async action
                   dispatch(deleteOffer({ token: adminData.token, id: row.id }))
                     .unwrap()
-                    .then(() =>
-                      setModalObject((p) => ({ ...p, status: false }))
-                    );
+                    .catch((err) => {
+                      // Optionally handle specific errors here if needed
+                      console.error("Failed to delete offer:", err);
+                    })
+                    .finally(() => {
+                      // 3. Close the modal and reset loading state, regardless of success or failure
+                      setModalObject({
+                        status: false,
+                        text: "",
+                        loading: false,
+                        onAbort: () => {},
+                        onConfirm: () => {},
+                      });
+                    });
                 },
               })
             }
@@ -130,6 +147,7 @@ const Offers = () => {
     },
   ];
 
+  // --- No changes needed in handler functions ---
   const handleFormChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
@@ -162,7 +180,15 @@ const Offers = () => {
 
   return (
     <>
-      <ConfirmModal {...modalObject} />
+      {/* 
+        Pass the isDeletingOffer from Redux to the modal's top-level loading prop.
+        This will disable the buttons while the global state is active.
+        The modalObject.loading will control the spinner inside the confirm button.
+      */}
+      <ConfirmModal
+        {...modalObject}
+        loading={isDeletingOffer || modalObject.loading}
+      />
       <ModalWrapper {...modalWrapper}>
         <CardLayoutBody>
           <div className="space-y-4">
@@ -211,7 +237,7 @@ const Offers = () => {
         </CardLayoutHeader>
         <CardLayoutBody removeBorder>
           <Searchbar
-            data={filteredOffers}
+            data={offers} // Pass the original offers array to the search bar
             onFilteredData={setFilteredOffers}
             searchFields={["id", "title", "description"]}
           />
@@ -220,8 +246,10 @@ const Offers = () => {
             tableData={filteredOffers}
             pagination
             progressPending={isLoadingOffers}
+            // The pagination now correctly uses the length of the filtered data
             paginationTotalRows={filteredOffers.length}
-            paginationComponentOptions={{ noRowsPerPage: "10" }}
+            // Consider if you want this fixed or dynamic
+            paginationComponentOptions={{ noRowsPerPage: false }}
           />
         </CardLayoutBody>
         <CardLayoutFooter />
