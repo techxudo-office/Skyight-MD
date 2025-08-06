@@ -17,33 +17,42 @@ const Layout = () => {
   };
 
   return (
-    <div className="flex">
+
+    <div className="flex w-full">
       {/* Redirect to login if no token is found (user is unauthenticated) */}
+      {/* This core logic remains unchanged as requested */}
       {!adminData?.token ? (
         <Navigate to="/" replace />
       ) : (
+        // The new layout structure starts here
         <>
-          {/* Sidebar component, controlled by sidebarStatus state */}
-          <Sidebar status={sidebarStatus} updateStatus={setSidebarStatus} />
-
-          {/* Header component with ability to toggle sidebar visibility */}
           <Header
             sidebarStatus={sidebarStatus}
             setSidebarStatusHandler={setSidebarStatusHandler}
           />
+          <div className="flex h-screen w-full">
+            <Sidebar status={sidebarStatus} updateStatus={setSidebarStatus} />
 
-          {/* Main content area, with padding and layout styling */}
-          <div className="relative flex flex-col flex-1 min-h-screen pt-16 lg:pb-10">
-            {/* Outlet renders nested child routes inside this layout */}
-            <div className="flex justify-center w-full min-h-screen p-5 bg-background">
-              <Outlet />
-            </div>
+            {/* Main content area based on your new layout */}
+            <div className="w-full lg:flex-1  bg-background">
+              {/* Scrollable container that holds both Outlet and Footer */}
+              <div
+                className="flex flex-col justify-between h-screen bg-globalBg overflow-y-auto w-full"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {/* Wrapper for the main page content (Outlet) */}
+                <div className="flex flex-col items-center justify-start  w-full md:px-4 pt-24 lg:pt-28">
+                  <Outlet />
+                </div>
 
-            {/* Footer section fixed at bottom with copyright info */}
-            <div className="absolute bottom-0 flex justify-center w-full py-2 bg-white">
-              <h2 className="mt-2 text-sm font-semibold text-center text-text">
-                © 2024 All rights reserved by Techxudo
-              </h2>
+                {/* Footer section from your original layout, now placed at the bottom
+                of the scrollable container */}
+                <div className="flex justify-center w-full py-2 bg-white">
+                  <h2 className="mt-2 text-sm font-semibold text-center text-text">
+                    © 2024 All rights reserved by Techxudo
+                  </h2>
+                </div>
+              </div>
             </div>
           </div>
         </>

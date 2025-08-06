@@ -48,12 +48,16 @@ const UserVerifications = () => {
 
   const columns = [
     { name: "USER", selector: (row) => row.fullName, sortable: false },
-    { name: "EMAIL", selector: (row) => row.email, sortable: false },
+    { name: "EMAIL", selector: (row) => row.email, sortable: false, width: "160px" },
     { name: "MOBILE", selector: (row) => row.mobile_number, sortable: false },
     {
       name: "ADDRESS",
-      selector: (row) => row.address,
+      selector: (row) =>
+        row.address.length > 20
+          ? row.address.slice(0, 20) + "..."
+          : row.address,
       sortable: false,
+      width: "170px",
       wrap: true,
     },
     {
@@ -61,7 +65,7 @@ const UserVerifications = () => {
       selector: (row) => <Tag value={row.status} />,
       sortable: false,
       wrap: true,
-      grow: 1,
+      width: "120px"
     },
     {
       name: "",

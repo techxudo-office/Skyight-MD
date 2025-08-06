@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Tag from "../../components/Tag/Tag";
 import Table from "../../components/Table/Table";
 import Searchbar from "../../components/Searchbar/Searchbar";

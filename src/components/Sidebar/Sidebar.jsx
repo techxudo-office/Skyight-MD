@@ -14,7 +14,7 @@ const Sidebar = ({ status, updateStatus }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState(null); // Index of currently expanded parent menu
-  const [mobileView, setMobileView] = useState(false);
+  const [mobileView, setMobileView] = useState(window.innerWidth < 1024);
   const { adminData } = useSelector((state) => state.persist);
   const sidebarLinks = useAdminSidebarLinks(); // Array of link objects, each may have `sublinks`
 
@@ -63,7 +63,7 @@ const Sidebar = ({ status, updateStatus }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 780) {
+      if (window.innerWidth < 1024) {
         // If viewport is small, switch to mobile mode
         setMobileView(true);
         updateStatus(false); // Collapse sidebar by default in mobile
@@ -104,17 +104,25 @@ const Sidebar = ({ status, updateStatus }) => {
   return (
     <div
       ref={sidebarRef}
-      className={`fixed lg:sticky h-screen top-0 bottom-0 z-20 bg-white shadow-md ${
-        mobileView
+      // className={`fixed lg:sticky h-screen top-0 bottom-0 z-20 bg-white shadow-md ${mobileView
+      //     ? status
+      //       ? "w-64 h-screen" // Mobile: expanded width when `status` is true
+      //       : "w-0 overflow-hidden" // Mobile: hidden when `status` is false
+      //     : status
+      //       ? "w-64" // Desktop: expanded width
+      //       : "w-20" // Desktop: collapsed width
+      //   } flex flex-col justify-between transition-all duration-300 overflow-y-auto`}
+      className={`transition-all ${mobileView ? "fixed" : "relative"
+        }  z-[990]  bg-white shadow-md  ${!mobileView
           ? status
-            ? "w-64 h-screen" // Mobile: expanded width when `status` is true
-            : "w-0 overflow-hidden" // Mobile: hidden when `status` is false
+            ? "w-1/5"
+            : "w-24 items-center "
           : status
-          ? "w-64" // Desktop: expanded width
-          : "w-20" // Desktop: collapsed width
-      } flex flex-col justify-between transition-all duration-300 overflow-y-auto`}
+            ? "w-60 translate-x-0 shadow-md fixed left-0 top-0 h-screen "
+            : " -translate-x-full fixed"
+        } flex flex-col justify-between transition-all duration-300 overflow-y-auto overflow-x-visible`}
     >
-      <div className="pt-20">
+      <div className="pt-16">
         {/* Profile Section */}
         <CardLayoutContainer className="relative w-full shadow-none">
           <CardLayoutHeader
@@ -122,9 +130,8 @@ const Sidebar = ({ status, updateStatus }) => {
             removeBorder={true}
           >
             <div
-              className={`relative ${
-                status ? "w-20 h-20" : "w-14 h-14"
-              } overflow-hidden rounded-full cursor-pointer group`}
+              className={`relative ${status ? "max-w-20 h-20" : "max-w-14 h-14"
+                } overflow-hidden rounded-full cursor-pointer group`}
             >
               <Profileimage />
             </div>
@@ -152,22 +159,21 @@ const Sidebar = ({ status, updateStatus }) => {
                 className={`flex items-center rounded-lg p-3 cursor-pointer transition-colors ${
                   // Highlight if exactly on this link’s route or any of its sublink routes
                   location.pathname === `/dashboard/${link.path}` ||
-                  hasActiveSublink(link)
+                    hasActiveSublink(link)
                     ? "bg-background"
                     : "hover:bg-gray-100 text-gray-700"
-                }`}
+                  }`}
               >
-                <span className="flex items-center flex-1 gap-3">
+                <span className={`flex items-center ${!status && "justify-center"} flex-1 gap-3`}>
                   <span className="text-xl">{link.icon}</span>
                   {status && <span>{link.title}</span>}
                 </span>
                 {link.sublinks && status && (
                   <IoIosArrowForward
-                    className={`text-lg transition-transform duration-200 ${
-                      shouldExpandMenu(linkIndex, link)
-                        ? "rotate-90" // Rotate arrow when expanded
-                        : "rotate-0" // Default arrow orientation
-                    }`}
+                    className={`text-lg transition-transform duration-200 ${shouldExpandMenu(linkIndex, link)
+                      ? "rotate-90" // Rotate arrow when expanded
+                      : "rotate-0" // Default arrow orientation
+                      }`}
                   />
                 )}
               </li>
@@ -175,9 +181,8 @@ const Sidebar = ({ status, updateStatus }) => {
               {/* Sublinks (only rendered if this link has sublinks) */}
               {link.sublinks && (
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    shouldExpandMenu(linkIndex, link) ? "max-h-96" : "max-h-0"
-                  }`}
+                  className={`overflow-hidden transition-all duration-300 ${shouldExpandMenu(linkIndex, link) ? "max-h-96" : "max-h-0"
+                    }`}
                 >
                   <ul className="pl-3 mt-1 space-y-1">
                     {link.sublinks.map((sublink, sublinkIndex) => (
@@ -192,7 +197,7 @@ const Sidebar = ({ status, updateStatus }) => {
                           location.pathname === `/dashboard/${sublink.path}`
                             ? "text-primary"
                             : "hover:bg-gray-100 text-gray-700"
-                        }`}
+                          }`}
                       >
                         <span className="flex items-center gap-3">
                           <span className="text-lg">{sublink.icon}</span>

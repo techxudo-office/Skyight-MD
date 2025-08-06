@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Loader  from "../Loader/Loader";
+import Loader from "../Loader/Loader";
 import DataTable from "react-data-table-component";
 
 const Table = ({
@@ -72,6 +72,7 @@ const Table = ({
               borderTopLeftRadius: "10px",
               borderTopRightRadius: "10px",
               borderBottomWidth: "0px",
+              maxWidth: "100%"
             },
           },
           headRow: {
@@ -105,7 +106,8 @@ const Table = ({
           },
           cells: {
             style: {
-              justifyContent: "center", // Centers content horizontally
+              justifyContent: "center",
+              padding: "8px 0px"// Centers content horizontally
             },
           },
         }}

@@ -81,7 +81,8 @@ const CancelRequests = () => {
       selector: (row) => <Tag value={row.booking_status} />,
       sortable: false,
       wrap: true,
-      grow: 4,
+      width: "170px",
+
     },
     {
       name: "CREATED AT",
