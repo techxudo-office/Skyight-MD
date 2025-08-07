@@ -19,6 +19,20 @@ const Sidebar = ({ status, updateStatus }) => {
   const sidebarLinks = useAdminSidebarLinks(); // Array of link objects, each may have `sublinks`
 
   useEffect(() => {
+    function handleClickOutside(event) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && mobileView) {
+        updateStatus(false); // Call the function when clicked outside
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [updateStatus]);
+
+  useEffect(() => {
     if (!status) {
       // If sidebar is closed, collapse any open submenu
       setActiveMenu(null);

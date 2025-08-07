@@ -5,7 +5,7 @@ export const CardLayoutHeader = ({
   children,
   heading,
   removeBorder,
-  className,
+  className = "flex flex-col md:flex-row items-center justify-between gap-3",
 }) => {
   return (
     <div
@@ -24,7 +24,7 @@ export const CardLayoutBody = ({ children, removeBorder, className }) => {
   return (
     <div
       className={`p-5 ${removeBorder ? "" : "border-b"
-        } border-slate-200 ${className}`}
+        } border-slate-200 w-full ${className}`}
     >
       {children}
     </div>

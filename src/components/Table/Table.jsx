@@ -72,7 +72,8 @@ const Table = ({
               borderTopLeftRadius: "10px",
               borderTopRightRadius: "10px",
               borderBottomWidth: "0px",
-              maxWidth: "100%"
+              overflowX: "auto",
+              width: "100%"
             },
           },
           headRow: {

@@ -111,7 +111,7 @@ const DashboardHome = () => {
   ];
 
   return (
-    <div className="pb-10 space-y-10 bg-background">
+    <div className="pb-10 px-3 space-y-10 bg-background w-full">
       <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
       <DashboardComissions />
       <DashboardCards />

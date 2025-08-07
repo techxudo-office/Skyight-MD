@@ -15,22 +15,25 @@ export default function NotificationPage() {
     navigate("/dashboard/create-notification");
   };
   return (
-    <CardLayoutContainer>
-      <CardLayoutHeader
-        heading={"Notifications"}
-        className="flex items-center justify-between"
-      >
-        <div className="relative">
-          <SecondaryButton
-            icon={<MdAdd className="text-black" />}
-            text={"Create New Notification"}
-            onClick={navigationHandler}
-          />
-        </div>
-      </CardLayoutHeader>
-      <CardLayoutBody removeBorder={true}>
-        <Notifications />
-      </CardLayoutBody>
-    </CardLayoutContainer>
+    <div className="px-3 w-full">
+
+      <CardLayoutContainer>
+        <CardLayoutHeader
+          heading={"Notifications"}
+
+        >
+          <div className="relative">
+            <SecondaryButton
+              icon={<MdAdd className="text-black" />}
+              text={"Create New Notification"}
+              onClick={navigationHandler}
+            />
+          </div>
+        </CardLayoutHeader>
+        <CardLayoutBody removeBorder={true}>
+          <Notifications />
+        </CardLayoutBody>
+      </CardLayoutContainer>
+    </div>
   );
 }

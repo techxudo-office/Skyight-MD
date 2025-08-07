@@ -91,43 +91,25 @@ const DashboardComission = () => {
     <>
       <CardLayoutContainer className={"py-2"}>
         <CardLayoutBody removeBorder={true}>
-          <div className="grid w-full grid-cols-3 gap-4">
-            <div className="h-full col-span-2 ">
-              <div className="flex gap-3 mb-3">
-                {/* Grid of currency commission inputs */}
-                <div className="grid w-2/3 grid-cols-4 gap-5 ">
-                  {Object.keys(formData).map((key) => (
-                    <div key={key}>
-                      <Input
-                        label={key.toUpperCase()}
-                        name={key}
-                        type="number"
-                        value={formData[key]}
-                        onChange={handleChange}
-                        placeholder={`Enter ${key.toUpperCase()}`}
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                {/* Overall commission section */}
-                <div className="w-1/3 text-end text-text">
-                  <p className="text-xs">Commisions</p>
-                  <p className="text-3xl font-semibold">
-                    {commisions.commission || 0}{" "}
-                    <span className="text-sm text-gray">%</span>
-                  </p>
-                  <Input
-                    className={"mt-5"}
-                    label={"Commision"}
-                    name={"commision"}
-                    type="number"
-                    value={commision}
-                    onChange={(e) => setCommision(e.target.value)}
-                    placeholder={`Enter Commision`}
-                  />
-                </div>
+          <div className="flex w-full flex-col sm:flex-row gap-4 relative">
+            <div className="h-full w-full sm:w-1/2">
+              {/* Grid of currency commission inputs */}
+              <div className="grid w-full mb-4  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 ">
+                {Object.keys(formData).map((key) => (
+                  <div key={key}>
+                    <Input
+                      label={key.toUpperCase()}
+                      name={key}
+                      type="number"
+                      value={formData[key]}
+                      onChange={handleChange}
+                      placeholder={`Enter ${key.toUpperCase()}`}
+                    />
+                  </div>
+                ))}
               </div>
+
+
 
               {/* Update button for commission */}
               <Button
@@ -136,37 +118,67 @@ const DashboardComission = () => {
                 icon={<GrDocumentUpdate />}
                 loading={isEditingcommision}
                 disabled={isEditingcommision}
+                className="max-sm:hidden"
               />
             </div>
 
             {/* Admin credits section */}
-            <div className="flex flex-col items-center justify-center col-span-1 p-6 text-white bg-primary rounded-xl">
-              <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
-              <Input
-                name="adminCredits"
-                type="number"
-                value={credits}
-                onChange={(e) => {
-                  setCredits(e.target.value);
-                }}
-                className="mb-3 text-black"
-                placeholder="Enter Credits"
-              />
+            <div className="flex flex-col lg:flex-row gap-3 w-full sm:w-1/2 max-md:sticky top-20  h-fit">
+              {/* Overall commission section */}
+              <div className=" sm:text-end text-text">
+                <p className="text-xs">Commisions</p>
+                <p className="text-3xl font-semibold">
+                  {commisions.commission || 0}{" "}
+                  <span className="text-sm text-gray">%</span>
+                </p>
+                <Input
+                  className={"mt-4"}
+                  label={"Commision"}
+                  name={"commision"}
+                  type="number"
+                  value={commision}
+                  onChange={(e) => setCommision(e.target.value)}
+                  placeholder={`Enter Commision`}
+                />
+              </div>
               <Button
-                text="Save"
-                onClick={() => {
-                  // Dispatch action to update admin credits
-                  dispatch(
-                    editAdminCredits({
-                      data: { amount: Number(credits) },
-                      token: adminData.token,
-                    })
-                  );
-                }}
-                loading={isEditingAdminCredits}
-                disabled={isEditingAdminCredits}
+                text={"Update"}
+                onClick={handleSubmit}
+                icon={<GrDocumentUpdate />}
+                loading={isEditingcommision}
+                disabled={isEditingcommision}
+                className="sm:hidden"
               />
+              <div className="flex flex-col items-center justify-center p-6 text-white bg-primary rounded-xl">
+
+                <h3 className="mb-2 text-lg font-semibold">Admin Credits</h3>
+                <Input
+                  name="adminCredits"
+                  type="number"
+                  value={credits}
+                  onChange={(e) => {
+                    setCredits(e.target.value);
+                  }}
+                  className="mb-3 text-black"
+                  placeholder="Enter Credits"
+                />
+                <Button
+                  text="Save"
+                  onClick={() => {
+                    // Dispatch action to update admin credits
+                    dispatch(
+                      editAdminCredits({
+                        data: { amount: Number(credits) },
+                        token: adminData.token,
+                      })
+                    );
+                  }}
+                  loading={isEditingAdminCredits}
+                  disabled={isEditingAdminCredits}
+                />
+              </div>
             </div>
+
           </div>
         </CardLayoutBody>
       </CardLayoutContainer>

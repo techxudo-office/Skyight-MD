@@ -33,14 +33,14 @@ const Notifications = () => {
     );
   }, [adminData?.token]);
 
-  useEffect(() => {}, [notifications]); // This is redundant unless you're planning side effects
+  useEffect(() => { }, [notifications]); // This is redundant unless you're planning side effects
 
   // Function to render a single notification row — used by react-window for virtualized rendering
   const renderRow = ({ index, style }) => {
     const item = notifications[index]; // Efficiently accesses only the visible notification for rendering
     return (
-      <div style={style} key={index}>
-        <CardLayoutContainer className="w-full mb-5">
+      <div style={style} key={index} >
+        <CardLayoutContainer className="w-full mb-5 ">
           <CardLayoutHeader
             className="flex flex-wrap items-center justify-start gap-5 py-3"
             removeBorder={true}

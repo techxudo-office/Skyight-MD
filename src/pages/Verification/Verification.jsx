@@ -11,6 +11,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resendLoginCode } from "../../_core/features/authSlice";
 import { verifyLoginOTP } from "../../_core/features/persistSlice";
+// import lock from "../../assets/images/lock.svg"
 
 const Verification = () => {
   const inputRefs = useRef([]);
@@ -96,10 +97,13 @@ const Verification = () => {
   };
   return (
     <>
-      <div className="flex items-center justify-center w-full h-screen animated-page">
-        <CardLayoutContainer className="hide-scrollbar max-w-[900px] h-[500px] m-auto p-0 shadow-3xl overflow-y-scroll">
-          <CardLayoutBody removeBorder padding="p-0" className="flex">
-            <div className="flex items-center justify-center flex-1">
+      <div className="flex items-center justify-center w-full h-screen animated-page px-4">
+        <div className="absolute md:bg-black/10 bg-black/20 inset-0 z-10"></div>
+
+        <CardLayoutContainer className=" relative z-20 max-w-[900px]  m-auto shadow-2xl  overflow-y-auto">
+
+          <CardLayoutBody removeBorder padding="p-0" className="flex lg:flex-row flex-col">
+            <div className="flex items-center justify-center flex-1 max-md:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -306,7 +310,7 @@ const Verification = () => {
               </svg>
             </div>
 
-            <div className="flex-1 p-16">
+            <div className="flex-1 p-7 md:p-16">
               <h3 className="mb-5 text-4xl font-extrabold text-center">
                 Login Verification
               </h3>
@@ -322,9 +326,8 @@ const Verification = () => {
                       type="text"
                       value={value}
                       maxLength="1"
-                      className={`w-16 h-16 text-center border-2 text-2xl outline-none rounded-lg bg-slate-100 ${
-                        value !== "" ? "border-primary" : "border-slate-300"
-                      }`}
+                      className={`w-16 h-16 text-center border-2 text-2xl outline-none rounded-lg bg-slate-100 ${value !== "" ? "border-primary" : "border-slate-300"
+                        }`}
                       onPaste={(e) => onPaste(e)}
                       onChange={(e) => onChangeHandler(e, index)}
                       onKeyDown={(e) => onKeyPressHandler(e, index)}

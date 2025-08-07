@@ -60,15 +60,15 @@ const Customers = () => {
       name: "",
       selector: (row) => (
         <div className="flex items-center gap-x-4">
-          <span
+          {/* <span
             className="text-xl cursor-pointer"
             onClick={() => {
-              setEditUserData(row);
               setIsEditModalOpen(true);
+              setEditUserData(row);
             }}
           >
             <MdEditSquare title="Edit" className="text-blue-500" />
-          </span>
+          </span> */}
           <span
             className="text-xl cursor-pointer"
             onClick={() => {

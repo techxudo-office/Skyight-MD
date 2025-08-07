@@ -68,80 +68,78 @@ const LoginForm = () => {
   return (
     <>
       {/* Render form only if user is not logged in */}
-        <CardLayoutContainer className={"max-w-md p-3 m-auto shadow-2xl"}>
-          <CardLayoutHeader
-            heading="Login"
-            className={"flex items-center justify-center pt-7 pb-0"}
-            removeBorder={true}
-          />
-          <form onSubmit={handleFormSubmit} noValidate>
-            <CardLayoutBody removeBorder={true}>
-              <div>
-                <div className="flex flex-col gap-5">
-                  {/* Email input with validation error */}
-                  <div
-                    className={`relative ${
-                      formik.touched.email && formik.errors.email ? "mb-5" : ""
+      <CardLayoutContainer className={"max-w-md p-3 m-auto shadow-2xl z-20 relative"}>
+        <CardLayoutHeader
+          heading="Login"
+          className={"flex items-center justify-center pt-7 pb-0"}
+          removeBorder={true}
+        />
+        <form onSubmit={handleFormSubmit} noValidate>
+          <CardLayoutBody removeBorder={true}>
+            <div>
+              <div className="flex flex-col gap-5">
+                {/* Email input with validation error */}
+                <div
+                  className={`relative ${formik.touched.email && formik.errors.email ? "mb-5" : ""
                     }`}
-                  >
-                    <Input
-                      placeholder={"abc.xcv@gmail.com"}
-                      id={"email"}
-                      name={"email"}
-                      label={"Email Address*"}
-                      type={"email"}
-                      value={formik.values.email}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <div className="absolute left-0 mt-2 text-sm text-red-500">
-                        {formik.errors.email}
-                      </div>
-                    )}
-                  </div>
+                >
+                  <Input
+                    placeholder={"abc.xcv@gmail.com"}
+                    id={"email"}
+                    name={"email"}
+                    label={"Email Address*"}
+                    type={"email"}
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.email && formik.errors.email && (
+                    <div className="absolute left-0 mt-2 text-sm text-red-500">
+                      {formik.errors.email}
+                    </div>
+                  )}
+                </div>
 
-                  {/* Password input with validation error */}
-                  <div
-                    className={`relative ${
-                      formik.touched.password && formik.errors.password
-                        ? "mb-5"
-                        : ""
+                {/* Password input with validation error */}
+                <div
+                  className={`relative ${formik.touched.password && formik.errors.password
+                    ? "mb-5"
+                    : ""
                     }`}
-                  >
-                    <Input
-                      placeholder={"********"}
-                      id={"password"}
-                      name={"password"}
-                      label={"Password*"}
-                      type={"password"}
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.password && formik.errors.password && (
-                      <div className="absolute left-0 mt-2 text-sm text-red-500">
-                        {formik.errors.password}
-                      </div>
-                    )}
-                  </div>
+                >
+                  <Input
+                    placeholder={"********"}
+                    id={"password"}
+                    name={"password"}
+                    label={"Password*"}
+                    type={"password"}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.password && formik.errors.password && (
+                    <div className="absolute left-0 mt-2 text-sm text-red-500">
+                      {formik.errors.password}
+                    </div>
+                  )}
                 </div>
               </div>
-            </CardLayoutBody>
+            </div>
+          </CardLayoutBody>
 
-            <CardLayoutFooter className={"flex items-center justify-center"}>
-              <div>
-                {/* Show spinner while loading, otherwise show "Login" button */}
-                <Button
-                  text={isLoading ? <Spinner /> : "Login"}
-                  disabled={isLoading}
-                  onClick={formik.handleSubmit}
-                  type="submit"
-                />
-              </div>
-            </CardLayoutFooter>
-          </form>
-        </CardLayoutContainer>
+          <CardLayoutFooter className={"flex items-center justify-center"}>
+            <div>
+              {/* Show spinner while loading, otherwise show "Login" button */}
+              <Button
+                text={isLoading ? <Spinner /> : "Login"}
+                disabled={isLoading}
+                onClick={formik.handleSubmit}
+                type="submit"
+              />
+            </div>
+          </CardLayoutFooter>
+        </form>
+      </CardLayoutContainer>
     </>
   );
 };

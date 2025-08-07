@@ -80,7 +80,13 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   // Toggle sidebar open/close
   const sidebarHandler = () => {
-    setSidebarStatusHandler(!sidebarStatus);
+    if ((sidebarStatus && window.innerWidth < 1024)) {
+      return
+    } else {
+
+      setSidebarStatusHandler(!sidebarStatus);
+    }
+
   };
 
   useEffect(() => {
@@ -92,7 +98,7 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   return (
     <>
-      <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg ">
+      <nav className="w-full fixed z-[999] bg-white shadow-md border-b-[1px] border-grayBg px-4">
         <div className="container mx-auto">
           <div className="flex items-center justify-between ">
             {/* Sidebar toggle button */}
@@ -151,9 +157,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
                       // Show refresh icon if credits are visible
                       <HiOutlineRefresh
                         onClick={refreshCredits}
-                        className={`${
-                          isLoadingCredits && "animate-spin"
-                        } max-sm:hidden`}
+                        className={`${isLoadingCredits && "animate-spin"
+                          } max-sm:hidden`}
                       />
                     )}
 

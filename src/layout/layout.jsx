@@ -34,14 +34,14 @@ const Layout = () => {
             <Sidebar status={sidebarStatus} updateStatus={setSidebarStatus} />
 
             {/* Main content area based on your new layout */}
-            <div className="w-full lg:flex-1  bg-background">
+            <div className="w-full lg:flex-1 lg:w-4/5  bg-background">
               {/* Scrollable container that holds both Outlet and Footer */}
               <div
                 className="flex flex-col justify-between h-screen bg-globalBg overflow-y-auto w-full"
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {/* Wrapper for the main page content (Outlet) */}
-                <div className="flex flex-col items-center justify-start  w-full md:px-4 pt-24 lg:pt-28">
+                <div className="flex flex-col items-center justify-start  w-full  pt-24 lg:pt-28">
                   <Outlet />
                 </div>
 
