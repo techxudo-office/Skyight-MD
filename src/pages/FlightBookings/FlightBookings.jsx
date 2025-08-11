@@ -3,7 +3,7 @@ import Tag from "../../components/Tag/Tag";
 import Table from "../../components/Table/Table";
 import Searchbar from "../../components/Searchbar/Searchbar";
 import ExcelExportButton from "../../components/ExcelExportButton/ExcelExportButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CardLayoutContainer,
   CardLayoutHeader,
@@ -11,24 +11,61 @@ import {
 } from "../../components/CardLayout/CardLayout";
 import { FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getFlightBookings } from "../../_core/features/bookingSlice";
+import {
+  getFlightBookings,
+  getCompanyBookings,
+} from "../../_core/features/bookingSlice";
 import { IoIosAirplane } from "react-icons/io";
 import dayjs from "dayjs";
 import useLogout from "../../hooks/useLogout";
 
-const FlightBookings = () => {
+const FlightBookings = ({ isCompanyDetail = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const logoutHandler = useLogout();
-  const { adminData } = useSelector((state) => state.persist);
-  const { flightBookings, isLoadingFlightBookings } = useSelector(
-    (state) => state.booking
-  );
-  const [filteredData, setFilteredData] = useState(flightBookings);
+  const { companyId } = useParams(); // used when isCompanyDetail === true
 
+  const { adminData } = useSelector((state) => state.persist);
+  const {
+    flightBookings,
+    companyBookings,
+    isLoadingFlightBookings,
+    isLoadingCompanyBookings,
+  } = useSelector((state) => state.booking);
+
+  // filteredData is the table dataset (searchbar writes to this)
+  const [filteredData, setFilteredData] = useState([]);
+
+  // Choose data source and loading source based on prop
+  const bookings = isCompanyDetail ? companyBookings : flightBookings;
+  const loading = isCompanyDetail
+    ? isLoadingCompanyBookings
+    : isLoadingFlightBookings;
+
+  // Fetch correct bookings on mount / when dependencies change
   useEffect(() => {
-    dispatch(getFlightBookings({ token: adminData.token, logoutHandler }));
-  }, [dispatch]);
+    if (!adminData?.token) return;
+
+    if (isCompanyDetail) {
+      // require companyId to fetch company bookings
+      if (!companyId) return;
+      dispatch(
+        getCompanyBookings({
+          token: adminData.token,
+          id: companyId,
+          logoutHandler,
+        })
+      );
+    } else {
+      dispatch(getFlightBookings({ token: adminData.token, logoutHandler }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, adminData?.token, isCompanyDetail, companyId]);
+
+  // Sync filteredData with the chosen bookings source whenever it changes
+  useEffect(() => {
+    setFilteredData(Array.isArray(bookings) ? bookings : []);
+  }, [bookings]);
 
   const columns = [
     {
@@ -37,9 +74,9 @@ const FlightBookings = () => {
         <span className="flex items-center gap-2 text-sm w-52 lg:justify-center text-text">
           {row.origin}
           <div className="flex items-center justify-center gap-1">
-            <span className="h-0.5 w-3 bg-primary"></span>
+            <span className="h-0.5 w-3 bg-primary" />
             <IoIosAirplane className="text-lg text-primary" />
-            <span className="h-0.5 w-3 bg-primary"></span>
+            <span className="h-0.5 w-3 bg-primary" />
           </div>
           {row.destination}
         </span>
@@ -93,32 +130,39 @@ const FlightBookings = () => {
   ];
 
   return (
-    <>
-      <CardLayoutContainer removeBg={true}>
-        <CardLayoutHeader
-          removeBorder={true}
-          heading={"Flight Bookings"}
-          className="flex items-center justify-between"
-        ></CardLayoutHeader>
-        <CardLayoutBody removeBorder={true}>
+    <CardLayoutContainer removeBg={true}>
+      <CardLayoutHeader
+        removeBorder={true}
+        heading={isCompanyDetail ? "Company Bookings" : "Flight Bookings"}
+        className="flex items-center justify-between"
+      />
+      <CardLayoutBody removeBorder={true}>
+        <div className="flex items-center gap-3 mb-4">
           <ExcelExportButton
             data={filteredData || []}
-            fileName="FlightBookings"
+            fileName={
+              isCompanyDetail
+                ? `Company_${companyId}_Bookings`
+                : "FlightBookings"
+            }
           />
-          {flightBookings && (
-            <Searchbar onFilteredData={setFilteredData} data={flightBookings} />
-          )}
-          <Table
-            pagination={true}
-            columnsData={columns}
-            tableData={filteredData || []}
-            progressPending={isLoadingFlightBookings}
-            paginationTotalRows={filteredData.length}
-            paginationComponentOptions={{ noRowsPerPage: "10" }}
-          />
-        </CardLayoutBody>
-      </CardLayoutContainer>
-    </>
+        </div>
+
+        {/* show searchbar only when we have data */}
+        {Array.isArray(bookings) && bookings.length > 0 && (
+          <Searchbar onFilteredData={setFilteredData} data={bookings} />
+        )}
+
+        <Table
+          pagination={true}
+          columnsData={columns}
+          tableData={filteredData || []}
+          progressPending={loading}
+          paginationTotalRows={(filteredData || []).length}
+          paginationComponentOptions={{ noRowsPerPage: "10" }}
+        />
+      </CardLayoutBody>
+    </CardLayoutContainer>
   );
 };
 

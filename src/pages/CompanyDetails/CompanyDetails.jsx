@@ -43,6 +43,7 @@ const CompanyDetails = () => {
         toDate,
       })
     );
+    dispatch(getCompanyRevenue({ token: adminData?.token, id: companyId }));
   }, [adminData?.token, filter, companyId, dispatch]);
 
   // Define different subsections within the company dashboard (each has an icon component)
@@ -84,12 +85,6 @@ const CompanyDetails = () => {
       icon: FaTimesCircle,
     },
   ];
-
-  useEffect(() => {
-    if (adminData?.token) {
-      dispatch(getCompanyRevenue({ token: adminData?.token, id: companyId }));
-    }
-  }, [adminData?.token, companyId, dispatch]);
 
   return (
     <CardLayoutContainer removeBg={true}>
