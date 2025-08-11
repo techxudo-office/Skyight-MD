@@ -10,6 +10,10 @@ const initialState = {
   isLoadingCompanyTickets: false,
   companyTicketsError: null,
 
+  companyAnalytics: [],
+  isLoadingAnalytics: false,
+  dashboardError: null,
+
   companyRevenue: "",
   isLoadingCompanyRevenue: false,
   companyRevenueError: null,
@@ -42,6 +46,16 @@ const companySlice = createSlice({
       .addCase(getCompanyTickets.rejected, (state, action) => {
         state.isLoadingCompanyTickets = false;
         state.companyTicketsError = action.payload;
+      })
+      .addCase(getCompanyAnalytics.pending, (state) => {
+        state.isLoadingAnalytics = true;
+      })
+      .addCase(getCompanyAnalytics.fulfilled, (state, action) => {
+        state.isLoadingAnalytics = false;
+        state.companyAnalytics = action.payload;
+      })
+      .addCase(getCompanyAnalytics.rejected, (state) => {
+        state.isLoadingAnalytics = false;
       })
       .addCase(getCompanyRevenue.pending, (state) => {
         state.isLoadingCompanyRevenue = true;
@@ -86,6 +100,17 @@ export const getCompanyTickets = createAsyncThunk(
     );
     return response
   }
+);
+
+// Thunk to fetch dashboard stats for the admin panel
+export const getCompanyAnalytics = createAsyncThunk(
+  "company/getCompanyAnalytics",
+  ({ token, fromDate, toDate, companyId }) =>
+    makeRequest(
+      "GET",
+      `/api/company/get-company-kpi/${companyId}?fromDate=${fromDate}&toDate=${toDate}`,
+      { token, errorMessage: "Failed to fetch company analytics." }
+    )
 );
 
 export const getCompanyRevenue = createAsyncThunk(

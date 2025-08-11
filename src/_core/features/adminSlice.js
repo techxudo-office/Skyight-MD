@@ -109,7 +109,7 @@ const adminSlice = createSlice({
 // Thunk to fetch list of admins with logout fallback on auth failure
 export const getAdmins = createAsyncThunk(
   "admin/getAdmins",
-  async ({ token, logoutHandler }, thunkAPI) => {
+  async ({ token, logoutHandler }) => {
     const response = await makeRequest("GET", "/api/admin", {
       token,
       logoutCallback: logoutHandler, // triggers logout if token is expired/unauthorized
