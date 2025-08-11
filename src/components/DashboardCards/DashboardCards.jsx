@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import Loader from "../Loader/Loader";
+import * as Select from "@radix-ui/react-select";
 import { useDispatch, useSelector } from "react-redux";
+import { computeDates, FILTER_OPTIONS } from "../../utils/helper";
 import { getDashboardAnalytics } from "../../_core/features/adminSlice";
 import { FaUserAlt, FaTachometerAlt, FaClipboardList } from "react-icons/fa";
-import dayjs from "dayjs";
-import * as Select from "@radix-ui/react-select";
-import { computeDates, FILTER_OPTIONS } from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
 
 const DashboardCards = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { adminData } = useSelector((state) => state.persist);
   const { dashboard, isLoadingDashboard } = useSelector((state) => state.admin);
@@ -24,30 +25,35 @@ const DashboardCards = () => {
   const cardData = [
     {
       title: "Revenue",
+      path: "/dashboard",
       value: dashboard?.totalRevenue,
       description: "Gross revenue",
       icon: <FaTachometerAlt className="text-3xl text-primary" />,
     },
     {
       title: "Total Bookings",
+      path: "/dashboard/flight-bookings",
       value: dashboard?.totalConfirmedBooking,
       description: "Since last month",
       icon: <FaClipboardList className="text-3xl text-primary" />,
     },
     {
       title: "Total Tickets",
+      path: "/dashboard/tickets",
       value: dashboard?.totalBookedBooking,
       description: "Since last month",
       icon: <FaClipboardList className="text-3xl text-primary" />,
     },
     {
       title: "Total Refunds",
+      path: "/dashboard/refund-requests",
       value: dashboard?.totalRefundedBooking,
       description: "Processed refunds",
       icon: <FaClipboardList className="text-3xl text-primary" />,
     },
     {
       title: "Registered Users",
+      path: "/dashboard/companies",
       value: dashboard?.totalCompany,
       description: "Active users",
       icon: <FaUserAlt className="text-3xl text-primary" />,
@@ -93,7 +99,8 @@ const DashboardCards = () => {
           {cardData.map((card, index) => (
             <div
               key={index}
-              className="flex items-start p-5 transition duration-300 bg-white shadow-inner rounded-xl hover:shadow-lg"
+              onClick={() => navigate(card.path)}
+              className="flex items-start p-5 transition duration-300 bg-white shadow-inner cursor-pointer rounded-xl hover:shadow-lg"
             >
               <div className="mr-4">{card.icon}</div>
               <div>
