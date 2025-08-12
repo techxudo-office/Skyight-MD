@@ -193,7 +193,7 @@ const BookingDetails = () => {
           />
           <h2 className="p-5 text-xl font-semibold text-text">
             {/* Safely formatting total fare as localized currency */}
-            Total Fare: {Number(
+            Total Fare: {Math.round(
               bookingDetails?.total_fare
             ).toLocaleString()}{" "}
             PKR

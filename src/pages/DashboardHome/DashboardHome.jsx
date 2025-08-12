@@ -52,7 +52,7 @@ const DashboardHome = () => {
     },
     {
       name: "TOTAL FARE",
-      selector: (row) => row.total_fare,
+      selector: (row) => Math.round(row.total_fare).toLocaleString(),
       sortable: false,
       grow: 2,
     },
@@ -111,7 +111,7 @@ const DashboardHome = () => {
   ];
 
   return (
-    <div className="pb-10 px-3 space-y-10 bg-background w-full">
+    <div className="w-full px-3 pb-10 space-y-10 bg-background">
       <h2 className="text-3xl font-semibold text-text mb-7">Dashboard</h2>
       <DashboardComissions />
       <DashboardCards />

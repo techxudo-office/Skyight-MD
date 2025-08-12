@@ -59,13 +59,13 @@ const RefundRequests = () => {
     },
     {
       name: "TOTAL FARE",
-      selector: (row) => Number(row.booking.total_fare).toLocaleString(),
+      selector: (row) => Math.round(row.total_fare).toLocaleString(),
       sortable: false,
       grow: 2,
     },
     {
       name: "PENALTY",
-      selector: (row) => Number(row.total_fare).toLocaleString(),
+      selector: (row) => Math.round(row.total_fare).toLocaleString(),
       sortable: false,
       grow: 2,
     },

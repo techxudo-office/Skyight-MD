@@ -58,7 +58,7 @@ const CustomerBookings = () => {
     },
     {
       name: "TOTAL FARE",
-      selector: (row) => row.total_fare,
+      selector: (row) => Math.round(row.total_fare).toLocaleString(),
       sortable: false,
       grow: 2,
     },
@@ -75,22 +75,22 @@ const CustomerBookings = () => {
       wrap: true,
       grow: 4,
     },
-    // {
-    //   name: "",
-    //   selector: (row) => (
-    //     <span
-    //       className="text-lg cursor-pointer"
-    //       onClick={() => {
-    //         navigate("/dashboard/booking-details", {
-    //           state: row,
-    //         });
-    //       }}
-    //     >
-    //       <FaEye title="View" className="text-green-500 " />
-    //     </span>
-    //   ),
-    //   sortable: false,
-    // },
+    {
+      name: "",
+      selector: (row) => (
+        <span
+          className="text-lg cursor-pointer"
+          onClick={() => {
+            navigate("/dashboard/booking-details", {
+              state: row,
+            });
+          }}
+        >
+          <FaEye title="View" className="text-green-500 " />
+        </span>
+      ),
+      sortable: false,
+    },
   ];
 
   return (

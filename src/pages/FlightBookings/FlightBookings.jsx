@@ -94,7 +94,7 @@ const FlightBookings = ({ isCompanyDetail = false }) => {
     },
     {
       name: "TOTAL FARE",
-      selector: (row) => row.total_fare,
+      selector: (row) => Math.round(row.total_fare).toLocaleString(),
       sortable: false,
       grow: 2,
     },
