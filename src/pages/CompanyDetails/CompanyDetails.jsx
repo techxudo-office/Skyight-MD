@@ -135,9 +135,7 @@ const CompanyDetails = () => {
                     Revenue Generated
                   </h3>
                   <p className="mt-2 text-2xl font-bold text-gray-900">
-                    {Math.round(
-                      companyAnalytics?.totalTransaction ?? 0
-                    ).toLocaleString()}
+                    {Math.round(companyRevenue ?? 0).toLocaleString()}
                   </p>
                 </div>
               </div>

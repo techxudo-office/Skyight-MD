@@ -150,7 +150,16 @@ const FlightBookings = ({ isCompanyDetail = false }) => {
 
         {/* show searchbar only when we have data */}
         {Array.isArray(bookings) && bookings.length > 0 && (
-          <Searchbar onFilteredData={setFilteredData} data={bookings} />
+          <Searchbar
+            searchFields={[
+              "booking_status",
+              "booking_reference_id",
+              "origin",
+              "destination",
+            ]}
+            onFilteredData={setFilteredData}
+            data={bookings}
+          />
         )}
 
         <Table
