@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 const persistor = persistStore(store);
 const App = () => {
   console.log("CICD test 4");
+  console.log("CICD test 4 new");
   return (
     <>
       <Provider store={store}>
