@@ -9,8 +9,8 @@ import Spinner from "../../components/Spinner/Spinner";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resendLoginCode } from "../../_core/features/authSlice";
-import { verifyLoginOTP } from "../../_core/features/persistSlice";
+import { verifyOTP, resendCode } from "../../_core/features/authSlice";
+import { verifyGoogleAuthCode } from "../../_core/features/persistSlice";
 // import lock from "../../assets/images/lock.svg"
 
 const Verification = () => {
@@ -20,12 +20,12 @@ const Verification = () => {
   const location = useLocation();
   const [email, setEmail] = useState("");
   const loading = useSelector((state) => state.persist.isLoadingVerifyOTP);
-  const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
+  const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
 
   const verificationHandler = (payload) => {
-    dispatch(verifyLoginOTP(payload)).then((action) => {
-      if (verifyLoginOTP.fulfilled.match(action)) {
-        setVerificationCode(["", "", "", ""]);
+    dispatch(verifyGoogleAuthCode(payload)).then((action) => {
+      if (verifyGoogleAuthCode.fulfilled.match(action)) {
+        setVerificationCode(["", "", "", "", "", ""]);
         navigate("/dashboard");
         toast.success("OTP verified successfully");
       }
@@ -40,7 +40,7 @@ const Verification = () => {
       return next;
     });
 
-    if (value !== "" && index < 3) {
+    if (value !== "" && index < 5) {
       inputRefs.current[index + 1].focus();
     }
   };
@@ -55,10 +55,10 @@ const Verification = () => {
   const onPaste = (e) => {
     e.preventDefault();
     const pasted =
-      e.clipboardData.getData("text/plain").match(/\d+/)?.[0].slice(0, 4) || "";
+      e.clipboardData.getData("text/plain").match(/\d+/)?.[0].slice(0, 6) || "";
     if (!pasted) return;
     // fill state in one go
-    const next = ["", "", "", ""];
+    const next = ["", "", "", "", "", ""];
     for (let i = 0; i < pasted.length; i++) {
       next[i] = pasted[i];
     }
@@ -70,8 +70,8 @@ const Verification = () => {
 
   const verifyOTPHandler = async () => {
     const otp = verificationCode.join("");
-    if (otp.trim() !== "" && otp.trim().length === 4) {
-      const payload = { verification_code: otp, email };
+    if (otp.trim() !== "" && otp.trim().length === 6) {
+      const payload = { token: otp, email };
       verificationHandler(payload);
     } else {
       toast.error("Please enter valid OTP");
@@ -93,7 +93,7 @@ const Verification = () => {
   }, []);
 
   const resendCodeHandler = () => {
-    dispatch(resendLoginCode({ email }));
+    dispatch(resendCode({ email }));
   };
   return (
     <>

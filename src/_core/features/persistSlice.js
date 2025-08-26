@@ -51,6 +51,17 @@ const persistSlice = createSlice({
       })
       .addCase(updateAccount.rejected, (state, action) => {
         state.isUpdatingAccount = false;
+      })
+      .addCase(verifyGoogleAuthCode.pending, (state) => {
+        state.isLoadingVerifyOTP = true;
+      })
+      .addCase(verifyGoogleAuthCode.fulfilled, (state, action) => {
+        console.log(state.adminData)
+        state.adminData = action.payload;
+        state.isLoadingVerifyOTP = false;
+      })
+      .addCase(verifyGoogleAuthCode.rejected, (state) => {
+        state.isLoadingVerifyOTP = false;
       });
   },
 });
@@ -74,6 +85,14 @@ export const updateAccount = createAsyncThunk(
     });
     return response?.data || response;
   }
+);
+
+// Submit OTP for verification after signup
+export const verifyGoogleAuthCode = createAsyncThunk("auth/verifyGoogleAuthCode", (payload) =>
+  makeRequest("post", "/api/verify-google-authenticator", {
+    data: payload,
+    errorMessage: "OTP verification failed",
+  })
 );
 
 export const uploadImage = createAsyncThunk(

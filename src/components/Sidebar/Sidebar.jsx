@@ -18,19 +18,19 @@ const Sidebar = ({ status, updateStatus }) => {
   const { adminData } = useSelector((state) => state.persist);
   const sidebarLinks = useAdminSidebarLinks(); // Array of link objects, each may have `sublinks`
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && mobileView) {
-        updateStatus(false); // Call the function when clicked outside
-      }
-    }
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (sidebarRef.current && !sidebarRef.current.contains(event.target) && mobileView) {
+  //       updateStatus(false); // Call the function when clicked outside
+  //     }
+  //   }
 
-    document.addEventListener("mousedown", handleClickOutside);
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [updateStatus]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [updateStatus]);
 
   useEffect(() => {
     if (!status) {
@@ -156,7 +156,7 @@ const Sidebar = ({ status, updateStatus }) => {
                   {`${adminData?.admin?.full_name}`}
                 </h3>
                 <h3 className="text-center text-text">
-                  {`${adminData?.admin?.role?.role}`}
+                  {`${adminData?.admin?.role?.name}`}
                 </h3>
               </>
             )}

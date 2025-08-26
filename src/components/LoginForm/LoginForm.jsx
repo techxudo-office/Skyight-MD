@@ -23,9 +23,16 @@ const LoginForm = () => {
     // Dispatch Redux login action and handle form reset or password error
     dispatch(login(payload))
       .unwrap()
+      .then((resp) => {
+        if (!resp?.user?.twoFASecret) {
+          navigate("/verification-login", { state: payload.email }); // Redirects to OTP for verification on successful login
+        } else {
+          navigate("/qr-code-scan", { state: payload.email }); // Redirects to QR code scan if 2FA is enabled
+        }
+      })
       .then(() => {
         resetForm(); // Reset form on successful login
-        navigate("/verification-login", { state: payload.email });
+        // navigate("/verification-login", { state: payload.email });
       })
       .catch((err) => {
         // Clear password field if login failed due to wrong password

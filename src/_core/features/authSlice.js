@@ -5,6 +5,9 @@ import makeRequest from "../../utils/ApiHelper";
 const initialState = {
   isLoading: false,
 
+  qrCode: null,
+  isGeneratingQrCode: false,
+
   isLoadingForgotPassword: false,
   forgotPasswordError: null,
 
@@ -94,7 +97,18 @@ const authSlice = createSlice({
       .addCase(resendCode.rejected, (state, action) => {
         state.isLoadingResendCode = false;
         state.resendCodeError = action.payload;
-      });
+      })
+      //Authentication
+      .addCase(qrCodeGenerator.pending, (state) => {
+        state.isGeneratingQrCode = true;
+      })
+      .addCase(qrCodeGenerator.fulfilled, (state, action) => {
+        state.isGeneratingQrCode = false;
+        state.qrCode = action.payload; // Assuming the response contains the QR code
+      })
+      .addCase(qrCodeGenerator.rejected, (state) => {
+        state.isGeneratingQrCode = false;
+      })
   },
 });
 
@@ -120,7 +134,13 @@ export const logout = createAsyncThunk("auth/logout", async (token) => {
   });
   return response?.message || response;
 });
-
+// QR Code Generator for login
+export const qrCodeGenerator = createAsyncThunk("auth/qrCodeGenerator", (payload) =>
+  makeRequest("post", "/api/generate-qrcode", {
+    data: payload,
+    errorMessage: "Qr Code Failed. Please try again.",
+  })
+);
 // Async thunk to send forgot password request
 export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",

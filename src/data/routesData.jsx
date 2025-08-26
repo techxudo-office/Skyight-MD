@@ -36,6 +36,7 @@ const Login = lazy(() => import("../pages/Login/Login"));
 const Verification = lazy(() => import("../pages/Verification/Verification"));
 const Admins = lazy(() => import("../pages/Admins/Admins"));
 const CreateAdmin = lazy(() => import("../pages/CreateAdmin/CreateAdmin"));
+const QrCodeScan = lazy(() => import("../pages/QrCodeScan/QrCodeScan"));
 const RefundRequests = lazy(() =>
   import("../pages/RefundRequests/RefundRequests")
 );
@@ -72,7 +73,7 @@ const SupportChatPage = lazy(() => import("../pages/SupportChat/SupportChat"));
 export const routesData = [
   { path: "/", element: <Login /> },
   { path: "/verification-login", element: <Verification /> },
-
+  { path: "/qr-code-scan", element: <QrCodeScan /> },
   {
     path: "/dashboard",
     element: <Dashboard />,

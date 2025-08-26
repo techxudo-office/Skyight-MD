@@ -80,12 +80,8 @@ const Header = ({ sidebarStatus, setSidebarStatusHandler }) => {
 
   // Toggle sidebar open/close
   const sidebarHandler = () => {
-    if ((sidebarStatus && window.innerWidth < 1024)) {
-      return
-    } else {
+    setSidebarStatusHandler(!sidebarStatus);
 
-      setSidebarStatusHandler(!sidebarStatus);
-    }
 
   };
 
