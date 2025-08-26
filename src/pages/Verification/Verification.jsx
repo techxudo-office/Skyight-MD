@@ -93,7 +93,8 @@ const Verification = () => {
   }, []);
 
   const resendCodeHandler = () => {
-    dispatch(resendCode({ email }));
+    // dispatch(resendCode({ email }));
+    navigate("/qr-code-scan", { state: email });
   };
   return (
     <>
@@ -315,7 +316,7 @@ const Verification = () => {
                 Login Verification
               </h3>
               <h3 className="mb-10 text-center text-md text-slate-500">
-                We have sent a verification code to your email address.
+                Verify code from your google authenticator
               </h3>
 
               <div className="flex flex-col gap-5">
@@ -337,12 +338,12 @@ const Verification = () => {
                 </div>
 
                 <div className="flex items-center justify-end px-10 mt-[-10px]">
-                  <Link
+                  <button
                     onClick={resendCodeHandler}
                     className="transition-all text-end text-primary hover:text-secondary"
                   >
-                    Resend code
-                  </Link>
+                    Scan again
+                  </button>
                 </div>
 
                 <div className="flex items-center justify-center mt-3 px-7">

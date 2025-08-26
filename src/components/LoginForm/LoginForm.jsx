@@ -24,7 +24,8 @@ const LoginForm = () => {
     dispatch(login(payload))
       .unwrap()
       .then((resp) => {
-        if (!resp?.user?.twoFASecret) {
+        console.log(resp, "resp")
+        if (resp?.user?.twoFASecret) {
           navigate("/verification-login", { state: payload.email }); // Redirects to OTP for verification on successful login
         } else {
           navigate("/qr-code-scan", { state: payload.email }); // Redirects to QR code scan if 2FA is enabled
