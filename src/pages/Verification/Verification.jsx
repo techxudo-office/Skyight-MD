@@ -1,3 +1,5 @@
+"use client"; // Assuming this is for Next.js App Router, added 'use client'
+
 import "../Login/Login.css";
 import { useState, useRef, useEffect } from "react";
 import {
@@ -11,91 +13,70 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyOTP, resendCode } from "../../_core/features/authSlice";
 import { verifyGoogleAuthCode } from "../../_core/features/persistSlice";
-// import lock from "../../assets/images/lock.svg"
 
 const Verification = () => {
-  const inputRefs = useRef([]);
+  const inputRef = useRef(null); // Ab sirf ek hi ref chahiye
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const [email, setEmail] = useState("");
   const loading = useSelector((state) => state.persist.isLoadingVerifyOTP);
-  const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
+
+  // Ab state ek hi string hogi
+  const [verificationCode, setVerificationCode] = useState("");
 
   const verificationHandler = (payload) => {
     dispatch(verifyGoogleAuthCode(payload)).then((action) => {
       if (verifyGoogleAuthCode.fulfilled.match(action)) {
-        setVerificationCode(["", "", "", "", "", ""]);
+        setVerificationCode("");
         navigate("/dashboard");
         toast.success("OTP verified successfully");
       }
     });
   };
 
-  const onChangeHandler = (e, index) => {
-    const value = e.target.value.replace(/[^0-9]/g, "");
-    setVerificationCode((prev) => {
-      const next = [...prev];
-      next[index] = value;
-      return next;
-    });
-
-    if (value !== "" && index < 5) {
-      inputRefs.current[index + 1].focus();
-    }
+  const onChangeHandler = (e) => {
+    // Sirf numbers accept karein aur 6 characters se zyada na ho
+    const value = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
+    setVerificationCode(value);
   };
 
-  const onKeyPressHandler = (e, index) => {
-    if (e.key === "Backspace" && verificationCode[index] === "") {
-      if (index > 0) {
-        inputRefs.current[index - 1].focus();
-      }
-    }
-  };
+  // onPaste ab simple ho jayega
   const onPaste = (e) => {
     e.preventDefault();
-    const pasted =
-      e.clipboardData.getData("text/plain").match(/\d+/)?.[0].slice(0, 6) || "";
-    if (!pasted) return;
-    // fill state in one go
-    const next = ["", "", "", "", "", ""];
-    for (let i = 0; i < pasted.length; i++) {
-      next[i] = pasted[i];
+    const pasted = e.clipboardData.getData("text/plain").replace(/[^0-9]/g, "").slice(0, 6);
+    if (pasted) {
+      setVerificationCode(pasted);
     }
-    setVerificationCode(next);
-    // focus the last filled or next
-    const lastIndex = pasted.length - 1;
-    inputRefs.current[lastIndex]?.focus();
   };
 
-  const verifyOTPHandler = async () => {
-    const otp = verificationCode.join("");
-    if (otp.trim() !== "" && otp.trim().length === 6) {
-      const payload = { token: otp, email };
+  const verifyOTPHandler = () => {
+    if (verificationCode.trim().length === 6) {
+      const payload = { token: verificationCode, email };
       verificationHandler(payload);
     } else {
-      toast.error("Please enter valid OTP");
+      toast.error("Please enter a 6-digit OTP");
     }
   };
 
-  // auto-submit as soon as all 4 boxes are non-empty:
+  // auto-submit jab 6 digits poore ho jayein
   useEffect(() => {
-    if (verificationCode.every((d) => d !== "")) {
+    if (verificationCode.length === 6) {
       verifyOTPHandler();
     }
   }, [verificationCode]);
 
   useEffect(() => {
-    inputRefs.current[0]?.focus();
+    inputRef.current?.focus();
     if (location.state) {
       setEmail(location.state);
     }
   }, []);
 
   const resendCodeHandler = () => {
-    // dispatch(resendCode({ email }));
     navigate("/qr-code-scan", { state: email });
   };
+
   return (
     <>
       <div className="flex items-center justify-center w-full h-screen animated-page px-4">
@@ -319,38 +300,36 @@ const Verification = () => {
                 Verify code from your google authenticator
               </h3>
 
-              <div className="flex flex-col gap-5">
-                <div className="flex justify-center gap-4 mt-5">
-                  {verificationCode.map((value, index) => (
-                    <input
-                      key={index}
-                      type="text"
-                      value={value}
-                      maxLength="1"
-                      className={`w-16 h-16 text-center border-2 text-2xl outline-none rounded-lg bg-slate-100 ${value !== "" ? "border-primary" : "border-slate-300"
-                        }`}
-                      onPaste={(e) => onPaste(e)}
-                      onChange={(e) => onChangeHandler(e, index)}
-                      onKeyDown={(e) => onKeyPressHandler(e, index)}
-                      ref={(el) => (inputRefs.current[index] = el)}
-                    />
-                  ))}
+              <div className="flex flex-col gap-5 items-center max-w-xs mx-auto">
+                {/* --- YAHAN CHANGE HUA HAI --- */}
+                <div className="flex justify-center mt-5">
+                  <input
+                    type="text" // 'text' rakhein taake 'letter-spacing' kaam kare
+                    inputMode="numeric" // Mobile par numeric keyboard kholega
+                    pattern="\d{6}" // 6 digits ka pattern
+                    value={verificationCode}
+                    maxLength="6"
+                    className="w-full  h-16 text-center border-2 text-3xl md:text-4xl tracking-[0.5em] outline-none rounded-lg bg-slate-100 focus:border-primary border-slate-300"
+                    onPaste={onPaste}
+                    onChange={onChangeHandler}
+                    ref={inputRef}
+                    autoComplete="one-time-code"
+                  />
                 </div>
+                {/* --- CHANGE KHATAM --- */}
 
-                <div className="flex items-center justify-end px-10 mt-[-10px]">
-                  <button
-                    onClick={resendCodeHandler}
-                    className="transition-all text-end text-primary hover:text-secondary"
-                  >
-                    Scan again
-                  </button>
-                </div>
+                <button
+                  onClick={resendCodeHandler}
+                  className="transition-all text-end w-full text-primary hover:text-secondary"
+                >
+                  Scan again
+                </button>
 
                 <div className="flex items-center justify-center mt-3 px-7">
                   <Button
                     text={loading ? <Spinner /> : "Verify"}
                     onClick={verifyOTPHandler}
-                    disabled={loading}
+                    disabled={loading || verificationCode.length !== 6}
                   />
                 </div>
               </div>

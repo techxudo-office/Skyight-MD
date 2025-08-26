@@ -22,7 +22,6 @@ const offerSlice = createSlice({
                 state.isLoadingOffers = true;
             })
             .addCase(getOffers.fulfilled, (state, action) => {
-                // console.log(action.payload)
                 state.offers = action.payload[0];
                 state.isLoadingOffers = false;
             })

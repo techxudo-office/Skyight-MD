@@ -56,7 +56,6 @@ const persistSlice = createSlice({
         state.isLoadingVerifyOTP = true;
       })
       .addCase(verifyGoogleAuthCode.fulfilled, (state, action) => {
-        console.log(state.adminData)
         state.adminData = action.payload;
         state.isLoadingVerifyOTP = false;
       })

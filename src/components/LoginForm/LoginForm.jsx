@@ -24,7 +24,6 @@ const LoginForm = () => {
     dispatch(login(payload))
       .unwrap()
       .then((resp) => {
-        console.log(resp, "resp")
         if (resp?.user?.twoFASecret) {
           navigate("/verification-login", { state: payload.email }); // Redirects to OTP for verification on successful login
         } else {
