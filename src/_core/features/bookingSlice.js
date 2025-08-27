@@ -226,7 +226,7 @@ export const getFlightBookings = createAsyncThunk(
   "booking/getFlightBookings",
   async ({ token, logoutHandler }, thunkAPI) => {
     try {
-      const response = await makeRequest("GET", "/api/booking", {
+      let response = await makeRequest("GET", "/api/booking", {
         token,
         errorMessage: "Failed to fetch flight bookings.",
         logoutCallback: logoutHandler,
