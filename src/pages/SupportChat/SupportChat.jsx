@@ -18,10 +18,13 @@ const SupportChatPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState({});
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [socket, setSocket] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
+  const [UserName, setUserName] = useState(null);
+  const [UserId, setUserId] = useState(null);
 
   const { adminData } = useSelector((state) => state.persist);
 
@@ -46,98 +49,121 @@ const SupportChatPage = () => {
       setChatRooms(rooms); // update state
     });
 
+    // ✅ listen for room messages
+    newSocket.on("joinedRoomMessages", (msgs) => {
+      if (!msgs.length) return;
+      // ✅ derive roomId from message data
+      const roomId = msgs[0].chatRoom?.id;
+
+      console.log("Received messages for room:", selectedRoom, msgs);
+
+      setMessages((prev) => ({
+        ...prev,
+        [selectedRoom]: msgs.map((m) => ({
+          id: m.id,
+          text: m.message,
+          sender: m.typedBy,
+          timestamp: new Date(m.created_at).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          status: "delivered",
+        })),
+      }));
+    });
+
     return () => {
       newSocket.disconnect();
     };
-  }, [adminData?.token]);
+  }, [adminData?.token,selectedRoom]);
 
-  const [messages, setMessages] = useState({
-    1: [
-      {
-        id: 1,
-        text: "Hi, I need help with my booking",
-        sender: "user",
-        timestamp: "10:30 AM",
-        status: "read",
-      },
-      {
-        id: 2,
-        text: "My booking reference is #BK123456",
-        sender: "user",
-        timestamp: "10:31 AM",
-        status: "read",
-      },
-      {
-        id: 3,
-        text: "Hello! I'd be happy to help you with your booking. Let me check the details.",
-        sender: "admin",
-        timestamp: "10:32 AM",
-        status: "delivered",
-      },
-      {
-        id: 4,
-        text: "I can see your booking. What specific issue are you facing?",
-        sender: "admin",
-        timestamp: "10:33 AM",
-        status: "read",
-      },
-    ],
-    2: [
-      {
-        id: 1,
-        text: "I had an issue with my reservation",
-        sender: "user",
-        timestamp: "9:15 AM",
-        status: "read",
-      },
-      {
-        id: 2,
-        text: "I've resolved the issue for you. Is there anything else I can help with?",
-        sender: "admin",
-        timestamp: "9:20 AM",
-        status: "read",
-      },
-      {
-        id: 3,
-        text: "Thank you for your help!",
-        sender: "user",
-        timestamp: "9:21 AM",
-        status: "read",
-      },
-    ],
-    3: [
-      {
-        id: 1,
-        text: "Is there any discount available?",
-        sender: "user",
-        timestamp: "8:45 AM",
-        status: "delivered",
-      },
-    ],
-    4: [
-      {
-        id: 1,
-        text: "My payment failed, please help",
-        sender: "user",
-        timestamp: "7:30 AM",
-        status: "delivered",
-      },
-      {
-        id: 2,
-        text: "I tried multiple times but it keeps failing",
-        sender: "user",
-        timestamp: "7:31 AM",
-        status: "delivered",
-      },
-      {
-        id: 3,
-        text: "This is really urgent, I need to complete my booking today",
-        sender: "user",
-        timestamp: "7:32 AM",
-        status: "delivered",
-      },
-    ],
-  });
+  // const [messages, setMessages] = useState({
+  //   1: [
+  //     {
+  //       id: 1,
+  //       text: "Hi, I need help with my booking",
+  //       sender: "user",
+  //       timestamp: "10:30 AM",
+  //       status: "read",
+  //     },
+  //     {
+  //       id: 2,
+  //       text: "My booking reference is #BK123456",
+  //       sender: "user",
+  //       timestamp: "10:31 AM",
+  //       status: "read",
+  //     },
+  //     {
+  //       id: 3,
+  //       text: "Hello! I'd be happy to help you with your booking. Let me check the details.",
+  //       sender: "admin",
+  //       timestamp: "10:32 AM",
+  //       status: "delivered",
+  //     },
+  //     {
+  //       id: 4,
+  //       text: "I can see your booking. What specific issue are you facing?",
+  //       sender: "admin",
+  //       timestamp: "10:33 AM",
+  //       status: "read",
+  //     },
+  //   ],
+  //   2: [
+  //     {
+  //       id: 1,
+  //       text: "I had an issue with my reservation",
+  //       sender: "user",
+  //       timestamp: "9:15 AM",
+  //       status: "read",
+  //     },
+  //     {
+  //       id: 2,
+  //       text: "I've resolved the issue for you. Is there anything else I can help with?",
+  //       sender: "admin",
+  //       timestamp: "9:20 AM",
+  //       status: "read",
+  //     },
+  //     {
+  //       id: 3,
+  //       text: "Thank you for your help!",
+  //       sender: "user",
+  //       timestamp: "9:21 AM",
+  //       status: "read",
+  //     },
+  //   ],
+  //   3: [
+  //     {
+  //       id: 1,
+  //       text: "Is there any discount available?",
+  //       sender: "user",
+  //       timestamp: "8:45 AM",
+  //       status: "delivered",
+  //     },
+  //   ],
+  //   4: [
+  //     {
+  //       id: 1,
+  //       text: "My payment failed, please help",
+  //       sender: "user",
+  //       timestamp: "7:30 AM",
+  //       status: "delivered",
+  //     },
+  //     {
+  //       id: 2,
+  //       text: "I tried multiple times but it keeps failing",
+  //       sender: "user",
+  //       timestamp: "7:31 AM",
+  //       status: "delivered",
+  //     },
+  //     {
+  //       id: 3,
+  //       text: "This is really urgent, I need to complete my booking today",
+  //       sender: "user",
+  //       timestamp: "7:32 AM",
+  //       status: "delivered",
+  //     },
+  //   ],
+  // });
 
   const emojis = [
     "😊",
@@ -261,12 +287,14 @@ const SupportChatPage = () => {
                 <div
                   key={room.id}
                   onClick={() => {
-                    setSelectedRoom(room.id);
-
+                    setSelectedRoom(room.userId);
+                    setUserName(`${room.first_name} ${room.last_name}`);
+                    setUserId(room.userId)
                     socket?.emit("joinRoom", {
                       isAdmin: false,
                       userId: room.userId,
                     });
+                    
                   }}
                   className={`p-4 border-b border-primary  border-primaryborder-gray-100 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${
                     selectedRoom === room.id
@@ -352,10 +380,7 @@ const SupportChatPage = () => {
                             isDarkMode ? "text-gray-400" : "text-gray-600"
                           }`}
                         >
-                          {chatRooms.find((room) => room.id === selectedRoom)
-                            ?.isOnline
-                            ? "Online"
-                            : "Offline"}
+                          {UserName}
                         </p>
                       </div>
                     </div>
@@ -372,6 +397,7 @@ const SupportChatPage = () => {
                 {/* Messages */}
                 <div className="flex-1 p-6 space-y-4 overflow-y-auto">
                   {(messages[selectedRoom] || []).map((msg) => (
+                    // {console.log({msg})}
                     <div
                       key={msg.id}
                       className={`flex ${
@@ -383,8 +409,8 @@ const SupportChatPage = () => {
                           msg.sender === "admin"
                             ? "bg-primary  text-white"
                             : isDarkMode
-                            ? "bg-gray-700 text-white"
-                            : "bg-gray-100 text-gray-900"
+                            ? "bg-primary  text-white"
+                            : isDarkMode
                         }`}
                       >
                         <p className="text-sm">{msg.text}</p>
