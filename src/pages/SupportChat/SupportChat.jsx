@@ -319,7 +319,6 @@ const SupportChatPage = () => {
                 <div
                   key={room.id}
                   onClick={() => {
-                    console.log("22222222222222222");
                     setSelectedRoom(room.id);
                     setUserName(`${room.first_name} ${room.last_name}`);
                     socket.emit("joinRoom", {
