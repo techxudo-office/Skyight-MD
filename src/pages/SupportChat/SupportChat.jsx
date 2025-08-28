@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 import { FiSend } from "react-icons/fi";
 import {
   FaRegCommentDots,
@@ -10,6 +11,8 @@ import {
   FaCheck,
 } from "react-icons/fa";
 import { BsThreeDotsVertical, BsCheck2All } from "react-icons/bs";
+import { SOCKET_URL } from "../../utils/ApiBaseUrl";
+import { useSelector } from "react-redux";
 
 const SupportChatPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -17,6 +20,25 @@ const SupportChatPage = () => {
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [socket, setSocket] = useState(null);
+
+  const { adminData } = useSelector((state) => state.persist);
+
+  useEffect(() => {
+    const newSocket = io(SOCKET_URL, {
+      extraHeaders: {
+        Authorization: `${adminData?.token}`,
+      },
+    });
+    setSocket(newSocket);
+
+    // emit joinRoom with userId
+    newSocket.emit("joinRoom", { isAdmin: true });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
 
   // Mock data for chat rooms
   const [chatRooms] = useState([
@@ -248,8 +270,9 @@ const SupportChatPage = () => {
               <div>
                 <h1 className="text-xl font-semibold">Admin Chat Support</h1>
                 <p
-                  className={`text-sm ${isDarkMode ? "bg-red text-gray-400" : "text-gray-600"
-                    }`}
+                  className={`text-sm ${
+                    isDarkMode ? "bg-red text-gray-400" : "text-gray-600"
+                  }`}
                 >
                   Manage customer conversations
                 </p>
@@ -257,10 +280,11 @@ const SupportChatPage = () => {
             </div>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className={`p-2 rounded-lg transition-colors ${isDarkMode
-                ? "bg-black text-yellow-400"
-                : "bg-gray-100 text-gray-600"
-                }`}
+              className={`p-2 rounded-lg transition-colors ${
+                isDarkMode
+                  ? "bg-black text-yellow-400"
+                  : "bg-gray-100 text-gray-600"
+              }`}
             >
               {isDarkMode ? (
                 <FaSun className="w-5 h-5" />
@@ -273,7 +297,9 @@ const SupportChatPage = () => {
 
         <div className="flex h-[calc(100vh-80px)]">
           {/* Chat Rooms Sidebar */}
-          <div className={`w-80 ${cardClasses} border-r border-primary flex flex-col`}>
+          <div
+            className={`w-80 ${cardClasses} border-r border-primary flex flex-col`}
+          >
             {/* Search */}
             <div className="p-4 border-b border-primary  border-gray-200 dark:border-gray-700">
               <div className="relative">
@@ -294,10 +320,11 @@ const SupportChatPage = () => {
                 <div
                   key={room.id}
                   onClick={() => setSelectedRoom(room.id)}
-                  className={`p-4 border-b border-primary  border-primaryborder-gray-100 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${selectedRoom === room.id
-                    ? "bg-teal-50 dark:bg-teal-900/20 border-l-4 border-l-primary "
-                    : ""
-                    }`}
+                  className={`p-4 border-b border-primary  border-primaryborder-gray-100 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${
+                    selectedRoom === room.id
+                      ? "bg-teal-50 dark:bg-teal-900/20 border-l-4 border-l-primary "
+                      : ""
+                  }`}
                 >
                   <div className="flex items-start space-x-3 ">
                     <div className="relative">
@@ -310,7 +337,9 @@ const SupportChatPage = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-medium truncate">{room.userName}</h3>
+                        <h3 className="font-medium truncate">
+                          {room.userName}
+                        </h3>
                         <div className="flex items-center space-x-2">
                           <div
                             className={`w-2 h-2 rounded-full ${getStatusColor(
@@ -318,16 +347,18 @@ const SupportChatPage = () => {
                             )}`}
                           ></div>
                           <span
-                            className={`text-xs ${isDarkMode ? "text-gray-400" : "text-gray-500"
-                              }`}
+                            className={`text-xs ${
+                              isDarkMode ? "text-gray-400" : "text-gray-500"
+                            }`}
                           >
                             {room.timestamp}
                           </span>
                         </div>
                       </div>
                       <p
-                        className={`text-sm truncate ${isDarkMode ? "text-gray-400" : "text-gray-600"
-                          }`}
+                        className={`text-sm truncate ${
+                          isDarkMode ? "text-gray-400" : "text-gray-600"
+                        }`}
                       >
                         {room.lastMessage}
                       </p>
@@ -350,7 +381,9 @@ const SupportChatPage = () => {
             {selectedRoom ? (
               <>
                 {/* Chat Header */}
-                <div className={`${cardClasses} border-b border-primary  border-primarypx-6 px-3 py-4`}>
+                <div
+                  className={`${cardClasses} border-b border-primary  border-primarypx-6 px-3 py-4`}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="flex items-center justify-center w-10 h-10 font-semibold text-white bg-primary  rounded-full">
@@ -367,8 +400,9 @@ const SupportChatPage = () => {
                           }
                         </h2>
                         <p
-                          className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"
-                            }`}
+                          className={`text-sm ${
+                            isDarkMode ? "text-gray-400" : "text-gray-600"
+                          }`}
                         >
                           {chatRooms.find((room) => room.id === selectedRoom)
                             ?.isOnline
@@ -378,8 +412,9 @@ const SupportChatPage = () => {
                       </div>
                     </div>
                     <button
-                      className={`p-2 rounded-lg transition-colors ${isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                        }`}
+                      className={`p-2 rounded-lg transition-colors ${
+                        isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
+                      }`}
                     >
                       <BsThreeDotsVertical className="w-5 h-5" />
                     </button>
@@ -391,25 +426,28 @@ const SupportChatPage = () => {
                   {(messages[selectedRoom] || []).map((msg) => (
                     <div
                       key={msg.id}
-                      className={`flex ${msg.sender === "admin" ? "justify-end" : "justify-start"
-                        }`}
+                      className={`flex ${
+                        msg.sender === "admin" ? "justify-end" : "justify-start"
+                      }`}
                     >
                       <div
-                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.sender === "admin"
-                          ? "bg-primary  text-white"
-                          : isDarkMode
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                          msg.sender === "admin"
+                            ? "bg-primary  text-white"
+                            : isDarkMode
                             ? "bg-gray-700 text-white"
                             : "bg-gray-100 text-gray-900"
-                          }`}
+                        }`}
                       >
                         <p className="text-sm">{msg.text}</p>
                         <div
-                          className={`flex items-center justify-between mt-1 ${msg.sender === "admin"
-                            ? "text-teal-100"
-                            : isDarkMode
+                          className={`flex items-center justify-between mt-1 ${
+                            msg.sender === "admin"
+                              ? "text-teal-100"
+                              : isDarkMode
                               ? "text-gray-400"
                               : "text-gray-500"
-                            }`}
+                          }`}
                         >
                           <span className="text-xs">{msg.timestamp}</span>
                           {msg.sender === "admin" && (
@@ -441,8 +479,9 @@ const SupportChatPage = () => {
                     <div className="relative">
                       <button
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className={`p-3 rounded-lg transition-colors ${isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                          }`}
+                        className={`p-3 rounded-lg transition-colors ${
+                          isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
+                        }`}
                       >
                         <FaRegSmile size={20} />
                       </button>
@@ -483,11 +522,12 @@ const SupportChatPage = () => {
                     Select a conversation
                   </h3>
                   <p
-                    className={`${isDarkMode ? "text-gray-400" : "text-gray-600"
-                      }`}
+                    className={`${
+                      isDarkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
                   >
-                    Choose a conversation from the sidebar to start chatting with
-                    users
+                    Choose a conversation from the sidebar to start chatting
+                    with users
                   </p>
                 </div>
               </div>
