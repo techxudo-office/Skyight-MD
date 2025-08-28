@@ -247,20 +247,6 @@ const SupportChatPage = () => {
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode
-                  ? "bg-black text-yellow-400"
-                  : "bg-gray-100 text-gray-600"
-              }`}
-            >
-              {isDarkMode ? (
-                <FaSun className="w-5 h-5" />
-              ) : (
-                <FaMoon className="w-5 h-5" />
-              )}
-            </button>
           </div>
         </div>
 
@@ -269,20 +255,6 @@ const SupportChatPage = () => {
           <div
             className={`w-80 ${cardClasses} border-r border-primary flex flex-col`}
           >
-            {/* Search */}
-            <div className="p-4 border-b border-primary  border-gray-200 dark:border-gray-700">
-              <div className="relative">
-                <FaSearch className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search conversations..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`w-full pl-10 pr-4 py-2 rounded-lg border border-primary ${inputClasses} focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors`}
-                />
-              </div>
-            </div>
-
             {/* Chat Rooms List */}
             <div className="flex-1 overflow-y-auto">
               {filteredRooms.map((room) => (
