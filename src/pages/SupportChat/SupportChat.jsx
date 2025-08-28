@@ -55,11 +55,11 @@ const SupportChatPage = () => {
       // ✅ derive roomId from message data
       const roomId = msgs[0].chatRoom?.id;
 
-      console.log("Received messages for room:", selectedRoom, msgs);
+      console.log("Received messages for room:", roomId, msgs);
 
       setMessages((prev) => ({
         ...prev,
-        [selectedRoom]: msgs.map((m) => ({
+        [roomId]: msgs.map((m) => ({
           id: m.id,
           text: m.message,
           sender: m.typedBy,
@@ -75,7 +75,7 @@ const SupportChatPage = () => {
     return () => {
       newSocket.disconnect();
     };
-  }, [adminData?.token,selectedRoom]);
+  }, [adminData?.token]);
 
   // const [messages, setMessages] = useState({
   //   1: [
@@ -287,14 +287,13 @@ const SupportChatPage = () => {
                 <div
                   key={room.id}
                   onClick={() => {
-                    setSelectedRoom(room.userId);
+                    console.log("22222222222222222");
+                    setSelectedRoom(room.id);
                     setUserName(`${room.first_name} ${room.last_name}`);
-                    setUserId(room.userId)
-                    socket?.emit("joinRoom", {
+                    socket.emit("joinRoom", {
                       isAdmin: false,
                       userId: room.userId,
                     });
-                    
                   }}
                   className={`p-4 border-b border-primary  border-primaryborder-gray-100 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${
                     selectedRoom === room.id
@@ -384,13 +383,6 @@ const SupportChatPage = () => {
                         </p>
                       </div>
                     </div>
-                    <button
-                      className={`p-2 rounded-lg transition-colors ${
-                        isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                      }`}
-                    >
-                      <BsThreeDotsVertical className="w-5 h-5" />
-                    </button>
                   </div>
                 </div>
 
@@ -405,13 +397,9 @@ const SupportChatPage = () => {
                       }`}
                     >
                       <div
-                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                          msg.sender === "admin"
-                            ? "bg-primary  text-white"
-                            : isDarkMode
-                            ? "bg-primary  text-white"
-                            : isDarkMode
-                        }`}
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg 
+                          bg-primary  text-white
+                        `}
                       >
                         <p className="text-sm">{msg.text}</p>
                         <div
@@ -420,7 +408,7 @@ const SupportChatPage = () => {
                               ? "text-teal-100"
                               : isDarkMode
                               ? "text-gray-400"
-                              : "text-gray-500"
+                              : isDarkMode
                           }`}
                         >
                           <span className="text-xs">{msg.timestamp}</span>
