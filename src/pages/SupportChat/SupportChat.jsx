@@ -51,51 +51,6 @@ const SupportChatPage = () => {
     };
   }, [adminData?.token]);
 
-  // Mock data for chat rooms
-  // const [chatRooms] = useState([
-  //   {
-  //     id: 1,
-  //     userName: "John Doe",
-  //     userAvatar: "JD",
-  //     lastMessage: "Hi, I need help with my booking",
-  //     timestamp: "2 min ago",
-  //     unreadCount: 3,
-  //     isOnline: true,
-  //     status: "active",
-  //   },
-  //   {
-  //     id: 2,
-  //     userName: "Sarah Wilson",
-  //     userAvatar: "SW",
-  //     lastMessage: "Thank you for your help!",
-  //     timestamp: "15 min ago",
-  //     unreadCount: 0,
-  //     isOnline: false,
-  //     status: "resolved",
-  //   },
-  //   {
-  //     id: 3,
-  //     userName: "Mike Johnson",
-  //     userAvatar: "MJ",
-  //     lastMessage: "Is there any discount available?",
-  //     timestamp: "1 hour ago",
-  //     unreadCount: 1,
-  //     isOnline: true,
-  //     status: "active",
-  //   },
-  //   {
-  //     id: 4,
-  //     userName: "Emily Davis",
-  //     userAvatar: "ED",
-  //     lastMessage: "My payment failed, please help",
-  //     timestamp: "3 hours ago",
-  //     unreadCount: 5,
-  //     isOnline: false,
-  //     status: "urgent",
-  //   },
-  // ]);
-
-  // Mock messages for selected room
   const [messages, setMessages] = useState({
     1: [
       {
@@ -333,7 +288,14 @@ const SupportChatPage = () => {
               {filteredRooms.map((room) => (
                 <div
                   key={room.id}
-                  onClick={() => setSelectedRoom(room.id)}
+                  onClick={() => {
+                    setSelectedRoom(room.id);
+
+                    socket?.emit("joinRoom", {
+                      isAdmin: false,
+                      userId: room.userId,
+                    });
+                  }}
                   className={`p-4 border-b border-primary  border-primaryborder-gray-100 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${
                     selectedRoom === room.id
                       ? "bg-teal-50 dark:bg-teal-900/20 border-l-4 border-l-primary "
