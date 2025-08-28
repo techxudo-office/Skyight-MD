@@ -232,7 +232,7 @@ const SupportChatPage = () => {
       }));
 
       socket.emit("sendMessage", {
-        userId: selectedRoom,
+        userId: UserId,
         message,
         typedBy: "admin",
       });
@@ -320,6 +320,7 @@ const SupportChatPage = () => {
                   key={room.id}
                   onClick={() => {
                     setSelectedRoom(room.id);
+                    setUserId(room.userId)
                     setUserName(`${room.first_name} ${room.last_name}`);
                     socket.emit("joinRoom", {
                       isAdmin: false,
