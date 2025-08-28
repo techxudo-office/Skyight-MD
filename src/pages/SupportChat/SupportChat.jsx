@@ -72,6 +72,28 @@ const SupportChatPage = () => {
       }));
     });
 
+    newSocket.on("receiveMessage", (msg) => {
+      console.log("📩 New incoming message:", msg);
+
+      // Assume msg has userId (or you can map via selectedRoom)
+      setMessages((prev) => ({
+        ...prev,
+        [msg.chatRoom]: [
+          ...(prev[msg.chatRoom] || []),
+          {
+            id: msg.id,
+            text: msg.message,
+            sender: msg.typedBy,
+            timestamp: new Date(msg.created_at).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            status: "delivered",
+          },
+        ],
+      }));
+    });
+
     return () => {
       newSocket.disconnect();
     };
@@ -204,6 +226,12 @@ const SupportChatPage = () => {
         ...prev,
         [selectedRoom]: [...(prev[selectedRoom] || []), newMessage],
       }));
+
+      socket.emit("sendMessage", {
+        userId: selectedRoom,
+        message,
+        typedBy: "admin",
+      });
 
       setMessage("");
     }
