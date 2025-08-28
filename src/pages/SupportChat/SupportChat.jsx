@@ -75,6 +75,9 @@ const SupportChatPage = () => {
     newSocket.on("receiveMessage", (msg) => {
       console.log("📩 New incoming message:", msg);
 
+      
+      newSocket.emit("getAllRooms");
+
       // Assume msg has userId (or you can map via selectedRoom)
       setMessages((prev) => ({
         ...prev,
@@ -92,6 +95,7 @@ const SupportChatPage = () => {
           },
         ],
       }));
+
     });
 
     return () => {
