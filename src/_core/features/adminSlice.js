@@ -9,7 +9,6 @@ const initialState = {
 
   dashboard: [],
   isLoadingDashboard: false,
-  dashboardError: null,
 
   isCreatingAdmin: false,
   createAdminError: null,
@@ -44,7 +43,6 @@ const adminSlice = createSlice({
       // Get Dashboard Analytics
       .addCase(getDashboardAnalytics.pending, (state) => {
         state.isLoadingDashboard = true;
-        state.dashboardError = null;
       })
       .addCase(getDashboardAnalytics.fulfilled, (state, action) => {
         state.isLoadingDashboard = false;
@@ -52,7 +50,6 @@ const adminSlice = createSlice({
       })
       .addCase(getDashboardAnalytics.rejected, (state, action) => {
         state.isLoadingDashboard = false;
-        state.dashboardError = action.payload;
       })
 
       // Create Admin
