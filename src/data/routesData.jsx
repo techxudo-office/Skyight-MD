@@ -69,6 +69,7 @@ const CompanyCancelledRequests = lazy(() =>
   )
 );
 const SupportChatPage = lazy(() => import("../pages/SupportChat/SupportChat"));
+const CustomTickets = lazy(() => import("../pages/CustomTickets/CustomTickets"));
 
 export const routesData = [
   { path: "/", element: <Login /> },
@@ -139,6 +140,7 @@ export const routesData = [
         element: <BookingDetails />,
       },
       { path: "supportChat", element: <SupportChatPage /> },
+      { path: "custom-tickets", element: <CustomTickets /> },
     ],
   },
 

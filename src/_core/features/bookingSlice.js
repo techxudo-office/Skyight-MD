@@ -32,6 +32,15 @@ const initialState = {
   isGetRefundsLoading: false,
   getRefundBookingError: null,
 
+  customTickets: [],
+  isLoadingCustomTickets: false,
+
+  isCreatingCustomTicket: false,
+
+  isDeletingCustomTicket: false,
+
+  isEditingCustomTicket: false,
+
   isRefundRequestLoading: false,
   refundBookingError: null,
 
@@ -171,6 +180,54 @@ const bookingSlice = createSlice({
       .addCase(cancelRequestFlight.rejected, (state, action) => {
         state.isCancelRequestLoading = false;
         state.cancelRequestError = action.payload;
+      })
+      .addCase(getCustomTickets.pending, (state) => {
+        state.isLoadingCustomTickets = true;
+      })
+      .addCase(getCustomTickets.fulfilled, (state, action) => {
+        state.isLoadingCustomTickets = false;
+        state.customTickets = action.payload.data[0];
+      })
+      .addCase(getCustomTickets.rejected, (state, action) => {
+        state.isLoadingCustomTickets = false;
+      })
+      .addCase(createCustomTicket.pending, (state) => {
+        state.isCreatingCustomTicket = true;
+      })
+      .addCase(createCustomTicket.fulfilled, (state, action) => {
+        state.isCreatingCustomTicket = false;
+        state.customTickets = [action.payload, ...state.customTickets];
+      })
+      .addCase(createCustomTicket.rejected, (state, action) => {
+        state.isCreatingCustomTicket = false;
+      })
+      .addCase(deleteCustomTicket.pending, (state) => {
+        state.isDeletingCustomTicket = true;
+      })
+      .addCase(deleteCustomTicket.fulfilled, (state, action) => {
+        state.isDeletingCustomTicket = false;
+        state.customTickets = state.customTickets.filter((customTicket) => customTicket.id !== action.payload);
+      })
+      .addCase(deleteCustomTicket.rejected, (state, action) => {
+        state.isDeletingCustomTicket = false;
+      })
+      .addCase(editCustomTicket.pending, (state) => {
+        state.isEditingCustomTicket = true;
+      })
+      .addCase(editCustomTicket.fulfilled, (state, action) => {
+        state.isEditingCustomTicket = false;
+        const updatedRole = action.payload;
+
+        if (!Array.isArray(state.customTickets)) {
+          return;
+        }
+
+        state.customTickets = state.customTickets.map((customTicket) =>
+          customTicket.id == updatedRole.id ? { ...customTicket, ...updatedRole } : customTicket
+        );
+      })
+      .addCase(editCustomTicket.rejected, (state, action) => {
+        state.isEditingCustomTicket = false;
       });
   },
 });
@@ -363,5 +420,62 @@ export const cancelRequestFlight = createAsyncThunk(
     }
   }
 );
+
+
+export const getCustomTickets = createAsyncThunk(
+  "booking/getCustomTickets",
+  async ({ token, logoutHandler }) => {
+    const response = await makeRequest("GET", "/api/custom-ticket", {
+      token,
+      logoutCallback: logoutHandler,
+      errorMessage: "Failed to fetch custom tickets.",
+    });
+    return {
+      data: response,
+      totalPages: response.data?.totalPages || 1,
+    };
+  }
+);
+
+export const createCustomTicket = createAsyncThunk(
+  "booking/createCustomTicket",
+  async ({ data, token }) => {
+    const response = await makeRequest("POST", "/api/custom-ticket", {
+      data,
+      token,
+      successMessage: "Custom ticket created successfully",
+      errorMessage: "Failed to create custom ticket.",
+      headers: { "Content-Type": "application/json" },
+    });
+    return response.data;
+  }
+);
+
+export const deleteCustomTicket = createAsyncThunk(
+  "booking/deleteCustomTicket",
+  async ({ id, token }) => {
+    await makeRequest("DELETE", `/api/custom-ticket/${id}`, {
+      token,
+      successMessage: "Custom ticket deleted successfully",
+      errorMessage: "Failed while deleting this custom ticket",
+    });
+    return id;
+  }
+);
+
+export const editCustomTicket = createAsyncThunk(
+  "booking/editCustomTicket",
+  async ({ id, token, data }) => {
+    const response = await makeRequest("PUT", `/api/custom-ticket/${id}`, {
+      data,
+      token,
+      successMessage: "Custom ticket updated successfully",
+      errorMessage: "Failed while updating this custom ticket",
+    });
+    return response;
+  }
+);
+
+
 
 export default bookingSlice.reducer;

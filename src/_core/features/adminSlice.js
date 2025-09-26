@@ -147,7 +147,7 @@ export const createAdmin = createAsyncThunk(
 export const deleteAdmin = createAsyncThunk(
   "admin/deleteAdmin",
   async ({ id, token }, thunkAPI) => {
-    await makeRequest("DELETE", `/ api / admin / ${id}`, {
+    await makeRequest("DELETE", `/api/admin/${id}`, {
       token,
       successMessage: "Admin deleted successfully",
       errorMessage: "Failed while deleting this admin",
@@ -160,7 +160,7 @@ export const deleteAdmin = createAsyncThunk(
 export const editAdmin = createAsyncThunk(
   "admin/editAdmin",
   ({ id, token, data }, thunkAPI) =>
-    makeRequest("PUT", `/ api / admin / ${id}`, {
+    makeRequest("PUT", `/api/admin/${id}`, {
       data,
       token,
       successMessage: "Admin updated successfully",
