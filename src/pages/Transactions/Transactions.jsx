@@ -219,7 +219,7 @@ const Transactions = ({ isCompanyDetail }) => {
               <p>
                 <strong className="text-text">Amount:</strong>{" "}
                 <span className="font-medium text-greenColor">
-                  ${selectedTransaction?.amount}
+                  {selectedTransaction?.amount}
                 </span>
               </p>
               <p className="flex items-center w-40 gap-x-2">
