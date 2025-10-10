@@ -147,8 +147,8 @@ const BookingDetails = () => {
                   sortable: false,
                 },
                 {
-                  name: "TYPE",
-                  selector: (row) => row.passenger_type_code,
+                  name: "SURNAME",
+                  selector: (row) => row.surname,
                   sortable: false,
                 },
                 {
