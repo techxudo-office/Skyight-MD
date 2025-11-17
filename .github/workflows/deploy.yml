@@ -29,44 +29,43 @@ jobs:
     needs: build_and_push
     runs-on: ubuntu-latest
     steps:
-      - name: SSH to EC2 and update dist folder from Docker image with verification
+      - name: Deploy Dashboard to EC2 via SSH (Docker runtime)
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
+            set -e
+
+            echo "📦 Docker disk usage BEFORE cleanup:"
+            docker system df || true
+
+            echo "🧹 Cleaning up unused Docker resources..."
+            docker system prune -af --volumes || true
+
+            echo "📦 Docker disk usage AFTER cleanup:"
+            docker system df || true
+
+            echo "🔐 Logging into Docker Hub..."
             echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
-            docker rm -f tmp-extract-dashboard 2>/dev/null || true
+            echo "🛑 Stopping and removing existing skyight-frontend-dashboard container (if any)..."
+            docker rm -f skyight-frontend-dashboard || true
 
-            echo "Pulling latest dashboard image…"
+            echo "⬇️ Pulling latest dashboard image..."
             docker pull techxudo2/skight-frontend-dashboard:latest
 
-            echo "Creating temp container…"
-            docker create --name tmp-extract-dashboard techxudo2/skight-frontend-dashboard:latest
+            echo "🚀 Starting new skyight-frontend-dashboard container on port 7172..."
+            docker run -d \
+              --name skyight-frontend-dashboard \
+              -p 127.0.0.1:7172:80 \
+              --restart unless-stopped \
+              techxudo2/skight-frontend-dashboard:latest
 
-            DASH_DIST=/home/ec2-user/dashboard/dist
+            echo "✅ skyight-frontend-dashboard container is running"
 
-            echo "Before update:"
-            ls -l $DASH_DIST || echo "dist folder not found"
+            echo "🔁 Restarting Nginx on host..."
+            sudo systemctl restart nginx || true
 
-            echo "Removing old dist…"
-            rm -rf $DASH_DIST
-
-            echo "Copying build out of container…"
-            docker cp tmp-extract-dashboard:/usr/share/nginx/html $DASH_DIST
-
-            echo "After update:"
-            ls -l $DASH_DIST || echo "dist folder not found"
-
-            docker rm tmp-extract-dashboard
-
-            sudo chown -R ec2-user:ec2-user $DASH_DIST
-
-            echo "Dashboard dist updated ✅"
-
-      - name: Restart Nginx (serve both B2B & dashboard)
-        run: |
-          sudo systemctl restart nginx
-          echo "Nginx restarted successfully."
+            echo "✅ Dashboard deployment completed"
