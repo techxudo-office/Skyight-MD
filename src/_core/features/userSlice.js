@@ -48,7 +48,7 @@ export const getCompanyUsers = createAsyncThunk(
 export const getUserVerificationForms = createAsyncThunk(
   "user/getUserVerificationForms",
   ({ token, logoutCallback }) =>
-    makeRequest("get", "/api/allForms", {
+    makeRequest("get", "/api/allForms?page=0&limit=1000000000", {
       token,
       logoutCallback,
       errorMessage: "Failed to fetch verification forms",
