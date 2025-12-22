@@ -22,6 +22,7 @@ import bankReducer from "../features/bankSlice";
 import offerReducer from "../features/offerSlice";
 import customerReducer from "../features/customerSlice";
 import adminReducer from "../features/adminSlice";
+import partnerReducer from "../features/partnerSlice";
 import persistedReducer from "../features/persistSlice";
 
 // Combine all feature reducers into a single reducer
@@ -41,6 +42,7 @@ const appReducer = combineReducers({
   offer: offerReducer,
   customer: customerReducer,
   admin: adminReducer,
+  partner: partnerReducer,
   persist: persistedReducer, // This slice is the only one persisted
 });
 

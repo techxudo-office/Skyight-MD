@@ -1,0 +1,40 @@
+/* Remove border from flag button */
+.react-tel-input .flag-dropdown {
+  border: none !important;
+  background: transparent !important;
+}
+
+.react-tel-input .selected-flag {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+}
+
+.react-tel-input .selected-flag:hover {
+  background: transparent !important;
+}
+
+.react-tel-input .selected-flag:focus {
+  background: transparent !important;
+  outline: none !important;
+}
+
+/* Remove border from dropdown */
+.react-tel-input .country-list {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Ensure input field styling */
+.react-tel-input .form-control {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+}
+
+.react-tel-input .form-control:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}

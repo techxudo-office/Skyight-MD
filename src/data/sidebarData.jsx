@@ -160,6 +160,18 @@ export const useAdminSidebarLinks = () => {
         },
       ].filter(Boolean),
     },
+    // Partners section
+    {
+      title: "Partners",
+      icon: <MdOutlineGroups />,
+      sublinks: [
+        {
+          title: "All Partners",
+          path: "partners",
+          icon: <MdOutlineGroups />,
+        },
+      ].filter(Boolean),
+    },
     // Conditionally show Notifications link
     pagePermissions.help_and_support && {
       title: "Notifications",

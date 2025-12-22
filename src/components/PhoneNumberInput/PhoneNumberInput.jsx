@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import "./PhoneNumberInput.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { MdEdit } from "react-icons/md";
 
@@ -18,38 +19,35 @@ const PhoneNumberInput = ({
   placeholder,
   autoComplete,
   setEditingField,
+  roundedFull = false
 }) => {
   const inputRef = useRef();
 
   useEffect(() => {
-    // Auto-focus the input when the component is marked as selected (e.g. for editing)
     if (isSelected) {
       inputRef.current.focus();
     }
   }, [isSelected]);
 
   const handlePhoneChange = (value) => {
-    // Parse the raw phone number string using libphonenumber-js
     const phoneNumber = parsePhoneNumberFromString(`+${value}`);
 
-    // Split the parsed phone number into structured data
     const parsedData = phoneNumber
       ? {
-          country_code: phoneNumber.countryCallingCode, // Extract country code (e.g. "1" for USA)
-          area_code: phoneNumber.nationalNumber?.slice(0, 3) || "", // First 3 digits as area code
-          number: phoneNumber.nationalNumber?.slice(3) || "", // Remaining digits as the phone number
-        }
-      : { country_code: "", area_code: "", number: "" }; // Fallback to empty fields if parsing fails
+        country_code: phoneNumber.countryCallingCode,
+        area_code: phoneNumber.nationalNumber?.slice(0, 3) || "", // First 3 digits as area code
+        number: phoneNumber.nationalNumber?.slice(3) || "", // Remaining digits as number
+      }
+      : { country_code: "", area_code: "", number: "" };
 
-    if (onChange) onChange(parsedData); // Trigger parent change handler with structured phone data
+    if (onChange) onChange(parsedData);
   };
 
   return (
     <div className={`flex flex-col w-full ${className}`}>
       <div
-        className={`relative flex items-center rounded-lg border border-gray text-text ${
-          disabled ? "bg-slate-100" : "bg-white"
-        }`}
+        className={`relative flex items-center py-1 ${roundedFull ? "rounded-full" : "rounded-md"} border border-gray text-text ${disabled ? "bg-slate-100" : "bg-white"
+          }`}
       >
         {label && (
           <label
@@ -59,10 +57,9 @@ const PhoneNumberInput = ({
             {label}
           </label>
         )}
-
         <PhoneInput
           ref={inputRef}
-          country={"ir"} // Set default country (Iran) for phone input formatting
+          country={"pk"} // Default country
           value={value}
           onChange={handlePhoneChange}
           inputProps={{
@@ -71,16 +68,15 @@ const PhoneNumberInput = ({
             disabled,
             placeholder,
             autoComplete,
-            // Reset editing field state when input loses focus
             onBlur: () => setEditingField?.(null),
             className:
               "w-full px-3 pt-3 bg-transparent outline-none text-base pl-10",
           }}
-          inputClass="w-full px-3 bg-transparent outline-none"
-          containerClass="w-full h-12"
+          inputClass={`w-full px-3 !bg-white outline-none ${roundedFull ? "rounded-full" : "rounded-md"}`}
+          containerClass={`w-full h-12 ${roundedFull ? "rounded-full" : "rounded-md"}`}
+          buttonClass="!border-none !bg-transparent"
+          dropdownClass="!border-none"
         />
-
-        {/* If input is disabled and being displayed in a profile context, show edit icon */}
         {disabled && profile && (
           <span
             className="absolute text-xl cursor-pointer right-3 text-primary"
