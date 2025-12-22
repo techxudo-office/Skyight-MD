@@ -43,7 +43,7 @@ export const addPartner = createAsyncThunk(
 export const deletePartner = createAsyncThunk(
   "partner/deletePartner",
   ({ token, id, logoutCallback }) =>
-    makeRequest("delete", `/api/partners/${id}`, {
+    makeRequest("delete", `/api/b2bpartner/${id}`, {
       token,
       logoutCallback,
       errorMessage: "Failed to delete partner",
@@ -54,7 +54,7 @@ export const deletePartner = createAsyncThunk(
 export const editPartner = createAsyncThunk(
   "partner/editPartner",
   ({ token, id, data, logoutCallback }) =>
-    makeRequest("put", `/api/partners/${id}`, {
+    makeRequest("put", `/api/b2bpartner/${id}`, {
       token,
       data,
       logoutCallback,

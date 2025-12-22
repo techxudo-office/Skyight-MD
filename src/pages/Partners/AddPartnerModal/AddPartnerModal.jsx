@@ -7,9 +7,11 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../../components/Input/Input";
 import Button from "../../../components/Button/Button";
+import Select from "../../../components/Select/Select";
 import PhoneNumberInput from "../../../components/PhoneNumberInput/PhoneNumberInput";
 import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
 import { addPartner, editPartner, getAllPartners } from "../../../_core/features/partnerSlice";
+import { Country, City } from "country-state-city";
 
 const initialState = {
     company_name: "",
@@ -20,7 +22,7 @@ const initialState = {
     mobile_number: "",
     password: "",
     city: "",
-    country: "",
+    country: { label: "", value: "" },
     address: "",
     website: "",
 };
@@ -36,8 +38,19 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
 
     const isEditing = !!partnerData;
 
+    // Prepare list of country choices
+    const countries = Country.getAllCountries().map((country) => ({
+        label: country.name,
+        value: country.isoCode,
+    }));
+
     useEffect(() => {
         if (partnerData) {
+            // Find the country ISO code from the country name
+            const countryData = countries.find(country =>
+                country.label.toLowerCase() === partnerData?.company?.country?.toLowerCase()
+            );
+
             setFormData({
                 company_name: partnerData?.company?.name || "",
                 first_name: partnerData?.first_name || "",
@@ -47,7 +60,7 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
                 mobile_number: partnerData?.mobile_number || "",
                 password: "", // Don't prefill password for editing
                 city: partnerData?.company?.city || "",
-                country: partnerData?.company?.country || "",
+                country: countryData || { label: "", value: "" }, // Use full country object
                 address: partnerData?.company?.address || "",
                 website: partnerData?.company?.website || "",
             });
@@ -155,7 +168,7 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
             newErrors.city = "City is required";
         }
 
-        if (!formData.country.trim()) {
+        if (!formData.country || !formData.country.value) {
             newErrors.country = "Country is required";
         }
 
@@ -176,6 +189,11 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
         }
 
         const submitData = { ...formData };
+
+        // Extract country label from object for API
+        if (submitData.country && typeof submitData.country === 'object') {
+            submitData.country = submitData.country.label;
+        }
 
         // Remove password from edit data if it's empty
         if (isEditing && !submitData.password.trim()) {
@@ -327,35 +345,62 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
                             </>
                         )}
 
-                        {/* City */}
-                        <Input
-                            id="city"
-                            name="city"
-                            type="text"
-                            label="City *"
-                            value={formData.city}
-                            onChange={handleInputChange}
-                            placeholder="Enter city"
-                            className={errors.city ? "mb-1" : "mb-4"}
-                        />
-                        {errors.city && (
-                            <p className="text-red-500 text-sm -mt-3 mb-2">{errors.city}</p>
-                        )}
-
                         {/* Country */}
-                        <Input
-                            id="country"
-                            name="country"
-                            type="text"
-                            label="Country *"
-                            value={formData.country}
-                            onChange={handleInputChange}
-                            placeholder="Enter country"
-                            className={errors.country ? "mb-1" : "mb-4"}
-                        />
-                        {errors.country && (
-                            <p className="text-red-500 text-sm -mt-3 mb-2">{errors.country}</p>
-                        )}
+                        <div className={errors.country ? "mb-1" : "mb-4"}>
+                            <Select
+                                id="country"
+                                label="Country *"
+                                options={countries}
+                                value={formData.country.label || ""}
+                                onChange={(option) => {
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        country: option,
+                                        city: "" // Reset city when country changes
+                                    }));
+                                }}
+                                placeholder="Select country"
+                            />
+                            {errors.country && (
+                                <p className="text-red-500 text-sm mt-1">{errors.country}</p>
+                            )}
+                        </div>
+
+                        {/* City */}
+                        <div className={errors.city ? "mb-1" : "mb-4"}>
+                            <Select
+                                id="city"
+                                label="City *"
+                                options={
+                                    formData.country.value
+                                        ? City.getCitiesOfCountry(
+                                            formData.country.value
+                                        ).map((city) => ({
+                                            label: city.name,
+                                            value: city.name,
+                                        }))
+                                        : []
+                                }
+                                value={formData.city}
+                                onChange={(option) => {
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        city: option.value
+                                    }));
+                                    if (errors.city) {
+                                        setErrors(prev => ({
+                                            ...prev,
+                                            city: ""
+                                        }));
+                                    }
+                                }}
+                                placeholder="Select city"
+                                disabled={!formData.country}
+                            />
+                            {errors.city && (
+                                <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+                            )}
+                        </div>
 
                         {/* Address */}
                         <div className="col-span-2">
