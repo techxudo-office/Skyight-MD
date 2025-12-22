@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
-import Modal from "../Modal/Modal";
+import ModalWrapper from "../ModalWrapper/ModalWrapper";
 import { useNavigate } from "react-router-dom";
 
 export default function SessionManager() {
@@ -52,20 +52,28 @@ export default function SessionManager() {
     };
   }, [adminData?.token, dispatch]);
 
-  if (!warnModal) return null;
   return (
-    <Modal
-      title="Session Expiring Soon"
-      Message="Your session will expire in one minute. Please save your work."
-      onBtnClick={() => {
-        setWarnModal(false);
-        // Optionally refresh token here if you have a refresh endpoint:
-        // dispatch(refreshToken());
-      }}
-      btnText="Continue Session"
-      active={true}
-      toggle={true}
-      onClose={() => setWarnModal(false)}
-    />
+    <ModalWrapper
+      isOpen={warnModal}
+      onRequestClose={() => setWarnModal(false)}
+      contentLabel="Session Expiring Soon"
+      header="Session Expiring Soon"
+    >
+      <div className="text-center">
+        <p className="mb-6 text-gray-600">
+          Your session will expire in one minute. Please save your work.
+        </p>
+        <button
+          onClick={() => {
+            setWarnModal(false);
+            // Optionally refresh token here if you have a refresh endpoint:
+            // dispatch(refreshToken());
+          }}
+          className="px-6 py-2 font-semibold text-white capitalize transition-colors bg-blue-500 rounded-lg hover:bg-blue-600"
+        >
+          Continue Session
+        </button>
+      </div>
+    </ModalWrapper>
   );
 }
