@@ -18,21 +18,19 @@ const initialState = {
     first_name: "",
     last_name: "",
     email: "",
-    phone_number: "",
     mobile_number: "",
     password: "",
     city: "",
     country: { label: "", value: "" },
     address: "",
     website: "",
+    isBlocked: false,
 };
 
 const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
     const dispatch = useDispatch();
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState(initialState);
-    const [phoneData, setPhoneData] = useState({ country_code: "", area_code: "", number: "" });
-    const [mobileData, setMobileData] = useState({ country_code: "", area_code: "", number: "" });
     const { adminData } = useSelector((state) => state.persist);
     const { isCreatingPartner, isEditingPartner } = useSelector((state) => state.partner);
 
@@ -85,7 +83,6 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
     };
 
     const handlePhoneChange = (phoneInfo) => {
-        setPhoneData(phoneInfo);
         const fullPhoneNumber = `+${phoneInfo.country_code}${phoneInfo.area_code}${phoneInfo.number}`;
         setFormData(prev => ({
             ...prev,
@@ -100,7 +97,6 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
     };
 
     const handleMobileChange = (phoneInfo) => {
-        setMobileData(phoneInfo);
         const fullMobileNumber = `+${phoneInfo.country_code}${phoneInfo.area_code}${phoneInfo.number}`;
         setFormData(prev => ({
             ...prev,

@@ -53,7 +53,7 @@ const Partners = () => {
     },
     {
       name: "PHONE",
-      selector: (row) => row?.company?.phone_number || "N/A",
+      selector: (row) => row?.mobile_number || "N/A",
       sortable: false,
     },
     {
