@@ -12,6 +12,7 @@ import PhoneNumberInput from "../../../components/PhoneNumberInput/PhoneNumberIn
 import ModalWrapper from "../../../components/ModalWrapper/ModalWrapper";
 import { addPartner, editPartner, getAllPartners } from "../../../_core/features/partnerSlice";
 import { Country, City } from "country-state-city";
+import Switch from "../../../components/Switch/Switch";
 
 const initialState = {
     company_name: "",
@@ -54,13 +55,13 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
                 first_name: partnerData?.first_name || "",
                 last_name: partnerData?.last_name || "",
                 email: partnerData?.email || "",
-                phone_number: partnerData?.company?.phone_number || "",
                 mobile_number: partnerData?.mobile_number || "",
                 password: "", // Don't prefill password for editing
                 city: partnerData?.company?.city || "",
                 country: countryData || { label: "", value: "" }, // Use full country object
                 address: partnerData?.company?.address || "",
                 website: partnerData?.company?.website || "",
+                isBlocked: partnerData?.isBlocked || false,
             });
         } else {
             setFormData(initialState);
@@ -82,20 +83,6 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
         }
     };
 
-    const handlePhoneChange = (phoneInfo) => {
-        const fullPhoneNumber = `+${phoneInfo.country_code}${phoneInfo.area_code}${phoneInfo.number}`;
-        setFormData(prev => ({
-            ...prev,
-            phone_number: fullPhoneNumber
-        }));
-        if (errors.phone_number) {
-            setErrors(prev => ({
-                ...prev,
-                phone_number: ""
-            }));
-        }
-    };
-
     const handleMobileChange = (phoneInfo) => {
         const fullMobileNumber = `+${phoneInfo.country_code}${phoneInfo.area_code}${phoneInfo.number}`;
         setFormData(prev => ({
@@ -113,11 +100,25 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
     const validateForm = () => {
         const newErrors = {};
 
-        // Required field validations
-        if (!formData.company_name.trim()) {
-            newErrors.company_name = "Company name is required";
-        } else if (formData.company_name.length > 255) {
-            newErrors.company_name = "Company name must be less than 255 characters";
+        // Company fields validation (only for new partners)
+        if (!isEditing) {
+            if (!formData.company_name.trim()) {
+                newErrors.company_name = "Company name is required";
+            } else if (formData.company_name.length > 255) {
+                newErrors.company_name = "Company name must be less than 255 characters";
+            }
+
+            if (!formData.city.trim()) {
+                newErrors.city = "City is required";
+            }
+
+            if (!formData.country || !formData.country.value) {
+                newErrors.country = "Country is required";
+            }
+
+            if (!formData.address.trim()) {
+                newErrors.address = "Address is required";
+            }
         }
 
         if (!formData.first_name.trim()) {
@@ -132,17 +133,14 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
             newErrors.last_name = "Last name must be less than 255 characters";
         }
 
-        // Email validation
-        const emailRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i;
-        if (!formData.email.trim()) {
-            newErrors.email = "Email is required";
-        } else if (!emailRegex.test(formData.email)) {
-            newErrors.email = "Invalid email format";
-        }
-
-        // Phone number validation
-        if (!formData.phone_number.trim()) {
-            newErrors.phone_number = "Phone number is required";
+        // Email validation (only for new partners)
+        if (!isEditing) {
+            const emailRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i;
+            if (!formData.email.trim()) {
+                newErrors.email = "Email is required";
+            } else if (!emailRegex.test(formData.email)) {
+                newErrors.email = "Invalid email format";
+            }
         }
 
         // Mobile number validation
@@ -159,19 +157,6 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
             }
         }
 
-        // Required string fields
-        if (!formData.city.trim()) {
-            newErrors.city = "City is required";
-        }
-
-        if (!formData.country || !formData.country.value) {
-            newErrors.country = "Country is required";
-        }
-
-        if (!formData.address.trim()) {
-            newErrors.address = "Address is required";
-        }
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -184,16 +169,25 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
             return;
         }
 
-        const submitData = { ...formData };
+        let submitData;
 
-        // Extract country label from object for API
-        if (submitData.country && typeof submitData.country === 'object') {
-            submitData.country = submitData.country.label;
-        }
+        if (isEditing) {
+            // Only send editable fields when editing
+            submitData = {
+                first_name: formData.first_name,
+                last_name: formData.last_name,
+                mobile_number: formData.mobile_number,
+                isBlocked: formData.isBlocked,
+            };
+        } else {
+            // Send all fields when creating
+            submitData = { ...formData };
+            delete submitData.isBlocked; // Not needed when creating
 
-        // Remove password from edit data if it's empty
-        if (isEditing && !submitData.password.trim()) {
-            delete submitData.password;
+            // Extract country label from object for API
+            if (submitData.country && typeof submitData.country === 'object') {
+                submitData.country = submitData.country.label;
+            }
         }
 
         try {
@@ -232,19 +226,23 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
             <form onSubmit={handleSubmit}>
                 <CardLayoutBody>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Company Name */}
-                        <Input
-                            id="company_name"
-                            name="company_name"
-                            type="text"
-                            label="Company Name *"
-                            value={formData.company_name}
-                            onChange={handleInputChange}
-                            placeholder="Enter company name"
-                            className={errors.company_name ? "mb-1" : "mb-4"}
-                        />
-                        {errors.company_name && (
-                            <p className="text-red-500 text-sm -mt-3 mb-2 col-span-2">{errors.company_name}</p>
+                        {/* Company Name - only show when adding */}
+                        {!isEditing && (
+                            <>
+                                <Input
+                                    id="company_name"
+                                    name="company_name"
+                                    type="text"
+                                    label="Company Name *"
+                                    value={formData.company_name}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter company name"
+                                    className={errors.company_name ? "mb-1" : "mb-4"}
+                                />
+                                {errors.company_name && (
+                                    <p className="text-red-500 text-sm -mt-3 mb-2 col-span-2">{errors.company_name}</p>
+                                )}
+                            </>
                         )}
 
                         {/* First Name */}
@@ -287,25 +285,11 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
                             onChange={handleInputChange}
                             placeholder="Enter email address"
                             className={errors.email ? "mb-1" : "mb-4"}
+                            disabled={isEditing}
                         />
                         {errors.email && (
                             <p className="text-red-500 text-sm -mt-3 mb-2">{errors.email}</p>
                         )}
-
-                        {/* Phone Number */}
-                        <div className={errors.phone_number ? "mb-1" : "mb-4"}>
-                            <PhoneNumberInput
-                                id="phone_number"
-                                name="phone_number"
-                                label="Phone Number *"
-                                value={formData.phone_number}
-                                onChange={handlePhoneChange}
-                                placeholder="Enter phone number"
-                            />
-                            {errors.phone_number && (
-                                <p className="text-red-500 text-sm mt-1">{errors.phone_number}</p>
-                            )}
-                        </div>
 
                         {/* Mobile Number */}
                         <div className={errors.mobile_number ? "mb-1" : "mb-4"}>
@@ -341,93 +325,105 @@ const AddPartnerModal = ({ isOpen, onClose, partnerData }) => {
                             </>
                         )}
 
-                        {/* Country */}
-                        <div className={errors.country ? "mb-1" : "mb-4"}>
-                            <Select
-                                id="country"
-                                label="Country *"
-                                options={countries}
-                                value={formData.country.label || ""}
-                                onChange={(option) => {
-                                    setFormData(prev => ({
-                                        ...prev,
-                                        country: option,
-                                        city: "" // Reset city when country changes
-                                    }));
-                                }}
-                                placeholder="Select country"
-                            />
-                            {errors.country && (
-                                <p className="text-red-500 text-sm mt-1">{errors.country}</p>
-                            )}
-                        </div>
+                        {/* Block Status - only show when editing */}
+                        {isEditing && (
+                            <div className="mb-4">
+                                <Switch
+                                    label="Block Partner"
+                                    value={formData.isBlocked}
+                                    onChange={(checked) => setFormData(prev => ({ ...prev, isBlocked: checked }))}
+                                />
+                            </div>
+                        )}
 
-                        {/* City */}
-                        <div className={errors.city ? "mb-1" : "mb-4"}>
-                            <Select
-                                id="city"
-                                label="City *"
-                                options={
-                                    formData.country.value
-                                        ? City.getCitiesOfCountry(
+                        {/* Country, City, Address, Website - only show when adding */}
+                        {!isEditing && (
+                            <>
+                                <div className={errors.country ? "mb-1" : "mb-4"}>
+                                    <Select
+                                        id="country"
+                                        label="Country *"
+                                        options={countries}
+                                        value={formData.country.label || ""}
+                                        onChange={(option) => {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                country: option,
+                                                city: "" // Reset city when country changes
+                                            }));
+                                        }}
+                                        placeholder="Select country"
+                                    />
+                                    {errors.country && (
+                                        <p className="text-red-500 text-sm mt-1">{errors.country}</p>
+                                    )}
+                                </div>
+
+                                <div className={errors.city ? "mb-1" : "mb-4"}>
+                                    <Select
+                                        id="city"
+                                        label="City *"
+                                        options={
                                             formData.country.value
-                                        ).map((city) => ({
-                                            label: city.name,
-                                            value: city.name,
-                                        }))
-                                        : []
-                                }
-                                value={formData.city}
-                                onChange={(option) => {
-                                    setFormData(prev => ({
-                                        ...prev,
-                                        city: option.value
-                                    }));
-                                    if (errors.city) {
-                                        setErrors(prev => ({
-                                            ...prev,
-                                            city: ""
-                                        }));
-                                    }
-                                }}
-                                placeholder="Select city"
-                                disabled={!formData.country}
-                            />
-                            {errors.city && (
-                                <p className="text-red-500 text-sm mt-1">{errors.city}</p>
-                            )}
-                        </div>
+                                                ? City.getCitiesOfCountry(
+                                                    formData.country.value
+                                                ).map((city) => ({
+                                                    label: city.name,
+                                                    value: city.name,
+                                                }))
+                                                : []
+                                        }
+                                        value={formData.city}
+                                        onChange={(option) => {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                city: option.value
+                                            }));
+                                            if (errors.city) {
+                                                setErrors(prev => ({
+                                                    ...prev,
+                                                    city: ""
+                                                }));
+                                            }
+                                        }}
+                                        placeholder="Select city"
+                                        disabled={!formData.country}
+                                    />
+                                    {errors.city && (
+                                        <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+                                    )}
+                                </div>
 
-                        {/* Address */}
-                        <div className="col-span-2">
-                            <Input
-                                id="address"
-                                name="address"
-                                type="text"
-                                label="Address *"
-                                value={formData.address}
-                                onChange={handleInputChange}
-                                placeholder="Enter full address"
-                                className={errors.address ? "mb-1" : "mb-4"}
-                            />
-                            {errors.address && (
-                                <p className="text-red-500 text-sm -mt-3 mb-2">{errors.address}</p>
-                            )}
-                        </div>
+                                <div className="col-span-2">
+                                    <Input
+                                        id="address"
+                                        name="address"
+                                        type="text"
+                                        label="Address *"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter full address"
+                                        className={errors.address ? "mb-1" : "mb-4"}
+                                    />
+                                    {errors.address && (
+                                        <p className="text-red-500 text-sm -mt-3 mb-2">{errors.address}</p>
+                                    )}
+                                </div>
 
-                        {/* Website - Optional */}
-                        <div className="col-span-2">
-                            <Input
-                                id="website"
-                                name="website"
-                                type="url"
-                                label="Website (Optional)"
-                                value={formData.website}
-                                onChange={handleInputChange}
-                                placeholder="Enter website URL"
-                                className="mb-4"
-                            />
-                        </div>
+                                <div className="col-span-2">
+                                    <Input
+                                        id="website"
+                                        name="website"
+                                        type="url"
+                                        label="Website (Optional)"
+                                        value={formData.website}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter website URL"
+                                        className="mb-4"
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </CardLayoutBody>
 
