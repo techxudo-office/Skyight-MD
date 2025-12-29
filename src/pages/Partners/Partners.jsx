@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   deletePartner,
   getAllPartners,
+  regeneratePartnerToken,
 } from "../../_core/features/partnerSlice";
 import SecondaryButton from "../../components/SecondaryBtn/SecondaryBtn";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
@@ -15,7 +16,7 @@ import {
   CardLayoutFooter,
 } from "../../components/CardLayout/CardLayout";
 import AddPartnerModal from "./AddPartnerModal/AddPartnerModal";
-import { MdAdd, MdEditSquare, MdAutoDelete } from "react-icons/md";
+import { MdAdd, MdEditSquare, MdAutoDelete, MdRefresh } from "react-icons/md";
 import toast from "react-hot-toast";
 
 const Partners = () => {
@@ -31,6 +32,7 @@ const Partners = () => {
     isLoadingPartners,
     isDeletingPartner,
     partnersTotal,
+    regeneratingTokenId,
   } = useSelector((state) => state.partner);
 
   const partnerColumns = [
@@ -84,6 +86,16 @@ const Partners = () => {
       selector: (row) => (
         <div className="flex items-center gap-x-4">
           <span
+            className={`text-xl ${regeneratingTokenId === row.id ? "animate-spin" : "cursor-pointer"}`}
+            onClick={() => {
+              if (regeneratingTokenId !== row.id) {
+                regenerateTokenHandler(row.id);
+              }
+            }}
+          >
+            <MdRefresh title="Regenerate Token" className="text-orange-500" />
+          </span>
+          <span
             className="text-xl cursor-pointer"
             onClick={() => {
               setEditPartnerData(row);
@@ -110,6 +122,12 @@ const Partners = () => {
   const openAddModalHandler = () => {
     setEditPartnerData(null);
     setIsAddModalOpen(true);
+  };
+
+  const regenerateTokenHandler = (partnerId) => {
+    dispatch(
+      regeneratePartnerToken({ id: partnerId, token: adminData?.token })
+    );
   };
 
   const deletePartnerHandler = () => {
