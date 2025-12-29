@@ -15,6 +15,9 @@ const initialState = {
 
   isEditingPartner: false,
   editPartnerError: null,
+
+  regeneratingTokenId: null,
+  regenerateTokenError: null,
 };
 
 // Async thunks using makeRequest
@@ -60,6 +63,17 @@ export const editPartner = createAsyncThunk(
       logoutCallback,
       errorMessage: "Failed to update partner",
       successMessage: "Partner updated successfully",
+    })
+);
+
+export const regeneratePartnerToken = createAsyncThunk(
+  "partner/regenerateToken",
+  ({ token, id, logoutCallback }) =>
+    makeRequest("put", `/api/b2bpartner/${id}/regenerate-token`, {
+      token,
+      logoutCallback,
+      errorMessage: "Failed to regenerate token",
+      successMessage: "Secret token regenerated successfully",
     })
 );
 
@@ -127,6 +141,27 @@ const partnerSlice = createSlice({
       .addCase(editPartner.rejected, (state, action) => {
         state.isEditingPartner = false;
         state.editPartnerError = action.payload;
+      })
+
+      // Regenerate token
+      .addCase(regeneratePartnerToken.pending, (state, action) => {
+        state.regeneratingTokenId = action.meta.arg.id;
+        state.regenerateTokenError = null;
+      })
+      .addCase(regeneratePartnerToken.fulfilled, (state, action) => {
+        const partnerId = action.meta.arg.id;
+        const newToken = action.payload?.secretToken;
+        if (newToken) {
+          const partner = state.partners.find((p) => p.id === partnerId);
+          if (partner) {
+            partner.secretToken = newToken;
+          }
+        }
+        state.regeneratingTokenId = null;
+      })
+      .addCase(regeneratePartnerToken.rejected, (state, action) => {
+        state.regeneratingTokenId = null;
+        state.regenerateTokenError = action.payload;
       });
   },
 });
