@@ -4,7 +4,7 @@ import * as Select from "@radix-ui/react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { computeDates, FILTER_OPTIONS } from "../../utils/helper";
 import { getDashboardAnalytics } from "../../_core/features/adminSlice";
-import { FaUserAlt, FaTachometerAlt, FaClipboardList } from "react-icons/fa";
+import { FaUserAlt, FaClipboardList, FaMoneyBillWave, FaWallet, FaPercentage } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const DashboardCards = () => {
@@ -24,11 +24,25 @@ const DashboardCards = () => {
 
   const cardData = [
     {
-      title: "Revenue",
+      title: "Total Revenue",
       path: "/dashboard",
-      value: dashboard?.totalRevenue,
-      description: "Gross revenue",
-      icon: <FaTachometerAlt className="text-3xl text-primary" />,
+      value: dashboard?.totalCredits,
+      description: "Total credits issued",
+      icon: <FaMoneyBillWave className="text-3xl text-primary" />,
+    },
+    {
+      title: "Remaining Credits",
+      path: "/dashboard",
+      value: dashboard?.remainingCredits,
+      description: "Remaining credits",
+      icon: <FaWallet className="text-3xl text-primary" />,
+    },
+    {
+      title: "Booking Commission",
+      path: "/dashboard",
+      value: dashboard?.booking_revenue,
+      description: "Booking commission",
+      icon: <FaPercentage className="text-3xl text-primary" />,
     },
     {
       title: "Total Bookings",
